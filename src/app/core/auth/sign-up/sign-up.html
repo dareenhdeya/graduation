@@ -1,0 +1,349 @@
+<div class="w-full mx-auto my-5 min-h-screen flex items-center justify-center">
+  <div class="w-full md:w-2/4 shadow-2xl drop-shadow-2xl border bg-white rounded-lg">
+    <div class="flex font-bold justify-center mt-6">
+      <h2 routerLink="/home" class="flex items-center space-x-2">
+        <i class="fa-solid fa-cart-shopping text-main-500 me-0 text-3xl"></i>
+        <span class="text-3xl font-bold text-black">Title</span>
+      </h2>
+    </div>
+    <h2 class="text-2xl text-center font-bold my-7 text-gray-800 mb-8">Sign UP</h2>
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="px-12 py-4">
+        <!-- First Name -->
+        <div class="relative w-full mb-2">
+          <input
+            formControlName="fName"
+            type="text"
+            placeholder=" "
+            id="fName"
+            [class.error-input]="
+              registerForm.get('fName')?.errors && registerForm.get('fName')?.touched
+            "
+            [class.valid-input]="
+              !registerForm.get('fName')?.errors && registerForm.get('fName')?.touched
+            "
+            class="peer block w-full rounded-lg border border-gray-300 bg-transparent px-2.5 pb-2.5 pt-4 text-sm text-gray-900 focus:outline-none focus:ring-0"
+          />
+          <label
+            for="fName"
+            class="absolute start-1 top-2 z-10 -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75"
+          >
+            First Name
+          </label>
+          <div
+            class="text-red-600 text-sm mt-1"
+            [hidden]="!(registerForm.get('fName')?.errors && registerForm.get('fName')?.touched)"
+          >
+            <span [hidden]="!registerForm.get('fName')?.hasError('required')"
+              >This input is required!</span
+            >
+            <span
+              [hidden]="
+                !(
+                  registerForm.get('fName')?.hasError('minlength') ||
+                  registerForm.get('fName')?.hasError('maxlength')
+                )
+              "
+            >
+              At least 3 characters (up to 30)
+            </span>
+          </div>
+        </div>
+
+        <!-- Last Name -->
+        <div class="relative w-full mb-2">
+          <input
+            formControlName="lName"
+            type="text"
+            placeholder=" "
+            id="lName"
+            [class.error-input]="
+              registerForm.get('lName')?.errors && registerForm.get('lName')?.touched
+            "
+            [class.valid-input]="
+              !registerForm.get('lName')?.errors && registerForm.get('lName')?.touched
+            "
+            class="peer block w-full rounded-lg border border-gray-300 bg-transparent px-2.5 pb-2.5 pt-4 text-sm text-gray-900 focus:outline-none focus:ring-0"
+          />
+          <label
+            for="lName"
+            class="absolute start-1 top-2 z-10 -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75"
+          >
+            Last Name
+          </label>
+          <div
+            class="text-red-600 text-sm mt-1"
+            [hidden]="!(registerForm.get('lName')?.errors && registerForm.get('lName')?.touched)"
+          >
+            <span [hidden]="!registerForm.get('lName')?.hasError('required')"
+              >This input is required!</span
+            >
+            <span
+              [hidden]="
+                !(
+                  registerForm.get('lName')?.hasError('minlength') ||
+                  registerForm.get('lName')?.hasError('maxlength')
+                )
+              "
+            >
+              At least 3 characters (up to 30)
+            </span>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="relative w-full mb-2">
+          <input
+            formControlName="email"
+            type="email"
+            id="email"
+            placeholder=" "
+            [class.error-input]="
+              registerForm.get('email')?.errors && registerForm.get('email')?.touched
+            "
+            [class.valid-input]="
+              !registerForm.get('email')?.errors && registerForm.get('email')?.touched
+            "
+            class="peer block w-full rounded-lg border border-gray-300 bg-transparent px-2.5 pb-2.5 pt-4 text-sm text-gray-900 focus:outline-none focus:ring-0"
+          />
+          <label
+            for="email"
+            class="absolute start-1 top-2 z-10 -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75"
+          >
+            Email Address
+          </label>
+          <div
+            class="text-red-600 text-sm mt-1"
+            [hidden]="!(registerForm.get('email')?.errors && registerForm.get('email')?.touched)"
+          >
+            <span [hidden]="!registerForm.get('email')?.hasError('required')"
+              >This input is required!</span
+            >
+            <span [hidden]="!registerForm.get('email')?.hasError('pattern')"
+              >Please enter a valid email address</span
+            >
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="relative w-full mb-2">
+          <input
+            id="password"
+            formControlName="password"
+            type="password"
+            placeholder=" "
+            [class.error-input]="
+              registerForm.get('password')?.errors && registerForm.get('password')?.touched
+            "
+            [class.valid-input]="
+              !registerForm.get('password')?.errors && registerForm.get('password')?.touched
+            "
+            class="peer block w-full rounded-lg border border-gray-300 bg-transparent px-2.5 pb-2.5 pt-4 text-sm text-gray-900 focus:outline-none focus:ring-0"
+          />
+          <label
+            for="password"
+            class="absolute start-1 top-2 z-10 -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75"
+          >
+            Password
+          </label>
+          <div
+            class="text-red-600 text-sm mt-1"
+            [hidden]="
+              !(registerForm.get('password')?.errors && registerForm.get('password')?.touched)
+            "
+          >
+            <span [hidden]="!registerForm.get('password')?.hasError('required')"
+              >This input is required!</span
+            >
+            <span [hidden]="!registerForm.get('password')?.hasError('pattern')"
+              >Password must be at least 8 characters and include uppercase, lowercase, number, and
+              special character</span
+            >
+          </div>
+        </div>
+
+        <!-- Re-enter Password -->
+        <div class="relative w-full mb-2">
+          <input
+            id="rePassword"
+            formControlName="rePassword"
+            type="password"
+            placeholder=" "
+            [class.error-input]="
+              (registerForm.get('rePassword')?.errors || registerForm.getError('missMatch')) &&
+              registerForm.get('rePassword')?.touched
+            "
+            [class.valid-input]="
+              !registerForm.get('rePassword')?.errors &&
+              !registerForm.getError('missMatch') &&
+              registerForm.get('rePassword')?.touched
+            "
+            class="peer block w-full rounded-lg border border-gray-300 bg-transparent px-2.5 pb-2.5 pt-4 text-sm text-gray-900 focus:outline-none focus:ring-0"
+          />
+          <label
+            for="rePassword"
+            class="absolute start-1 top-2 z-10 -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75"
+          >
+            Re-enter Password
+          </label>
+          <div
+            class="text-red-600 text-sm mt-1"
+            [hidden]="
+              !(
+                (registerForm.get('rePassword')?.errors || registerForm.getError('missMatch')) &&
+                registerForm.get('rePassword')?.touched
+              )
+            "
+          >
+            <span [hidden]="!registerForm.get('rePassword')?.hasError('required')"
+              >This input is required!</span
+            >
+            <span [hidden]="!registerForm.getError('missMatch')">Passwords do not match</span>
+          </div>
+        </div>
+
+        <!-- Phone Number -->
+        <div class="relative w-full mb-2">
+          <input
+            formControlName="phoneNumber"
+            type="tel"
+            placeholder=" "
+            id="phoneNumber"
+            [class.error-input]="
+              registerForm.get('phoneNumber')?.errors && registerForm.get('phoneNumber')?.touched
+            "
+            [class.valid-input]="
+              !registerForm.get('phoneNumber')?.errors && registerForm.get('phoneNumber')?.touched
+            "
+            class="peer block w-full rounded-lg border border-gray-300 bg-transparent px-2.5 pb-2.5 pt-4 text-sm text-gray-900 focus:outline-none focus:ring-0"
+          />
+          <label
+            for="phoneNumber"
+            class="absolute start-1 top-2 z-10 -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75"
+          >
+            Phone Number
+          </label>
+          <div
+            class="text-red-600 text-sm mt-1"
+            [hidden]="
+              !(registerForm.get('phoneNumber')?.errors && registerForm.get('phoneNumber')?.touched)
+            "
+          >
+            <span [hidden]="!registerForm.get('phoneNumber')?.hasError('required')"
+              >This input is required!</span
+            >
+            <span [hidden]="!registerForm.get('phoneNumber')?.hasError('pattern')"
+              >Please enter a valid Egyptian phone number</span
+            >
+          </div>
+        </div>
+
+        <!-- Address -->
+        <div class="relative w-full mb-2">
+          <input
+            formControlName="address"
+            type="text"
+            placeholder=" "
+            id="address"
+            [class.error-input]="
+              registerForm.get('address')?.errors && registerForm.get('address')?.touched
+            "
+            [class.valid-input]="
+              !registerForm.get('address')?.errors && registerForm.get('address')?.touched
+            "
+            class="peer block w-full rounded-lg border border-gray-300 bg-transparent px-2.5 pb-2.5 pt-4 text-sm text-gray-900 focus:outline-none focus:ring-0"
+          />
+          <label
+            for="address"
+            class="absolute start-1 top-2 z-10 -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75"
+          >
+            Address
+          </label>
+          <div
+            class="text-red-600 text-sm mt-1"
+            [hidden]="
+              !(registerForm.get('address')?.errors && registerForm.get('address')?.touched)
+            "
+          >
+            <span [hidden]="!registerForm.get('address')?.hasError('required')"
+              >This input is required!</span
+            >
+          </div>
+        </div>
+
+        <!-- Job (Dropdown) -->
+        <div class="relative w-full mb-2">
+          <select
+            formControlName="job"
+            [class.error-input]="
+              registerForm.get('job')?.errors && registerForm.get('job')?.touched
+            "
+            [class.valid-input]="
+              !registerForm.get('job')?.errors && registerForm.get('job')?.touched
+            "
+            class="peer block w-full rounded-lg border border-gray-300 bg-transparent px-2.5 pb-2.5 pt-4 text-sm text-gray-900 focus:outline-none focus:ring-0 appearance-none"
+          >
+            <option value="" disabled selected hidden>Select Job</option>
+            <option value="Teacher">Teacher</option>
+            <option value="Engineer">Engineer</option>
+            <option value="Doctor">Doctor</option>
+            <option value="Parent">Parent</option>
+            <option value="Other">Other</option>
+          </select>
+          <label
+            for="job"
+            class="absolute start-1 top-2 z-10 -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75"
+          >
+            Job
+          </label>
+          <div
+            class="text-red-600 text-sm mt-1"
+            [hidden]="!(registerForm.get('job')?.errors && registerForm.get('job')?.touched)"
+          >
+            <span [hidden]="!registerForm.get('job')?.hasError('required')"
+              >This input is required!</span
+            >
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          [disabled]="isLoading || !registerForm.valid"
+          type="submit"
+          class="min-w-[250px] disabled:bg-gray-500 disabled:cursor-auto block mx-auto text-2xl py-2 mt-8 rounded-full bg-main-400 cursor-pointer hover:bg-main-700 duration-300 text-gray-100 focus:outline-none"
+        >
+          Submit
+          <i [hidden]="!isLoading" class="fas fa-spinner fa-spin"></i>
+        </button>
+
+        <!-- Server Error -->
+        <div
+          class="response-msg bg-red-100 border-l-4 my-4 text-2xl font-light border-red-500 text-red-700 p-4"
+          [hidden]="!errorMessage"
+          role="alert"
+        >
+          <p>{{ errorMessage }}</p>
+        </div>
+
+        <!-- Success Message -->
+        <div
+          class="response-msg bg-green-100 border-l-4 my-4 text-2xl font-light border-green-500 text-green-700 p-4"
+          [hidden]="!successMessage"
+          role="alert"
+        >
+          <p class="font-bold">Registration {{ successMessage }}</p>
+          <small>You will be redirected to the login page in {{ timer }}</small>
+        </div>
+      </div>
+    </form>
+
+    <p class="font-bold text-center p-4">
+      Already have an acount?
+      <a
+        class="text-main-500 cursor-pointer hover:underline duration-300 hover:text-main-700"
+        routerLink="/login"
+        >SignIn</a
+      >
+    </p>
+  </div>
+</div>

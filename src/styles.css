@@ -1,0 +1,10 @@
+/* You can add global styles to this file, and also import other style files */
+@import "./styles/typography.css";
+
+
+@import "tailwindcss";
+
+
+@import "./styles/variables.css";
+@import "./styles/base.css";
+@import "./styles/themes.css";
