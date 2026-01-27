@@ -32,7 +32,6 @@ export class AuthService extends baseHttp {
       `${APP_APIs.forgotPassword}/${safe}`,
       {},
       {
-        // headers اللي عندك
         headers: {
           EmailorUserName: value,
           Email: value,
@@ -41,7 +40,6 @@ export class AuthService extends baseHttp {
     );
   }
 
-  // ✅ هنا أهم تعديل: responseType text
   verifyOtp(body: IVerifyOtpBody) {
     return this.post<string>(APP_APIs.verifyOtp, body, {
       responseType: 'text' as const,
@@ -61,18 +59,13 @@ export class AuthService extends baseHttp {
   }
 
   logout() {
-    // مفيش body — لازم تبعتي cookies
-    return this.post<any>(
-      APP_APIs.logout,
-      {} // body فاضي
-    );
+    return this.post<any>(APP_APIs.logout, {});
   }
 
   logoutAndRedirect() {
     this.logout().subscribe({
       next: () => this.router.navigateByUrl('/login'),
       error: () => {
-        // حتى لو فشل logout (مثلاً cookies expired) رجّعيه login برضه
         this.router.navigateByUrl('/login');
       },
     });
