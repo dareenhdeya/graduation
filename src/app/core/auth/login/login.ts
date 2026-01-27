@@ -29,31 +29,26 @@ export class Login implements OnInit {
 
   initForm(): void {
     this.loginForm = this.fb.group({
-      usernameorEmail: [null, [Validators.required, Validators.email]],
+      usernameorEmail: [null, [Validators.required]],
       password: [null, [Validators.required]],
     });
   }
 
   submitLogin(): void {
     if (this.loginForm.valid) {
-      console.log(this.loginForm);
-
       this.subscription.unsubscribe();
       this.isLoading = true;
       this.errMsg = '';
 
       this.subscription = this.authService.login(this.loginForm.value).subscribe({
         next: (res) => {
-          console.log(res);
-          if (res.message === 'Logined Successfully') {
-            this.cookieService.set('token', res.data.accessToken);
-            this.router.navigate(['home']);
-          }
+          console.log('login res:', res);
+          this.router.navigate(['/home']);
           this.isLoading = false;
         },
         error: (err) => {
-          console.log(err);
-          this.errMsg = err.error.message;
+          console.log('login err:', err);
+          this.errMsg = err.userMessage || err.error?.message || 'Login failed';
           this.isLoading = false;
         },
       });

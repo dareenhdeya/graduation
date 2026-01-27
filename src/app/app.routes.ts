@@ -4,6 +4,7 @@ import { Login } from './core/auth/login/login';
 import { SignUp } from './core/auth/sign-up/sign-up';
 import { MainLayout } from './core/layout/main-layout/main-layout';
 import { HomeComponent } from './features/home/home.component';
+import { ForgotpassComponent } from './core/auth/forgotpass/forgotpass.component';
 
 export const routes: Routes = [
   {
@@ -17,11 +18,11 @@ export const routes: Routes = [
     children: [
       { path: 'login', component: Login, title: 'login page' },
       { path: 'register', component: SignUp, title: 'register page' },
-      // {
-      //   path: 'forgotpass',
-      //   component: ForgotpassComponent,
-      //   title: 'forgot pass page',
-      // },
+      {
+        path: 'forgotpass',
+        component: ForgotpassComponent,
+        title: 'forgot pass page',
+      },
     ],
   },
   {

@@ -1,0 +1,17 @@
+<div class="container mx-auto py-6">
+  <div class="flex flex-wrap gap-3 justify-center">
+    @for (letter of letters; track $index) {
+      <a [routerLink]="['/details']">
+        <div
+          class="flex items-center justify-center {{ letters[$index].bg }} {{
+            letters[$index].hover
+          }} duration-500 hover:scale-110 z-10 cursor-pointer size-32 rounded-lg"
+        >
+          <span class="text-white text-shadow-2xs font-bold text-4xl">
+            {{ letter.asci }}
+          </span>
+        </div>
+      </a>
+    }
+  </div>
+</div>

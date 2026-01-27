@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { AuthService } from './../../../core/auth/services/auth.service';
+import { Component, inject } from '@angular/core';
 
 @Component({
   selector: 'app-navbar',
@@ -7,5 +8,16 @@ import { Component } from '@angular/core';
   styleUrl: './navbar.component.css',
 })
 export class NavbarComponent {
+  firstLetter: string = 'D';
+  // *Inject Services
+  private readonly authService = inject(AuthService);
 
+  constructor() {
+    // const username = localStorage.getItem("username") || "D"
+    // this.firstLetter = username.charAt(0).toUpperCase()
+  }
+
+  logOut() {
+    this.authService.logoutAndRedirect();
+  }
 }

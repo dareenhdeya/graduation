@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpInterceptorFn } from '@angular/common/http';
 
-import { headersInterceptor } from './headers-interceptor';
+import { authRefreshInterceptor } from './auth-refresh-interceptor';
 
-describe('headersInterceptor', () => {
+describe('authRefreshInterceptor', () => {
   const interceptor: HttpInterceptorFn = (req, next) => 
-    TestBed.runInInjectionContext(() => headersInterceptor(req, next));
+    TestBed.runInInjectionContext(() => authRefreshInterceptor(req, next));
 
   beforeEach(() => {
     TestBed.configureTestingModule({});

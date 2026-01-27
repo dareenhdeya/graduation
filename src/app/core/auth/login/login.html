@@ -78,7 +78,14 @@
       <a class="text-sky-400 hover:underline text-sm mb-4 inline-block" routerLink="/forgotpass">
         Forgot password?
       </a>
+
+      <p class="text-sm text-gray-400 text-center mt-4">
+        Don't have an account?
+        <a routerLink="/register" class="text-sky-400 hover:underline">Register</a>
+      </p>
+
       <button
+        type="submit"
         class="w-full cursor-pointer mt-4 py-3 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-semibold shadow-lg transition-all duration-300 flex justify-center items-center gap-2"
       >
         Login @if(isLoading){

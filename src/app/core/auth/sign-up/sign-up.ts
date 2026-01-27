@@ -1,124 +1,210 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
-import { interval, take } from 'rxjs';
-import { IRegisterResponse } from '../interfaces/IRegisterResponse';
+
+
+import { Component, inject, OnInit } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { RouterLink } from '@angular/router';
+
+type RoleId = 0 | 1 | 2 | 3;
+type GenderId = 1 | 2;
+
 @Component({
   selector: 'app-sign-up',
+  standalone: true,
   imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './sign-up.html',
   styleUrl: './sign-up.css',
 })
-export class SignUp {
-  //Inject Services
-  private readonly authSirvec = inject(AuthService);
-  private router = inject(Router);
+export class SignUp implements OnInit {
+  private readonly fb = inject(FormBuilder);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
-  // Variables
-  errorMessage?: string; //for error response message
-  successMessage?: string; //for success response message
-  isLoading: boolean = false; // track the request
-  timer: number = 3;
-  ngOnInit() {
-    // this.registerForm.setValue({
-    //   name: "mohammed",
-    //   email: "mohamed20@gmail.com",
-    //   password: "123456789@Ab",
-    //   rePassword: "123456789@Ab",
-    //   phone: "01091215398",
-    // })
+  isLoading = false;
+  errMsg = '';
+  fileErrMsg = '';
+
+  selectedFile: File | null = null;
+
+  roles: { id: RoleId; label: string }[] = [
+    { id: 1, label: 'Student' },
+    { id: 2, label: 'Parent' },
+    { id: 3, label: 'Teacher' },
+    { id: 0, label: 'Admin' },
+  ];
+
+avatars = [
+  { id: '001-man',    src: '/images/pfp/001-man.png' },
+  { id: '002-cat',    src: '/images/pfp/002-cat.png' },
+  { id: '002-man-1',  src: '/images/pfp/002-man-1.png' },
+  { id: '003-man-2',  src: '/images/pfp/003-man-2.png' },
+  { id: '003-panda',  src: '/images/pfp/003-panda.png' },
+  { id: '004-boy',    src: '/images/pfp/004-boy.png' },
+  { id: '004-rabbit', src: '/images/pfp/004-rabbit.png' },
+  { id: '005-dog',    src: '/images/pfp/005-dog.png' },
+  { id: '005-woman',  src: '/images/pfp/005-woman.png' },
+  { id: '006-girl',   src: '/images/pfp/006-girl.png' },
+  { id: '006-lion',   src: '/images/pfp/006-lion.png' },
+  { id: '007-boy',    src: '/images/pfp/007-boy.png' },
+  { id: '007-woman-1',src: '/images/pfp/007-woman-1.png' },
+  { id: '008-bear',   src: '/images/pfp/008-bear.png' },
+  { id: '008-woman-2',src: '/images/pfp/008-woman-2.png' },
+  { id: '009-chicken',src: '/images/pfp/009-chicken.png' },
+  { id: '009-human',  src: '/images/pfp/009-human.png' },
+  { id: '010-girl',   src: '/images/pfp/010-girl.png' },
+  { id: '010-woman-3',src: '/images/pfp/010-woman-3.png' },
+  { id: '011-profile',src: '/images/pfp/011-profile.png' },
+  { id: '012-woman',  src: '/images/pfp/012-woman.png' },
+  { id: '013-meerkat',src: '/images/pfp/013-meerkat.png' },
+];
+
+filePreviewUrl: string | null = null;
+showAvatarPicker = false;
+selectedAvatarSrc: string | null = null;
+
+get avatarPreview(): string {
+  if (this.selectedAvatarSrc) return this.selectedAvatarSrc;
+  if (this.filePreviewUrl) return this.filePreviewUrl;
+  return '/images/pfp/011-profile.png';
+}
+
+selectAvatar(src: string) {
+  this.selectedAvatarSrc = src;
+  this.selectedFile = null;
+
+  if (this.filePreviewUrl) URL.revokeObjectURL(this.filePreviewUrl);
+  this.filePreviewUrl = null;
+
+  this.fileErrMsg = '';
+  this.showAvatarPicker = false;
+}
+
+
+openAvatarPicker() {
+  this.showAvatarPicker = true;
+}
+
+closeAvatarPicker() {
+  this.showAvatarPicker = false;
+}
+
+
+  signUpForm = this.fb.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required]],
+    role: [1 as any, [Validators.required]],
+
+    Gender: ['', [Validators.required]],
+
+    FName: ['', [Validators.required]],
+    LName: ['', [Validators.required]],
+    phoneNumber: ['', [Validators.required]],
+    Address: [''],
+
+    Job: [''],
+    SubjectID: [''],
+  });
+
+  ngOnInit(): void {
+    this.applyRoleRules(Number(this.signUpForm.get('role')!.value) as RoleId);
+
+    this.signUpForm.get('role')!.valueChanges.subscribe((role) => {
+      this.applyRoleRules(Number(role) as RoleId);
+      this.fileErrMsg = '';
+    });
   }
 
-  registerForm = new FormGroup(
-    {
-      fName: new FormControl('', [
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(30),
-      ]),
+  private applyRoleRules(role: RoleId) {
+    const jobCtrl = this.signUpForm.get('Job')!;
+    const subjectCtrl = this.signUpForm.get('SubjectID')!;
 
-      lName: new FormControl('', [
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(30),
-      ]),
-
-      email: new FormControl('', [
-        Validators.required,
-        Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/),
-      ]),
-
-      password: new FormControl('', [Validators.required]),
-
-      rePassword: new FormControl('', [Validators.required]),
-
-      phoneNumber: new FormControl('', [
-        Validators.required,
-        Validators.pattern(/^01[0-2,5][0-9]{8}$/),
-      ]),
-
-      role: new FormControl(2, [Validators.required]), // Assuming default role is '2' (Parent)
-
-      address: new FormControl('', [Validators.required]), // Added required for 'address'
-
-      job: new FormControl(''),
-    },
-    {
-      validators: this.passMissMatch,
+    if (role !== 3) {
+      jobCtrl.setValidators([Validators.required]);
+    } else {
+      jobCtrl.clearValidators();
+      jobCtrl.setValue('');
     }
-  );
-  onSubmit() {
-    console.log(this.registerForm);
-    if (this.registerForm.valid) {
-      this.handleBeforeSubmit();
+    jobCtrl.updateValueAndValidity({ emitEvent: false });
 
-      const userData = this.registerForm.value;
-      this.authSirvec.signUp(userData).subscribe({
-        next: (response) => {
-          this.handleAfterSucces(response);
-        },
-        error: (err: HttpErrorResponse) => {
-          this.handleErrorResponse(err);
-        },
-      });
-    }
-    console.log(this.registerForm.value);
+    // if (role === 3) {
+    //   // subjectCtrl.setValidators([Validators.required]);
+    // } else {
+    //   subjectCtrl.clearValidators();
+    //   subjectCtrl.setValue('');
+    // }
+    subjectCtrl.updateValueAndValidity({ emitEvent: false });
   }
-  handleBeforeSubmit(): void {
-    this.registerForm.markAllAsTouched();
-    this.errorMessage = undefined;
+
+  onFileChange(e: Event) {
+    const input = e.target as HTMLInputElement;
+    const file = input.files?.[0] || null;
+  
+    this.selectedFile = file;
+    this.fileErrMsg = '';
+  
+    this.selectedAvatarSrc = null;
+  
+    if (this.filePreviewUrl) URL.revokeObjectURL(this.filePreviewUrl);
+    this.filePreviewUrl = file ? URL.createObjectURL(file) : null;
+  }
+  
+
+  submit() {
+    if (this.signUpForm.invalid) {
+      this.signUpForm.markAllAsTouched();
+      return;
+    }
+
+    const v = this.signUpForm.value;
+
+    const role = Number(v.role) as RoleId;
+    const gender = Number(v.Gender) as GenderId;
+    if (![1, 2].includes(gender)) {
+      this.signUpForm.get('Gender')?.setErrors({ required: true });
+      return;
+    }
+
+    if (role === 2 && !this.selectedFile) {
+      this.fileErrMsg = 'Profile picture is required for Parent.';
+      return;
+    }
+
     this.isLoading = true;
-  }
-  handleAfterSucces(response: IRegisterResponse): void {
-    this.isLoading = false;
-    this.errorMessage = undefined;
-    console.log(response);
-    console.log('after success');
-    this.successMessage = response.message;
-    this.registerForm.reset();
-    interval(1000)
-      .pipe(take(3))
-      .subscribe(() => {
-        console.log('interval');
-        this.timer--;
-        if (this.timer === 0) this.redirectTo('/login');
-      });
+    this.errMsg = '';
+    this.fileErrMsg = '';
+
+    const fd = new FormData();
+
+    if (this.selectedFile) fd.append('file', this.selectedFile);
+
+    fd.append('email', String(v.email || ''));
+    fd.append('password', String(v.password || ''));
+    fd.append('role', String(role));
+
+    fd.append('Gender', String(gender));
+
+    fd.append('FName', String(v.FName || ''));
+    fd.append('LName', String(v.LName || ''));
+    fd.append('phoneNumber', String(v.phoneNumber || ''));
+    fd.append('Address', String(v.Address || ''));
+
+    if (role !== 3) fd.append('Job', String(v.Job || ''));
+
+    if (role === 3 && v.SubjectID) fd.append('SubjectID', String(v.SubjectID || ''));
+
+    this.authService.signUp(fd).subscribe({
+      next: () => {
+        this.isLoading = false;
+        this.router.navigateByUrl('/login');
+      },
+      error: (err) => {
+        this.errMsg = err?.error?.Message || err?.error?.message || 'Registration failed';
+        this.isLoading = false;
+      },
+    });
   }
 
-  handleErrorResponse(error: HttpErrorResponse) {
-    console.log(error.error);
-    this.errorMessage = error.error.message;
-    this.isLoading = false;
-  }
-  redirectTo(url: string) {
-    this.router.navigateByUrl(url);
-  }
-  passMissMatch(FormGroup: any) {
-    return FormGroup.get('rePassword').value === FormGroup.get('password').value
-      ? null
-      : { missMatch: true };
-  }
+  ngOnDestroy() {
+    if (this.filePreviewUrl) URL.revokeObjectURL(this.filePreviewUrl);
+  }  
 }
