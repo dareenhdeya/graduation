@@ -1,5 +1,3 @@
-
-
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -21,6 +19,7 @@ export class SignUp implements OnInit {
   private readonly router = inject(Router);
 
   isLoading = false;
+  showPass: boolean = false;
   errMsg = '';
   fileErrMsg = '';
 
@@ -33,61 +32,59 @@ export class SignUp implements OnInit {
     { id: 0, label: 'Admin' },
   ];
 
-avatars = [
-  { id: '001-man',    src: '/images/pfp/001-man.png' },
-  { id: '002-cat',    src: '/images/pfp/002-cat.png' },
-  { id: '002-man-1',  src: '/images/pfp/002-man-1.png' },
-  { id: '003-man-2',  src: '/images/pfp/003-man-2.png' },
-  { id: '003-panda',  src: '/images/pfp/003-panda.png' },
-  { id: '004-boy',    src: '/images/pfp/004-boy.png' },
-  { id: '004-rabbit', src: '/images/pfp/004-rabbit.png' },
-  { id: '005-dog',    src: '/images/pfp/005-dog.png' },
-  { id: '005-woman',  src: '/images/pfp/005-woman.png' },
-  { id: '006-girl',   src: '/images/pfp/006-girl.png' },
-  { id: '006-lion',   src: '/images/pfp/006-lion.png' },
-  { id: '007-boy',    src: '/images/pfp/007-boy.png' },
-  { id: '007-woman-1',src: '/images/pfp/007-woman-1.png' },
-  { id: '008-bear',   src: '/images/pfp/008-bear.png' },
-  { id: '008-woman-2',src: '/images/pfp/008-woman-2.png' },
-  { id: '009-chicken',src: '/images/pfp/009-chicken.png' },
-  { id: '009-human',  src: '/images/pfp/009-human.png' },
-  { id: '010-girl',   src: '/images/pfp/010-girl.png' },
-  { id: '010-woman-3',src: '/images/pfp/010-woman-3.png' },
-  { id: '011-profile',src: '/images/pfp/011-profile.png' },
-  { id: '012-woman',  src: '/images/pfp/012-woman.png' },
-  { id: '013-meerkat',src: '/images/pfp/013-meerkat.png' },
-];
+  avatars = [
+    { id: '001-man', src: '/images/pfp/001-man.png' },
+    { id: '002-cat', src: '/images/pfp/002-cat.png' },
+    { id: '002-man-1', src: '/images/pfp/002-man-1.png' },
+    { id: '003-man-2', src: '/images/pfp/003-man-2.png' },
+    { id: '003-panda', src: '/images/pfp/003-panda.png' },
+    { id: '004-boy', src: '/images/pfp/004-boy.png' },
+    { id: '004-rabbit', src: '/images/pfp/004-rabbit.png' },
+    { id: '005-dog', src: '/images/pfp/005-dog.png' },
+    { id: '005-woman', src: '/images/pfp/005-woman.png' },
+    { id: '006-girl', src: '/images/pfp/006-girl.png' },
+    { id: '006-lion', src: '/images/pfp/006-lion.png' },
+    { id: '007-boy', src: '/images/pfp/007-boy.png' },
+    { id: '007-woman-1', src: '/images/pfp/007-woman-1.png' },
+    { id: '008-bear', src: '/images/pfp/008-bear.png' },
+    { id: '008-woman-2', src: '/images/pfp/008-woman-2.png' },
+    { id: '009-chicken', src: '/images/pfp/009-chicken.png' },
+    { id: '009-human', src: '/images/pfp/009-human.png' },
+    { id: '010-girl', src: '/images/pfp/010-girl.png' },
+    { id: '010-woman-3', src: '/images/pfp/010-woman-3.png' },
+    { id: '011-profile', src: '/images/pfp/011-profile.png' },
+    { id: '012-woman', src: '/images/pfp/012-woman.png' },
+    { id: '013-meerkat', src: '/images/pfp/013-meerkat.png' },
+  ];
 
-filePreviewUrl: string | null = null;
-showAvatarPicker = false;
-selectedAvatarSrc: string | null = null;
+  filePreviewUrl: string | null = null;
+  showAvatarPicker = false;
+  selectedAvatarSrc: string | null = null;
 
-get avatarPreview(): string {
-  if (this.selectedAvatarSrc) return this.selectedAvatarSrc;
-  if (this.filePreviewUrl) return this.filePreviewUrl;
-  return '/images/pfp/011-profile.png';
-}
+  get avatarPreview(): string {
+    if (this.selectedAvatarSrc) return this.selectedAvatarSrc;
+    if (this.filePreviewUrl) return this.filePreviewUrl;
+    return '/images/pfp/011-profile.png';
+  }
 
-selectAvatar(src: string) {
-  this.selectedAvatarSrc = src;
-  this.selectedFile = null;
+  selectAvatar(src: string) {
+    this.selectedAvatarSrc = src;
+    this.selectedFile = null;
 
-  if (this.filePreviewUrl) URL.revokeObjectURL(this.filePreviewUrl);
-  this.filePreviewUrl = null;
+    if (this.filePreviewUrl) URL.revokeObjectURL(this.filePreviewUrl);
+    this.filePreviewUrl = null;
 
-  this.fileErrMsg = '';
-  this.showAvatarPicker = false;
-}
+    this.fileErrMsg = '';
+    this.showAvatarPicker = false;
+  }
 
+  openAvatarPicker() {
+    this.showAvatarPicker = true;
+  }
 
-openAvatarPicker() {
-  this.showAvatarPicker = true;
-}
-
-closeAvatarPicker() {
-  this.showAvatarPicker = false;
-}
-
+  closeAvatarPicker() {
+    this.showAvatarPicker = false;
+  }
 
   signUpForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -138,16 +135,15 @@ closeAvatarPicker() {
   onFileChange(e: Event) {
     const input = e.target as HTMLInputElement;
     const file = input.files?.[0] || null;
-  
+
     this.selectedFile = file;
     this.fileErrMsg = '';
-  
+
     this.selectedAvatarSrc = null;
-  
+
     if (this.filePreviewUrl) URL.revokeObjectURL(this.filePreviewUrl);
     this.filePreviewUrl = file ? URL.createObjectURL(file) : null;
   }
-  
 
   submit() {
     if (this.signUpForm.invalid) {
@@ -206,5 +202,5 @@ closeAvatarPicker() {
 
   ngOnDestroy() {
     if (this.filePreviewUrl) URL.revokeObjectURL(this.filePreviewUrl);
-  }  
+  }
 }
