@@ -10,7 +10,7 @@
     <nav
       class="md:ml-auto md:mr-4 md:py-1 md:pl-4 md:border-l md:border-gray-400 flex flex-wrap items-center text-base justify-center"
     >
-      <a class="mr-5 hover:text-gray-900"
+      <a routerLink="home" class="mr-5 hover:text-gray-900"
         ><span
           class="bg-black cursor-pointer text-white px-5 py-2.5 hover:bg-gray-800 duration-300 rounded-full"
           ><i class="fa-solid fa-house"></i> Home</span
@@ -22,16 +22,21 @@
           ><i class="fa-solid fa-trophy"></i> Progress</span
         ></a
       >
-      <a class="mr-5 hover:text-gray-900"
-        ><span
-          class="rounded-full flex items-center justify-center bg-purple-500 text-2xl size-10 text-white font-medium shadow shadow-black"
-          >{{ firstLetter }}</span
-        ></a
-      >
+      <button type="button" (click)="goToProfile()" class="cursor-pointer mr-5 hover:text-gray-900">
+        <span
+          class="rounded-full overflow-hidden flex items-center justify-center bg-purple-500 size-10 text-white font-medium shadow shadow-black"
+        >
+          @if (profileImage) {
+          <img [src]="profileImage" class="w-full h-full object-cover" />
+          } @else {
+          <span class="text-lg">{{ firstLetter }}</span>
+          }
+        </span>
+      </button>
     </nav>
     <button
       (click)="logOut()"
-      class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0"
+      class="inline-flex items-center cursor-pointer bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0"
     >
       <span><i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out</span>
     </button>

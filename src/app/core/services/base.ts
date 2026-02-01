@@ -29,54 +29,63 @@
 //   }
 // }
 
-
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Params } from '@angular/router';
+
+type JsonOptions = {
+  headers?: HttpHeaders | Record<string, string | string[]>;
+};
+
+type TextOptions = {
+  headers?: HttpHeaders | Record<string, string | string[]>;
+};
 
 export abstract class baseHttp {
   protected readonly http = inject(HttpClient);
 
-  private normalizeOptions(headersOrOptions?: any, filters?: Params) {
-    const looksLikeOptions =
-      headersOrOptions &&
-      typeof headersOrOptions === 'object' &&
-      ('headers' in headersOrOptions ||
-        'responseType' in headersOrOptions ||
-        'withCredentials' in headersOrOptions ||
-        'observe' in headersOrOptions ||
-        'params' in headersOrOptions);
-
-    if (looksLikeOptions) {
-      return {
-        ...(filters ? { params: filters } : {}),
-        ...headersOrOptions,
-      };
-    }
-
-    return {
-      ...(filters ? { params: filters } : {}),
-      ...(headersOrOptions ? { headers: headersOrOptions } : {}),
-    };
+  protected get<T>(url: string, filters?: Params, options?: JsonOptions) {
+    return this.http.get<T>(url, {
+      ...(options ?? {}),
+      params: filters,
+      observe: 'body',
+      responseType: 'json',
+    });
   }
 
-  protected get<T>(url: string, filters?: Params, headersOrOptions?: {}) {
-    return this.http.get<T>(url, this.normalizeOptions(headersOrOptions, filters));
+  protected post<T>(url: string, data: {}, options?: JsonOptions) {
+    return this.http.post<T>(url, data, {
+      ...(options ?? {}),
+      observe: 'body',
+      responseType: 'json',
+    });
   }
 
-  protected put<T>(url: string, data?: {}, headersOrOptions?: {}) {
-    return this.http.put<T>(url, data, this.normalizeOptions(headersOrOptions));
+  protected put<T>(url: string, data?: {}, options?: JsonOptions) {
+    return this.http.put<T>(url, data, {
+      ...(options ?? {}),
+      observe: 'body',
+      responseType: 'json',
+    });
   }
 
-  protected post<T>(url: string, data: {}, headersOrOptions?: {}) {
-    return this.http.post<T>(url, data, this.normalizeOptions(headersOrOptions));
+  protected patch<T>(url: string, data?: {}, options?: JsonOptions) {
+    return this.http.patch<T>(url, data, {
+      ...(options ?? {}),
+      observe: 'body',
+      responseType: 'json',
+    });
   }
 
-  protected patch<T>(url: string, data?: {}, headersOrOptions?: {}) {
-    return this.http.patch<T>(url, data, this.normalizeOptions(headersOrOptions));
+  protected delete<T>(url: string, options?: JsonOptions) {
+    return this.http.delete<T>(url, {
+      ...(options ?? {}),
+      observe: 'body',
+      responseType: 'json',
+    });
   }
 
-  protected delete<T>(url: string, headersOrOptions?: {}) {
-    return this.http.delete<T>(url, this.normalizeOptions(headersOrOptions));
+  protected postText(url: string, data: {}, options?: TextOptions) {
+    return this.http.post(url, data, { ...(options ?? {}), observe: 'body', responseType: 'text' });
   }
 }

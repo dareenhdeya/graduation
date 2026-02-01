@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { LettersComponent } from '../../shared/components/letters/letters.component';
+import { RoleActionsComponent } from '../role-actions/role-actions.component';
+import { AuthService } from '../../core/auth/services/auth.service';
 
 type BgLetter = {
   id: number;
@@ -14,11 +16,24 @@ type BgLetter = {
 
 @Component({
   selector: 'app-home',
-  imports: [LettersComponent],
+  imports: [LettersComponent, RoleActionsComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
+  private auth = inject(AuthService);
+
+  ngOnInit() {
+    this.auth.getProfile().subscribe({
+      next: (res) => {
+        console.log('=======profile:==========', res);
+        const role = res.data.role;
+        this.auth.setRole(role);
+      },
+      error: (err) => console.error('Failed to get profile', err),
+    });
+  }
+
   bgLetters: BgLetter[] = [];
 
   constructor() {

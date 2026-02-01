@@ -4,24 +4,42 @@ import { baseHttp } from '../../services/base';
 import { APP_APIs } from '../../constants/appAPIs';
 import { ILoginResponse } from '../interfaces/ILoginResponse';
 import { IRegisterResponse } from '../interfaces/IRegisterResponse';
+import { ViewProfileResponse } from '../interfaces/IProfileResponse';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { BehaviorSubject, map } from 'rxjs';
 
 export interface IVerifyOtpBody {
   emailOrUserName: string;
   otp: string;
 }
 
+type Role = 'Admin' | 'Parent' | 'Teacher' | 'Student';
+
 @Injectable({ providedIn: 'root' })
 export class AuthService extends baseHttp {
   private readonly router = inject(Router);
+
+  private roleSubject = new BehaviorSubject<Role | null>(null);
+  role$ = this.roleSubject.asObservable();
+
+  setRole(role: Role | null) {
+    this.roleSubject.next(role);
+  }
+
+  getRoleSnapshot() {
+    return this.roleSubject.value;
+  }
+
+  getProfile() {
+    return this.http.get<ViewProfileResponse>(APP_APIs.getProfile);
+  }
 
   signUp(userData: any) {
     return this.post<IRegisterResponse>(APP_APIs.register, userData);
   }
 
   login(userData: any) {
-    return this.post<string>(APP_APIs.login, userData, {
-      responseType: 'text' as const,
-    });
+    return this.postText(APP_APIs.login, userData);
   }
 
   requestPasswordChange(emailOrUserName: string) {
@@ -41,9 +59,7 @@ export class AuthService extends baseHttp {
   }
 
   verifyOtp(body: IVerifyOtpBody) {
-    return this.post<string>(APP_APIs.verifyOtp, body, {
-      responseType: 'text' as const,
-    });
+    return this.postText(APP_APIs.verifyOtp, body);
   }
 
   resetPassword(newPassword: string) {

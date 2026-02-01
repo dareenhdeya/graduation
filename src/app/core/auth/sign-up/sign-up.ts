@@ -61,10 +61,10 @@ export class SignUp implements OnInit {
   showAvatarPicker = false;
   selectedAvatarSrc: string | null = null;
 
-  get avatarPreview(): string {
+  get avatarPreview(): string | null {
     if (this.selectedAvatarSrc) return this.selectedAvatarSrc;
     if (this.filePreviewUrl) return this.filePreviewUrl;
-    return '/images/pfp/011-profile.png';
+    return null;
   }
 
   selectAvatar(src: string) {
@@ -145,22 +145,80 @@ export class SignUp implements OnInit {
     this.filePreviewUrl = file ? URL.createObjectURL(file) : null;
   }
 
-  submit() {
+  // submit() {
+  //   if (this.signUpForm.invalid) {
+  //     this.signUpForm.markAllAsTouched();
+  //     return;
+  //   }
+
+  //   const v = this.signUpForm.value;
+
+  //   const role = Number(v.role) as RoleId;
+  //   const gender = Number(v.Gender) as GenderId;
+  //   if (![1, 2].includes(gender)) {
+  //     this.signUpForm.get('Gender')?.setErrors({ required: true });
+  //     return;
+  //   }
+
+  //   const hasAnyPicture = !!this.selectedFile || !!this.selectedAvatarSrc;
+
+  //   if (role === 2 && !hasAnyPicture) {
+  //     this.fileErrMsg = 'Profile picture is required for Parent.';
+  //     return;
+  //   }
+
+  //   this.isLoading = true;
+  //   this.errMsg = '';
+  //   this.fileErrMsg = '';
+
+  //   const fd = new FormData();
+
+  //   if (this.selectedFile) fd.append('file', this.selectedFile);
+
+  //   fd.append('email', String(v.email || ''));
+  //   fd.append('password', String(v.password || ''));
+  //   fd.append('role', String(role));
+
+  //   fd.append('Gender', String(gender));
+
+  //   fd.append('FName', String(v.FName || ''));
+  //   fd.append('LName', String(v.LName || ''));
+  //   fd.append('phoneNumber', String(v.phoneNumber || ''));
+  //   fd.append('Address', String(v.Address || ''));
+
+  //   if (role !== 3) fd.append('Job', String(v.Job || ''));
+
+  //   if (role === 3 && v.SubjectID) fd.append('SubjectID', String(v.SubjectID || ''));
+
+  //   this.authService.signUp(fd).subscribe({
+  //     next: () => {
+  //       this.isLoading = false;
+  //       this.router.navigateByUrl('/login');
+  //     },
+  //     error: (err) => {
+  //       this.errMsg = err?.error?.Message || err?.error?.message || 'Registration failed';
+  //       this.isLoading = false;
+  //     },
+  //   });
+  // }
+
+  async submit() {
     if (this.signUpForm.invalid) {
       this.signUpForm.markAllAsTouched();
       return;
     }
 
     const v = this.signUpForm.value;
-
     const role = Number(v.role) as RoleId;
     const gender = Number(v.Gender) as GenderId;
+
     if (![1, 2].includes(gender)) {
       this.signUpForm.get('Gender')?.setErrors({ required: true });
       return;
     }
 
-    if (role === 2 && !this.selectedFile) {
+    const hasAnyPicture = !!this.selectedFile || !!this.selectedAvatarSrc;
+    if (role === 2 && !hasAnyPicture) {
       this.fileErrMsg = 'Profile picture is required for Parent.';
       return;
     }
@@ -171,21 +229,26 @@ export class SignUp implements OnInit {
 
     const fd = new FormData();
 
+    // ✅ لو مفيش uploaded file بس فيه avatar، حوليه لملف
+    if (!this.selectedFile && this.selectedAvatarSrc) {
+      const res = await fetch(this.selectedAvatarSrc);
+      const blob = await res.blob();
+      const file = new File([blob], 'avatar.png', { type: blob.type || 'image/png' });
+      this.selectedFile = file;
+    }
+
     if (this.selectedFile) fd.append('file', this.selectedFile);
 
     fd.append('email', String(v.email || ''));
     fd.append('password', String(v.password || ''));
     fd.append('role', String(role));
-
     fd.append('Gender', String(gender));
-
     fd.append('FName', String(v.FName || ''));
     fd.append('LName', String(v.LName || ''));
     fd.append('phoneNumber', String(v.phoneNumber || ''));
     fd.append('Address', String(v.Address || ''));
 
     if (role !== 3) fd.append('Job', String(v.Job || ''));
-
     if (role === 3 && v.SubjectID) fd.append('SubjectID', String(v.SubjectID || ''));
 
     this.authService.signUp(fd).subscribe({

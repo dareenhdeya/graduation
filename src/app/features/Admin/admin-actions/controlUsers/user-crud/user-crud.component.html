@@ -1,0 +1,159 @@
+<section class="min-h-screen bg-[#070A13] text-white p-6">
+  <div class="mx-auto max-w-6xl">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-6">
+      <div>
+        <h1 class="text-2xl md:text-3xl font-bold">Users</h1>
+        <p class="text-white/60 text-sm">View all users returned from Admin/Show-Users</p>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button
+          type="button"
+          (click)="goBack()"
+          class="cursor-pointer rounded-xl border border-white/10 bg-white/[0.06] px-4 py-2 text-sm hover:bg-white/[0.10] transition"
+        >
+          <i class="fa-solid fa-backward"></i> Back
+        </button>
+      </div>
+    </div>
+
+    <div class="rounded-2xl border border-white/10 bg-white/[0.06] p-4 mb-5">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div class="md:col-span-2">
+          <label class="block text-xs text-white/60 mb-1">Search (name / email)</label>
+          <input
+            [formControl]="search"
+            class="w-full rounded-xl border border-white/10 bg-white/[0.05] px-4 py-2.5 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
+            placeholder="Type to search..."
+          />
+        </div>
+
+        <div>
+          <label class="block text-xs text-white/60 mb-1">Role</label>
+          <select
+            [formControl]="roleFilter"
+            class="w-full rounded-xl border border-white/10 bg-white/[0.05] px-4 py-2.5 text-white/90 outline-none transition focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
+          >
+            <option class="bg-[#0b1020]" value="All">All</option>
+            <option class="bg-[#0b1020]" value="Admin">Admin</option>
+            <option class="bg-[#0b1020]" value="Parent">Parent</option>
+            <option class="bg-[#0b1020]" value="Teacher">Teacher</option>
+            <option class="bg-[#0b1020]" value="Student">Student</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    @if (loading) {
+    <div class="rounded-2xl border border-white/10 bg-white/[0.06] p-5 text-white/70">
+      Loading users...
+    </div>
+    } @else if (error) {
+    <div class="rounded-2xl border border-red-500/25 bg-red-500/10 p-5 text-red-200">
+      {{ error }}
+    </div>
+    } @else {
+    <div class="rounded-2xl border border-white/10 bg-white/[0.06] overflow-hidden">
+      <div class="px-5 py-4 border-b border-white/10 flex items-center justify-between">
+        <div class="text-sm text-white/70">
+          Total: <span class="text-white font-semibold">{{ filteredUsers.length }}</span>
+        </div>
+      </div>
+
+      @if (filteredUsers.length === 0) {
+      <div class="p-6 text-white/70">No users found.</div>
+      } @else {
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm">
+          <thead class="bg-white/[0.04] text-white/70">
+            <tr>
+              <th class="text-left font-semibold px-5 py-3">User</th>
+              <th class="text-left font-semibold px-5 py-3">Email</th>
+              <th class="text-left font-semibold px-5 py-3">Role</th>
+              <th class="text-left font-semibold px-5 py-3">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (u of filteredUsers; track u.id) {
+            <tr
+              class="border-t border-white/10 hover:bg-white/4 transition cursor-pointer"
+              (click)="openUser(u)"
+            >
+              <td class="px-5 py-3">
+                <div class="flex items-center gap-3">
+                  @if (u.pfpURL) {
+                  <img
+                    [src]="u.pfpURL"
+                    class="size-10 rounded-full object-cover border border-white/10"
+                    alt="pfp"
+                  />
+                  } @else {
+                  <div
+                    class="size-10 rounded-full flex items-center justify-center bg-purple-500/80 border border-white/10 font-bold"
+                  >
+                    {{ getInitial(u) }}
+                  </div>
+                  }
+
+                  <div class="min-w-0">
+                    <div class="font-semibold text-white truncate max-w-[220px]">
+                      {{ u.name || 'N/A' }}
+                    </div>
+                    <div class="text-xs text-white/50 truncate max-w-[220px]">
+                      {{ u.id }}
+                    </div>
+                  </div>
+                </div>
+              </td>
+
+              <td class="px-5 py-3 text-white/80">
+                {{ u.email || '-' }}
+              </td>
+
+              <td class="px-5 py-3">
+                <span
+                  class="inline-flex items-center rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-xs"
+                >
+                  {{ u.role || '-' }}
+                </span>
+              </td>
+
+              <td class="px-5 py-3">
+                <div class="flex items-center gap-5">
+                  <button
+                    type="button"
+                    class="cursor-pointer rounded-lg bg-amber-600/80 px-3 py-1.5 text-sm hover:bg-amber-500 transition"
+                    (click)="onEndSession(u, $event)"
+                  >
+                    End Session
+                  </button>
+
+                  <button
+                    type="button"
+                    class="cursor-pointer rounded-lg bg-red-600/80 px-3 py-1.5 text-sm hover:bg-red-500 transition"
+                    (click)="onBlockUser(u, $event)"
+                  >
+                    Block
+                  </button>
+
+                  @if(u.role === "Teacher"){
+                  <button
+                    type="button"
+                    class="cursor-pointer rounded-lg bg-green-600/80 px-3 py-1.5 text-sm hover:bg-green-500 transition"
+                    (click)="activate()"
+                  >
+                    Activate</button
+                  >}
+                </div>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      }
+    </div>
+    }
+  </div>
+</section>

@@ -24,6 +24,6 @@ export const appConfig: ApplicationConfig = {
       withFetch(),
       withInterceptors([credentialsInterceptor, authRefreshInterceptor, errorsInterceptor])
     ),
-    importProvidersFrom(CookieService),
+    // importProvidersFrom(CookieService),
   ],
 };

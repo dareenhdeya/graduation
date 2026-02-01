@@ -1,0 +1,57 @@
+<section class="min-h-screen bg-[#070A13] text-white p-6">
+  <div class="mx-auto max-w-3xl">
+    <div class="flex items-center gap-2">
+      <a
+        routerLink="/admin/users"
+        class="rounded-xl border border-white/10 bg-white/[0.06] px-4 py-2 text-sm hover:bg-white/[0.10] transition"
+      >
+        <i class="fa-solid fa-backward"></i> Back
+      </a>
+    </div>
+    @if (vm$ | async; as vm) { @if (vm.loading) {
+    <div class="mt-6 text-white/70">Loading...</div>
+    } @else if (vm.error) {
+    <div class="mt-6 rounded-2xl border border-red-500/25 bg-red-500/10 p-5 text-red-200">
+      {{ vm.error }}
+    </div>
+    } @else if (vm.user) {
+    <div class="mt-6 rounded-2xl border border-white/10 bg-white/[0.06] p-6">
+      <div class="flex items-center gap-4">
+        @if (vm.user.pfpURL) {
+        <img
+          [src]="vm.user.pfpURL"
+          class="size-14 rounded-full object-cover border border-white/10"
+        />
+        } @else {
+        <div
+          class="size-14 rounded-full flex items-center justify-center bg-purple-500/80 border border-white/10 font-bold"
+        >
+          {{ (vm.user.name?.[0] || '?') }}
+        </div>
+        }
+
+        <div>
+          <div class="text-xl font-bold">{{ vm.user.name || 'N/A' }}</div>
+          <div class="text-white/60 text-sm">{{ vm.user.email }}</div>
+        </div>
+      </div>
+
+      <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+        <div class="text-white/70">
+          Role: <span class="text-white">{{ vm.user.role }}</span>
+        </div>
+        <div class="text-white/70">
+          Phone: <span class="text-white">{{ vm.user.phone || '-' }}</span>
+        </div>
+        <div class="text-white/70">
+          Address: <span class="text-white">{{ vm.user.address || '-' }}</span>
+        </div>
+        <div class="text-white/70">
+          BirthDate: <span class="text-white">{{ vm.user.birthDate || '-' }}</span>
+        </div>
+      </div>
+      
+    </div>
+    } }
+  </div>
+</section>

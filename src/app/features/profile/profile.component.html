@@ -1,0 +1,33 @@
+<div class="min-h-screen bg-[#070A13] text-white p-6">
+  <div class="mx-auto max-w-xl rounded-3xl border border-white/10 bg-white/[0.06] p-6">
+    <h2 class="text-2xl font-bold mb-6">My Profile</h2>
+
+    @if (loading) {
+    <div class="text-white/70">Loading...</div>
+    } @if (error) {
+    <div class="text-red-300">{{ error }}</div>
+    } @if (profile; as p) {
+    <div class="space-y-4">
+      <div class="flex items-center gap-4">
+        @if (p.pfpURL) {
+        <img
+          [src]="p.pfpURL"
+          class="size-20 rounded-full object-cover border border-white/10"
+          alt="avatar"
+        />
+        }
+        <div>
+          <div class="text-xl font-semibold">{{ p.name }}</div>
+          <div class="text-white/70">{{ p.role }}</div>
+        </div>
+      </div>
+
+      <div class="space-y-2 text-white/85">
+        <div><span class="text-white/60">Email:</span> {{ p.email }}</div>
+        <div><span class="text-white/60">Phone:</span> {{ p.phone || '-' }}</div>
+        <div><span class="text-white/60">Address:</span> {{ p.address || '-' }}</div>
+      </div>
+    </div>
+    }
+  </div>
+</div>
