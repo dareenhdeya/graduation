@@ -183,7 +183,7 @@
               </div>
             </div>
 
-            @if (+signUpForm.get('role')?.value! !== 3) {
+            @if (+signUpForm.get('role')?.value! === 2) {
             <div>
               <label class="block text-sm font-medium text-white/80 mb-2">Job</label>
               <input
@@ -200,7 +200,6 @@
             }
           </div>
           <div class="pt-4 mt-4 border-t border-white/10">
-
             <button
               type="submit"
               [disabled]="isLoading"
