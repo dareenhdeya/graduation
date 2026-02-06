@@ -1,6 +1,6 @@
 .error-input {
   @apply border border-red-500 focus:border-red-600 focus:ring-red-600 text-red-500;
-  animation: shake .3s forwards;
+  animation: shake 0.3s forwards;
 }
 
 .valid-input {
