@@ -21,6 +21,24 @@
         >
           <p>Waiting for admin approval</p>
         </div>
+        }@else if(errMsg === '{"message":"invalid credentials"}'){
+        <div
+          class="mt-6 rounded-2xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-200"
+        >
+          <p>Invalid email or password</p>
+        </div>
+        }@else if(errMsg){ }@else if(errMsg === '{"message":"account is deactivated"}'){
+        <div
+          class="mt-6 rounded-2xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-200"
+        >
+          <p>Account is deactivated</p>
+        </div>
+        }@else if(errMsg){
+        <div
+          class="mt-6 rounded-2xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-200"
+        >
+          {{ errMsg }}
+        </div>
         }@else if(errMsg){
         <div
           class="mt-6 rounded-2xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-200"
