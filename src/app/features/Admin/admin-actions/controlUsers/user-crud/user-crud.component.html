@@ -1,4 +1,4 @@
-<section class="min-h-screen bg-[#070A13] text-white p-6">
+<section class="min-h-screen text-white p-6">
   <div class="mx-auto max-w-6xl">
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-6">
       <div>
@@ -7,7 +7,7 @@
       </div>
     </div>
 
-    <div class="rounded-2xl border border-white/10 bg-white/[0.06] p-4 mb-5">
+    <div class="rounded-2xl bg-[#070A13] p-4 mb-5">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
         <div class="md:col-span-2">
           <label class="block text-xs text-white/60 mb-1">Search (name / email)</label>
@@ -43,7 +43,7 @@
       {{ error }}
     </div>
     } @else {
-    <div class="rounded-2xl border border-white/10 bg-white/[0.06] overflow-hidden">
+    <div class="rounded-2xl bg-[#070A13] overflow-hidden">
       <div class="px-5 py-4 border-b border-white/10 flex items-center justify-between">
         <div class="text-sm text-white/70">
           Total: <span class="text-white font-semibold">{{ filteredUsers.length }}</span>

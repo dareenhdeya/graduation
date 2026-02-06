@@ -1,9 +1,9 @@
-<section class="min-h-screen bg-[#070A13] text-white p-6">
+<section class="min-h-screen text-white p-6">
   <div class="mx-auto max-w-3xl">
     <div class="flex items-center gap-2">
       <a
         routerLink="/admin/users"
-        class="rounded-xl border border-white/10 bg-white/[0.06] px-4 py-2 text-sm hover:bg-white/[0.10] transition"
+        class="rounded-xl bg-[#070A13] px-4 py-2 text-sm hover:bg-white/[0.10] transition"
       >
         <i class="fa-solid fa-backward"></i> All Users
       </a>
@@ -16,7 +16,7 @@
       {{ error }}
     </div>
     } @else if (user) {
-    <div class="mt-6 rounded-2xl border border-white/10 bg-white/[0.06] p-6">
+    <div class="mt-6 rounded-2xl bg-[#070A13] p-6">
       <div class="flex items-center gap-4">
         @if (user.pfpURL) {
         <img [src]="user.pfpURL" class="size-14 rounded-full object-cover border border-white/10" />

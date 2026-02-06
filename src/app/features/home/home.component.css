@@ -1,4 +1,4 @@
-
+/* 
 .floating-layer {
   position: absolute;
   inset: 0;
@@ -23,4 +23,4 @@
   100% {
     transform: translate3d(6px, -3px, 0) rotate(2deg) scale(1.02);
   }
-}
+} */
