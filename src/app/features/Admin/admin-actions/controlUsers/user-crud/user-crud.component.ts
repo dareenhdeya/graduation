@@ -46,10 +46,6 @@ export class UserCrudComponent implements OnInit {
     });
   }
 
-  goBack() {
-    this.router.navigateByUrl('/home');
-  }
-
   get filteredUsers(): IADMIN[] {
     const q = this.search.value.trim().toLowerCase();
     const rf = this.roleFilter.value;
