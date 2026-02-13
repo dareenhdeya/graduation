@@ -24,14 +24,14 @@ export class HomeComponent implements OnInit {
   private auth = inject(AuthService);
 
   ngOnInit() {
-    this.auth.getProfile().subscribe({
-      next: (res) => {
-        console.log('=======profile:==========', res);
-        const role = res.data.role;
-        this.auth.setRole(role);
-      },
-      error: (err) => console.error('Failed to get profile', err),
-    });
+    // this.auth.getProfile().subscribe({
+    //   next: (res) => {
+    //     console.log('=======profile:==========', res);
+    //     const role = res.data.role;
+    //     this.auth.setRole(role);
+    //   },
+    //   error: (err) => console.error('Failed to get profile', err),
+    // });
   }
 
   // bgLetters: BgLetter[] = [];

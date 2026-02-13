@@ -13,22 +13,24 @@
 
   <div class="floating-layer pointer-events-none absolute inset-0">
     @for (b of bgLetters; track b.id) {
-    <span
-      class="float-icon"
-      [style.left.%]="b.left"
-      [style.top.%]="b.top"
-      [style.fontSize.px]="b.size"
-      [style.animationDuration.s]="b.dur"
-      [style.animationDelay.s]="b.delay"
-      [style.--c]="b.color"
-    >
-      {{ b.char }}
-    </span>
+      <span
+        class="float-icon"
+        [style.left.%]="b.left"
+        [style.top.%]="b.top"
+        [style.fontSize.px]="b.size"
+        [style.animationDuration.s]="b.dur"
+        [style.animationDelay.s]="b.delay"
+        [style.--c]="b.color"
+      >
+        {{ b.char }}
+      </span>
     }
   </div>
 
   <div class="relative z-10">
     <app-navbar />
-    <router-outlet></router-outlet>
+    <div class=" py-18">
+      <router-outlet></router-outlet>
+    </div>
   </div>
 </section>

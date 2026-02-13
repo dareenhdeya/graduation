@@ -1,7 +1,7 @@
 import { environment } from '../../../environments/environment';
 
 export const APP_APIs = {
-  // Auth
+  //* Auth
   register: `${environment.apiUrl}Auth/Sign-UP`,
   login: `${environment.apiUrl}Auth/sign-in`,
 
@@ -17,9 +17,21 @@ export const APP_APIs = {
 
   getProfile: `${environment.apiUrl}Auth/view-profile`,
 
-   // Admin
-   adminShowUsers: `${environment.apiUrl}Admin/Show-Users`,
-   adminViewUser: (id: string) => `${environment.apiUrl}Admin/view-user/${id}`,
-   adminEndSession: (id: string) => `${environment.apiUrl}Admin/End-Session/${id}`,
-   adminBlockUser: (id: string) => `${environment.apiUrl}Admin/Block-User/${id}`,
+  //* Admin
+  adminShowUsers: `${environment.apiUrl}Admin/Show-Users`,
+  adminViewUser: (id: string) => `${environment.apiUrl}Admin/view-user/${id}`,
+  adminEndSession: (id: string) => `${environment.apiUrl}Admin/End-Session/${id}`,
+  adminBlockUser: (id: string) => `${environment.apiUrl}Admin/Block-User/${id}`,
+
+  //  * Teacher
+  teacherGetStudents: `${environment.apiUrl}Teacher/get-students`,
+  teacherGetLessons: `${environment.apiUrl}Teacher/get-lessons`,
+  teacherAddLesson: `${environment.apiUrl}Teacher/Add-lesson`,
+
+  //* Student
+  studentGetAllSubjects: `${environment.apiUrl}Student/View-Subjects`,
+  studentGetSubjectDetails: (id: string) => `${environment.apiUrl}Student/View-Subject/${id}`,
+  studentGetLessons: (id: string) => `${environment.apiUrl}Student/View-Lessons/${id}`,
+  studentEnrollSubject: (id: string) => `${environment.apiUrl}Student/Enroll-subject/${id}`,
+  studentViewEnrolledSubjects: `${environment.apiUrl}Student/View-Enrolled-Subjects`,
 };

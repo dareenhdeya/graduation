@@ -31,7 +31,7 @@ export class AuthService extends baseHttp {
   }
 
   getProfile() {
-    return this.http.get<ViewProfileResponse>(APP_APIs.getProfile);
+    return this.get<ViewProfileResponse>(APP_APIs.getProfile);
   }
 
   signUp(userData: any) {

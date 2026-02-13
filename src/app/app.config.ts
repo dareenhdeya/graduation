@@ -4,7 +4,7 @@ import {
   provideBrowserGlobalErrorListeners,
   provideZoneChangeDetection,
 } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withViewTransitions } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
@@ -18,12 +18,11 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
+    provideRouter(routes , withViewTransitions()),
     provideClientHydration(withEventReplay()),
     provideHttpClient(
       withFetch(),
       withInterceptors([credentialsInterceptor, authRefreshInterceptor, errorsInterceptor])
     ),
-    // importProvidersFrom(CookieService),
   ],
 };

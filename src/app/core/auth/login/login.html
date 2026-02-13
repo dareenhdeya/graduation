@@ -1,3 +1,130 @@
+<!-- <section class="relative min-h-[calc(100vh)] overflow-hidden bg-[#070A13]">
+  <div
+    class="pointer-events-none absolute -top-64 -left-72 h-[520px] w-[820px] rounded-[999px] bg-sky-500/12 blur-[130px]"
+  ></div>
+  <div
+    class="pointer-events-none absolute -bottom-72 -right-60 h-[720px] w-[720px] rounded-full bg-fuchsia-500/12 blur-[140px]"
+  ></div>
+
+  <div class="relative z-10 min-h-screen flex items-center justify-center px-4">
+    <div class="w-full max-w-2xl">
+      <div
+        class="relative rounded-[32px] border border-white/10 bg-white/[0.06] backdrop-blur-xl shadow-[0_50px_140px_-90px_rgba(0,0,0,.95)] px-6 md:px-8 pb-8 pt-12"
+      >
+        <div class="text-center">
+          <h1 class="text-3xl md:text-4xl font-black tracking-tight text-white">Login Now</h1>
+        </div>
+
+        @if(errMsg === '{"message":"account is pending approval"}'){
+        <div
+          class="mt-6 rounded-2xl border border-yellow-500/25 bg-yellow-500/10 px-4 py-3 text-sm text-yellow-200"
+        >
+          <p>Waiting for admin approval</p>
+        </div>
+        }@else if(errMsg === '{"message":"invalid credentials"}'){
+        <div
+          class="mt-6 rounded-2xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-200"
+        >
+          <p>Invalid email or password</p>
+        </div>
+        }@else if(errMsg){ }@else if(errMsg === '{"message":"account is deactivated"}'){
+        <div
+          class="mt-6 rounded-2xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-200"
+        >
+          <p>Account is deactivated</p>
+        </div>
+        }@else if(errMsg){
+        <div
+          class="mt-6 rounded-2xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-200"
+        >
+          {{ errMsg }}
+        </div>
+        }@else if(errMsg){
+        <div
+          class="mt-6 rounded-2xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-200"
+        >
+          {{ errMsg }}
+        </div>
+        }
+
+        <form [formGroup]="loginForm" (ngSubmit)="submitLogin()" class="mt-7 space-y-5">
+          @let emailCont = loginForm.get('usernameorEmail'); @let passCont =
+          loginForm.get('password');
+
+          <div>
+            <label class="block text-sm font-medium text-white/80 mb-2">Email</label>
+            <input
+              formControlName="usernameorEmail"
+              type="email"
+              class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10 invalid:border-red-500/50"
+              placeholder="name@example.com"
+            />
+
+            @if (emailCont?.touched && emailCont?.errors) { @if (emailCont?.getError('required')) {
+            <p class="text-red-400 text-sm mt-1">Email is required.</p>
+            } @else if (emailCont?.getError('email')) {
+            <p class="text-red-400 text-sm mt-1">Enter valid email.</p>
+            } }
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-white/80 mb-2">Password</label>
+
+            <div class="relative">
+              <input
+                formControlName="password"
+                [type]="showPass ? 'text' : 'password'"
+                class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 pr-12 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10 invalid:border-red-500/50"
+              />
+
+              <button
+                type="button"
+                (click)="showPass = !showPass"
+                class="absolute cursor-pointer top-1/2 right-3 -translate-y-1/2 size-9 rounded-xl border-white/10 bg-white/[0.04] text-white/65 hover:text-white hover:bg-white/[0.08] transition flex items-center justify-center"
+                aria-label="Toggle password visibility"
+              >
+                @if (showPass) { <i class="fas fa-eye-slash"></i> } @else {
+                <i class="fas fa-eye"></i> }
+              </button>
+            </div>
+
+            @if (passCont?.touched && passCont?.errors) { @if (passCont?.getError('required')) {
+            <p class="text-red-400 text-sm mt-1">Password is required.</p>
+            } @else if (passCont?.getError('pattern')) {
+            <p class="text-red-400 text-sm mt-1">Enter valid password.</p>
+            } }
+          </div>
+
+          <div class="flex items-center justify-between pt-1">
+            <a class="text-sky-300 hover:underline text-sm" routerLink="/forgotpass">
+              Forgot password?
+            </a>
+          </div>
+
+          <button
+            type="submit"
+            [disabled]="isLoading"
+            class="btn-solid cursor-pointer w-full mt-2 h-12 rounded-2xl font-semibold text-white disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            <span class="flex items-center justify-center gap-2">
+              Login @if (isLoading) { <i class="fas fa-spinner fa-spin"></i> }
+            </span>
+          </button>
+
+          <p class="text-sm text-white/55 text-center mt-4">
+            Don't have an account?
+            <a routerLink="/register" class="text-sky-300 hover:underline">Register</a>
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+ -->
+
+
+
 <section class="relative min-h-[calc(100vh)] overflow-hidden bg-[#070A13]">
   <div
     class="pointer-events-none absolute -top-64 -left-72 h-[520px] w-[820px] rounded-[999px] bg-sky-500/12 blur-[130px]"

@@ -35,6 +35,7 @@ export class NavbarComponent {
 
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  isMenuOpen = false;  //* For mobile menu toggle
 
   ngOnInit() {
     this.authService.getProfile().subscribe({
@@ -52,6 +53,9 @@ export class NavbarComponent {
     });
   }
 
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
   goToProfile() {
     this.router.navigateByUrl('/profile');
   }

@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 type RoleId = 0 | 1 | 2 | 3;
 type GenderId = 1 | 2;
@@ -29,7 +30,12 @@ export class SignUp implements OnInit {
     { id: 1, label: 'Student' },
     { id: 2, label: 'Parent' },
     { id: 3, label: 'Teacher' },
-    { id: 0, label: 'Admin' },
+  ];
+
+  Disability: { id: number; label: string }[] = [
+    { id: 0, label: 'None' },
+    { id: 1, label: 'Hearing' },
+    { id: 2, label: 'Speech' },
   ];
 
   avatars = [
@@ -88,18 +94,22 @@ export class SignUp implements OnInit {
 
   signUpForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required]],
+    password: [
+      '',
+      [Validators.required, Validators.pattern(/^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/)],
+    ],
     role: [1 as any, [Validators.required]],
 
     Gender: ['', [Validators.required]],
 
     FName: ['', [Validators.required]],
     LName: ['', [Validators.required]],
-    phoneNumber: ['', [Validators.required]],
-    Address: [''],
-
+    phoneNumber: [''],
+    Address: ['', [Validators.required]],
+    BirthDate: [''],
     Job: [''],
     SubjectID: [''],
+    Disability: [0 as any],
   });
 
   ngOnInit(): void {
@@ -115,7 +125,7 @@ export class SignUp implements OnInit {
     const jobCtrl = this.signUpForm.get('Job')!;
     const subjectCtrl = this.signUpForm.get('SubjectID')!;
 
-    if (role !== 3) {
+    if (role == 2) {
       jobCtrl.setValidators([Validators.required]);
     } else {
       jobCtrl.clearValidators();
@@ -203,6 +213,8 @@ export class SignUp implements OnInit {
   // }
 
   async submit() {
+    console.log(this.signUpForm.value);
+
     if (this.signUpForm.invalid) {
       this.signUpForm.markAllAsTouched();
       return;
@@ -217,11 +229,11 @@ export class SignUp implements OnInit {
       return;
     }
 
-    const hasAnyPicture = !!this.selectedFile || !!this.selectedAvatarSrc;
-    if (role === 2 && !hasAnyPicture) {
-      this.fileErrMsg = 'Profile picture is required for Parent.';
-      return;
-    }
+    // const hasAnyPicture = !!this.selectedFile || !!this.selectedAvatarSrc;
+    // if (role === 2 && !hasAnyPicture) {
+    //   this.fileErrMsg = 'Profile picture is required for Parent.';
+    //   return;
+    // }
 
     this.isLoading = true;
     this.errMsg = '';
@@ -247,6 +259,8 @@ export class SignUp implements OnInit {
     fd.append('LName', String(v.LName || ''));
     fd.append('phoneNumber', String(v.phoneNumber || ''));
     fd.append('Address', String(v.Address || ''));
+    fd.append('BirthDate', String(v.BirthDate || ''));
+    fd.append('Disability', String(v.Disability || 0));
 
     if (role !== 3) fd.append('Job', String(v.Job || ''));
     if (role === 3 && v.SubjectID) fd.append('SubjectID', String(v.SubjectID || ''));
@@ -256,9 +270,21 @@ export class SignUp implements OnInit {
         this.isLoading = false;
         this.router.navigateByUrl('/login');
       },
-      error: (err) => {
-        this.errMsg = err?.error?.Message || err?.error?.message || 'Registration failed';
+      error: (err: HttpErrorResponse) => {
+        // this.errMsg = err?.error?.Message || err?.error?.message || 'Registration failed';
         this.isLoading = false;
+        // console.log(this.errMsg);
+        console.log(err.error);
+        const e: any = err.error;
+        const errorsObj = e?.errors;
+        const firstField = errorsObj ? Object.keys(errorsObj)[0] : null;
+        const firstMsg =
+          (firstField && Array.isArray(errorsObj[firstField]) && errorsObj[firstField][0]) ||
+          e?.message ||
+          e?.title ||
+          'Registration failed';
+
+        this.errMsg = firstMsg;
       },
     });
   }

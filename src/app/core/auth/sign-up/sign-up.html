@@ -9,7 +9,7 @@
   <div class="relative z-10 h-full flex items-center justify-center px-4">
     <div class="mx-auto w-full max-w-2xl">
       <div
-        class="relative rounded-[32px] border border-white/10 bg-white/[0.06] backdrop-blur-xl shadow-[0_50px_140px_-90px_rgba(0,0,0,.95)] px-6 md:px-8 pt-20 pb-6 max-h-[calc(100vh-9rem)] flex flex-col min-h-0"
+        class="relative rounded-4xl border border-white/10 bg-white/[0.06] backdrop-blur-xl shadow-[0_50px_140px_-90px_rgba(0,0,0,.95)] px-6 md:px-8 pt-20 pb-6 max-h-[calc(100vh-9rem)] flex flex-col min-h-0"
       >
         <div class="absolute -top-14 left-1/2 -translate-x-1/2">
           <div
@@ -82,8 +82,8 @@
                 <option class="bg-[#0b1020]" [value]="2">Female</option>
               </select>
 
-              @if (signUpForm.get('Gender')?.touched &&
-              signUpForm.get('Gender')?.getError('required')) {
+              @if ( signUpForm.get('Gender')?.touched &&
+              signUpForm.get('Gender')?.getError('required') ) {
               <p class="text-red-400 text-sm mt-1">Gender is required.</p>
               }
             </div>
@@ -120,14 +120,23 @@
                   class="absolute top-1/2 right-3 -translate-y-1/2 size-9 rounded-xl cursor-pointer bg-white/[0.04] text-white/65 hover:text-white hover:bg-white/[0.08] transition flex items-center justify-center"
                   aria-label="Toggle password visibility"
                 >
-                  @if (showPass) { <i class="fas fa-eye-slash"></i> } @else {
-                  <i class="fas fa-eye"></i> }
+                  @if (showPass) {
+                  <i class="fas fa-eye-slash"></i>
+                  } @else {
+                  <i class="fas fa-eye"></i>
+                  }
                 </button>
               </div>
 
-              @if (signUpForm.get('password')?.touched &&
-              signUpForm.get('password')?.getError('required')) {
+              @if ( signUpForm.get('password')?.touched &&
+              signUpForm.get('password')?.getError('required') ) {
               <p class="text-red-400 text-sm mt-1">Password is required.</p>
+              }@else if (signUpForm.get('password')?.touched &&
+              signUpForm.get('password')?.getError('pattern')) {
+              <p class="text-red-400 text-sm mt-1">
+                Password must be at least 8 characters and include an uppercase letter, a number,
+                and a special character.
+              </p>
               }
             </div>
 
@@ -139,8 +148,8 @@
                   class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
                   placeholder="First name"
                 />
-                @if (signUpForm.get('FName')?.touched &&
-                signUpForm.get('FName')?.getError('required')) {
+                @if ( signUpForm.get('FName')?.touched &&
+                signUpForm.get('FName')?.getError('required') ) {
                 <p class="text-red-400 text-sm mt-1">First name is required.</p>
                 }
               </div>
@@ -152,14 +161,15 @@
                   class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
                   placeholder="Last name"
                 />
-                @if (signUpForm.get('LName')?.touched &&
-                signUpForm.get('LName')?.getError('required')) {
+                @if ( signUpForm.get('LName')?.touched &&
+                signUpForm.get('LName')?.getError('required') ) {
                 <p class="text-red-400 text-sm mt-1">Last name is required.</p>
                 }
               </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              @if (+signUpForm.get('role')?.value !== 1) {
               <div>
                 <label class="block text-sm font-medium text-white/80 mb-2">Phone Number</label>
                 <input
@@ -167,11 +177,37 @@
                   class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
                   placeholder="01xxxxxxxxx"
                 />
-                @if (signUpForm.get('phoneNumber')?.touched &&
-                signUpForm.get('phoneNumber')?.getError('required')) {
+                @if ( signUpForm.get('phoneNumber')?.touched &&
+                signUpForm.get('phoneNumber')?.getError('required') ) {
                 <p class="text-red-400 text-sm mt-1">Phone number is required.</p>
                 }
               </div>
+              } @else {
+              <div>
+                <label class="block text-sm font-medium text-white/80 mb-2">Birth Date</label>
+                <input
+                  type="date"
+                  formControlName="BirthDate"
+                  class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
+                  placeholder="Birth date"
+                />
+                @if ( signUpForm.get('BirthDate')?.touched &&
+                signUpForm.get('BirthDate')?.getError('required') ) {
+                <p class="text-red-400 text-sm mt-1">Birth date is required.</p>
+                }
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-white/80 mb-2">Disability</label>
+                <select
+                  formControlName="Disability"
+                  class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
+                >
+                  @for (d of Disability; track d.id) {
+                  <option class="bg-[#0b1020]" [value]="d.id">{{ d.label }}</option>
+                  }
+                </select>
+              </div>
+              }
 
               <div>
                 <label class="block text-sm font-medium text-white/80 mb-2">Address</label>
@@ -180,6 +216,10 @@
                   class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
                   placeholder="Address"
                 />
+                @if ( signUpForm.get('Address')?.touched &&
+                signUpForm.get('Address')?.getError('required') ) {
+                <p class="text-red-400 text-sm mt-1">Address is required.</p>
+                }
               </div>
             </div>
 
@@ -191,7 +231,8 @@
                 class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
                 placeholder="Your job"
               />
-              @if (signUpForm.get('Job')?.touched && signUpForm.get('Job')?.getError('required')) {
+              @if ( signUpForm.get('Job')?.touched && signUpForm.get('Job')?.getError('required') )
+              {
               <p class="text-red-400 text-sm mt-1">Job is required.</p>
               }
             </div>
@@ -206,7 +247,9 @@
               class="btn-solid cursor-pointer w-full h-12 rounded-2xl font-semibold text-white disabled:opacity-60 disabled:cursor-not-allowed"
             >
               <span class="flex items-center justify-center gap-2">
-                Sign Up @if (isLoading) { <i class="fas fa-spinner fa-spin"></i> }
+                Sign Up @if (isLoading) {
+                <i class="fas fa-spinner fa-spin"></i>
+                }
               </span>
             </button>
 
