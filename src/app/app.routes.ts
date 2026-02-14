@@ -21,6 +21,10 @@ import { authGuard } from './core/guards/auth/auth-guard';
 import { logedinGuard } from './core/guards/logedin/logedin-guard';
 import { roleGuard } from './core/guards/role/role-guard';
 import { NotFoundComponent } from './core/not-found/not-found.component';
+import { SubjectCrudComponent } from './features/Admin/admin-actions/controlSubjects/subject-crud/subject-crud.component';
+import { AdminSubjectDetailsComponent } from './features/Admin/admin-actions/controlSubjects/admin-subject-details/admin-subject-details.component';
+import { AdminDashboardComponent } from './features/Admin/admin-dashboard/admin-dashboard.component';
+import { PendingTeachersComponent } from './features/Admin/admin-actions/controlUsers/pending-teachers/pending-teachers.component';
 
 export const routes: Routes = [
   {
@@ -51,8 +55,22 @@ export const routes: Routes = [
         canActivate: [roleGuard],
         data: { roles: ['Admin'] },
         children: [
+          // { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+          { path: 'dashboard', component: AdminDashboardComponent, title: 'Admin Dashboard' },
           { path: 'users', component: UserCrudComponent, title: 'Users' },
+          {
+            path: 'pending-teachers',
+            component: PendingTeachersComponent,
+            title: 'Pending Teachers',
+          },
           { path: 'users/:id', component: UserDetailsComponent, title: 'User Details' },
+
+          { path: 'subjects', component: SubjectCrudComponent, title: 'Subjects' },
+          {
+            path: 'subjects/:sid',
+            component: AdminSubjectDetailsComponent,
+            title: 'Subject Details',
+          },
         ],
       },
 
@@ -91,7 +109,6 @@ export const routes: Routes = [
           },
         ],
       },
-     
     ],
   },
   {

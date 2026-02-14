@@ -9,6 +9,6 @@ export const logedinGuard: CanActivateFn = () => {
 
   return auth.getProfile().pipe(
     map(() => router.createUrlTree(['/home']) as UrlTree),
-    catchError(() => of(true)) // لو مش logged in سيبيه يدخل login/register
+    catchError(() => of(true))
   );
 };

@@ -11,7 +11,6 @@ export const roleGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
 
   const allowed = (route.data['roles'] as Role[] | undefined) ?? [];
 
-  // helper: check role snapshot
   const hasAccess = (role: Role | null) => !!role && allowed.includes(role);
 
   const currentRole = auth.getRoleSnapshot();
@@ -19,7 +18,6 @@ export const roleGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
     return hasAccess(currentRole) ? true : router.createUrlTree(['/home']);
   }
 
-  // لو role مش متخزّن لسه، هاتيه من profile
   return auth.getProfile().pipe(
     tap((res) => auth.setRole(res.data.role)),
     map((res) => (hasAccess(res.data.role) ? true : (router.createUrlTree(['/home']) as UrlTree))),

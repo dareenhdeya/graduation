@@ -1,24 +1,24 @@
 export interface IADMIN {
-    id: string;
+  id: string;
   name: string | null;
   email: string | null;
+  status: number;
   address: string | null;
   phone: string | null;
-  role: 'Admin' | 'Parent' | 'Teacher' | 'Student' | string;
+  role: 'Parent' | 'Teacher' | 'Student' | string;
   birthDate: string | null;
   disability: string | null;
   pfpURL: string | null;
-  teaches: any | null;
+  teaches: string | null;
+  job: string | null;
 }
 
 export interface ShowUsersResponse {
-    message: string; 
-    data: IADMIN[];
-  }
+  message: string;
+  data: IADMIN[];
+}
 
-  
-  export interface ViewUserResponse {
-    message: string;
-    data: IADMIN;
-  }
-  
+export interface ViewUserResponse {
+  message: string;
+  data: IADMIN;
+}

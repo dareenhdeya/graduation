@@ -9,7 +9,6 @@ export const authGuard: CanActivateFn = () => {
 
   return auth.getProfile().pipe(
     tap((res) => {
-      // خزّني الـ role أول ما نتأكد إن session valid
       auth.setRole(res.data.role);
     }),
     map(() => true),

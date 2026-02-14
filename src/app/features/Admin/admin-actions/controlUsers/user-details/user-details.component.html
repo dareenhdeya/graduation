@@ -1,52 +1,117 @@
-<section class="min-h-screen text-white p-6">
-  <div class="mx-auto max-w-3xl">
+<section class="min-h-screen text-white px-4 py-8">
+  <div class="mx-auto max-w-4xl">
     <div class="flex items-center gap-2">
       <a
         routerLink="/admin/users"
-        class="rounded-xl bg-[#070A13] px-4 py-2 text-sm hover:bg-white/[0.10] transition"
+        class="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-2 text-sm hover:bg-white/[0.08] transition"
       >
-        <i class="fa-solid fa-backward"></i> All Users
+        <i class="fa-solid fa-arrow-left"></i>
+        All Users
       </a>
     </div>
 
     @if (loading) {
-    <div class="mt-6 text-white/70">Loading...</div>
+    <div class="mt-6 rounded-2xl border border-white/10 bg-white/[0.06] p-5 text-white/70">
+      Loading...
+    </div>
     } @else if (error) {
     <div class="mt-6 rounded-2xl border border-red-500/25 bg-red-500/10 p-5 text-red-200">
       {{ error }}
     </div>
     } @else if (user) {
-    <div class="mt-6 rounded-2xl bg-[#070A13] p-6">
-      <div class="flex items-center gap-4">
-        @if (user.pfpURL) {
-        <img [src]="user.pfpURL" class="size-14 rounded-full object-cover border border-white/10" />
-        } @else {
-        <div
-          class="size-14 rounded-full flex items-center justify-center bg-purple-500/80 border border-white/10 font-bold"
-        >
-          {{ (user.name?.[0] || '?') }}
-        </div>
-        }
 
-        <div>
-          <div class="text-xl font-bold">{{ user.name || 'N/A' }}</div>
-          <div class="text-white/60 text-sm">{{ user.email }}</div>
+    <div
+      class="mt-6 rounded-[28px] border border-white/10 bg-white/[0.06] backdrop-blur-xl shadow-[0_50px_140px_-90px_rgba(0,0,0,.95)] overflow-hidden"
+    >
+      <div class="p-6 sm:p-7 border-b border-white/10">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-5">
+          <div class="shrink-0">
+            @if (user.pfpURL) {
+            <img
+              [src]="user.pfpURL"
+              class="size-16 rounded-full object-cover border border-white/10"
+              alt="pfp"
+            />
+            } @else {
+            <div
+              class="size-16 rounded-full flex items-center justify-center bg-purple-600 text-white font-black border border-white/10"
+            >
+              {{ (user.name?.[0] || '?') }}
+            </div>
+            }
+          </div>
+
+          <div class="min-w-0 flex-1">
+            <div class="flex flex-wrap items-center gap-2">
+              <h1 class="text-2xl font-black tracking-tight truncate">
+                {{ user.name || 'N/A' }}
+              </h1>
+
+              <span
+                class="inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold"
+                [class]="statusStyles[user.status]"
+              >
+                {{ statusLabels[user.status] }}
+              </span>
+
+              <span
+                class="inline-flex items-center rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-xs text-white/85"
+              >
+                {{ user.role || '-' }}
+              </span>
+            </div>
+
+            <div class="mt-2 text-sm text-white/60 truncate">
+              {{ user.email || '-' }}
+            </div>
+
+            <div class="mt-1 text-xs text-white/45 truncate">ID: {{ user.id }}</div>
+          </div>
         </div>
       </div>
 
-      <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-        <div class="text-white/70">
-          Role: <span class="text-white">{{ user.role }}</span>
+      <div class="p-6 sm:p-7">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+            <div class="text-xs text-white/55">Phone</div>
+            <div class="mt-1 font-semibold text-white/90">{{ user.phone || '-' }}</div>
+          </div>
+
+          <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+            <div class="text-xs text-white/55">Address</div>
+            <div class="mt-1 font-semibold text-white/90">{{ user.address || '-' }}</div>
+          </div>
+
+          <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+            <div class="text-xs text-white/55">Birth Date</div>
+            <div class="mt-1 font-semibold text-white/90">{{ user.birthDate || '-' }}</div>
+          </div>
+
+          <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+            <div class="text-xs text-white/55">Subject</div>
+            <div class="mt-1 font-semibold text-white/90">{{ user.teaches || '-' }}</div>
+          </div>
+
+          <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-4 sm:col-span-2">
+            <div class="text-xs text-white/55">Job</div>
+            <div class="mt-1 font-semibold text-white/90">{{ user.job || '-' }}</div>
+          </div>
         </div>
-        <div class="text-white/70">
-          Phone: <span class="text-white">{{ user.phone || '-' }}</span>
-        </div>
-        <div class="text-white/70">
-          Address: <span class="text-white">{{ user.address || '-' }}</span>
-        </div>
-        <div class="text-white/70">
-          BirthDate:
-          <span class="text-white">{{ user.birthDate || '-' }}</span>
+
+        <div class="mt-6 flex flex-wrap gap-3">
+          <button
+            type="button"
+            class="cursor-pointer rounded-2xl bg-amber-600 px-4 py-2 text-sm font-semibold hover:bg-amber-500 transition"
+          >
+            End Session
+          </button>
+
+          <button
+            type="button"
+            class="cursor-pointer rounded-2xl bg-red-600 px-4 py-2 text-sm font-semibold hover:bg-red-500 transition"
+          >
+            Block
+          </button>
         </div>
       </div>
     </div>

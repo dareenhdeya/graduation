@@ -3,6 +3,7 @@ import { baseHttp } from '../../../core/services/base';
 import { ShowUsersResponse, ViewUserResponse } from '../interfaces/iadmin.interface';
 import { APP_APIs } from '../../../core/constants/appAPIs';
 import { Params } from '@angular/router';
+import { AddSubjectBody, AddSubjectResponse, ListSubjectsResponse, ViewSubjectResponse } from '../interfaces/IAdminSubject.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -25,11 +26,17 @@ export class AdminServiceService extends baseHttp {
     return this.patch<any>(APP_APIs.adminBlockUser(id), {});
   }
 
-  listSubjects() {}
+  listSubjects() {
+    return this.get<ListSubjectsResponse>(APP_APIs.adminListSubjects, undefined);
+  }
 
-  viewSubject() {}
+  viewSubject(sid: string) {
+    return this.get<ViewSubjectResponse>(APP_APIs.adminViewSubject(sid), undefined);
+  }
 
-  addSubject() {}
+  addSubject(body: AddSubjectBody) {
+    return this.post<AddSubjectResponse>(APP_APIs.adminAddSubject, body);
+  }
 
   approveTeacher() {}
 }

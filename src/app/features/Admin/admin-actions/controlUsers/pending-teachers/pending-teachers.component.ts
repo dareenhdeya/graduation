@@ -6,12 +6,12 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 type Role = 'Parent' | 'Teacher' | 'Student';
 
 @Component({
-  selector: 'app-user-crud',
+  selector: 'app-pending-teachers',
   imports: [ReactiveFormsModule],
-  templateUrl: './user-crud.component.html',
-  styleUrl: './user-crud.component.css',
+  templateUrl: './pending-teachers.component.html',
+  styleUrl: './pending-teachers.component.css',
 })
-export class UserCrudComponent implements OnInit {
+export class PendingTeachersComponent implements OnInit {
   private readonly adminService = inject(AdminServiceService);
   private readonly router = inject(Router);
 
@@ -39,19 +39,13 @@ export class UserCrudComponent implements OnInit {
 
   loading = false;
   error = '';
-  isTable = true;
 
   users: IADMIN[] = [];
 
   search = new FormControl<string>('', { nonNullable: true });
-  roleFilter = new FormControl<Role | 'All'>('All', { nonNullable: true });
 
   ngOnInit(): void {
     this.loadUsers();
-  }
-
-  setView(mode: 'table' | 'grid') {
-    this.isTable = mode === 'table';
   }
 
   loadUsers() {
@@ -74,17 +68,15 @@ export class UserCrudComponent implements OnInit {
 
   get filteredUsers(): IADMIN[] {
     const q = this.search.value.trim().toLowerCase();
-    const rf = this.roleFilter.value;
 
     return this.users.filter((u) => {
-      const roleOk = rf === 'All' ? true : (u.role as any) === rf;
+      const isPendingTeacher = u.role === 'Teacher' && Number(u.status) === 2;
 
       const name = (u.name ?? '').toLowerCase();
       const email = (u.email ?? '').toLowerCase();
+      const textOk = !q || name.includes(q) || email.includes(q);
 
-      const textOk = !q || name.startsWith(q) || email.startsWith(q);
-
-      return roleOk && textOk;
+      return isPendingTeacher && textOk;
     });
   }
 
@@ -100,31 +92,5 @@ export class UserCrudComponent implements OnInit {
     });
   }
 
-  onEndSession(u: IADMIN, e: MouseEvent) {
-    e.stopPropagation();
-    this.error = '';
-
-    this.adminService.endSession(u.id).subscribe({
-      next: () => {
-        this.loadUsers();
-      },
-      error: (err) => {
-        this.error = err?.error?.message || err?.message || 'Failed to end session';
-      },
-    });
-  }
-
-  onBlockUser(u: IADMIN, e: MouseEvent) {
-    e.stopPropagation();
-    this.error = '';
-
-    this.adminService.blockUser(u.id).subscribe({
-      next: () => {
-        this.loadUsers();
-      },
-      error: (err) => {
-        this.error = err?.error?.message || err?.message || 'Failed to block user';
-      },
-    });
-  }
+  activate() {}
 }

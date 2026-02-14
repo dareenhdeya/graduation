@@ -18,7 +18,7 @@ export class ForgotpassComponent {
   private readonly cookieService = inject(CookieService);
   private readonly router = inject(Router);
 
-  currentStep = 1; 
+  currentStep = 1;
   loading = false;
   errMsg = '';
 
@@ -129,7 +129,8 @@ export class ForgotpassComponent {
     this.authService.resetPassword(newPassword).subscribe({
       next: () => {
         this.loading = false;
-        this.authService.logout(); 
+        this.authService.logout();
+        this.router.navigate(['/login']);
       },
       error: (err) => {
         this.errMsg = err.userMessage || err.error?.message || 'Reset password failed';

@@ -21,7 +21,10 @@ export const APP_APIs = {
   adminShowUsers: `${environment.apiUrl}Admin/Show-Users`,
   adminViewUser: (id: string) => `${environment.apiUrl}Admin/view-user/${id}`,
   adminEndSession: (id: string) => `${environment.apiUrl}Admin/End-Session/${id}`,
-  adminBlockUser: (id: string) => `${environment.apiUrl}Admin/Block-User/${id}`,
+  adminBlockUser: (id: string) => `${environment.apiUrl}Admin/Toggle-Ban-User/${id}`,
+  adminListSubjects: `${environment.apiUrl}Admin/List-Subjects`,
+  adminViewSubject: (sid: string) => `${environment.apiUrl}Admin/View-Subject/${sid}`,
+  adminAddSubject: `${environment.apiUrl}Admin/Add-Subject`,
 
   //  * Teacher
   teacherGetStudents: `${environment.apiUrl}Teacher/get-students`,
