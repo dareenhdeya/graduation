@@ -1,0 +1,26 @@
+/* 
+.floating-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.float-icon {
+  position: absolute;
+  font-weight: 900;
+  opacity: 0.22;
+  user-select: none;
+  color: var(--c) !important;
+  filter: drop-shadow(0 16px 22px rgba(0, 0, 0, 0.28));
+  will-change: transform;
+  animation: floaty linear infinite alternate;
+}
+
+@keyframes floaty {
+  0% {
+    transform: translate3d(-6px, 3px, 0) rotate(-2deg) scale(0.99);
+  }
+  100% {
+    transform: translate3d(6px, -3px, 0) rotate(2deg) scale(1.02);
+  }
+} */

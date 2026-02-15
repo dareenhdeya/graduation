@@ -1,0 +1,17 @@
+.btn-solid {
+  background: #0ea5e9;
+  border: none;
+  box-shadow: 0 14px 40px -18px rgba(14, 165, 233, 0.55);
+  transition: all 0.18s ease;
+}
+
+.btn-solid:hover {
+  background: #0284c7;
+  transform: translateY(-2px);
+  box-shadow: 0 22px 55px -20px rgba(14, 165, 233, 0.65);
+}
+
+.btn-solid:active {
+  transform: translateY(0);
+  box-shadow: 0 10px 25px -15px rgba(14, 165, 233, 0.5);
+}

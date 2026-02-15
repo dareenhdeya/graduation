@@ -1,0 +1,135 @@
+<section class="relative min-h-screen  pt-28 pb-10 px-4 overflow-hidden">
+  <div
+    class="pointer-events-none absolute top-20 left-10 h-96 w-96 rounded-full bg-purple-600/10 blur-[100px]"
+  ></div>
+  <div
+    class="pointer-events-none absolute bottom-20 right-10 h-96 w-96 rounded-full bg-sky-600/10 blur-[100px]"
+  ></div>
+
+  <div class="container mx-auto max-w-7xl relative z-10">
+    <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
+      <div>
+        <h1 class="text-3xl md:text-4xl font-black text-white tracking-tight">
+          My
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-400"
+            >Lessons</span
+          >
+        </h1>
+        <p class="text-white/50 text-sm mt-1">Manage and track your uploaded content</p>
+      </div>
+
+      <a
+        routerLink="/teacher/add-lesson"
+        class="btn-solid flex items-center gap-2 bg-sky-600 hover:bg-sky-500 text-white px-6 py-3 rounded-full font-semibold transition-all shadow-lg shadow-sky-600/20 hover:scale-105"
+      >
+        <i class="fa-solid fa-plus"></i>
+        <span>Add New Lesson</span>
+      </a>
+    </div>
+
+    @if (isLoading) {
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @for (item of [1, 2, 3]; track item) {
+          <div class="rounded-3xl border border-white/5 bg-white/[0.02] p-4 h-80 animate-pulse">
+            <div class="h-40 bg-white/5 rounded-2xl mb-4"></div>
+            <div class="h-6 w-3/4 bg-white/5 rounded mb-2"></div>
+            <div class="h-4 w-1/2 bg-white/5 rounded"></div>
+          </div>
+        }
+      </div>
+
+    } @else if (lessons.length === 0) {
+      <div
+        class="flex flex-col items-center justify-center py-20 text-center border-2 border-dashed border-white/10 rounded-3xl bg-white/[0.02]"
+      >
+        <div
+          class="size-20 rounded-full bg-white/5 flex items-center justify-center text-white/20 mb-4"
+        >
+          <i class="fa-solid fa-film text-4xl"></i>
+        </div>
+        <h3 class="text-xl font-bold text-white">No lessons found</h3>
+        <p class="text-white/50 max-w-xs mx-auto mt-2 mb-6">
+          You haven't uploaded any lessons yet. Start sharing knowledge today!
+        </p>
+        <a
+          routerLink="/teacher/add-lesson"
+          class="text-sky-400 hover:text-sky-300 font-semibold cursor-pointer"
+        >
+          Create first lesson &rarr;
+        </a>
+      </div>
+
+    } @else {
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @for (lesson of lessons; track lesson.id) {
+          <div
+            class="group relative rounded-3xl border border-white/10 bg-white/5 overflow-hidden hover:border-sky-500/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-sky-900/10"
+          >
+            <div class="relative h-48 bg-black/50 overflow-hidden">
+              @if (lesson.videoUrl) {
+                <video
+                  controls
+                  class="w-full h-full object-cover"
+                  [poster]="lesson.videoUrl"
+                  preload="metadata"
+                >
+                  <source [src]="lesson.videoUrl" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              } @else {
+                <div
+                  class="w-full h-full flex flex-col items-center justify-center text-white/30 bg-white/5"
+                >
+                  <i class="fa-solid fa-image text-3xl mb-2"></i>
+                  <span class="text-xs uppercase tracking-wider">No Media</span>
+                </div>
+              }
+
+              <div
+                class="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10"
+              >
+                <span class="text-xs font-medium text-white/90">
+                  <i class="fa-regular fa-calendar mr-1"></i>
+                  {{ lesson.releaseDate | date: 'mediumDate' }}
+                </span>
+              </div>
+            </div>
+
+            <div class="p-5">
+              <h3 class="text-xl font-bold text-white mb-2 line-clamp-1" title="{{ lesson.title }}">
+                {{ lesson.title }}
+              </h3>
+
+              <p class="text-white/60 text-sm mb-4 line-clamp-2 h-10">
+                {{ lesson.description }}
+              </p>
+
+              <div class="flex items-center justify-between pt-4 border-t border-white/10">
+                <button
+                  class="flex items-center gap-2 text-sm font-medium text-sky-400 hover:text-sky-300 transition-colors"
+                >
+                  <i class="fa-solid fa-play"></i> Watch
+                </button>
+
+                <div class="flex items-center gap-1">
+                  <button
+                    class="size-8 rounded-full flex items-center justify-center text-white/50 hover:bg-white/10 hover:text-yellow-400 transition-colors"
+                    title="Edit"
+                  >
+                    <i class="fa-solid fa-pen text-sm"></i>
+                  </button>
+                  <button
+                    class="size-8 rounded-full flex items-center justify-center text-white/50 hover:bg-red-500/20 hover:text-red-400 transition-colors"
+                    title="Delete"
+                  >
+                    <i class="fa-solid fa-trash text-sm"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</section>

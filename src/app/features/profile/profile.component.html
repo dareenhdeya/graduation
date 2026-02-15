@@ -1,0 +1,183 @@
+<!-- <div class="min-h-screen text-white p-6">
+  <div class="mx-auto bg-[#070A13] *:max-w-xl rounded-3xl p-6">
+    <h2 class="text-2xl font-bold mb-6">My Profile</h2>
+
+    @if (loading) {
+    <div class="text-white/70">Loading...</div>
+    } @if (error) {
+    <div class="text-red-300">{{ error }}</div>
+    } @if (profile; as p) {
+    <div class="space-y-4">
+      <div class="flex items-center gap-4">
+        @if (p.pfpURL) {
+        <img
+          [src]="p.pfpURL"
+          class="size-20 rounded-full object-cover border border-white/10"
+          alt="avatar"
+        />
+        }
+        <div>
+          <div class="text-xl font-semibold">{{ p.name }}</div>
+          <div class="text-white/70">{{ p.role }}</div>
+        </div>
+      </div>
+
+      <div class="space-y-2 text-white/85">
+        <div><span class="text-white/60">Email:</span> {{ p.email }}</div>
+        <div><span class="text-white/60">Phone:</span> {{ p.phone || '-' }}</div>
+        <div><span class="text-white/60">birthDate:</span> {{ p.birthDate || '-' }}</div>
+        <div><span class="text-white/60">Address:</span> {{ p.address || '-' }}</div>
+        <div><span class="text-white/60">Subject:</span> {{ p.teaches || '-' }}</div>
+        <div><span class="text-white/60">Job:</span> {{ p.job || '-' }}</div>
+      </div>
+    </div>
+    }
+  </div>
+</div> -->
+
+<section class="min-h-screen text-white px-4 py-10">
+  <div class="mx-auto max-w-6xl">
+    <h1 class="mb-6 text-2xl md:text-3xl font-black tracking-tight">My Profile</h1>
+
+    @if (loading) {
+    <div
+      class="rounded-[28px] border border-white/10 bg-white/[0.06] backdrop-blur-xl p-6 text-white/70"
+    >
+      Loading profile...
+    </div>
+    } @else if (error) {
+    <div class="rounded-[28px] border border-red-500/25 bg-red-500/10 p-6 text-red-200">
+      {{ error }}
+    </div>
+    } @else if (profile; as p) {
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+      <aside
+        class="lg:col-span-4 rounded-[28px] border border-white/10 bg-white/[0.06] backdrop-blur-xl shadow-[0_60px_160px_-110px_rgba(0,0,0,.95)] overflow-hidden"
+      >
+        <div class="relative h-24 bg-white/[0.06] border-b border-white/10 overflow-hidden">
+          <div
+            class="pointer-events-none absolute -top-10 -left-10 size-40 rounded-full bg-sky-500/10 blur-2xl -z-10"
+          ></div>
+          <div
+            class="pointer-events-none absolute -bottom-12 -right-12 size-44 rounded-full bg-fuchsia-500/10 blur-2xl -z-10"
+          ></div>
+        </div>
+
+        <div class="px-6 pb-6">
+          <div class="-mt-10 relative z-10 flex items-end justify-between">
+            @if (p.pfpURL) {
+            <img
+              [src]="p.pfpURL"
+              class="size-20 rounded-2xl object-cover border border-white/10 shadow-lg"
+              alt="avatar"
+            />
+            } @else {
+            <div
+              class="size-20 text-2xl rounded-2xl border border-white/10 bg-purple-700 flex items-center justify-center text-white/80 font-bold shadow-lg"
+            >
+              {{ (p.name?.[0] || '?') }}
+            </div>
+            }
+
+            <span
+              class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-3 py-1 text-xs text-white/85"
+            >
+              <span class="size-2 rounded-full bg-sky-400"></span>
+              {{ p.role || '-' }}
+            </span>
+          </div>
+
+          <div class="mt-4">
+            <div class="text-xl font-extrabold truncate">{{ p.name || 'N/A' }}</div>
+            <div class="text-white/60 text-sm truncate mt-1">
+              <i class="fa-regular fa-envelope mr-2 text-white/40"></i>
+              {{ p.email || '-' }}
+            </div>
+          </div>
+
+          <div class="mt-5 flex flex-wrap gap-2">
+            <span
+              class="inline-flex items-center rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-white/75"
+            >
+              <i class="fa-solid fa-phone mr-2 text-white/40"></i>{{ p.phone || '-' }}
+            </span>
+
+            <span
+              class="inline-flex items-center rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-white/75"
+            >
+              <i class="fa-regular fa-calendar mr-2 text-white/40"></i>{{ p.birthDate || '-' }}
+            </span>
+          </div>
+
+          <div class="my-6 h-px bg-white/10"></div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              (click)="copyEmail(p.email)"
+              class="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-2 text-sm hover:bg-white/[0.09] transition cursor-pointer"
+            >
+              <i class="fa-regular fa-copy mr-2 text-white/50"></i>Copy Email
+            </button>
+
+            <button
+              class="rounded-2xl bg-sky-600 px-4 py-2 text-sm font-semibold hover:bg-sky-500 transition cursor-pointer"
+            >
+              <i class="fa-solid fa-pen mr-2"></i>Edit
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <main class="lg:col-span-8 space-y-5">
+        <div
+          class="rounded-[28px] border border-white/10 bg-white/[0.06] backdrop-blur-xl shadow-[0_60px_160px_-110px_rgba(0,0,0,.95)] p-6"
+        >
+          <div class="flex items-center justify-between mb-4">
+            <div class="font-bold text-lg">Details</div>
+            <span class="text-xs text-white/45">Account info</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+              <div class="text-xs text-white/55 mb-1">Phone</div>
+              <div class="font-semibold text-white/90">{{ p.phone || '-' }}</div>
+            </div>
+
+            <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+              <div class="text-xs text-white/55 mb-1">Birth Date</div>
+              <div class="font-semibold text-white/90">{{ p.birthDate || '-' }}</div>
+            </div>
+
+            <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-4 sm:col-span-2">
+              <div class="text-xs text-white/55 mb-1">Address</div>
+              <div class="font-semibold text-white/90 break-words">{{ p.address || '-' }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-[28px] border border-white/10 bg-white/[0.06] backdrop-blur-xl p-6">
+          <div class="flex items-center justify-between mb-4">
+            <div class="font-bold text-lg">Work / Study</div>
+            <span class="text-xs text-white/45">Role-related</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+              <div class="text-xs text-white/55 mb-1">Subject</div>
+              <div class="font-semibold text-white/90">{{ p.teaches || '-' }}</div>
+            </div>
+
+            <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+              <div class="text-xs text-white/55 mb-1">Job</div>
+              <div class="font-semibold text-white/90">{{ p.job || '-' }}</div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    }
+  </div>
+</section>

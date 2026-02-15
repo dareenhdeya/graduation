@@ -1,0 +1,257 @@
+<section class="min-h-screen text-white px-4 py-10">
+  <div class="mx-auto max-w-6xl">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between mb-7">
+      <div>
+        <h1 class="text-2xl md:text-3xl font-black tracking-tight">Subjects</h1>
+        <p class="text-white/55 text-sm mt-1">Create and manage subjects.</p>
+      </div>
+
+      <span
+        class="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-2 text-sm text-white/80 backdrop-blur"
+      >
+        <i class="fa-solid fa-layer-group text-white/60"></i>
+        Total:
+        <span class="text-white font-semibold">{{ filteredSubjects.length }}</span>
+      </span>
+    </div>
+
+    <div
+      class="rounded-[28px] border border-white/10 bg-white/[0.06] backdrop-blur-xl shadow-[0_50px_140px_-90px_rgba(0,0,0,.95)] p-4 sm:p-5 mb-6"
+    >
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div class="w-full sm:flex-1">
+          <div class="relative">
+            <i
+              class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-white/35"
+            ></i>
+            <input
+              [formControl]="search"
+              class="w-full pl-11 rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
+              placeholder="Search by subject name or id..."
+            />
+            @if (search.value) {
+            <button
+              type="button"
+              class="absolute right-3 top-1/2 -translate-y-1/2 rounded-xl px-3 py-1.5 text-xs text-white/70 hover:bg-white/[0.06] transition"
+              (click)="search.setValue('')"
+            >
+              Clear
+            </button>
+            }
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button
+            type="button"
+            class="inline-flex items-center cursor-pointer gap-2 rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-sm text-white/85 hover:bg-white/[0.09] transition"
+            (click)="openAdd = true"
+          >
+            <i class="fa-solid fa-plus"></i>
+            Add Subject
+          </button>
+        </div>
+      </div>
+    </div>
+
+    @if (openAdd) {
+    <div class="fixed inset-0 z-50">
+      <div
+        class="absolute inset-0 bg-[#050814]/70 backdrop-blur-sm"
+        (click)="openAdd = false"
+      ></div>
+
+      <div class="absolute inset-0 flex items-center justify-center p-4">
+        <div
+          class="w-full max-w-xl rounded-[32px] border border-white/10 bg-gradient-to-b from-[#0b1020]/95 to-[#070A13]/95 shadow-[0_70px_200px_-120px_rgba(0,0,0,.95)] overflow-hidden"
+          (click)="$event.stopPropagation()"
+        >
+          <div class="relative p-6 border-b border-white/10">
+            <div
+              class="pointer-events-none absolute -top-24 -left-24 h-56 w-56 rounded-full bg-sky-500/15 blur-[70px]"
+            ></div>
+            <div
+              class="pointer-events-none absolute -bottom-24 -right-24 h-56 w-56 rounded-full bg-fuchsia-500/15 blur-[70px]"
+            ></div>
+
+            <div class="relative flex items-start justify-between gap-4">
+              <div class="flex items-start gap-4">
+                <div
+                  class="size-12 rounded-2xl bg-white/[0.06] border border-white/10 flex items-center justify-center"
+                >
+                  <i class="fa-solid fa-book-open text-white/85"></i>
+                </div>
+
+                <div>
+                  <div class="text-xl font-black tracking-tight">New Subject</div>
+                  <div class="text-sm text-white/55 mt-1">
+                    Add a subject and configure accessibility options.
+                  </div>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                class="rounded-2xl cursor-pointer border border-white/10 bg-white/[0.04] px-3 py-2 text-white/70 hover:bg-white/[0.08] transition"
+                (click)="openAdd = false"
+                aria-label="Close"
+                title="Close"
+              >
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="p-6 space-y-4">
+            <div class="rounded-3xl border border-white/10 bg-white/[0.04] p-5">
+              <label class="block text-xs text-white/60 mb-2">Subject Name</label>
+              <div class="relative">
+                <i
+                  class="fa-solid fa-tag absolute left-4 top-1/2 -translate-y-1/2 text-white/35"
+                ></i>
+                <input
+                  [formControl]="subjectName"
+                  class="w-full pl-11 rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
+                  placeholder="e.g. English"
+                />
+              </div>
+              <div class="text-xs text-white/45 mt-2">
+                Keep it short and clear
+              </div>
+            </div>
+
+            <div class="rounded-3xl border border-white/10 bg-white/[0.04] p-5">
+              <div class="flex items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                  <div
+                    class="size-10 rounded-2xl bg-white/[0.06] border border-white/10 flex items-center justify-center"
+                  >
+                    <i class="fa-solid fa-ear-deaf text-white/80"></i>
+                  </div>
+
+                  <div>
+                    <div class="font-semibold">deaf_mute</div>
+                    <div class="text-xs text-white/50 mt-0.5">
+                      Enable accessibility mode for this subject.
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  class="relative h-9 w-16 cursor-pointer rounded-full border border-white/10 transition bg-white/[0.06] hover:bg-white/[0.09]"
+                  (click)="deafMute.setValue(!deafMute.value)"
+                  [attr.aria-pressed]="deafMute.value"
+                >
+                  <span
+                    class="absolute top-1 left-1 size-7 rounded-full bg-white/80 transition shadow-[0_12px_30px_-18px_rgba(0,0,0,.9)]"
+                    [class]="deafMute.value ? 'translate-x-7' : ''"
+                  ></span>
+                  <span
+                    class="absolute inset-0 rounded-full"
+                    [class]="deafMute.value ? 'bg-sky-500/20' : ''"
+                  ></span>
+                </button>
+
+                <input type="checkbox" class="hidden" [formControl]="deafMute" />
+              </div>
+            </div>
+
+            @if (error) {
+            <div
+              class="rounded-3xl border border-red-500/25 bg-red-500/10 p-4 text-sm text-red-200"
+            >
+              {{ error }}
+            </div>
+            }
+          </div>
+
+          <div
+            class="p-6 border-t border-white/10 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
+          >
+            <div class="text-xs text-white/45">You can edit subject details later.</div>
+
+            <div class="flex items-center justify-end gap-2">
+              <button
+                type="button"
+                class="rounded-2xl cursor-pointer border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white/80 hover:bg-white/[0.08] transition"
+                (click)="openAdd = false"
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                class="rounded-2xl cursor-pointer px-5 py-2.5 text-sm font-bold transition disabled:opacity-60 bg-gradient-to-r from-sky-600 to-fuchsia-600 hover:from-sky-500 hover:to-fuchsia-500"
+                (click)="add()"
+                [disabled]="adding || !subjectName.value.trim()"
+              >
+                <i class="fa-solid fa-plus mr-2"></i>
+                {{ adding ? 'Adding...' : 'Create Subject' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    } @if (loading) {
+    <div class="rounded-3xl border border-white/10 bg-white/[0.06] p-6 text-white/70">
+      Loading subjects...
+    </div>
+    } @else if (error) {
+    <div class="rounded-3xl border border-red-500/25 bg-red-500/10 p-6 text-red-200">
+      {{ error }}
+    </div>
+    } @else { @if (filteredSubjects.length === 0) {
+    <div class="rounded-3xl border border-white/10 bg-white/[0.06] p-10 text-center text-white/60">
+      <div class="text-lg font-semibold text-white/80 mb-2">No subjects found</div>
+      <div class="text-sm">Try a different search keyword.</div>
+    </div>
+    } @else {
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      @for (s of filteredSubjects; track s.subjectId) {
+
+      <div
+        class="group rounded-[28px] border border-white/10 bg-white/[0.06] backdrop-blur-xl shadow-[0_35px_120px_-95px_rgba(0,0,0,.9)] p-5 hover:bg-white/[0.09] hover:border-white/15 transition cursor-pointer"
+        (click)="openSubject(s)"
+      >
+        <div class="flex items-start justify-between gap-3">
+          <div class="min-w-0">
+            <div class="text-lg font-bold truncate">
+              {{ s.subjectName || 'Unnamed' }}
+            </div>
+            <div class="text-xs text-white/45 mt-1 truncate">ID: {{ s.subjectId }}</div>
+          </div>
+
+          <span
+            class="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold"
+            [class]="
+              s.deaf_mute
+                ? 'border-sky-500/25 bg-sky-500/10 text-sky-200'
+                : 'border-white/10 bg-white/[0.04] text-white/75'
+            "
+          >
+            <span
+              class="size-2 rounded-full"
+              [class]="s.deaf_mute ? 'bg-sky-300' : 'bg-white/40'"
+            ></span>
+            deaf_mute
+          </span>
+        </div>
+
+        <div class="mt-5 flex items-center justify-between text-sm text-white/55">
+          <span class="inline-flex items-center gap-2">
+            <i class="fa-solid fa-eye text-white/40"></i>
+            View details
+          </span>
+
+          <i class="fa-solid fa-arrow-right text-white/35 group-hover:text-white/70 transition"></i>
+        </div>
+      </div>
+
+      }
+    </div>
+    } }
+  </div>
+</section>

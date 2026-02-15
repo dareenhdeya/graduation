@@ -1,0 +1,36 @@
+/* You can add global styles to this file, and also import other style files */
+@import './styles/typography.css';
+
+@import 'tailwindcss';
+
+@import './styles/variables.css';
+@import './styles/base.css';
+@import './styles/themes.css';
+
+/* Define keyframe animations */
+@keyframes rotate-out {
+  to {
+    transform: rotateY(180deg);
+  }
+}
+
+@keyframes rotate-in {
+  from {
+    transform: rotateY(-180deg);
+  }
+}
+
+/* Target view transition pseudo-elements */
+::view-transition-old(*),
+::view-transition-new(*) {
+  animation-duration: 500ms;
+  animation-name: -ua-view-transition-fade-in, rotate-in;
+}
+
+::view-transition-old(*) {
+  animation-name: -ua-view-transition-fade-out, rotate-out;
+}
+
+body {
+  background-color: #101131;
+}

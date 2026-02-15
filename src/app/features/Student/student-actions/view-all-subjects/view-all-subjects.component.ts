@@ -1,0 +1,54 @@
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component, inject, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common'; // Import CommonModule
+import { RouterLink } from '@angular/router';   // Import RouterLink
+import { IStudAllSubResponse, StudentAllSubject } from '../../interfaces/IStudAllSubResponse'; // Check path
+import { StudentServiceService } from '../../services/student-service.service';
+
+@Component({
+  selector: 'app-view-all-subjects',
+  standalone: true,
+  imports: [CommonModule, RouterLink], 
+  templateUrl: './view-all-subjects.component.html',
+  styleUrl: './view-all-subjects.component.css',
+})
+export class ViewAllSubjectsComponent implements OnInit {
+  
+  private readonly studentService = inject(StudentServiceService);
+
+  allSub: StudentAllSubject[] = [];
+  isLoading = true; // Add loading state
+
+  ngOnInit(): void {
+    this.viewAllSubjects();
+  }
+
+  viewAllSubjects() {
+    this.isLoading = true;
+    this.studentService.getAllSubjects().subscribe({
+      next: (res :IStudAllSubResponse) => {
+        this.allSub = res.result || [];
+        this.isLoading = false;
+        console.log(this.allSub);
+      },
+      error: (err: HttpErrorResponse) => {
+        console.log(err.error.message);
+        this.isLoading = false;
+      }
+    });
+  }
+
+  //  give each subject a unique color based on its index
+  getColor(index: number): string {
+    const colors = ['text-sky-400', 'text-purple-400', 'text-pink-400', 'text-green-400', 'text-yellow-400'];
+    return colors[index % colors.length];  // 5 % 5 = 0 , 6 % 5 = 1 
+  }
+
+  getBgColor(index: number): string {
+    const colors = ['bg-sky-500/10', 'bg-purple-500/10', 'bg-pink-500/10', 'bg-green-500/10', 'bg-yellow-500/10'];
+    return colors[index % colors.length];
+  }
+
+
+
+}
