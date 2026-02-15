@@ -1,0 +1,286 @@
+<section class="relative h-screen overflow-hidden bg-[#070A13]">
+  <div
+    class="pointer-events-none absolute -top-64 -left-72 h-[520px] w-[820px] rounded-[999px] bg-sky-500/12 blur-[130px]"
+  ></div>
+  <div
+    class="pointer-events-none absolute -bottom-72 -right-60 h-[720px] w-[720px] rounded-full bg-fuchsia-500/12 blur-[140px]"
+  ></div>
+
+  <div class="relative z-10 h-full flex items-center justify-center px-4">
+    <div class="mx-auto w-full max-w-2xl">
+      <div
+        class="relative rounded-4xl border border-white/10 bg-white/[0.06] backdrop-blur-xl shadow-[0_50px_140px_-90px_rgba(0,0,0,.95)] px-6 md:px-8 pt-20 pb-6 max-h-[calc(100vh-9rem)] flex flex-col min-h-0"
+      >
+        <div class="absolute -top-14 left-1/2 -translate-x-1/2">
+          <div
+            class="group relative size-28 md:size-32 rounded-full border-2 border-gray-900 bg-white/10 hover:border-sky-400/60 transition shadow-[0_22px_70px_-18px_rgba(0,0,0,.95)]"
+          >
+            <div class="absolute inset-0 rounded-full overflow-hidden">
+              @if (avatarPreview) {
+              <img [src]="avatarPreview" class="w-full h-full object-cover" />
+              } @else {
+              <div class="w-full h-full flex items-center justify-center text-white/60 bg-white/5">
+                <i class="fa-regular fa-user text-3xl"></i>
+              </div>
+              }
+              <div
+                class="absolute inset-0 bg-black/35 opacity-0 group-hover:opacity-100 transition"
+              ></div>
+            </div>
+
+            <button
+              type="button"
+              (click)="openAvatarPicker()"
+              class="cursor-pointer absolute -bottom-1 right-2 size-10 rounded-full bg-sky-600 text-white flex items-center justify-center text-md border-2 border-gray-900 shadow-lg z-10 hover:bg-sky-500 transition"
+              title="Change picture"
+            >
+              <i class="fa-solid fa-pen"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="text-center">
+          <h1 class="text-3xl md:text-4xl font-black tracking-tight text-white">Register Student</h1>
+          <p class="text-white/50 text-sm mt-2">Add a child to your account</p>
+        </div>
+
+        @if (errMsg) {
+        <div
+          class="mt-6 rounded-2xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-200"
+        >
+          {{ errMsg }}
+        </div>
+        }
+
+        <form
+          [formGroup]="signUpForm"
+          (ngSubmit)="submit()"
+          class="mt-7 flex flex-col flex-1 min-h-0"
+        >
+          <div class="overflow-y-auto pr-2 custom-scroll flex-1 min-h-0 space-y-5">
+            
+            <div>
+              <label class="block text-sm font-medium text-white/80 mb-2">Student Email</label>
+              <input
+                formControlName="email"
+                type="email"
+                class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
+                placeholder="student@example.com"
+              />
+              @if (signUpForm.get('email')?.touched && signUpForm.get('email')?.errors) { @if
+              (signUpForm.get('email')?.getError('required')) {
+              <p class="text-red-400 text-sm mt-1">Email is required.</p>
+              } @else if (signUpForm.get('email')?.getError('email')) {
+              <p class="text-red-400 text-sm mt-1">Enter valid email.</p>
+              } }
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-white/80 mb-2">Password</label>
+
+              <div class="relative">
+                <input
+                  formControlName="password"
+                  [type]="showPass ? 'text' : 'password'"
+                  class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 pr-12 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
+                />
+
+                <button
+                  type="button"
+                  (click)="showPass = !showPass"
+                  class="absolute top-1/2 right-3 -translate-y-1/2 size-9 rounded-xl cursor-pointer bg-white/[0.04] text-white/65 hover:text-white hover:bg-white/[0.08] transition flex items-center justify-center"
+                  aria-label="Toggle password visibility"
+                >
+                  @if (showPass) {
+                  <i class="fas fa-eye-slash"></i>
+                  } @else {
+                  <i class="fas fa-eye"></i>
+                  }
+                </button>
+              </div>
+
+              @if ( signUpForm.get('password')?.touched &&
+              signUpForm.get('password')?.getError('required') ) {
+              <p class="text-red-400 text-sm mt-1">Password is required.</p>
+              }@else if (signUpForm.get('password')?.touched &&
+              signUpForm.get('password')?.getError('pattern')) {
+              <p class="text-red-400 text-sm mt-1">
+                Password must be at least 8 characters and include an uppercase letter, a number,
+                and a special character.
+              </p>
+              }
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-white/80 mb-2">First Name</label>
+                <input
+                  formControlName="FName"
+                  class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
+                  placeholder="First name"
+                />
+                @if ( signUpForm.get('FName')?.touched &&
+                signUpForm.get('FName')?.getError('required') ) {
+                <p class="text-red-400 text-sm mt-1">First name is required.</p>
+                }
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-white/80 mb-2">Last Name</label>
+                <input
+                  formControlName="LName"
+                  class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
+                  placeholder="Last name"
+                />
+                @if ( signUpForm.get('LName')?.touched &&
+                signUpForm.get('LName')?.getError('required') ) {
+                <p class="text-red-400 text-sm mt-1">Last name is required.</p>
+                }
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                 <div>
+                    <label class="block text-sm font-medium text-white/80 mb-2">Gender</label>
+                    <select
+                      formControlName="Gender"
+                      class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
+                    >
+                      <option class="bg-[#0b1020]" value="" disabled>Select gender</option>
+                      <option class="bg-[#0b1020]" [value]="1">Male</option>
+                      <option class="bg-[#0b1020]" [value]="2">Female</option>
+                    </select>
+      
+                    @if ( signUpForm.get('Gender')?.touched &&
+                    signUpForm.get('Gender')?.getError('required') ) {
+                    <p class="text-red-400 text-sm mt-1">Gender is required.</p>
+                    }
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-white/80 mb-2">Address</label>
+                    <input
+                      formControlName="Address"
+                      class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
+                      placeholder="Address"
+                    />
+                    @if ( signUpForm.get('Address')?.touched &&
+                    signUpForm.get('Address')?.getError('required') ) {
+                    <p class="text-red-400 text-sm mt-1">Address is required.</p>
+                    }
+                  </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                <label class="block text-sm font-medium text-white/80 mb-2">Birth Date</label>
+                <input
+                    type="date"
+                    formControlName="BirthDate"
+                    class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
+                />
+                @if ( signUpForm.get('BirthDate')?.touched &&
+                signUpForm.get('BirthDate')?.getError('required') ) {
+                <p class="text-red-400 text-sm mt-1">Birth date is required.</p>
+                }
+                </div>
+
+                <div>
+                <label class="block text-sm font-medium text-white/80 mb-2">Disability</label>
+                <select
+                    formControlName="Disability"
+                    class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
+                >
+                    @for (d of Disability; track d.id) {
+                    <option class="bg-[#0b1020]" [value]="d.id">{{ d.label }}</option>
+                    }
+                </select>
+                </div>
+            </div>
+
+            @if (fileErrMsg) {
+            <p class="text-red-400 text-sm">{{ fileErrMsg }}</p>
+            }
+          </div>
+
+          <div class="pt-4 mt-4 border-t border-white/10">
+            <button
+              type="submit"
+              [disabled]="isLoading"
+              class="btn-solid cursor-pointer w-full h-12 rounded-2xl font-semibold text-white disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              <span class="flex items-center justify-center gap-2">
+                Register Student @if (isLoading) {
+                <i class="fas fa-spinner fa-spin"></i>
+                }
+              </span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  @if (showAvatarPicker) {
+  <div class="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
+    <div
+      class="w-full max-w-3xl rounded-3xl bg-[#070A13]/60 border border-white/10 p-5 backdrop-blur-2xl"
+    >
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold text-white/90">Choose an avatar</h3>
+        <button
+          type="button"
+          (click)="closeAvatarPicker()"
+          class="cursor-pointer text-white/70 hover:text-white"
+        >
+          <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+      </div>
+
+      <div class="flex items-center gap-3 mb-5">
+        <input
+          #fileInput
+          type="file"
+          (change)="onFileChange($event); closeAvatarPicker()"
+          class="hidden"
+          accept="image/*"
+        />
+
+        <button
+          type="button"
+          (click)="fileInput.click()"
+          class="cursor-pointer size-14 rounded-full border border-white/12 bg-white/5 hover:border-sky-400/60 hover:bg-white/10 transition flex items-center justify-center text-white/90"
+          title="Upload from device"
+        >
+          <i class="fa-solid fa-upload text-lg"></i>
+        </button>
+
+        <p class="text-sm text-white/60">Upload from device</p>
+      </div>
+
+      <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-3">
+        @for (a of avatars; track a.id) {
+        <button
+          type="button"
+          (click)="selectAvatar(a.src)"
+          class="cursor-pointer rounded-full overflow-hidden border border-white/10 hover:border-sky-400/60 transition"
+          title="Select"
+        >
+          <img [src]="a.src" class="w-full aspect-square object-cover" />
+        </button>
+        }
+      </div>
+
+      <div class="flex justify-end gap-2 mt-6">
+        <button
+          type="button"
+          (click)="closeAvatarPicker()"
+          class="rounded-2xl cursor-pointer bg-white/5 border border-white/10 px-4 py-2 text-white/80 hover:bg-white/10 transition"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+  }
+</section>

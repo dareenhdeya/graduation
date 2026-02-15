@@ -1,1 +1,80 @@
-<p>parent-actions works!</p>
+<section class="relative min-h-screen overflow-hidden bg-[#070A13] pt-28 pb-10 px-4">
+  <div
+    class="pointer-events-none absolute top-20 left-10 h-96 w-96 rounded-full bg-purple-600/10 blur-[100px]"
+  ></div>
+  <div
+    class="pointer-events-none absolute bottom-20 right-10 h-96 w-96 rounded-full bg-sky-600/10 blur-[100px]"
+  ></div>
+
+  <div class="container mx-auto max-w-6xl relative z-10">
+    <div class="mb-12 text-center md:text-left">
+      <h1 class="text-4xl md:text-5xl font-black text-white tracking-tight mb-2">
+        Parent
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-400">
+          Dashboard
+        </span>
+      </h1>
+      <p class="text-white/50 text-lg">Manage your children's accounts and view their progress.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <a
+        routerLink="/parent/view-children"
+        class="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-8 transition-all duration-300 hover:bg-white/10 hover:border-sky-500/30 hover:-translate-y-2 hover:shadow-[0_0_40px_rgba(14,165,233,0.15)] cursor-pointer"
+      >
+        <div
+          class="absolute -right-10 -top-10 size-40 bg-sky-500/10 rounded-full blur-2xl group-hover:bg-sky-500/20 transition"
+        ></div>
+
+        <div class="relative z-10">
+          <div
+            class="size-14 rounded-2xl bg-sky-500/20 text-sky-400 flex items-center justify-center text-2xl mb-6 shadow-inner border border-sky-500/20"
+          >
+            <i class="fa-solid fa-users-line"></i>
+          </div>
+
+          <h3 class="text-2xl font-bold text-white mb-2">My Children</h3>
+          <p class="text-white/50 text-sm">
+            View profiles, check activity, and manage settings for your kids.
+          </p>
+
+          <div
+            class="mt-6 flex items-center gap-2 text-sky-400 font-semibold text-sm group-hover:gap-3 transition-all"
+          >
+            <span>View All</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </div>
+        </div>
+      </a>
+
+      <a
+        routerLink="/parent/register-student"
+        class="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-8 transition-all duration-300 hover:bg-white/10 hover:border-green-500/30 hover:-translate-y-2 hover:shadow-[0_0_40px_rgba(34,197,94,0.15)] cursor-pointer"
+      >
+        <div
+          class="absolute -right-10 -top-10 size-40 bg-green-500/10 rounded-full blur-2xl group-hover:bg-green-500/20 transition"
+        ></div>
+
+        <div class="relative z-10">
+          <div
+            class="size-14 rounded-2xl bg-green-500/20 text-green-400 flex items-center justify-center text-2xl mb-6 shadow-inner border border-green-500/20"
+          >
+            <i class="fa-solid fa-user-plus"></i>
+          </div>
+
+          <h3 class="text-2xl font-bold text-white mb-2">Register Child</h3>
+          <p class="text-white/50 text-sm">
+            Create a new student account and link them to your profile.
+          </p>
+
+          <div
+            class="mt-6 flex items-center gap-2 text-green-400 font-semibold text-sm group-hover:gap-3 transition-all"
+          >
+            <span>Add New</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>

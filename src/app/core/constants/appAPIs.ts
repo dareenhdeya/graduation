@@ -37,4 +37,10 @@ export const APP_APIs = {
   studentGetLessons: (id: string) => `${environment.apiUrl}Student/View-Lessons/${id}`,
   studentEnrollSubject: (id: string) => `${environment.apiUrl}Student/Enroll-subject/${id}`,
   studentViewEnrolledSubjects: `${environment.apiUrl}Student/View-Enrolled-Subjects`,
+
+
+
+  // * Parent
+  parentRegisterStudent: `${environment.apiUrl}Parent/register-student`,
+  parentShowChildren: `${environment.apiUrl}Parent/Show-children`,
 };
