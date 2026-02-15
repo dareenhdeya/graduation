@@ -25,12 +25,9 @@ import { SubjectCrudComponent } from './features/Admin/admin-actions/controlSubj
 import { AdminSubjectDetailsComponent } from './features/Admin/admin-actions/controlSubjects/admin-subject-details/admin-subject-details.component';
 import { AdminDashboardComponent } from './features/Admin/admin-dashboard/admin-dashboard.component';
 import { PendingTeachersComponent } from './features/Admin/admin-actions/controlUsers/pending-teachers/pending-teachers.component';
-<<<<<<< HEAD
-=======
 import { ParentActionsComponent } from './features/Parent/parent-actions/parent-actions.component';
 import { RegisterStudentComponent } from './features/Parent/parent-actions/register-student/register-student.component';
 import { ViewChildrenComponent } from './features/Parent/parent-actions/view-children/view-children.component';
->>>>>>> c6f4a8a23167c19b3c7026a6f0615b9ce4b36579
 
 export const routes: Routes = [
   {
