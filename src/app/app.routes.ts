@@ -112,8 +112,6 @@ export const routes: Routes = [
           },
         ],
       },
-<<<<<<< HEAD
-=======
       // --- PARENT ROUTES ---
       {
         path: 'parent',
@@ -125,7 +123,6 @@ export const routes: Routes = [
           {path: 'view-children', component: ViewChildrenComponent, title: 'View Children' },
         ]
       }
->>>>>>> c6f4a8a23167c19b3c7026a6f0615b9ce4b36579
     ],
   },
   {
