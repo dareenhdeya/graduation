@@ -1,0 +1,141 @@
+<section class="min-h-screen text-white px-4 py-8">
+  <div class="mx-auto max-w-6xl">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between mb-6">
+      <div>
+        <h1 class="text-2xl md:text-3xl font-black tracking-tight">Pending Teachers</h1>
+        <p class="text-white/55 text-sm mt-1">Teachers waiting for approval.</p>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <span
+          class="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-white/80"
+        >
+          <i class="fa-solid fa-users"></i>
+          Total:
+          <span class="text-white font-semibold">{{ filteredUsers.length }}</span>
+        </span>
+      </div>
+    </div>
+
+    <div
+      class="rounded-[28px] border border-white/10 bg-white/[0.06] backdrop-blur-xl shadow-[0_50px_140px_-90px_rgba(0,0,0,.95)] p-4 sm:p-5 mb-5"
+    >
+      <label class="block text-xs text-white/60 mb-1">Search</label>
+      <div class="relative">
+        <i
+          class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-white/35"
+        ></i>
+        <input
+          [formControl]="search"
+          class="w-full pl-11 rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
+          placeholder="Search by name or email..."
+        />
+      </div>
+    </div>
+
+    @if (loading) {
+    <div class="rounded-3xl border border-white/10 bg-white/[0.06] p-6 text-white/70">
+      Loading users...
+    </div>
+    } @else if (error) {
+    <div class="rounded-3xl border border-red-500/25 bg-red-500/10 p-6 text-red-200">
+      {{ error }}
+    </div>
+    } @else {
+
+    <div
+      class="rounded-[28px] border border-white/10 bg-white/[0.06] backdrop-blur-xl shadow-[0_50px_140px_-90px_rgba(0,0,0,.95)] overflow-hidden"
+    >
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm">
+          <thead class="bg-white/[0.04] text-white/65">
+            <tr>
+              <th class="text-left font-semibold px-6 py-4">User</th>
+              <th class="text-left font-semibold px-6 py-4">Email</th>
+              <!-- <th class="text-left font-semibold px-6 py-4">Role</th> -->
+              <th class="text-left font-semibold px-6 py-4">Status</th>
+              <th class="text-right font-semibold px-6 py-4">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @if (filteredUsers.length === 0) {
+            <tr>
+              <td colspan="5" class="px-6 py-10 text-center text-white/60">No users found.</td>
+            </tr>
+            } @else { @for (u of filteredUsers; track u.id) {
+            <tr
+              class="border-t border-white/10 hover:bg-white/[0.05] transition cursor-pointer"
+              (click)="openUser(u)"
+            >
+              <td class="px-6 py-4">
+                <div class="flex items-center gap-3">
+                  @if (u.pfpURL) {
+                  <img
+                    [src]="u.pfpURL"
+                    class="size-10 rounded-full object-cover border border-white/10"
+                    alt="pfp"
+                  />
+                  } @else {
+                  <div
+                    class="size-10 rounded-full flex items-center justify-center bg-purple-600 text-white font-bold border border-white/10"
+                  >
+                    {{ getInitial(u) }}
+                  </div>
+                  }
+
+                  <div class="min-w-0">
+                    <div class="font-semibold text-white truncate max-w-[240px]">
+                      {{ u.name || 'N/A' }}
+                    </div>
+                    <div class="text-xs text-white/45 truncate max-w-[240px]">ID: {{ u.id }}</div>
+                  </div>
+                </div>
+              </td>
+
+              <td class="px-6 py-4 text-white/80">
+                {{ u.email || '-' }}
+              </td>
+
+              <!-- <td class="px-6 py-4">
+                <span
+                  class="inline-flex items-center rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-xs text-white/85"
+                >
+                  {{ u.role || '-' }}
+                </span>
+              </td> -->
+
+              <td class="px-6 py-4">
+                <span
+                  class="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold"
+                  [class]="statusStyles[u.status]"
+                >
+                  <span class="size-2 rounded-full bg-white/80"></span>
+                  {{ statusLabels[u.status] }}
+                </span>
+              </td>
+
+              <td class="px-6 py-4">
+                <div class="flex items-center justify-end gap-2" (click)="$event.stopPropagation()">
+                  @if (u.role === "Teacher" && u.status === 2) {
+                  <button
+                    type="button"
+                    class="cursor-pointer py-2 px-3 inline-flex items-center gap-2 rounded-xl border border-green-500/25 bg-green-500/10 text-green-100 hover:bg-green-500/15 transition"
+                    (click)="activate()"
+                    title="Activate Teacher"
+                  >
+                    <i class="fa-solid fa-circle-check"></i>
+                    Activate
+                  </button>
+                  }
+                </div>
+              </td>
+            </tr>
+            } }
+          </tbody>
+        </table>
+      </div>
+    </div>
+    }
+  </div>
+</section>

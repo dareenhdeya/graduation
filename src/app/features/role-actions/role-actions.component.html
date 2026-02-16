@@ -1,0 +1,26 @@
+<div class="role-actions-container">
+
+    @if (role$ | async; as role) {
+  
+      @if (role === 'Admin') {
+        <app-admin-actions></app-admin-actions>
+      }
+  
+      @if (role === 'Parent') {
+        <app-parent-actions></app-parent-actions>
+      }
+  
+      @if (role === 'Teacher') {
+        <app-teacher-actions></app-teacher-actions>
+      }
+  
+      @if (role === 'Student') {
+        <app-student-actions></app-student-actions>
+      }
+  
+    } @else {
+      <p>Loading role...</p>
+    }
+  
+  </div>
+  

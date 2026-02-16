@@ -1,0 +1,63 @@
+<section class="min-h-screen text-white px-4 py-8">
+  <div class="mx-auto max-w-3xl">
+    <a
+      routerLink="/admin/subjects"
+      class="inline-flex items-center gap-2 rounded-2xl bg-white/[0.06] border border-white/10 px-4 py-2 text-sm hover:bg-white/[0.10] transition"
+    >
+      <i class="fa-solid fa-arrow-left"></i>
+      All Subjects
+    </a>
+
+    @if (loading) {
+    <div class="mt-6 text-white/70">Loading...</div>
+    } @else if (error) {
+    <div class="mt-6 rounded-3xl border border-red-500/25 bg-red-500/10 p-6 text-red-200">
+      {{ error }}
+    </div>
+    } @else if (subject) {
+
+    <div class="mt-6 rounded-[28px] border border-white/10 bg-white/[0.06] backdrop-blur-xl p-6">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <h1 class="text-2xl font-black tracking-tight">{{ subject.subjectName }}</h1>
+          <div class="text-white/55 text-sm mt-1">ID: {{ subject.subjectId }}</div>
+        </div>
+
+        <span
+          class="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold"
+          [class]="
+            subject.deaf_mute
+              ? 'border-sky-500/25 bg-sky-500/10 text-sky-200'
+              : 'border-white/10 bg-white/[0.04] text-white/75'
+          "
+        >
+          deaf_mute
+        </span>
+      </div>
+
+      <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+        <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+          <div class="text-white/60 text-xs">Students</div>
+          <div class="text-xl font-bold mt-1">{{ subject.studentsCount }}</div>
+        </div>
+
+        <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+          <div class="text-white/60 text-xs">Teachers</div>
+          <div class="text-xl font-bold mt-1">{{ subject.teachersCount }}</div>
+        </div>
+
+        <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+          <div class="text-white/60 text-xs">Lessons</div>
+          <div class="text-xl font-bold mt-1">{{ subject.lessonsCount }}</div>
+        </div>
+
+        <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+          <div class="text-white/60 text-xs">Levels</div>
+          <div class="text-xl font-bold mt-1">{{ subject.levelsCount }}</div>
+        </div>
+      </div>
+    </div>
+
+    }
+  </div>
+</section>

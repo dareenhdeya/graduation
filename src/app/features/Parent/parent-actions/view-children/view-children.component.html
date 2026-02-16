@@ -1,0 +1,160 @@
+<section class="relative min-h-screen bg-[#070A13] pt-28 pb-10 px-4">
+  <div
+    class="pointer-events-none absolute top-20 left-10 h-96 w-96 rounded-full bg-purple-600/10 blur-[100px]"
+  ></div>
+  <div
+    class="pointer-events-none absolute bottom-20 right-10 h-96 w-96 rounded-full bg-sky-600/10 blur-[100px]"
+  ></div>
+
+  <div class="container mx-auto max-w-7xl relative z-10">
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+      <div>
+        <h1 class="text-4xl font-black text-white tracking-tight mb-2">
+          My
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-400"
+            >Children</span
+          >
+        </h1>
+        <p class="text-white/50 text-lg">Manage profiles and view details.</p>
+      </div>
+
+      <button
+        (click)="showChildren()"
+        class="group flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white/70 hover:text-white hover:bg-white/10 hover:border-sky-500/30 transition"
+      >
+        <i class="fa-solid fa-rotate-right" [class.fa-spin]="isLoading"></i>
+        <span>Refresh List</span>
+      </button>
+    </div>
+
+    @if (errorMessage) {
+      <div
+        class="rounded-2xl border border-red-500/20 bg-red-500/10 p-6 text-center text-red-200 mb-8"
+      >
+        <i class="fa-solid fa-triangle-exclamation text-3xl mb-2"></i>
+        <p>{{ errorMessage }}</p>
+      </div>
+    }
+
+    @if (isLoading) {
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @for (item of [1, 2, 3]; track item) {
+          <div class="rounded-3xl border border-white/5 bg-white/5 p-6 animate-pulse h-64">
+            <div class="flex items-center gap-4 mb-6">
+              <div class="size-16 rounded-2xl bg-white/10"></div>
+              <div class="space-y-2">
+                <div class="h-4 w-32 bg-white/10 rounded"></div>
+                <div class="h-3 w-20 bg-white/10 rounded"></div>
+              </div>
+            </div>
+            <div class="space-y-3">
+              <div class="h-3 w-full bg-white/10 rounded"></div>
+              <div class="h-3 w-3/4 bg-white/10 rounded"></div>
+            </div>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @for (child of children; track child.id) {
+          <div
+            class="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-6 transition-all duration-300 hover:bg-white/10 hover:border-sky-500/30 hover:-translate-y-1 hover:shadow-2xl flex flex-col h-full"
+          >
+            <div
+              class="absolute -right-10 -top-10 size-40 bg-sky-500/5 rounded-full blur-2xl group-hover:bg-sky-500/10 transition"
+            ></div>
+
+            <div class="relative z-10 flex flex-col h-full">
+              <div class="flex items-center gap-4 mb-6">
+                <div
+                  class="size-16 rounded-2xl bg-gradient-to-br from-white/10 to-white/5 border border-white/10 flex items-center justify-center text-2xl font-bold text-sky-400 group-hover:scale-110 transition shadow-inner group-hover:border-sky-500/50 group-hover:text-sky-300"
+                >
+                  {{ child.fName.charAt(0).toUpperCase() }}
+                </div>
+
+                <div>
+                  <h3
+                    class="text-xl font-bold text-white leading-tight line-clamp-1"
+                    title="{{ child.fName }}"
+                  >
+                    {{ child.fName }}
+                  </h3>
+                  <div class="flex items-center gap-2 mt-1">
+                    <span class="size-2 rounded-full bg-green-500"></span>
+                    <p class="text-sm text-white/50">Active Student</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="space-y-4 mb-8 text-sm flex-1">
+                <div
+                  class="flex items-center gap-3 text-white/60 p-2 rounded-lg hover:bg-white/5 transition"
+                >
+                  <div
+                    class="size-8 rounded-lg bg-white/5 flex items-center justify-center text-sky-400 shrink-0"
+                  >
+                    <i class="fa-regular fa-envelope"></i>
+                  </div>
+                  <span class="truncate" title="{{ child.email }}">{{ child.email }}</span>
+                </div>
+
+                <div
+                  class="flex items-center gap-3 text-white/60 p-2 rounded-lg hover:bg-white/5 transition"
+                >
+                  <div
+                    class="size-8 rounded-lg bg-white/5 flex items-center justify-center text-purple-400 shrink-0"
+                  >
+                    <i class="fa-regular fa-calendar"></i>
+                  </div>
+                  <span>{{ child.birthDate | date: 'mediumDate' }}</span>
+                </div>
+
+                <div
+                  class="flex items-center gap-3 text-white/60 p-2 rounded-lg hover:bg-white/5 transition"
+                >
+                  <div
+                    class="size-8 rounded-lg bg-white/5 flex items-center justify-center text-pink-400 shrink-0"
+                  >
+                    <i class="fa-solid fa-universal-access"></i>
+                  </div>
+                  <span class="capitalize">{{ child.disability || 'None' }}</span>
+                </div>
+              </div>
+
+              <div class="mt-auto grid grid-cols-2 gap-3">
+                <button
+                  [routerLink]="['/parent/child-profile/', child.id]"
+                  class="py-3 rounded-xl bg-sky-600/10 text-sky-400 font-bold text-sm hover:bg-sky-600 hover:text-white transition border border-sky-600/20 shadow-lg shadow-sky-900/10 hover:shadow-sky-600/20"
+                >
+                  View Profile
+                </button>
+                <button
+                  class="py-3 rounded-xl bg-white/5 text-white/70 font-bold text-sm hover:bg-white/10 hover:text-white transition border border-white/10"
+                >
+                  Progress
+                </button>
+              </div>
+            </div>
+          </div>
+        } @empty {
+          <div
+            class="col-span-full py-16 text-center rounded-3xl border border-dashed border-white/10 bg-white/[0.02]"
+          >
+            <div
+              class="mx-auto size-20 rounded-full bg-white/5 flex items-center justify-center text-white/20 mb-4"
+            >
+              <i class="fa-solid fa-child-reaching text-4xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-2">No Children Found</h3>
+            <p class="text-white/50 mb-6">You haven't registered any children yet.</p>
+            <button
+              class="px-6 py-3 rounded-xl bg-sky-600 text-white font-semibold hover:bg-sky-500 transition shadow-lg shadow-sky-900/20"
+            >
+              Register a Child
+            </button>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</section>

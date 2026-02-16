@@ -1,0 +1,227 @@
+<section class="relative min-h-[calc(100vh)] overflow-hidden bg-[#070A13]">
+    <div
+      class="pointer-events-none absolute -top-64 -left-72 h-[520px] w-[820px] rounded-[999px] bg-sky-500/12 blur-[130px]"
+    ></div>
+    <div
+      class="pointer-events-none absolute -bottom-72 -right-60 h-[720px] w-[720px] rounded-full bg-fuchsia-500/12 blur-[140px]"
+    ></div>
+  
+    <div class="relative z-10 min-h-screen flex items-center justify-center px-4">
+      <div class="mx-auto w-full max-w-3xl">
+        <div
+          class="relative rounded-[32px] border border-white/10 bg-white/[0.06] backdrop-blur-xl
+                 shadow-[0_50px_140px_-90px_rgba(0,0,0,.95)] p-6 md:p-8"
+        >
+          <div class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3">
+            <div class="flex items-center gap-2 overflow-x-auto no-scrollbar">
+              @for (s of steps; track s.id; let i = $index) {
+                <button
+                  type="button"
+                  (click)="goTo(s.id)"
+                  [disabled]="!canGoTo(s.id)"
+                  class="group flex items-center gap-2 shrink-0 rounded-xl px-2 py-2 transition
+                         disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <span
+                    class="grid place-items-center h-9 w-9 rounded-full text-sm font-semibold border transition
+                           border-white/15 text-white/70 bg-white/[0.04]
+                           group-hover:border-sky-400/50 group-hover:text-white"
+                    [class.!border-sky-400]="currentStep === s.id"
+                    [class.!text-white]="currentStep === s.id"
+                    [class.!bg-sky-500/15]="currentStep === s.id"
+                  >
+                    {{ s.id }}
+                  </span>
+  
+                  <span
+                    class="text-sm font-medium whitespace-nowrap transition text-white/70 group-hover:text-white"
+                    [class.!text-white]="currentStep === s.id"
+                  >
+                    {{ s.label }}
+                  </span>
+  
+                  @if (i < steps.length - 1) {
+                    <span class="mx-1 text-white/25 select-none">»</span>
+                  }
+                </button>
+              }
+            </div>
+          </div>
+  
+          @if (errMsg) {
+            <div class="mt-5 rounded-2xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+              {{ errMsg }}
+            </div>
+          }
+  
+          <div class="mt-7">
+            @if (currentStep === 1) {
+              <div class="text-center">
+                <h2 class="text-2xl md:text-3xl font-black tracking-tight text-white">Forgot Password</h2>
+                <p class="mt-2 text-sm text-white/60">Enter your email or username to receive an OTP.</p>
+              </div>
+  
+              <form [formGroup]="emailForm" (ngSubmit)="submitEmail()" class="mt-7 space-y-5">
+                <div>
+                  <label class="block text-sm font-medium text-white/80 mb-2">Email or Username</label>
+                  <input
+                    formControlName="emailOrUserName"
+                    type="text"
+                    placeholder="name@email.com or username"
+                    class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90
+                           placeholder:text-white/35 outline-none transition
+                           focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
+                  />
+                  @if (emailForm.get('emailOrUserName')?.touched &&
+                  emailForm.get('emailOrUserName')?.getError('required')) {
+                    <p class="mt-2 text-sm text-red-300">Email/Username is required</p>
+                  }
+                </div>
+  
+                <button
+                  type="submit"
+                  [disabled]="loading"
+                  class="btn-solid w-full h-12 rounded-2xl font-semibold text-white
+                         disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  <span class="flex items-center justify-center gap-2">
+                    Send OTP
+                    @if (loading) {
+                      <span class="h-5 w-5 rounded-full border-2 border-white/40 border-t-white animate-spin"></span>
+                    }
+                  </span>
+                </button>
+              </form>
+            }
+  
+            @if (currentStep === 2) {
+              <div class="text-center">
+                <h2 class="text-2xl md:text-3xl font-black tracking-tight text-white">Verify OTP</h2>
+                <p class="mt-2 text-sm text-white/60">
+                  We sent an OTP to <span class="text-white/90 font-medium">{{ savedUser }}</span>.
+                </p>
+              </div>
+  
+              <form [formGroup]="otpForm" (ngSubmit)="submitOtp()" class="mt-7 space-y-5">
+                <div>
+                  <label class="block text-sm font-medium text-white/80 mb-2">OTP</label>
+                  <input
+                    formControlName="otp"
+                    type="text"
+                    inputmode="numeric"
+                    placeholder="Enter OTP"
+                    class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90
+                           placeholder:text-white/35 outline-none transition tracking-[0.3em]
+                           focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
+                  />
+                  @if (otpForm.get('otp')?.touched && otpForm.get('otp')?.getError('required')) {
+                    <p class="mt-2 text-sm text-red-300">OTP is required</p>
+                  }
+                </div>
+  
+                <div class="flex items-center gap-3">
+                  <button
+                    type="button"
+                    (click)="goTo(1)"
+                    [disabled]="loading"
+                    class="flex-1 h-12 rounded-2xl border border-white/10 bg-white/[0.05] hover:bg-white/[0.08]
+                           text-white/80 font-semibold transition disabled:opacity-60 disabled:cursor-not-allowed"
+                  >
+                    Back
+                  </button>
+  
+                  <button
+                    type="submit"
+                    [disabled]="loading"
+                    class="btn-solid flex-1 h-12 rounded-2xl font-semibold text-white
+                           disabled:opacity-60 disabled:cursor-not-allowed"
+                  >
+                    <span class="flex items-center justify-center gap-2">
+                      Verify
+                      @if (loading) {
+                        <span class="h-5 w-5 rounded-full border-2 border-white/40 border-t-white animate-spin"></span>
+                      }
+                    </span>
+                  </button>
+                </div>
+              </form>
+            }
+  
+            @if (currentStep === 3) {
+              <div class="text-center">
+                <h2 class="text-2xl md:text-3xl font-black tracking-tight text-white">Reset Password</h2>
+                <p class="mt-2 text-sm text-white/60">Create a new password for your account.</p>
+              </div>
+  
+              <form [formGroup]="resetForm" (ngSubmit)="submitReset()" class="mt-7 space-y-5">
+                <div>
+                  <label class="block text-sm font-medium text-white/80 mb-2">New Password</label>
+                  <input
+                    type="password"
+                    formControlName="newPassword"
+                    placeholder="Enter new password"
+                    class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90
+                           placeholder:text-white/35 outline-none transition
+                           focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
+                  />
+                  @if (resetForm.get('newPassword')?.touched &&
+                  resetForm.get('newPassword')?.getError('required')) {
+                    <p class="mt-2 text-sm text-red-300">New password is required</p>
+                  }
+                </div>
+  
+                <div>
+                  <label class="block text-sm font-medium text-white/80 mb-2">Confirm Password</label>
+                  <input
+                    type="password"
+                    formControlName="confirmPassword"
+                    placeholder="Confirm new password"
+                    class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90
+                           placeholder:text-white/35 outline-none transition
+                           focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
+                  />
+  
+                  @if (resetForm.get('confirmPassword')?.touched &&
+                  resetForm.get('confirmPassword')?.getError('required')) {
+                    <p class="mt-2 text-sm text-red-300">Confirm password is required</p>
+                  }
+  
+                  @if (resetForm.get('confirmPassword')?.touched &&
+                  resetForm.get('confirmPassword')?.getError('mismatch')) {
+                    <p class="mt-2 text-sm text-red-300">Passwords do not match</p>
+                  }
+                </div>
+  
+                <div class="flex items-center gap-3">
+                  <button
+                    type="button"
+                    (click)="goTo(2)"
+                    [disabled]="loading"
+                    class="flex-1 h-12 rounded-2xl border border-white/10 bg-white/[0.05] hover:bg-white/[0.08]
+                           text-white/80 font-semibold transition disabled:opacity-60 disabled:cursor-not-allowed"
+                  >
+                    Back
+                  </button>
+  
+                  <button
+                    type="submit"
+                    [disabled]="loading"
+                    class="btn-solid flex-1 h-12 rounded-2xl font-semibold text-white
+                           disabled:opacity-60 disabled:cursor-not-allowed"
+                  >
+                    <span class="flex items-center justify-center gap-2">
+                      Reset Password
+                      @if (loading) {
+                        <span class="h-5 w-5 rounded-full border-2 border-white/40 border-t-white animate-spin"></span>
+                      }
+                    </span>
+                  </button>
+                </div>
+              </form>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
