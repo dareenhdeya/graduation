@@ -1,4 +1,3 @@
-/* smooth modern scrollbar */
 .modal-scroll::-webkit-scrollbar {
   width: 8px;
 }

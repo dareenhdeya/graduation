@@ -63,7 +63,7 @@ export class NavbarComponent {
       this.profileImage = data.pfpURL ?? null;
     });
   
-    this.authService.refreshProfile(); // initial load
+    this.authService.refreshProfile();
   }
   
 

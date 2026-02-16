@@ -120,27 +120,15 @@ export class ProfileComponent {
     this.showAvatarPicker = false;
   }
 
-  // selectAvatar(src: string) {
-  //   fetch(src)
-  //     .then(res => res.blob())
-  //     .then(blob => {
-  //       const file = new File([blob], 'avatar.png', { type: blob.type });
-  //       this.editForm.patchValue({ image: file });
-  //       this.imagePreview = src;
-  //       this.showAvatarPicker = false;
-  //     });
-  // }
   selectAvatar(src: string) {
-    // 1. عرض المعاينة فوراً للمستخدم (Instant Feedback)
     this.imagePreview = src;
 
-    // 2. تحويل الصورة لملف في الخلفية
     fetch(src)
       .then((res) => res.blob())
       .then((blob) => {
         const file = new File([blob], 'avatar.png', { type: blob.type });
         this.editForm.patchValue({ image: file });
-        this.showAvatarPicker = false; // قفل المودال بعد تمام التحويل
+        this.showAvatarPicker = false;
       })
       .catch((err) => {
         console.error('Error setting avatar:', err);
@@ -161,28 +149,6 @@ export class ProfileComponent {
     }
   }
 
-  // submitEdit() {
-  //   const v = this.editForm.value;
-  //   const fd = new FormData();
-
-  //   Object.entries(v).forEach(([key, value]) => {
-  //     if (value !== null && value !== '') {
-  //       fd.append(key, value as any);
-  //     }
-  //   });
-
-  //   this.authService.editProfile(fd).subscribe({
-  //     next: (res) => {
-  //       this.showEditModal = false;
-  //       this.get_profile();
-  //       console.log('edit', res);
-  //     },
-  //     error: (err) => {
-  //       console.log(err);
-  //       // this.error = err?.error?.title || 'Failed to edit profile';
-  //     },
-  //   });
-  // }
   get f() {
     return this.editForm.controls;
   }
@@ -190,13 +156,12 @@ export class ProfileComponent {
   submitEdit() {
     if (this.editForm.invalid) return;
 
-    this.loadingEdit = true; // حالة انتظار
+    this.loadingEdit = true;
     this.error = '';
 
     const v = this.editForm.value;
     const fd = new FormData();
 
-    // إضافة الحقول النصية فقط إذا كانت موجودة
     const keys = ['fName', 'lName', 'email', 'address', 'phone', 'birthDate', 'teaches', 'job'];
     keys.forEach((key) => {
       const val = (v as any)[key];
@@ -205,9 +170,8 @@ export class ProfileComponent {
       }
     });
 
-    // إضافة الصورة إذا تم تغييرها
     if (v.image) {
-      fd.append('image', v.image); // تأكدي إن السيرفر مستني اسم الحقل 'image'
+      fd.append('image', v.image);
     }
 
     this.authService.editProfile(fd).subscribe({
@@ -216,7 +180,7 @@ export class ProfileComponent {
 
         this.showEditModal = false;
         this.authService.refreshProfile();
-        this.imagePreview = null; // تصفير المعاينة المؤقتة
+        this.imagePreview = null;
         this.editError = '';
         this.loadingEdit = false;
       },
@@ -226,7 +190,6 @@ export class ProfileComponent {
         const validationErrors = err?.error?.errors;
 
         if (validationErrors) {
-          // بيحول الـ Object لمصفوفة من الرسائل: ["Invalid Home address", "Field X is required"]
           this.editError = Object.values(validationErrors).flat().join(', ');
         } else {
           this.editError = err?.error?.title || 'Failed to update profile';
