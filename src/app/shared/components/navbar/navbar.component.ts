@@ -35,23 +35,39 @@ export class NavbarComponent {
 
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
-  isMenuOpen = false;  //* For mobile menu toggle
+  isMenuOpen = false; //* For mobile menu toggle
+
+  // ngOnInit() {
+  //   this.authService.getProfile().subscribe({
+  //     next: (res: any) => {
+  //       console.log('nav', res);
+
+  //       const data = res?.data;
+
+  //       if (data?.fName) {
+  //         this.firstLetter = data.fName.charAt(0).toUpperCase();
+  //       }
+
+  //       if (data?.pfpURL) {
+  //         this.profileImage = data.pfpURL;
+  //       }
+  //     },
+  //   });
+  // }
 
   ngOnInit() {
-    this.authService.getProfile().subscribe({
-      next: (res: any) => {
-        const data = res?.data;
-
-        if (data?.name) {
-          this.firstLetter = data.name.charAt(0).toUpperCase();
-        }
-
-        if (data?.pfpURL) {
-          this.profileImage = data.pfpURL;
-        }
-      },
+    this.authService.profile$.subscribe(data => {
+      if (!data) return;
+  
+      this.firstLetter = data.fName?.charAt(0).toUpperCase() ?? 'U';
+      this.profileImage = data.pfpURL ?? null;
     });
+  
+    this.authService.refreshProfile(); // initial load
   }
+  
+
+
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;

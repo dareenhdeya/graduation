@@ -4,9 +4,9 @@ import { baseHttp } from '../../services/base';
 import { APP_APIs } from '../../constants/appAPIs';
 import { ILoginResponse } from '../interfaces/ILoginResponse';
 import { IRegisterResponse } from '../interfaces/IRegisterResponse';
-import { ViewProfileResponse } from '../interfaces/IProfileResponse';
+import { ProfileData, ViewProfileResponse } from '../interfaces/IProfileResponse';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { BehaviorSubject, map } from 'rxjs';
+import { BehaviorSubject, map, tap } from 'rxjs';
 
 export interface IVerifyOtpBody {
   emailOrUserName: string;
@@ -22,6 +22,24 @@ export class AuthService extends baseHttp {
   private roleSubject = new BehaviorSubject<Role | null>(null);
   role$ = this.roleSubject.asObservable();
 
+  private profileSubject = new BehaviorSubject<ProfileData | null>(null);
+  profile$ = this.profileSubject.asObservable();
+  
+  loadProfile() {
+    return this.getProfile().pipe(
+      tap((res: ViewProfileResponse) => {
+        this.profileSubject.next(res.data);
+      })
+    );
+  }
+  
+  refreshProfile() {
+    this.getProfile().subscribe(res => {
+      this.profileSubject.next(res.data);
+    });
+  }
+
+
   setRole(role: Role | null) {
     this.roleSubject.next(role);
   }
@@ -33,6 +51,10 @@ export class AuthService extends baseHttp {
   getProfile() {
     return this.get<ViewProfileResponse>(APP_APIs.getProfile);
   }
+
+  editProfile(formData: FormData) {
+    return this.patch<any>(APP_APIs.editProfile, formData);
+  }  
 
   signUp(userData: any) {
     return this.post<IRegisterResponse>(APP_APIs.register, userData);

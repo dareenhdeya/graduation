@@ -1,19 +1,23 @@
-export type Role = 'Admin' | 'Parent' | 'Teacher' | 'Student';
+export type Role = 'Parent' | 'Teacher' | 'Student';
 
-export interface ProfileDTO {
+export interface ProfileData {
   id: string;
-  name: string;
+  fName: string;
+  lName: string;
   email: string;
-  address: string;
-  phone: string;
+  address?: string | null;
+  phone?: string | null;
   role: Role;
-  birthDate: string | null;
-  disability: string | null;
-  pfURL: string | null;
-  teaches: any;
+  // role: string;
+  birthDate?: string | null;
+  pfpURL?: string | null;
+  disability?: string | null;
+  teaches?:  string | null;
+  job?: string | null;
+  status: number | null;
 }
 
 export interface ViewProfileResponse {
   message: string;
-  data: ProfileDTO;
-}
+  data: ProfileData;
+};

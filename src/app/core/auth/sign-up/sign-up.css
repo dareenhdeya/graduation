@@ -26,3 +26,20 @@
 .custom-scroll::-webkit-scrollbar-track {
   background: transparent;
 }
+
+/* calendericon */
+.dark-calendar-picker::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.dark-calendar-picker::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+.dark-calendar-picker::-webkit-inner-spin-button,
+.dark-calendar-picker::-webkit-clear-button {
+  display: none;
+}

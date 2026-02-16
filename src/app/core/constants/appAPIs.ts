@@ -16,6 +16,7 @@ export const APP_APIs = {
   refreshToken: `${environment.apiUrl}Auth/Refresh-Token`,
 
   getProfile: `${environment.apiUrl}Auth/view-profile`,
+  editProfile: `${environment.apiUrl}Auth/Edit-profile`,
 
   //* Admin
   adminShowUsers: `${environment.apiUrl}Admin/Show-Users`,
