@@ -31,6 +31,7 @@ export const APP_APIs = {
   teacherGetStudents: `${environment.apiUrl}Teacher/get-students`,
   teacherGetLessons: `${environment.apiUrl}Teacher/get-lessons`,
   teacherAddLesson: `${environment.apiUrl}Teacher/Add-lesson`,
+  teacherAddWordAttachment: `${environment.apiUrl}Teacher/Add-words-to-Dictionary`,
 
   //* Student
   studentGetAllSubjects: `${environment.apiUrl}Student/View-Subjects`,

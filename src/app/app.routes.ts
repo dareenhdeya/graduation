@@ -29,6 +29,7 @@ import { ParentActionsComponent } from './features/Parent/parent-actions/parent-
 import { RegisterStudentComponent } from './features/Parent/parent-actions/register-student/register-student.component';
 import { ViewChildrenComponent } from './features/Parent/parent-actions/view-children/view-children.component';
 import { ChildProfileComponent } from './features/Parent/parent-actions/child-profile/child-profile.component';
+import { AddDictionaryComponent } from './features/Teacher/teacher-actions/add-dictionary/add-dictionary.component';
 
 export const routes: Routes = [
   {
@@ -88,6 +89,7 @@ export const routes: Routes = [
           { path: 'lessons', component: GetTeacherLessonsComponent, title: 'My Lessons' },
           { path: 'add-lesson', component: AddLessonComponent, title: 'Add Lesson' },
           { path: 'students', component: GetTeacherStudentsComponent, title: 'My Students' },
+          { path: 'add-dictionary', component: AddDictionaryComponent, title: 'Add Dictionary' }
         ],
       },
       // --- STUDENT ROUTES ---
