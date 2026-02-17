@@ -72,7 +72,7 @@ export class PendingTeachersComponent implements OnInit {
     return this.users.filter((u) => {
       const isPendingTeacher = u.role === 'Teacher' && Number(u.status) === 2;
 
-      const name = (u.name ?? '').toLowerCase();
+      const name = (u.fName ?? '').toLowerCase();
       const email = (u.email ?? '').toLowerCase();
       const textOk = !q || name.includes(q) || email.includes(q);
 
@@ -81,7 +81,7 @@ export class PendingTeachersComponent implements OnInit {
   }
 
   getInitial(u: IADMIN): string {
-    const n = (u.name || '').trim();
+    const n = (u.fName || '').trim();
     return n ? n.charAt(0).toUpperCase() : '?';
   }
 

@@ -212,6 +212,8 @@
                 <p class="text-red-400 text-sm mt-1">Birthdate is required.</p>
                 } }
               </div>
+
+              @if(+signUpForm.get('role')?.value! === 1){
               <div>
                 <label class="block text-sm font-medium text-white/80 mb-2">Disability</label>
                 <select
@@ -223,6 +225,7 @@
                   }
                 </select>
               </div>
+              }
               <!-- } -->
 
               <div>

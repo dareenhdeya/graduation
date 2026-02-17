@@ -79,7 +79,7 @@ export class UserCrudComponent implements OnInit {
     return this.users.filter((u) => {
       const roleOk = rf === 'All' ? true : (u.role as any) === rf;
 
-      const name = (u.name ?? '').toLowerCase();
+      const name = (u.fName ?? '').toLowerCase();
       const email = (u.email ?? '').toLowerCase();
 
       const textOk = !q || name.startsWith(q) || email.startsWith(q);
@@ -89,7 +89,7 @@ export class UserCrudComponent implements OnInit {
   }
 
   getInitial(u: IADMIN): string {
-    const n = (u.name || '').trim();
+    const n = (u.fName || '').trim();
     return n ? n.charAt(0).toUpperCase() : '?';
   }
 
