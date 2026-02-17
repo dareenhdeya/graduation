@@ -38,6 +38,13 @@ export class SignUp implements OnInit {
     { id: 2, label: 'Speech' },
   ];
 
+  submitted = false;
+
+  isInvalid(controlName: string): boolean {
+    const c = this.signUpForm.get(controlName);
+    return !!(c && c.invalid && (c.touched || this.submitted));
+  }
+
   avatars = [
     { id: '001-man', src: '/images/pfp/001-man.png' },
     { id: '002-cat', src: '/images/pfp/002-cat.png' },
@@ -96,18 +103,21 @@ export class SignUp implements OnInit {
     email: ['', [Validators.required, Validators.email]],
     password: [
       '',
-      [Validators.required, Validators.pattern(/^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/)],
+      [
+        Validators.required,
+        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/),
+      ],
     ],
     role: [1 as any, [Validators.required]],
 
     Gender: ['', [Validators.required]],
 
-    FName: ['', [Validators.required]],
-    LName: ['', [Validators.required]],
-    phoneNumber: [''],
-    Address: ['', [Validators.required]],
-    BirthDate: [''],
-    Job: [''],
+    FName: ['', [Validators.required, Validators.minLength(2), Validators.pattern('^[a-zA-Z]+$')]],
+    LName: ['', [Validators.required, Validators.minLength(2), Validators.pattern('^[a-zA-Z]+$')]],
+    phoneNumber: ['', [Validators.required, Validators.pattern('^0[0-9]{10}$')]],
+    Address: ['', [Validators.required, Validators.minLength(10)]],
+    BirthDate: ['', [Validators.required]],
+    Job: ['', [Validators.minLength(2)]],
     SubjectID: [''],
     Disability: [0 as any],
   });
@@ -214,6 +224,7 @@ export class SignUp implements OnInit {
 
   async submit() {
     console.log(this.signUpForm.value);
+    this.submitted = true;
 
     if (this.signUpForm.invalid) {
       this.signUpForm.markAllAsTouched();
@@ -241,7 +252,6 @@ export class SignUp implements OnInit {
 
     const fd = new FormData();
 
-    // ✅ لو مفيش uploaded file بس فيه avatar، حوليه لملف
     if (!this.selectedFile && this.selectedAvatarSrc) {
       const res = await fetch(this.selectedAvatarSrc);
       const blob = await res.blob();

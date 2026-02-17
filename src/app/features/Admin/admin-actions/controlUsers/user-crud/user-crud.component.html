@@ -170,23 +170,35 @@
                 <div class="flex items-center justify-end gap-2" (click)="$event.stopPropagation()">
                   <button
                     type="button"
-                    class="cursor-pointer py-2 px-3 inline-flex items-center gap-2 rounded-xl border border-amber-500/25 bg-amber-500/10 text-amber-100 hover:bg-amber-500/15 transition"
+                    [disabled]="u.status === 2"
+                    class="py-2 px-3 inline-flex items-center gap-2 rounded-xl border border-amber-500/25 bg-amber-500/10 text-amber-100 transition disabled:opacity-30 disabled:cursor-not-allowed enabled:hover:bg-amber-500/15 enabled:cursor-pointer"
                     (click)="onEndSession(u, $event)"
                     title="End Session"
                   >
                     <i class="fa-solid fa-power-off"></i>
                     End
                   </button>
-
+                  @if(u.status !== 3){
                   <button
                     type="button"
-                    class="cursor-pointer py-2 px-3 inline-flex items-center gap-2 rounded-xl border border-red-500/25 bg-red-500/10 text-red-100 hover:bg-red-500/15 transition"
+                    [disabled]="u.status === 2"
+                    class="py-2 px-3 inline-flex items-center gap-2 rounded-xl border border-red-500/25 bg-red-500/10 text-red-100 transition disabled:opacity-30 disabled:cursor-not-allowed enabled:hover:bg-red-500/15 enabled:cursor-pointer"
                     (click)="onBlockUser(u, $event)"
                     title="Block User"
                   >
                     <i class="fa-solid fa-ban"></i>
-                    @if(u.status !== 3){Block}@else{Unblock}
+                    Block
                   </button>
+                  } @else{
+                  <button
+                    type="button"
+                    class="cursor-pointer py-2 px-3 inline-flex items-center gap-2 rounded-xl border border-green-500/25 bg-green-500/10 text-green-100 hover:bg-green-500/15 transition"
+                    (click)="onBlockUser(u, $event)"
+                    title="Unblock User"
+                  >
+                    <i class="fa-solid fa-ban"></i>
+                    Unblock</button
+                  >}
                 </div>
               </td>
             </tr>

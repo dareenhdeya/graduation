@@ -22,6 +22,7 @@ export class Login implements OnInit {
   isLoading: boolean = false;
   showPass: boolean = false;
   loginForm!: FormGroup;
+  submitted = false;
 
   ngOnInit(): void {
     this.initForm();
@@ -30,11 +31,21 @@ export class Login implements OnInit {
   initForm(): void {
     this.loginForm = this.fb.group({
       usernameorEmail: [null, [Validators.required]],
-      password: [null, [Validators.required]],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+          ),
+        ],
+      ],
     });
   }
 
   submitLogin(): void {
+    this.submitted = true;
+
     if (this.loginForm.valid) {
       this.subscription.unsubscribe();
       this.isLoading = true;
@@ -47,10 +58,16 @@ export class Login implements OnInit {
           this.isLoading = false;
         },
         error: (err) => {
-          console.log('login err:', err);
-          this.errMsg = err.userMessage || err.error?.message || 'Login failed';
-          console.log('======login err:=============================', this.errMsg);
           this.isLoading = false;
+
+          console.log('login err:', err);
+          const rawMsg = err.error?.message || err.userMessage || 'Login failed';
+
+          if (typeof rawMsg === 'object') {
+            this.errMsg = rawMsg.message;
+          } else {
+            this.errMsg = rawMsg;
+          }
         },
       });
     } else {

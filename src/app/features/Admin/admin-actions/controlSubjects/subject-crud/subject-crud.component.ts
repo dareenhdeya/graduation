@@ -14,6 +14,8 @@ export class SubjectCrudComponent implements OnInit {
   private admin = inject(AdminServiceService);
   private router = inject(Router);
 
+  filterType = new FormControl<'all' | 'deaf' | 'normal'>('all', { nonNullable: true });
+
   loading = false;
   error = '';
 
@@ -49,14 +51,21 @@ export class SubjectCrudComponent implements OnInit {
 
   get filteredSubjects(): IAdminSubject[] {
     const q = this.search.value.trim().toLowerCase();
-    if (!q) return this.subjects;
-
-    return this.subjects.filter(
-      (s) =>
+  
+    return this.subjects.filter((s) => {
+      const matchesSearch =
+        !q ||
         (s.subjectName || '').toLowerCase().includes(q) ||
-        (s.subjectId || '').toLowerCase().includes(q)
-    );
-  }
+        (s.subjectId || '').toLowerCase().includes(q);
+  
+      const matchesFilter =
+        this.filterType.value === 'all' ||
+        (this.filterType.value === 'deaf' && s.deaf_mute) ||
+        (this.filterType.value === 'normal' && !s.deaf_mute);
+  
+      return matchesSearch && matchesFilter;
+    });
+  }  
 
   openSubject(s: IAdminSubject) {
     this.router.navigate(['/admin/subjects', s.subjectId]);

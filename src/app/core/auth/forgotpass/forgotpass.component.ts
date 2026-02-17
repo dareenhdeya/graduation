@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 
 import { AuthService } from '../services/auth.service';
@@ -8,7 +8,7 @@ import { AuthService } from '../services/auth.service';
 @Component({
   selector: 'app-forgotpass',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './forgotpass.component.html',
   styleUrls: ['./forgotpass.component.css'],
 })
@@ -21,6 +21,9 @@ export class ForgotpassComponent {
   currentStep = 1;
   loading = false;
   errMsg = '';
+
+  showNewPass = false;
+  showConfirmPass = false;
 
   steps = [
     { id: 1, label: 'Forgot Password' },
@@ -36,10 +39,30 @@ export class ForgotpassComponent {
     otp: ['', Validators.required],
   });
 
-  resetForm = this.fb.group({
-    newPassword: ['', Validators.required],
-    confirmPassword: ['', Validators.required],
-  });
+  resetForm = this.fb.group(
+    {
+      newPassword: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.pattern(
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+          ),
+        ],
+      ],
+      confirmPassword: ['', Validators.required],
+    },
+    {
+      validators: this.passwordMatchValidator,
+    }
+  );
+
+  passwordMatchValidator(g: any) {
+    const pass = g.get('newPassword').value;
+    const confirm = g.get('confirmPassword').value;
+    return pass === confirm ? null : { mismatch: true };
+  }
 
   savedUser = '';
 

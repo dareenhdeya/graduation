@@ -75,6 +75,7 @@
               <label class="block text-sm font-medium text-white/80 mb-2">Gender</label>
               <select
                 formControlName="Gender"
+                [class.border-red-500]="isInvalid('Gender')"
                 class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
               >
                 <option class="bg-[#0b1020]" value="" disabled>Select gender</option>
@@ -82,24 +83,24 @@
                 <option class="bg-[#0b1020]" [value]="2">Female</option>
               </select>
 
-              @if ( signUpForm.get('Gender')?.touched &&
-              signUpForm.get('Gender')?.getError('required') ) {
+              @if (isInvalid('Gender')) { @if (signUpForm.get('Gender')?.hasError('required')) {
               <p class="text-red-400 text-sm mt-1">Gender is required.</p>
-              }
+              } }
             </div>
 
             <div>
               <label class="block text-sm font-medium text-white/80 mb-2">Email</label>
               <input
                 formControlName="email"
+                [class.border-red-500]="isInvalid('email')"
                 type="email"
                 class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
                 placeholder="name@example.com"
               />
-              @if (signUpForm.get('email')?.touched && signUpForm.get('email')?.errors) { @if
-              (signUpForm.get('email')?.getError('required')) {
+
+              @if (isInvalid('email')) { @if (signUpForm.get('email')?.hasError('required')) {
               <p class="text-red-400 text-sm mt-1">Email is required.</p>
-              } @else if (signUpForm.get('email')?.getError('email')) {
+              } @if (signUpForm.get('email')?.hasError('email')) {
               <p class="text-red-400 text-sm mt-1">Enter valid email.</p>
               } }
             </div>
@@ -110,6 +111,7 @@
               <div class="relative">
                 <input
                   formControlName="password"
+                  [class.border-red-500]="isInvalid('password')"
                   [type]="showPass ? 'text' : 'password'"
                   class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 pr-12 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
                 />
@@ -128,16 +130,15 @@
                 </button>
               </div>
 
-              @if ( signUpForm.get('password')?.touched &&
-              signUpForm.get('password')?.getError('required') ) {
+              @if ( signUpForm.get('password')?.invalid && (signUpForm.get('password')?.touched ||
+              submitted) ) { @if (signUpForm.get('password')?.hasError('required')) {
               <p class="text-red-400 text-sm mt-1">Password is required.</p>
-              }@else if (signUpForm.get('password')?.touched &&
-              signUpForm.get('password')?.getError('pattern')) {
+              } @if (signUpForm.get('password')?.hasError('pattern')) {
               <p class="text-red-400 text-sm mt-1">
-                Password must be at least 8 characters and include an uppercase letter, a number,
-                and a special character.
+                Password must be at least 8 characters and include an uppercase letter, a lowercase
+                letter, a number, and a special character.
               </p>
-              }
+              } }
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -145,56 +146,71 @@
                 <label class="block text-sm font-medium text-white/80 mb-2">First Name</label>
                 <input
                   formControlName="FName"
+                  [class.border-red-500]="isInvalid('FName')"
                   class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
                   placeholder="First name"
                 />
-                @if ( signUpForm.get('FName')?.touched &&
-                signUpForm.get('FName')?.getError('required') ) {
+
+                @if (isInvalid('FName')) { @if (signUpForm.get('FName')?.hasError('required')) {
                 <p class="text-red-400 text-sm mt-1">First name is required.</p>
-                }
+                } @if (signUpForm.get('FName')?.hasError('minlength')) {
+                <p class="text-red-400 text-sm mt-1">Minimum 2 characters.</p>
+                } @if (signUpForm.get('FName')?.hasError('pattern')) {
+                <p class="text-red-400 text-sm mt-1">Letters only.</p>
+                } }
               </div>
 
               <div>
                 <label class="block text-sm font-medium text-white/80 mb-2">Last Name</label>
                 <input
                   formControlName="LName"
+                  [class.border-red-500]="isInvalid('LName')"
                   class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
                   placeholder="Last name"
                 />
-                @if ( signUpForm.get('LName')?.touched &&
-                signUpForm.get('LName')?.getError('required') ) {
+                @if (isInvalid('LName')) { @if (signUpForm.get('LName')?.hasError('required')) {
                 <p class="text-red-400 text-sm mt-1">Last name is required.</p>
-                }
+                } @if (signUpForm.get('LName')?.hasError('minlength')) {
+                <p class="text-red-400 text-sm mt-1">Minimum 2 characters.</p>
+                } @if (signUpForm.get('LName')?.hasError('pattern')) {
+                <p class="text-red-400 text-sm mt-1">Letters only.</p>
+                } }
               </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              @if (+signUpForm.get('role')?.value !== 1) {
+              <!-- @if (+signUpForm.get('role')?.value !== 1) { -->
               <div>
                 <label class="block text-sm font-medium text-white/80 mb-2">Phone Number</label>
                 <input
                   formControlName="phoneNumber"
+                  [class.border-red-500]="isInvalid('phoneNumber')"
                   class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
                   placeholder="01xxxxxxxxx"
                 />
-                @if ( signUpForm.get('phoneNumber')?.touched &&
-                signUpForm.get('phoneNumber')?.getError('required') ) {
+
+                @if (isInvalid('phoneNumber')) { @if
+                (signUpForm.get('phoneNumber')?.hasError('required')) {
                 <p class="text-red-400 text-sm mt-1">Phone number is required.</p>
-                }
+                } @if (signUpForm.get('phoneNumber')?.hasError('pattern')) {
+                <p class="text-red-400 text-sm mt-1">Invalid phone format.</p>
+                } }
               </div>
-              } @else {
+              <!-- } @else { -->
               <div>
                 <label class="block text-sm font-medium text-white/80 mb-2">Birth Date</label>
                 <input
                   type="date"
                   formControlName="BirthDate"
+                  [class.border-red-500]="isInvalid('BirthDate')"
                   class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
                   placeholder="Birth date"
                 />
-                @if ( signUpForm.get('BirthDate')?.touched &&
-                signUpForm.get('BirthDate')?.getError('required') ) {
-                <p class="text-red-400 text-sm mt-1">Birth date is required.</p>
-                }
+
+                @if (isInvalid('BirthDate')) { @if
+                (signUpForm.get('BirthDate')?.hasError('required')) {
+                <p class="text-red-400 text-sm mt-1">Birthdate is required.</p>
+                } }
               </div>
               <div>
                 <label class="block text-sm font-medium text-white/80 mb-2">Disability</label>
@@ -207,19 +223,22 @@
                   }
                 </select>
               </div>
-              }
+              <!-- } -->
 
               <div>
                 <label class="block text-sm font-medium text-white/80 mb-2">Address</label>
                 <input
                   formControlName="Address"
+                  [class.border-red-500]="isInvalid('Address')"
                   class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
                   placeholder="Address"
                 />
-                @if ( signUpForm.get('Address')?.touched &&
-                signUpForm.get('Address')?.getError('required') ) {
+
+                @if (isInvalid('Address')) { @if (signUpForm.get('Address')?.hasError('required')) {
                 <p class="text-red-400 text-sm mt-1">Address is required.</p>
-                }
+                } @if (signUpForm.get('Address')?.hasError('minlength')) {
+                <p class="text-red-400 text-sm mt-1">Minimum 10 characters.</p>
+                } }
               </div>
             </div>
 
@@ -228,13 +247,18 @@
               <label class="block text-sm font-medium text-white/80 mb-2">Job</label>
               <input
                 formControlName="Job"
+                [class.border-red-500]="isInvalid('Job')"
                 class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
                 placeholder="Your job"
               />
-              @if ( signUpForm.get('Job')?.touched && signUpForm.get('Job')?.getError('required') )
-              {
-              <p class="text-red-400 text-sm mt-1">Job is required.</p>
-              }
+
+              @if (isInvalid('Job')) {
+              <!-- @if (signUpForm.get('Job')?.hasError('required')) {
+                  <p class="text-red-400 text-sm mt-1">Job is required.</p>
+                } -->
+              @if (signUpForm.get('Job')?.hasError('minlength')) {
+              <p class="text-red-400 text-sm mt-1">Minimum 2 characters.</p>
+              } }
             </div>
             } @if (fileErrMsg) {
             <p class="text-red-400 text-sm">{{ fileErrMsg }}</p>

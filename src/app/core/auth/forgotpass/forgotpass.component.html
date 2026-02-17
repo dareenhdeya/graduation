@@ -78,10 +78,17 @@
                   }
                 </div>
   
+                <div class="flex items-center justify-between py-1">
+                  <p class="text-sm text-white/55 text-center">
+                    Back to
+                    <a routerLink="/login" class="text-sky-300 hover:underline">login</a>
+                  </p>
+                </div>
+
                 <button
                   type="submit"
                   [disabled]="loading"
-                  class="btn-solid w-full h-12 rounded-2xl font-semibold text-white
+                  class="cursor-pointer btn-solid w-full h-12 rounded-2xl font-semibold text-white
                          disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   <span class="flex items-center justify-center gap-2">
@@ -124,7 +131,7 @@
                     type="button"
                     (click)="goTo(1)"
                     [disabled]="loading"
-                    class="flex-1 h-12 rounded-2xl border border-white/10 bg-white/[0.05] hover:bg-white/[0.08]
+                    class="cursor-pointer flex-1 h-12 rounded-2xl border border-white/10 bg-white/[0.05] hover:bg-white/[0.08]
                            text-white/80 font-semibold transition disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     Back
@@ -133,7 +140,7 @@
                   <button
                     type="submit"
                     [disabled]="loading"
-                    class="btn-solid flex-1 h-12 rounded-2xl font-semibold text-white
+                    class="cursor-pointer btn-solid flex-1 h-12 rounded-2xl font-semibold text-white
                            disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     <span class="flex items-center justify-center gap-2">
@@ -156,48 +163,70 @@
               <form [formGroup]="resetForm" (ngSubmit)="submitReset()" class="mt-7 space-y-5">
                 <div>
                   <label class="block text-sm font-medium text-white/80 mb-2">New Password</label>
-                  <input
-                    type="password"
-                    formControlName="newPassword"
-                    placeholder="Enter new password"
-                    class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90
-                           placeholder:text-white/35 outline-none transition
-                           focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
-                  />
-                  @if (resetForm.get('newPassword')?.touched &&
-                  resetForm.get('newPassword')?.getError('required')) {
-                    <p class="mt-2 text-sm text-red-300">New password is required</p>
+                  <div class="relative">
+                    <input
+                      [type]="showNewPass ? 'text' : 'password'"
+                      formControlName="newPassword"
+                      [class.border-red-400]="resetForm.get('newPassword')?.touched && resetForm.get('newPassword')?.invalid"
+                      placeholder="Enter new password"
+                      class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 pr-12 text-white/90 outline-none transition focus:border-sky-400/60 placeholder:text-gray-500 placeholder:italic"
+                    />
+                    <button type="button" (click)="showNewPass = !showNewPass" class="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white cursor-pointer">
+                      <i class="fa-solid" 
+                      [class.fa-eye-slash]="showNewPass" 
+                      [class.fa-eye]="!showNewPass"></i>                    </button>
+                  </div>
+                  
+                  @let nPass = resetForm.get('newPassword');
+                  @if (nPass?.touched && nPass?.invalid) {
+                    <div class="mt-2 space-y-1 ml-1">
+                      @if (nPass?.errors?.['required']) {
+                        <p class="text-xs text-red-300">Password is required</p>
+                      }
+                      @if (nPass?.errors?.['pattern']) {
+                        <p class="text-[10px] text-red-200 leading-relaxed">
+                          Must include: Upper, lower, number, and special character (@$!%*?&).
+                        </p>
+                      }
+                    </div>
                   }
                 </div>
-  
-                <div>
+                
+                <div class="mt-4">
                   <label class="block text-sm font-medium text-white/80 mb-2">Confirm Password</label>
-                  <input
-                    type="password"
-                    formControlName="confirmPassword"
-                    placeholder="Confirm new password"
-                    class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90
-                           placeholder:text-white/35 outline-none transition
-                           focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
-                  />
-  
-                  @if (resetForm.get('confirmPassword')?.touched &&
-                  resetForm.get('confirmPassword')?.getError('required')) {
-                    <p class="mt-2 text-sm text-red-300">Confirm password is required</p>
-                  }
-  
-                  @if (resetForm.get('confirmPassword')?.touched &&
-                  resetForm.get('confirmPassword')?.getError('mismatch')) {
-                    <p class="mt-2 text-sm text-red-300">Passwords do not match</p>
+                  <div class="relative">
+                    <input
+                      [type]="showConfirmPass ? 'text' : 'password'"
+                      formControlName="confirmPassword"
+                      [class.border-red-400]="resetForm.hasError('mismatch') && resetForm.get('confirmPassword')?.touched"
+                      placeholder="Confirm new password"
+                      class="w-full rounded-2xl placeholder:text-gray-500 placeholder:italic border border-white/10 bg-white/[0.05] px-4 py-3 pr-12 text-white/90 outline-none transition focus:border-sky-400/60"
+                    />
+                    <button type="button" (click)="showConfirmPass = !showConfirmPass" class="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white cursor-pointer">
+                      <i class="fa-solid" 
+         [class.fa-eye-slash]="showNewPass" 
+         [class.fa-eye]="!showNewPass"></i>
+                    </button>
+                  </div>
+                
+                  @if (resetForm.get('confirmPassword')?.touched) {
+                    <div class="mt-2 space-y-1 ml-1">
+                      @if (resetForm.get('confirmPassword')?.hasError('required')) {
+                        <p class="text-xs text-red-300">Confirming password is required</p>
+                      }
+                      @if (resetForm.hasError('mismatch') && !resetForm.get('confirmPassword')?.hasError('required')) {
+                        <p class="text-xs text-red-300 italic">Passwords do not match</p>
+                      }
+                    </div>
                   }
                 </div>
-  
+
                 <div class="flex items-center gap-3">
                   <button
                     type="button"
                     (click)="goTo(2)"
                     [disabled]="loading"
-                    class="flex-1 h-12 rounded-2xl border border-white/10 bg-white/[0.05] hover:bg-white/[0.08]
+                    class="cursor-pointer flex-1 h-12 rounded-2xl border border-white/10 bg-white/[0.05] hover:bg-white/[0.08]
                            text-white/80 font-semibold transition disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     Back
@@ -206,7 +235,7 @@
                   <button
                     type="submit"
                     [disabled]="loading"
-                    class="btn-solid flex-1 h-12 rounded-2xl font-semibold text-white
+                    class="cursor-pointer btn-solid flex-1 h-12 rounded-2xl font-semibold text-white
                            disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     <span class="flex items-center justify-center gap-2">

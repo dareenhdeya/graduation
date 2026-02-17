@@ -40,7 +40,35 @@
             }
           </div>
         </div>
-
+        <div class="flex items-center gap-2">
+          <button
+            type="button"
+            (click)="filterType.setValue('all')"
+            [class.bg-sky-500/20]="filterType.value === 'all'"
+            class="cursor-pointer rounded-xl border border-white/10 px-3 py-2 text-sm"
+          >
+            All
+          </button>
+        
+          <button
+            type="button"
+            (click)="filterType.setValue('deaf')"
+            [class.bg-sky-500/20]="filterType.value === 'deaf'"
+            class="cursor-pointer rounded-xl border border-white/10 px-3 py-2 text-sm"
+          >
+            Deaf / Mute
+          </button>
+        
+          <button
+            type="button"
+            (click)="filterType.setValue('normal')"
+            [class.bg-sky-500/20]="filterType.value === 'normal'"
+            class="cursor-pointer rounded-xl border border-white/10 px-3 py-2 text-sm"
+          >
+            Normal
+          </button>
+        </div>
+        
         <div class="flex items-center gap-2">
           <button
             type="button"
@@ -115,9 +143,7 @@
                   placeholder="e.g. English"
                 />
               </div>
-              <div class="text-xs text-white/45 mt-2">
-                Keep it short and clear
-              </div>
+              <div class="text-xs text-white/45 mt-2">Keep it short and clear</div>
             </div>
 
             <div class="rounded-3xl border border-white/10 bg-white/[0.04] p-5">
