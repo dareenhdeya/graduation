@@ -3,19 +3,13 @@ import { CommonModule } from '@angular/common'; // Import CommonModule
 import { ParentServiceService } from '../../services/parent-service.service';
 import { IChildren, IViewChildrenResponse } from '../../interfaces/IViewChildrenResponse';
 import { HttpErrorResponse } from '@angular/common/http';
-<<<<<<< HEAD
 import { RouterLink } from "@angular/router";
-=======
->>>>>>> origin/main
 
 @Component({
   selector: 'app-view-children',
   standalone: true,
-<<<<<<< HEAD
   imports: [CommonModule, RouterLink],
-=======
-  imports: [CommonModule],
->>>>>>> origin/main
+
   templateUrl: './view-children.component.html',
   styleUrl: './view-children.component.css',
 })
