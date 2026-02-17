@@ -22,6 +22,24 @@ export class ProfileComponent {
   showEditModal = false;
   imagePreview: string | null = null;
 
+  showChangePassModal = false;
+  loadingChangePass = false;
+  changePassError = '';
+  showOldPass = false;
+  showNewPass = false;
+
+  changePassForm = this.fb.group({
+    oldPassword: ['', [Validators.required]],
+    newPassword: [
+      '',
+      [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/),
+      ],
+    ],
+  });
+
   editForm = this.fb.group({
     fName: ['', [Validators.required, Validators.minLength(2), Validators.pattern('^[a-zA-Z]+$')]],
     lName: ['', [Validators.required, Validators.minLength(2), Validators.pattern('^[a-zA-Z]+$')]],
@@ -154,7 +172,10 @@ export class ProfileComponent {
   }
 
   submitEdit() {
-    if (this.editForm.invalid) return;
+    if (this.editForm.invalid) {
+      console.log('invalidddddddddddd');
+      return;
+    }
 
     this.loadingEdit = true;
     this.error = '';
@@ -185,7 +206,7 @@ export class ProfileComponent {
         this.loadingEdit = false;
       },
       error: (err) => {
-        console.log(err);
+        console.log('edit errrrrrrrr', err);
         // this.editError = err?.error?.title || 'Failed to update profile';
         const validationErrors = err?.error?.errors;
 
@@ -199,5 +220,36 @@ export class ProfileComponent {
     });
   }
 
-  changepass() {}
+  changepass() {
+    console.log('change');
+
+    this.changePassForm.reset();
+    this.changePassError = '';
+    this.showChangePassModal = true;
+  }
+
+  submitChangePassword() {
+    if (this.changePassForm.invalid) return;
+
+    this.loadingChangePass = true;
+    this.changePassError = '';
+
+    const payload = this.changePassForm.value as {
+      oldPassword: string;
+      newPassword: string;
+    };
+
+    this.authService.changePassword(payload).subscribe({
+      next: () => {
+        console.log('save change');
+
+        this.showChangePassModal = false;
+        this.loadingChangePass = false;
+      },
+      error: (err) => {
+        this.changePassError = err?.error?.message || 'Failed to change password';
+        this.loadingChangePass = false;
+      },
+    });
+  }
 }

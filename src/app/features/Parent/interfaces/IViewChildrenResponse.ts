@@ -1,7 +1,11 @@
 export interface IChildren {
     id: string;
+<<<<<<< HEAD
     fName: string;
     lName: string;
+=======
+    name: string;
+>>>>>>> origin/main
     email: string;
     status?: any;
     address?: any;
