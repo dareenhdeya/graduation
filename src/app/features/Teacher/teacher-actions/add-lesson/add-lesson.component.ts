@@ -76,7 +76,7 @@ export class AddLessonComponent {
         // clr inputs
         this.lessonForm.reset();
         setTimeout(() => {
-          this.router.navigate(['/teacher/my-subjects']);
+          this.router.navigate(['/teacher/lessons']);
         }, 1000);
         this.selectedFile = null;
         this.mediaPreview = null;

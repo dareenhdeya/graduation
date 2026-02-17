@@ -5,6 +5,7 @@ import { APP_APIs } from '../../../core/constants/appAPIs';
 import { IGetTeacherLessons } from '../interfaces/IGetTeacherLessons';
 import { IWordAttachment } from '../interfaces/IWordAttachment';
 import { IAddToDictionaryResponse } from '../interfaces/IAddToDictionaryResponse';
+import { IEditedLesson, IEditLessonResponse } from '../interfaces/IEditLessonResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -19,9 +20,17 @@ export class TeacherServiceService extends baseHttp {
   addLesson(lessonData: FormData) {
     return this.post(APP_APIs.teacherAddLesson, lessonData);
   }
+  editLesson(lessonId: string, lessonData: IEditedLesson) {
+    return this.patch<IEditLessonResponse>(APP_APIs.teacherEditLesson(lessonId), lessonData);
+  }
+  removeLesson(lessonId: string) {
+    return this.delete(APP_APIs.teacherRemoveLesson(lessonId));
+  }
+
+
   addDictionary(word: string, file: File) {
     const formData = new FormData();
-    
+
     formData.append('word', word);
 
     formData.append('files', file);

@@ -33,9 +33,9 @@ export class SignUp implements OnInit {
   ];
 
   Disability: { id: number; label: string }[] = [
-    { id: 0, label: 'None' },
-    { id: 1, label: 'Hearing' },
-    { id: 2, label: 'Speech' },
+    { id: 1, label: 'None' },
+    { id: 2, label: 'Hearing' },
+    { id: 3, label: 'Speech' },
   ];
 
   avatars = [
