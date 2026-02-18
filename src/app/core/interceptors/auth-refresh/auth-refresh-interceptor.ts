@@ -11,7 +11,7 @@ const DONT_RETRY = [
   '/Auth/Verify-OTP',
   '/Auth/reset-password',
   '/Auth/logout',
-  '/Auth/view-profile',
+  // '/Auth/view-profile',
 ];
 
 export const authRefreshInterceptor: HttpInterceptorFn = (req, next) => {

@@ -46,13 +46,17 @@
               formControlName="usernameorEmail"
               type="email"
               class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10 invalid:border-red-500/50"
-              placeholder="name@example.com"
+              placeholder="name@email.com"
             />
 
             @if (emailCont?.touched && emailCont?.errors) {
                @if (emailCont?.getError('required')) {
             <p class="text-red-400 text-sm mt-1">Email is required.</p>
-            } }
+            }
+           @if (emailCont?.get('email')?.hasError('email')) {
+              <p class="text-red-400 text-sm mt-1">Enter valid email.</p>
+              }
+          }
           </div>
 
           <div>
