@@ -1,10 +1,10 @@
-<section class="relative min-h-screen  pt-28 pb-10 px-4 overflow-hidden">
-  <div
+<section class="relative min-h-screen pt-28 pb-10 px-4 overflow-hidden">
+  <!-- <div
     class="pointer-events-none absolute top-40 -left-20 h-96 w-96 rounded-full bg-purple-600/10 blur-[120px]"
   ></div>
   <div
     class="pointer-events-none absolute bottom-20 right-0 h-96 w-96 rounded-full bg-blue-600/10 blur-[120px]"
-  ></div>
+  ></div> -->
 
   <div class="container mx-auto max-w-7xl relative z-10">
     <div class="flex flex-col md:flex-row justify-between items-end mb-10 gap-4">
@@ -31,95 +31,92 @@
     </div>
 
     @if (isLoading) {
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        @for (item of [1, 2, 3, 4]; track item) {
-          <div
-            class="rounded-3xl border border-white/5 bg-white/[0.02] p-6 h-64 animate-pulse flex flex-col items-center justify-center"
-          >
-            <div class="size-20 bg-white/5 rounded-full mb-4"></div>
-            <div class="h-4 w-1/2 bg-white/5 rounded mb-2"></div>
-            <div class="h-3 w-1/3 bg-white/5 rounded"></div>
-          </div>
-        }
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      @for (item of [1, 2, 3, 4]; track item) {
+      <div
+        class="rounded-3xl border border-white/5 bg-white/[0.02] p-6 h-64 animate-pulse flex flex-col items-center justify-center"
+      >
+        <div class="size-20 bg-white/5 rounded-full mb-4"></div>
+        <div class="h-4 w-1/2 bg-white/5 rounded mb-2"></div>
+        <div class="h-3 w-1/3 bg-white/5 rounded"></div>
       </div>
+      }
+    </div>
 
     } @else if (students.length === 0) {
+    <div
+      class="flex flex-col items-center justify-center py-24 text-center border-2 border-dashed border-white/10 rounded-3xl bg-white/[0.02]"
+    >
       <div
-        class="flex flex-col items-center justify-center py-24 text-center border-2 border-dashed border-white/10 rounded-3xl bg-white/[0.02]"
+        class="size-20 rounded-full bg-white/5 flex items-center justify-center text-white/20 mb-4"
       >
-        <div
-          class="size-20 rounded-full bg-white/5 flex items-center justify-center text-white/20 mb-4"
-        >
-          <i class="fa-solid fa-users-slash text-3xl"></i>
-        </div>
-        <h3 class="text-xl font-bold text-white">No Students Yet</h3>
-        <p class="text-white/50 max-w-xs mx-auto mt-2">
-          Your classroom is empty. Students who join will appear here.
-        </p>
+        <i class="fa-solid fa-users-slash text-3xl"></i>
       </div>
+      <h3 class="text-xl font-bold text-white">No Students Yet</h3>
+      <p class="text-white/50 max-w-xs mx-auto mt-2">
+        Your classroom is empty. Students who join will appear here.
+      </p>
+    </div>
 
     } @else {
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-        @for (student of students; track student.id) {
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+      @for (student of students; track student.id) {
+      <div
+        class="group relative rounded-3xl border border-white/10 bg-white/5 p-6 hover:bg-white/[0.08] hover:border-purple-500/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-purple-900/10 flex flex-col items-center text-center"
+      >
+        <div class="relative mb-4">
           <div
-            class="group relative rounded-3xl border border-white/10 bg-white/5 p-6 hover:bg-white/[0.08] hover:border-purple-500/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-purple-900/10 flex flex-col items-center text-center"
+            class="size-20 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-2xl font-bold text-white shadow-lg shadow-purple-500/20 group-hover:scale-110 transition-transform duration-300"
           >
-            <div class="relative mb-4">
-              <div
-                class="size-20 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-2xl font-bold text-white shadow-lg shadow-purple-500/20 group-hover:scale-110 transition-transform duration-300"
-              >
-                {{ getInitial(student.name) }}
-              </div>
-              <div
-                class="absolute bottom-1 right-1 size-4 bg-green-500 border-4 border-[#13151b] rounded-full"
-              ></div>
-            </div>
-
-            <h3
-              class="text-lg font-bold text-white mb-1 truncate w-full"
-              title="{{ student.name }}"
-            >
-              {{ student.name }}
-            </h3>
-
-            <a
-              href="mailto:{{ student.email }}"
-              class="text-white/40 text-xs hover:text-sky-400 transition-colors mb-4 truncate w-full flex items-center justify-center gap-1"
-            >
-              <i class="fa-regular fa-envelope"></i> {{ student.email }}
-            </a>
-
-            <div class="w-full py-3 border-t border-dashed border-white/10 mt-auto">
-              @if (student.parentInfo) {
-                <span
-                  class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-500/10 text-green-400 text-xs font-medium border border-green-500/20"
-                >
-                  <i class="fa-solid fa-user-check"></i> Parent Linked
-                </span>
-              } @else {
-                <span
-                  class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 text-white/30 text-xs font-medium border border-white/5"
-                >
-                  <i class="fa-solid fa-user-xmark"></i> No Parent
-                </span>
-              }
-            </div>
-
-            <div class="grid grid-cols-2 gap-2 w-full mt-4">
-              <button
-                class="flex items-center justify-center gap-2 py-2 rounded-xl bg-white/5 text-white/70 hover:bg-sky-500 hover:text-white transition-all text-xs font-medium"
-              >
-                <i class="fa-solid fa-chart-line"></i> Progress
-              </button>
-              <button
-                class="flex items-center justify-center gap-2 py-2 rounded-xl bg-white/5 text-white/70 hover:bg-purple-500 hover:text-white transition-all text-xs font-medium"
-              >
-                <i class="fa-regular fa-comment-dots"></i> Message
-              </button>
-            </div>
+            {{ getInitial(student.name) }}
           </div>
-        }
+          <div
+            class="absolute bottom-1 right-1 size-4 bg-green-500 border-4 border-[#13151b] rounded-full"
+          ></div>
+        </div>
+
+        <h3 class="text-lg font-bold text-white mb-1 truncate w-full" title="{{ student.name }}">
+          {{ student.name }}
+        </h3>
+
+        <a
+          href="mailto:{{ student.email }}"
+          class="text-white/40 text-xs hover:text-sky-400 transition-colors mb-4 truncate w-full flex items-center justify-center gap-1"
+        >
+          <i class="fa-regular fa-envelope"></i> {{ student.email }}
+        </a>
+
+        <div class="w-full py-3 border-t border-dashed border-white/10 mt-auto">
+          @if (student.parentInfo) {
+          <span
+            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-500/10 text-green-400 text-xs font-medium border border-green-500/20"
+          >
+            <i class="fa-solid fa-user-check"></i> Parent Linked
+          </span>
+          } @else {
+          <span
+            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 text-white/30 text-xs font-medium border border-white/5"
+          >
+            <i class="fa-solid fa-user-xmark"></i> No Parent
+          </span>
+          }
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 w-full mt-4">
+          <button
+            class="flex items-center justify-center gap-2 py-2 rounded-xl bg-white/5 text-white/70 hover:bg-sky-500 hover:text-white transition-all text-xs font-medium"
+          >
+            <i class="fa-solid fa-chart-line"></i> Progress
+          </button>
+          <button
+            class="flex items-center justify-center gap-2 py-2 rounded-xl bg-white/5 text-white/70 hover:bg-purple-500 hover:text-white transition-all text-xs font-medium"
+          >
+            <i class="fa-regular fa-comment-dots"></i> Message
+          </button>
+        </div>
       </div>
+      }
+    </div>
     }
   </div>
 </section>

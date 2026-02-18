@@ -52,10 +52,22 @@ export class Login implements OnInit {
       this.errMsg = '';
 
       this.subscription = this.authService.login(this.loginForm.value).subscribe({
-        next: (res) => {
-          console.log('login res:', res);
-          this.router.navigate(['/home']);
-          this.isLoading = false;
+        next: () => {
+          this.authService.getProfile().subscribe({
+            next: (res) => {
+              const role = res.data.role;
+
+              this.authService.setRole(role);
+              this.authService.redirectByRole(role);
+
+              console.log('login res:', res);
+              this.isLoading = false;
+            },
+            error: () => {
+              this.isLoading = false;
+              this.errMsg = 'Failed to load profile';
+            },
+          });
         },
         error: (err) => {
           this.isLoading = false;

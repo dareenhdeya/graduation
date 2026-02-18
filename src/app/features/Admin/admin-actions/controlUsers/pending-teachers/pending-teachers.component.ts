@@ -7,7 +7,7 @@ type Role = 'Parent' | 'Teacher' | 'Student';
 
 @Component({
   selector: 'app-pending-teachers',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './pending-teachers.component.html',
   styleUrl: './pending-teachers.component.css',
 })

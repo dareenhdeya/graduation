@@ -108,4 +108,16 @@ export class AuthService extends baseHttp {
       },
     });
   }
+
+  redirectByRole(role: Role) {
+    const map: Record<Role, string> = {
+      Admin: '/admin/dashboard',
+      Teacher: '/teacher/dashboard',
+      Student: '/student/dashboard',
+      Parent: '/parent/dashboard',
+    };
+  
+    this.router.navigate([map[role]]);
+  }
+  
 }

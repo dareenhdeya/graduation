@@ -1,10 +1,10 @@
 <section class="relative min-h-screen overflow-hidden flex items-center justify-center py-10">
-  <div
+  <!-- <div
     class="pointer-events-none absolute -top-64 -left-72 h-[520px] w-[820px] rounded-[999px] bg-sky-500/12 blur-[130px]"
   ></div>
   <div
     class="pointer-events-none absolute -bottom-72 -right-60 h-[720px] w-[720px] rounded-full bg-fuchsia-500/12 blur-[140px]"
-  ></div>
+  ></div> -->
 
   <div class="relative z-10 w-full px-4">
     <div class="mx-auto w-full max-w-2xl">
@@ -31,13 +31,12 @@
               class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
               placeholder="e.g., Learn ABCs in ASL"
             />
-            @if (lessonForm.get('title')?.touched && lessonForm.get('title')?.invalid) {
-<<<<<<< HEAD
-              <p class="text-red-400 text-sm mt-1">Title is required.</p>
-=======
+            @if (lessonForm.get('title')?.touched && lessonForm.get('title')?.invalid) { <<<<<<<
+            HEAD
             <p class="text-red-400 text-sm mt-1">Title is required.</p>
->>>>>>> origin/main
-            }
+            =======
+            <p class="text-red-400 text-sm mt-1">Title is required.</p>
+            >>>>>>> origin/main }
           </div>
 
           <div>
@@ -68,46 +67,45 @@
                 (click)="mediaInput.click()"
                 class="w-full cursor-pointer rounded-3xl border-2 border-dashed border-white/10 bg-white/[0.02] hover:bg-white/[0.05] hover:border-sky-500/50 transition-all duration-300 p-6 flex flex-col items-center justify-center text-center group-hover:shadow-[0_0_30px_rgba(14,165,233,0.1)] min-h-[180px]"
               >
-                @if (selectedFile) {
-                  @if (isImage) {
-                    <div
-                      class="relative h-40 rounded-xl overflow-hidden mb-3 border border-white/20 shadow-lg"
-                    >
-                      <img [src]="mediaPreview" class="h-full w-auto object-cover" alt="Preview" />
-                    </div>
-                  } @else {
-                    <div
-                      class="size-16 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center mb-3 animate-pulse"
-                    >
-                      <i class="fa-solid fa-film text-3xl"></i>
-                    </div>
-                  }
-
-                  <div
-                    class="flex items-center gap-2 text-green-400 bg-green-500/10 px-4 py-1.5 rounded-full border border-green-500/20"
-                  >
-                    <i class="fa-solid fa-check text-xs"></i>
-                    <span class="font-medium text-sm truncate max-w-[200px]">{{
-                      selectedFile.name
-                    }}</span>
-                  </div>
-                  <p class="text-white/40 text-xs mt-2 group-hover:text-sky-300 transition-colors">
-                    Click to replace media
-                  </p>
+                @if (selectedFile) { @if (isImage) {
+                <div
+                  class="relative h-40 rounded-xl overflow-hidden mb-3 border border-white/20 shadow-lg"
+                >
+                  <img [src]="mediaPreview" class="h-full w-auto object-cover" alt="Preview" />
+                </div>
                 } @else {
-                  <div
-                    class="size-16 rounded-full bg-sky-500/10 text-sky-400 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform"
-                  >
-                    <i class="fa-solid fa-cloud-arrow-up text-3xl"></i>
-                  </div>
-                  <p class="text-white font-medium text-lg">Upload Media</p>
-                  <p class="text-white/40 text-sm mt-1">MP4, WebM, GIF, JPG, PNG</p>
+                <div
+                  class="size-16 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center mb-3 animate-pulse"
+                >
+                  <i class="fa-solid fa-film text-3xl"></i>
+                </div>
+                }
+
+                <div
+                  class="flex items-center gap-2 text-green-400 bg-green-500/10 px-4 py-1.5 rounded-full border border-green-500/20"
+                >
+                  <i class="fa-solid fa-check text-xs"></i>
+                  <span class="font-medium text-sm truncate max-w-[200px]">{{
+                    selectedFile.name
+                  }}</span>
+                </div>
+                <p class="text-white/40 text-xs mt-2 group-hover:text-sky-300 transition-colors">
+                  Click to replace media
+                </p>
+                } @else {
+                <div
+                  class="size-16 rounded-full bg-sky-500/10 text-sky-400 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform"
+                >
+                  <i class="fa-solid fa-cloud-arrow-up text-3xl"></i>
+                </div>
+                <p class="text-white font-medium text-lg">Upload Media</p>
+                <p class="text-white/40 text-sm mt-1">MP4, WebM, GIF, JPG, PNG</p>
                 }
               </div>
             </div>
 
             @if (lessonForm.get('videoFile')?.touched && lessonForm.get('videoFile')?.invalid) {
-              <p class="text-red-400 text-sm mt-1">Media file is required.</p>
+            <p class="text-red-400 text-sm mt-1">Media file is required.</p>
             }
           </div>
 
@@ -119,10 +117,8 @@
             >
               <span class="flex items-center justify-center gap-2">
                 @if (isLoading) {
-                  <i class="fas fa-spinner fa-spin"></i> Processing...
-                } @else {
-                  <i class="fa-solid fa-paper-plane"></i> Publish Lesson
-                }
+                <i class="fas fa-spinner fa-spin"></i> Processing... } @else {
+                <i class="fa-solid fa-paper-plane"></i> Publish Lesson }
               </span>
             </button>
           </div>

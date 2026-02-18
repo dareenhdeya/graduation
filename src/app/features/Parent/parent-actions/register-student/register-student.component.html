@@ -1,10 +1,10 @@
-<section class="relative h-screen overflow-hidden bg-[#070A13]">
-  <div
+<section class="relative h-screen overflow-hidden">
+  <!-- <div
     class="pointer-events-none absolute -top-64 -left-72 h-[520px] w-[820px] rounded-[999px] bg-sky-500/12 blur-[130px]"
   ></div>
   <div
     class="pointer-events-none absolute -bottom-72 -right-60 h-[720px] w-[720px] rounded-full bg-fuchsia-500/12 blur-[140px]"
-  ></div>
+  ></div> -->
 
   <div class="relative z-10 h-full flex items-center justify-center px-4">
     <div class="mx-auto w-full max-w-2xl">
@@ -40,7 +40,9 @@
         </div>
 
         <div class="text-center">
-          <h1 class="text-3xl md:text-4xl font-black tracking-tight text-white">Register Student</h1>
+          <h1 class="text-3xl md:text-4xl font-black tracking-tight text-white">
+            Register Student
+          </h1>
           <p class="text-white/50 text-sm mt-2">Add a child to your account</p>
         </div>
 
@@ -58,7 +60,6 @@
           class="mt-7 flex flex-col flex-1 min-h-0"
         >
           <div class="overflow-y-auto pr-2 custom-scroll flex-1 min-h-0 space-y-5">
-            
             <div>
               <label class="block text-sm font-medium text-white/80 mb-2">Student Email</label>
               <input
@@ -140,62 +141,62 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                 <div>
-                    <label class="block text-sm font-medium text-white/80 mb-2">Gender</label>
-                    <select
-                      formControlName="Gender"
-                      class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
-                    >
-                      <option class="bg-[#0b1020]" value="" disabled>Select gender</option>
-                      <option class="bg-[#0b1020]" [value]="1">Male</option>
-                      <option class="bg-[#0b1020]" [value]="2">Female</option>
-                    </select>
-      
-                    @if ( signUpForm.get('Gender')?.touched &&
-                    signUpForm.get('Gender')?.getError('required') ) {
-                    <p class="text-red-400 text-sm mt-1">Gender is required.</p>
-                    }
-                  </div>
+              <div>
+                <label class="block text-sm font-medium text-white/80 mb-2">Gender</label>
+                <select
+                  formControlName="Gender"
+                  class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
+                >
+                  <option class="bg-[#0b1020]" value="" disabled>Select gender</option>
+                  <option class="bg-[#0b1020]" [value]="1">Male</option>
+                  <option class="bg-[#0b1020]" [value]="2">Female</option>
+                </select>
 
-                  <div>
-                    <label class="block text-sm font-medium text-white/80 mb-2">Address</label>
-                    <input
-                      formControlName="Address"
-                      class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
-                      placeholder="Address"
-                    />
-                    @if ( signUpForm.get('Address')?.touched &&
-                    signUpForm.get('Address')?.getError('required') ) {
-                    <p class="text-red-400 text-sm mt-1">Address is required.</p>
-                    }
-                  </div>
+                @if ( signUpForm.get('Gender')?.touched &&
+                signUpForm.get('Gender')?.getError('required') ) {
+                <p class="text-red-400 text-sm mt-1">Gender is required.</p>
+                }
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-white/80 mb-2">Address</label>
+                <input
+                  formControlName="Address"
+                  class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
+                  placeholder="Address"
+                />
+                @if ( signUpForm.get('Address')?.touched &&
+                signUpForm.get('Address')?.getError('required') ) {
+                <p class="text-red-400 text-sm mt-1">Address is required.</p>
+                }
+              </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
+              <div>
                 <label class="block text-sm font-medium text-white/80 mb-2">Birth Date</label>
                 <input
-                    type="date"
-                    formControlName="BirthDate"
-                    class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
+                  type="date"
+                  formControlName="BirthDate"
+                  class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
                 />
                 @if ( signUpForm.get('BirthDate')?.touched &&
                 signUpForm.get('BirthDate')?.getError('required') ) {
                 <p class="text-red-400 text-sm mt-1">Birth date is required.</p>
                 }
-                </div>
+              </div>
 
-                <div>
+              <div>
                 <label class="block text-sm font-medium text-white/80 mb-2">Disability</label>
                 <select
-                    formControlName="Disability"
-                    class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
+                  formControlName="Disability"
+                  class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
                 >
-                    @for (d of Disability; track d.id) {
-                    <option class="bg-[#0b1020]" [value]="d.id">{{ d.label }}</option>
-                    }
+                  @for (d of Disability; track d.id) {
+                  <option class="bg-[#0b1020]" [value]="d.id">{{ d.label }}</option>
+                  }
                 </select>
-                </div>
+              </div>
             </div>
 
             @if (fileErrMsg) {
