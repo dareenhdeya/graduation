@@ -2,11 +2,12 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TeacherServiceService } from '../../services/teacher-service.service';
 import { Student } from '../../interfaces/IGetTeacherStudents'; // Check path
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-get-teacher-students',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './get-teacher-students.component.html',
   styleUrl: './get-teacher-students.component.css'
 })

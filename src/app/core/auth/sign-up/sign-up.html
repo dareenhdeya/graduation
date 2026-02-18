@@ -256,9 +256,9 @@
               />
 
               @if (isInvalid('Job')) {
-              <!-- @if (signUpForm.get('Job')?.hasError('required')) {
+              @if (signUpForm.get('Job')?.hasError('required')) {
                   <p class="text-red-400 text-sm mt-1">Job is required.</p>
-                } -->
+                }
               @if (signUpForm.get('Job')?.hasError('minlength')) {
               <p class="text-red-400 text-sm mt-1">Minimum 2 characters.</p>
               } }

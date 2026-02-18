@@ -30,13 +30,13 @@ export class Login implements OnInit {
 
   initForm(): void {
     this.loginForm = this.fb.group({
-      usernameorEmail: [null, [Validators.required]],
+      usernameorEmail: [null, [Validators.required, Validators.email]],
       password: [
         '',
         [
           Validators.required,
           Validators.pattern(
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()_+\-])[A-Za-z\d@$!%*?&#^()_+\-]{8,}$/
           ),
         ],
       ],
