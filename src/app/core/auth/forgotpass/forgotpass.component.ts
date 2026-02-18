@@ -32,7 +32,7 @@ export class ForgotpassComponent {
   ];
 
   emailForm = this.fb.group({
-    emailOrUserName: ['', Validators.required],
+    emailOrUserName: ['', Validators.required, Validators.email],
   });
 
   otpForm = this.fb.group({
@@ -47,7 +47,7 @@ export class ForgotpassComponent {
           Validators.required,
           Validators.minLength(8),
           Validators.pattern(
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()_+\-])[A-Za-z\d@$!%*?&#^()_+\-]{8,}$/
           ),
         ],
       ],

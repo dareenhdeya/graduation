@@ -260,7 +260,7 @@
                     class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition focus:border-sky-400/60"
                   />
                   @if (f.fName.touched && f.fName.errors) {
-                  <p class="text-[10px] text-red-400 mt-1">First name is required</p>
+                  <p class="text-[10px] text-red-400 mt-1">First name is must be at least 2 characters long and contain only Arabic or English letters</p>
                   }
                 </div>
                 <div>
@@ -270,7 +270,7 @@
                     class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition focus:border-sky-400/60"
                   />
                   @if (f.lName.touched && f.lName.errors) {
-                  <p class="text-[10px] text-red-400 mt-1">Last name is required</p>
+                  <p class="text-[10px] text-red-400 mt-1">Last name is must be at least 2 characters long and contain only Arabic or English letters</p>
                   }
                 </div>
               </div>
@@ -285,9 +285,7 @@
               />
               @if (f.email.touched && f.email.errors) {
               <div class="text-[10px] text-red-400 mt-2 ml-1">
-                @if (f.email.errors['required']) {
-                <span>Email is required</span>
-                } @if (f.email.errors['email']) {
+                @if (f.email.errors['email']) {
                 <span>Please enter a valid email address</span>
                 }
               </div>

@@ -36,15 +36,15 @@ export class ProfileComponent {
       [
         Validators.required,
         Validators.minLength(8),
-        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/),
+        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()_+\-])[A-Za-z\d@$!%*?&#^()_+\-]{8,}$/),
       ],
     ],
   });
 
   editForm = this.fb.group({
-    fName: ['', [Validators.required, Validators.minLength(2), Validators.pattern('^[a-zA-Z]+$')]],
-    lName: ['', [Validators.required, Validators.minLength(2), Validators.pattern('^[a-zA-Z]+$')]],
-    email: ['', [Validators.required, Validators.email]],
+    fName: ['', [ Validators.minLength(2), Validators.pattern('^[a-zA-Zء-ي]+$')]],
+    lName: ['', [ Validators.minLength(2), Validators.pattern('^[a-zA-Zء-ي]+$')]],
+    email: ['', [ Validators.email]],
     address: ['', [Validators.minLength(10)]],
     phone: ['', [Validators.pattern('^0[0-9]{10}$')]],
     job: ['', [Validators.minLength(2)]],

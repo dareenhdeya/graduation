@@ -105,21 +105,21 @@ export class SignUp implements OnInit {
       '',
       [
         Validators.required,
-        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/),
+        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()_+\-])[A-Za-z\d@$!%*?&#^()_+\-]{8,}$/),
       ],
     ],
     role: [1 as any, [Validators.required]],
 
     Gender: ['', [Validators.required]],
 
-    FName: ['', [Validators.required, Validators.minLength(2), Validators.pattern('^[a-zA-Z]+$')]],
-    LName: ['', [Validators.required, Validators.minLength(2), Validators.pattern('^[a-zA-Z]+$')]],
+    FName: ['', [Validators.required, Validators.minLength(2), Validators.pattern('^[a-zA-Zء-ي]+$')]],
+    LName: ['', [Validators.required, Validators.minLength(2), Validators.pattern('^[a-zA-Zء-ي]+$')]],
     phoneNumber: ['', [Validators.required, Validators.pattern('^0[0-9]{10}$')]],
     Address: ['', [Validators.required, Validators.minLength(10)]],
     BirthDate: ['', [Validators.required]],
-    Job: ['', [Validators.minLength(2)]],
+    Job: ['', [Validators.required,Validators.minLength(2)]],
     SubjectID: [''],
-    Disability: [0 as any],
+    Disability: [1 as any],
   });
 
   ngOnInit(): void {
