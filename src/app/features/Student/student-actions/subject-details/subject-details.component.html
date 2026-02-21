@@ -1,130 +1,128 @@
-<section class="relative min-h-screen pt-28 pb-10 px-4 overflow-hidden">
-  <!-- <div
-    class="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 h-[500px] w-[800px] rounded-full bg-sky-600/10 blur-[120px]"
-  ></div> -->
-
+<section
+  class="relative min-h-screen pt-28 pb-10 px-4 overflow-hidden transition-colors duration-300"
+>
   <div class="container mx-auto max-w-5xl relative z-10">
     <a
       routerLink="/student/all-subjects"
-      class="inline-flex items-center gap-2 text-white/50 hover:text-white mb-8 transition-colors cursor-pointer"
+      class="inline-flex items-center gap-2 text-text-main/50 hover:text-text-main mb-8 transition-colors cursor-pointer font-medium"
     >
       <i class="fa-solid fa-arrow-left"></i> Back to Subjects
     </a>
 
     @if (isLoading) {
-    <div class="animate-pulse space-y-8">
-      <div class="h-32 bg-white/5 rounded-3xl w-full"></div>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 h-40">
-        <div class="bg-white/5 rounded-3xl"></div>
-        <div class="bg-white/5 rounded-3xl"></div>
-        <div class="bg-white/5 rounded-3xl"></div>
-        <div class="bg-white/5 rounded-3xl"></div>
+      <div class="animate-pulse space-y-8">
+        <div class="h-32 bg-text-main/5 rounded-3xl w-full"></div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 h-40">
+          <div class="bg-text-main/5 rounded-3xl"></div>
+          <div class="bg-text-main/5 rounded-3xl"></div>
+          <div class="bg-text-main/5 rounded-3xl"></div>
+          <div class="bg-text-main/5 rounded-3xl"></div>
+        </div>
       </div>
-    </div>
     } @else if (subject) {
-    <div
-      class="relative rounded-3xl border border-white/10 bg-white/5 p-8 md:p-12 mb-8 flex flex-col md:flex-row items-center md:items-start gap-8 backdrop-blur-md"
-    >
       <div
-        class="size-24 md:size-32 rounded-3xl bg-gradient-to-br from-sky-500/20 to-purple-600/20 border border-white/10 flex items-center justify-center text-4xl md:text-5xl text-white shadow-[0_0_40px_rgba(14,165,233,0.1)]"
+        class="relative rounded-3xl border border-border-main bg-surface p-8 md:p-12 mb-8 flex flex-col md:flex-row items-center md:items-start gap-8 backdrop-blur-md shadow-sm transition-colors duration-300"
       >
-        <i class="fa-solid fa-book-bookmark"></i>
-      </div>
-
-      <div class="flex-1 text-center md:text-left">
-        <h1 class="text-3xl md:text-5xl font-black text-white mb-4">{{ subject.subjectName }}</h1>
-
-        <div class="flex flex-wrap items-center justify-center md:justify-start gap-3">
-          @if (subject.deaf_mute) {
-          <span
-            class="px-4 py-1.5 rounded-full bg-pink-500/20 text-pink-300 text-sm font-bold border border-pink-500/20 flex items-center gap-2"
-          >
-            <i class="fa-solid fa-hands-asl-interpreting"></i> Accessible Content
-          </span>
-          }
-        </div>
-      </div>
-
-      <div class="mt-4 md:mt-0">
-        <button
-          (click)="enrollSub(subject.subjectId)"
-          class="btn-solid cursor-pointer bg-green-600 text-black px-8 py-3 rounded-full font-bold hover:bg-green-500 transition-colors shadow-lg shadow-white/10"
+        <div
+          class="size-24 md:size-32 rounded-3xl bg-gradient-to-br from-sky-500/20 to-purple-600/20 border border-border-main flex items-center justify-center text-4xl md:text-5xl text-text-main shadow-[0_0_40px_rgba(14,165,233,0.1)]"
         >
-          Enroll Now
-        </button>
+          <i class="fa-solid fa-book-bookmark"></i>
+        </div>
+
+        <div class="flex-1 text-center md:text-left">
+          <h1 class="text-3xl md:text-5xl font-black text-text-main mb-4">
+            {{ subject.subjectName }}
+          </h1>
+
+          <div class="flex flex-wrap items-center justify-center md:justify-start gap-3">
+            @if (subject.deaf_mute) {
+              <span
+                class="px-4 py-1.5 rounded-full bg-pink-500/10 text-pink-600 dark:text-pink-300 text-sm font-bold border border-pink-500/20 flex items-center gap-2"
+              >
+                <i class="fa-solid fa-hands-asl-interpreting"></i> Accessible Content
+              </span>
+            }
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4 mt-4 md:mt-0">
+          <button
+            (click)="enrollSub(subject.subjectId)"
+            class="btn-solid cursor-pointer bg-green-600 text-white px-8 py-3 rounded-full font-bold hover:bg-green-500 transition-colors shadow-lg shadow-green-600/20"
+          >
+            Enroll Now
+          </button>
+          <button
+            [disabled]="!isEnrolled"
+            [routerLink]="['/student/subject-lessons', subject.subjectId]"
+            class="btn-solid bg-text-main text-background px-8 py-3 rounded-full font-bold transition-all shadow-lg shadow-text-main/10 disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-85"
+          >
+            View Lessons
+          </button>
+        </div>
       </div>
 
-      <div class="mt-4 md:mt-0">
-        <button
-          [routerLink]="['/student/subject-lessons', subject.subjectId]"
-          class="btn-solid cursor-pointer bg-white text-black px-8 py-3 rounded-full font-bold hover:bg-gray-200 transition-colors shadow-lg shadow-white/10"
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+        <div
+          class="rounded-3xl border border-border-main bg-surface p-6 hover:border-green-500/40 transition-colors group shadow-sm"
         >
-          View Lessons
-        </button>
-      </div>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-      <div
-        class="rounded-3xl border border-white/5 bg-[#0F121C] p-6 hover:border-green-500/30 transition-colors group"
-      >
-        <div class="flex items-center justify-between mb-4">
-          <p class="text-white/50 text-sm font-medium uppercase tracking-wider">Teachers</p>
-          <div
-            class="size-10 rounded-full bg-green-500/10 text-green-400 flex items-center justify-center group-hover:bg-green-500 group-hover:text-black transition-all"
-          >
-            <i class="fa-solid fa-chalkboard-user"></i>
+          <div class="flex items-center justify-between mb-4">
+            <p class="text-text-main/50 text-sm font-medium uppercase tracking-wider">Teachers</p>
+            <div
+              class="size-10 rounded-full bg-green-500/10 text-green-600 dark:text-green-400 flex items-center justify-center group-hover:bg-green-500 group-hover:text-white transition-all"
+            >
+              <i class="fa-solid fa-chalkboard-user"></i>
+            </div>
           </div>
+          <p class="text-4xl font-black text-text-main">{{ subject.teachersCount }}</p>
         </div>
-        <p class="text-4xl font-black text-white">{{ subject.teachersCount }}</p>
-      </div>
 
-      <div
-        class="rounded-3xl border border-white/5 bg-[#0F121C] p-6 hover:border-yellow-500/30 transition-colors group"
-      >
-        <div class="flex items-center justify-between mb-4">
-          <p class="text-white/50 text-sm font-medium uppercase tracking-wider">Students</p>
-          <div
-            class="size-10 rounded-full bg-yellow-500/10 text-yellow-400 flex items-center justify-center group-hover:bg-yellow-500 group-hover:text-black transition-all"
-          >
-            <i class="fa-solid fa-users"></i>
+        <div
+          class="rounded-3xl border border-border-main bg-surface p-6 hover:border-yellow-500/40 transition-colors group shadow-sm"
+        >
+          <div class="flex items-center justify-between mb-4">
+            <p class="text-text-main/50 text-sm font-medium uppercase tracking-wider">Students</p>
+            <div
+              class="size-10 rounded-full bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 flex items-center justify-center group-hover:bg-yellow-500 group-hover:text-white transition-all"
+            >
+              <i class="fa-solid fa-users"></i>
+            </div>
           </div>
+          <p class="text-4xl font-black text-text-main">{{ subject.studentsCount }}</p>
         </div>
-        <p class="text-4xl font-black text-white">{{ subject.studentsCount }}</p>
-      </div>
 
-      <div
-        class="rounded-3xl border border-white/5 bg-[#0F121C] p-6 hover:border-sky-500/30 transition-colors group"
-      >
-        <div class="flex items-center justify-between mb-4">
-          <p class="text-white/50 text-sm font-medium uppercase tracking-wider">Levels</p>
-          <div
-            class="size-10 rounded-full bg-sky-500/10 text-sky-400 flex items-center justify-center group-hover:bg-sky-500 group-hover:text-black transition-all"
-          >
-            <i class="fa-solid fa-layer-group"></i>
+        <div
+          class="rounded-3xl border border-border-main bg-surface p-6 hover:border-sky-500/40 transition-colors group shadow-sm"
+        >
+          <div class="flex items-center justify-between mb-4">
+            <p class="text-text-main/50 text-sm font-medium uppercase tracking-wider">Levels</p>
+            <div
+              class="size-10 rounded-full bg-sky-500/10 text-sky-600 dark:text-sky-400 flex items-center justify-center group-hover:bg-sky-500 group-hover:text-white transition-all"
+            >
+              <i class="fa-solid fa-layer-group"></i>
+            </div>
           </div>
+          <p class="text-4xl font-black text-text-main">{{ subject.levelsCount }}</p>
         </div>
-        <p class="text-4xl font-black text-white">{{ subject.levelsCount }}</p>
-      </div>
 
-      <div
-        class="rounded-3xl border border-white/5 bg-[#0F121C] p-6 hover:border-purple-500/30 transition-colors group"
-      >
-        <div class="flex items-center justify-between mb-4">
-          <p class="text-white/50 text-sm font-medium uppercase tracking-wider">Lessons</p>
-          <div
-            class="size-10 rounded-full bg-purple-500/10 text-purple-400 flex items-center justify-center group-hover:bg-purple-500 group-hover:text-white transition-all"
-          >
-            <i class="fa-solid fa-film"></i>
+        <div
+          class="rounded-3xl border border-border-main bg-surface p-6 hover:border-purple-500/40 transition-colors group shadow-sm"
+        >
+          <div class="flex items-center justify-between mb-4">
+            <p class="text-text-main/50 text-sm font-medium uppercase tracking-wider">Lessons</p>
+            <div
+              class="size-10 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center group-hover:bg-purple-500 group-hover:text-white transition-all"
+            >
+              <i class="fa-solid fa-film"></i>
+            </div>
           </div>
+          <p class="text-4xl font-black text-text-main">{{ subject.lessonsCount }}</p>
         </div>
-        <p class="text-4xl font-black text-white">{{ subject.lessonsCount }}</p>
       </div>
-    </div>
     } @else {
-    <div class="text-center text-white/50 py-20">
-      <p>Subject not found.</p>
-    </div>
+      <div class="text-center text-text-main/50 py-20 font-medium">
+        <p>Subject not found.</p>
+      </div>
     }
   </div>
 </section>

@@ -1,7 +1,7 @@
 <!-- <app-navbar/>
 <router-outlet></router-outlet> -->
 <section class="relative min-h-screen overflow-hidden">
-  <div class="absolute inset-0 bg-[#070A13]"></div>
+  <div class="absolute inset-0 bg-background"></div>
 
   <div
     class="absolute inset-0 bg-[radial-gradient(900px_520px_at_20%_15%,rgba(56,189,248,.22),transparent_60%),radial-gradient(900px_520px_at_80%_20%,rgba(236,72,153,.18),transparent_60%),radial-gradient(900px_520px_at_50%_95%,rgba(34,197,94,.14),transparent_62%)]"
@@ -13,23 +13,24 @@
 
   <div class="floating-layer pointer-events-none absolute inset-0">
     @for (b of bgLetters; track b.id) {
-    <span
-      class="float-icon"
-      [style.left.%]="b.left"
-      [style.top.%]="b.top"
-      [style.fontSize.px]="b.size"
-      [style.animationDuration.s]="b.dur"
-      [style.animationDelay.s]="b.delay"
-      [style.--c]="b.color"
-    >
-      {{ b.char }}
-    </span>
+      <span
+        class="float-icon"
+        [style.left.%]="b.left"
+        [style.top.%]="b.top"
+        [style.fontSize.px]="b.size"
+        [style.animationDuration.s]="b.dur"
+        [style.animationDelay.s]="b.delay"
+        [style.--c]="b.color"
+      >
+        {{ b.char }}
+      </span>
     }
   </div>
 
   <div class="relative z-10">
     <app-navbar />
     <div class="pt-24">
+      <app-color-picker />
       <router-outlet></router-outlet>
     </div>
   </div>

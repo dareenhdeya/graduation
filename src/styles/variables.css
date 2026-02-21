@@ -1,9 +1,21 @@
 :root {
-  --main-color: #0aad0a;
-  --light-color: #f0f3f2;
-  --shadow: rgba(145, 158, 171, 0.2) 0px 2px 4px -1px,
-    rgba(145, 158, 171, 0.14) 0px 4px 5px 0px,
-    rgba(145, 158, 171, 0.12) 0px 1px 10px 0px;
-  --font-family: "Encode Sans Expanded", sans-serif;
-  --rating-color: #ffc908;
+  --bg-main: #f8fafc;        /* Light gray background */
+  --bg-surface: #ffffff;     /* White cards/boxes */
+  --brand-primary: #0284c7;  /* Sky 600 */
+  --text-color: #0f172a;     /* Dark text */
+  --border-color: #e2e8f0;   /* Light gray borders */
 }
+
+:root.dark {
+  --bg-main: #070A13;                
+  --bg-surface: rgba(255, 255, 255, 0.05); 
+  --brand-primary: #38bdf8;           
+  --text-color: #ffffff;
+  --border-color: rgba(255, 255, 255, 0.1);
+
+}
+  
+
+
+
+
