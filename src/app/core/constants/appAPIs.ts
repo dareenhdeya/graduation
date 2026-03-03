@@ -26,6 +26,9 @@ export const APP_APIs = {
   adminListSubjects: `${environment.apiUrl}Admin/List-Subjects`,
   adminViewSubject: (sid: string) => `${environment.apiUrl}Admin/View-Subject/${sid}`,
   adminAddSubject: `${environment.apiUrl}Admin/Add-Subject`,
+  adminAproveTeacher: `${environment.apiUrl}Admin/Approve-teacher`,
+
+
 
   //  * Teacher
   teacherGetStudents: `${environment.apiUrl}Teacher/get-students`,
