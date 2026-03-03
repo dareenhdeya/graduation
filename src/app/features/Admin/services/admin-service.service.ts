@@ -3,7 +3,7 @@ import { baseHttp } from '../../../core/services/base';
 import { ShowUsersResponse, ViewUserResponse } from '../interfaces/iadmin.interface';
 import { APP_APIs } from '../../../core/constants/appAPIs';
 import { Params } from '@angular/router';
-import { AddSubjectBody, AddSubjectResponse, ListSubjectsResponse, ViewSubjectResponse } from '../interfaces/IAdminSubject.interface';
+import { AddSubjectBody, AddSubjectResponse, IAproveResponse, IAproveTeacher, ListSubjectsResponse, ViewSubjectResponse } from '../interfaces/IAdminSubject.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -38,5 +38,7 @@ export class AdminServiceService extends baseHttp {
     return this.post<AddSubjectResponse>(APP_APIs.adminAddSubject, body);
   }
 
-  approveTeacher() {}
+  approveTeacher(body: IAproveTeacher) {
+    return this.patch<IAproveResponse>(APP_APIs.adminAproveTeacher, body)
+  }
 }

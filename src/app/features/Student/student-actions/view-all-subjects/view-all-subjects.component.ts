@@ -9,17 +9,22 @@ import { IEnrollSubResponse } from '../../interfaces/IEnrollSubResponse';
 @Component({
   selector: 'app-view-all-subjects',
   standalone: true,
-  imports: [CommonModule, RouterLink], 
+  imports: [CommonModule, RouterLink],
   templateUrl: './view-all-subjects.component.html',
   styleUrl: './view-all-subjects.component.css',
 })
 export class ViewAllSubjectsComponent implements OnInit {
-  
+
   private readonly studentService = inject(StudentServiceService);
   private readonly route = inject(ActivatedRoute)
   private readonly router = inject(Router)
   allSub: StudentAllSubject[] = [];
   isLoading = true; // Add loading state
+
+
+
+  hoveredIndex: number | null = null;
+
 
   ngOnInit(): void {
     this.viewAllSubjects();
@@ -28,7 +33,7 @@ export class ViewAllSubjectsComponent implements OnInit {
   viewAllSubjects() {
     this.isLoading = true;
     this.studentService.getAllSubjects().subscribe({
-      next: (res :IStudAllSubResponse) => {
+      next: (res: IStudAllSubResponse) => {
         this.allSub = res.result || [];
         this.isLoading = false;
         console.log(this.allSub);
@@ -50,6 +55,16 @@ export class ViewAllSubjectsComponent implements OnInit {
     const colors = ['bg-sky-500/10', 'bg-purple-500/10', 'bg-pink-500/10', 'bg-green-500/10', 'bg-yellow-500/10'];
     return colors[index % colors.length];
   }
+  getCardBgColor(index: number): string {
+    const colors = [
+      'bg-sky-500/10',
+      'bg-purple-500/10',
+      'bg-pink-500/10',
+      'bg-green-500/10',
+      'bg-yellow-500/10'
+    ];
+    return colors[index % colors.length];
+  }
 
 
 
@@ -65,5 +80,19 @@ export class ViewAllSubjectsComponent implements OnInit {
         alert(err.error.message || 'Error enrolling in subject');
       }
     });
+  }
+
+  // to trigger when hover card
+  setHovered(index: number | null) {
+    this.hoveredIndex = index;
+  }
+
+  overlapCard(index: number): string {
+    const overlapClasses = 'z-50 scale-[1.15] -translate-y-4 border-primary/50 !bg-background shadow-[0_30px_60px_-15px_var(--brand-primary)]';
+    if (this.hoveredIndex === index) {
+      return overlapClasses;
+    } else {
+      return 'z-10';
+    }
   }
 }
