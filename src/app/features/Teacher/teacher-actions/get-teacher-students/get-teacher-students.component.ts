@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TeacherServiceService } from '../../services/teacher-service.service';
 import { Student } from '../../interfaces/IGetTeacherStudents'; // Check path
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-get-teacher-students',
@@ -14,6 +14,7 @@ import { RouterLink } from '@angular/router';
 export class GetTeacherStudentsComponent implements OnInit {
 
   private teacherService = inject(TeacherServiceService);
+  private route = inject(ActivatedRoute);
   
   students: Student[] = [];
   isLoading = true;
@@ -24,7 +25,12 @@ export class GetTeacherStudentsComponent implements OnInit {
 
   getStudents() {
     this.isLoading = true;
-    this.teacherService.getStudents().subscribe({
+    const subjectId = this.route.snapshot.paramMap.get('sid');
+    if (!subjectId) {
+      this.isLoading = false;
+      return;
+    }
+    this.teacherService.getStudents(subjectId).subscribe({
       next: (res) => {
         this.students = res.result || []; 
         this.isLoading = false;

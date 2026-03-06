@@ -10,7 +10,7 @@ export interface AppThemeColor {
 
 export const AVAILABLE_COLORS: AppThemeColor[] = [
   { name: 'Sky', hex: '#38bdf8' },
-  { name: 'Purple', hex: '#a855f7' },
+  { name: 'Fuchsia', hex: '#d946ef' },
   { name: 'Pink', hex: '#ec4899' },
   { name: 'Emerald', hex: '#10b981' },
   { name: 'Amber', hex: '#f59e0b' },

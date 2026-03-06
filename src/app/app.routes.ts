@@ -17,6 +17,7 @@ import { SubjectDetailsComponent } from './features/Student/student-actions/subj
 import { ViewAllSubjectsComponent } from './features/Student/student-actions/view-all-subjects/view-all-subjects.component';
 import { ViewLessonsComponent } from './features/Student/student-actions/view-lessons/view-lessons.component';
 import { ViewEnrolledSubjectsComponent } from './features/Student/student-actions/view-enrolled-subjects/view-enrolled-subjects.component';
+import { LessonDetailsComponent } from './features/Student/student-actions/lesson-details/lesson-details.component';
 import { authGuard } from './core/guards/auth/auth-guard';
 import { logedinGuard } from './core/guards/logedin/logedin-guard';
 import { roleGuard } from './core/guards/role/role-guard';
@@ -30,6 +31,8 @@ import { RegisterStudentComponent } from './features/Parent/parent-actions/regis
 import { ViewChildrenComponent } from './features/Parent/parent-actions/view-children/view-children.component';
 import { ChildProfileComponent } from './features/Parent/parent-actions/child-profile/child-profile.component';
 import { AddDictionaryComponent } from './features/Teacher/teacher-actions/add-dictionary/add-dictionary.component';
+import { TeacherSubjectDashboardComponent } from './features/Teacher/teacher-actions/teacher-subject-dashboard/teacher-subject-dashboard.component';
+import { ManageLessonComponent } from './features/Teacher/teacher-actions/manage-lesson/manage-lesson.component';
 
 export const routes: Routes = [
   {
@@ -86,10 +89,12 @@ export const routes: Routes = [
         data: { roles: ['Teacher'] },
         children: [
           { path: 'dashboard', component: TeacherActionsComponent, title: 'Teacher Dashboard' },
-          { path: 'lessons', component: GetTeacherLessonsComponent, title: 'My Lessons' },
-          { path: 'add-lesson', component: AddLessonComponent, title: 'Add Lesson' },
-          { path: 'students', component: GetTeacherStudentsComponent, title: 'My Students' },
-          { path: 'add-dictionary', component: AddDictionaryComponent, title: 'Add Dictionary' }
+          { path: 'subject/:sid', component: TeacherSubjectDashboardComponent, title: 'Manage Subject' },
+          { path: 'subject/:sid/lessons', component: GetTeacherLessonsComponent, title: 'My Lessons' },
+          { path: 'subject/:sid/add-lesson', component: AddLessonComponent, title: 'Add Lesson' },
+          { path: 'subject/:sid/lesson/:lid/manage', component: ManageLessonComponent, title: 'Manage Lesson' },
+          { path: 'subject/:sid/students', component: GetTeacherStudentsComponent, title: 'My Students' },
+          { path: 'subject/:sid/add-dictionary', component: AddDictionaryComponent, title: 'Add Dictionary' }
         ],
       },
       // --- STUDENT ROUTES ---
@@ -107,6 +112,11 @@ export const routes: Routes = [
             path: 'subject-lessons/:id',
             component: ViewLessonsComponent,
             title: 'Subject Lessons',
+          },
+          {
+            path: 'subject/:sid/lesson/:lid',
+            component: LessonDetailsComponent,
+            title: 'Lesson Details',
           },
           {
             path: 'my-subjects',

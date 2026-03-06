@@ -31,20 +31,25 @@ export const APP_APIs = {
 
 
   //  * Teacher
-  teacherGetStudents: `${environment.apiUrl}Teacher/get-students`,
-  teacherGetLessons: `${environment.apiUrl}Teacher/get-lessons`,
+  teacherViewSubjects: `${environment.apiUrl}Teacher/Home`,
+  teacherGetStudents: (sid: string) => `${environment.apiUrl}Teacher/get-students/${sid}`,
+  teacherGetLessons: (sid: string) => `${environment.apiUrl}Teacher/get-lessons/${sid}`,
   teacherAddLesson: `${environment.apiUrl}Teacher/Add-lesson`,
   teacherEditLesson: (id: string) => `${environment.apiUrl}Teacher/Edit-Lesson/${id}`,
   teacherRemoveLesson: (id: string) => `${environment.apiUrl}Teacher/Remove-Lesson/${id}`,
-
-  teacherAddWordAttachment: `${environment.apiUrl}Teacher/Add-words-to-Dictionary`,
+  teacherViewLesson: (sid: string, lid: string) => `${environment.apiUrl}Teacher/View-Lesson/${sid}/${lid}`,
+  teacherUploadVideo: `${environment.apiUrl}Teacher/Upload-Video`,
+  teacherAddWordAttachment: (sid: string) => `${environment.apiUrl}Teacher/Add-words-to-Dictionary/${sid}`,
 
   //* Student
   studentGetAllSubjects: `${environment.apiUrl}Student/View-Subjects`,
   studentGetSubjectDetails: (id: string) => `${environment.apiUrl}Student/View-Subject/${id}`,
   studentGetLessons: (id: string) => `${environment.apiUrl}Student/View-Lessons/${id}`,
+  studentGetLessonDetails: (sid: string, lid: string) => `${environment.apiUrl}Student/View-lesson/${sid}/${lid}`,
+  studentCompleteLesson: `${environment.apiUrl}Student/Complete-lesson`,
   studentEnrollSubject: (id: string) => `${environment.apiUrl}Student/Enroll-subject/${id}`,
   studentViewEnrolledSubjects: `${environment.apiUrl}Student/View-Enrolled-Subjects`,
+  studentCompleteLesseon: `${environment.apiUrl}Student/Complete-lesson`,
 
 
 

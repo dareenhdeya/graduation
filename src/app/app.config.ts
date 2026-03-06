@@ -13,11 +13,14 @@ import { CookieService } from 'ngx-cookie-service';
 import { errorsInterceptor } from './core/interceptors/errors/errors-interceptor';
 import { authRefreshInterceptor } from './core/interceptors/auth-refresh/auth-refresh-interceptor';
 import { credentialsInterceptor } from './core/interceptors/credentials/credentials-interceptor-interceptor';
+// import { provideServerRendering, withRoutes } from '@angular/ssr';
+// import { serverRoutes } from './app.routes.server';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
+    // provideServerRendering(withRoutes(serverRoutes)),
     provideRouter(routes , withViewTransitions()),
     provideClientHydration(withEventReplay()),
     provideHttpClient(

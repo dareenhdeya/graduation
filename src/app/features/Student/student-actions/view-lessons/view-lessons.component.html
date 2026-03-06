@@ -1,203 +1,91 @@
-<section
-  class="relative min-h-screen pt-24 pb-10 px-4 overflow-hidden bg-background transition-colors duration-300"
->
+<section class="relative min-h-screen pt-24 pb-10 px-4 overflow-hidden">
   <div class="container mx-auto max-w-7xl relative z-10">
     <div class="flex items-center gap-4 mb-8">
       <a
         routerLink="/student/all-subjects"
-        class="size-10 rounded-full bg-text-main/5 flex items-center justify-center text-text-main/50 hover:text-text-main hover:bg-text-main/10 transition cursor-pointer"
+        class="size-10 rounded-2xl bg-surface border border-border-main flex items-center justify-center text-text-main/50 hover:text-text-main hover:bg-background transition shadow-sm cursor-pointer"
       >
         <i class="fa-solid fa-arrow-left"></i>
       </a>
       <div>
-        <h1 class="text-2xl font-bold text-text-main">Course Content</h1>
-        <p class="text-text-main/50 text-sm font-medium">
-          <span class="text-primary font-bold">{{ lessons.length }} Lessons</span> available
+        <h1 class="text-2xl font-black tracking-tight text-text-main">Course Content</h1>
+        <p class="text-text-main/50 text-sm font-bold">
+          <span class="text-sky-500">{{ lessons.length }} Lessons</span> available
         </p>
       </div>
     </div>
 
     @if (isLoading) {
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-pulse">
-        <div class="lg:col-span-2 h-[400px] bg-text-main/5 rounded-[2rem]"></div>
-        <div class="space-y-4">
-          <div class="h-24 bg-text-main/5 rounded-2xl" *ngFor="let i of [1, 2, 3, 4]"></div>
-        </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-5 animate-pulse">
+        @for (i of [1, 2, 3, 4, 5, 6, 7, 8]; track i) {
+          <div
+            class="h-24 md:h-28 rounded-2xl bg-surface border border-border-main shadow-sm"
+          ></div>
+        }
       </div>
     } @else if (lessons.length > 0) {
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-        <div class="lg:col-span-2 space-y-6 sticky top-24">
+      <div
+        class="relative rounded-3xl p-6 md:p-8 border border-border-main bg-surface backdrop-blur-md shadow-sm overflow-hidden"
+      >
+        <div class="flex flex-col items-center gap-3 mb-6">
           <div
-            class="relative w-full aspect-video bg-black rounded-[2rem] overflow-hidden border border-border-main shadow-lg group"
+            class="rounded-2xl px-6 py-3 border border-border-main bg-background flex items-center"
           >
-            @if (activeLesson) {
-              @if (activeLesson.videoUrl) {
-                @if (isImage(activeLesson.videoUrl)) {
-                  <img
-                    [src]="activeLesson.videoUrl"
-                    class="w-full h-full object-contain bg-black/50"
-                    alt="Lesson Content"
-                  />
-                  <div
-                    class="absolute bottom-4 right-4 bg-black/60 border border-white/10 px-3 py-1 rounded-full text-xs text-white backdrop-blur"
-                  >
-                    <i class="fa-regular fa-image"></i> Visual Content
-                  </div>
-                } @else {
-                  <video
-                    [src]="activeLesson.videoUrl"
-                    controls
-                    autoplay
-                    class="w-full h-full object-contain"
-                    controlsList="nodownload"
-                  ></video>
-                }
-              } @else {
-                <div
-                  class="w-full h-full flex flex-col items-center justify-center text-text-main/50 bg-surface"
-                >
-                  <div
-                    class="size-20 rounded-full bg-text-main/5 flex items-center justify-center mb-4"
-                  >
-                    <i class="fa-solid fa-lock text-3xl text-text-main/30"></i>
-                  </div>
-                  <p class="text-lg font-bold text-text-main">Content locked or unavailable</p>
-                  <p class="text-sm font-medium">Please contact your teacher</p>
-                </div>
-              }
-            }
+            <p class="text-text-main font-bold">✨ Click any lesson to start learning! ✨</p>
           </div>
-
-          @if (activeLesson) {
-            <div
-              class="bg-surface border border-border-main rounded-[2rem] p-6 md:p-8 backdrop-blur-md shadow-sm transition-colors duration-300"
-            >
-              <div class="flex items-start justify-between gap-4 mb-4">
-                <h2 class="text-2xl md:text-3xl font-black text-text-main leading-tight">
-                  {{ activeLesson.title }}
-                </h2>
-                <span
-                  class="whitespace-nowrap px-3 py-1 rounded-full bg-text-main/5 text-text-main/50 font-medium text-xs border border-border-main"
-                >
-                  <i class="fa-regular fa-calendar mr-1"></i>
-                  {{ activeLesson.releaseDate | date: 'mediumDate' }}
-                </span>
-              </div>
-
-              <p class="text-text-main/70 leading-relaxed text-lg mb-8">
-                {{ activeLesson.description }}
-              </p>
-
-              <button
-                type="button"
-                class="group relative w-full cursor-pointer mt-8 overflow-hidden rounded-2xl border border-primary/30 bg-primary/10 py-4 transition-all duration-300 hover:bg-primary/20 hover:border-primary/60 hover:shadow-[0_0_30px_-10px_var(--brand-primary)]"
-              >
-                <div
-                  class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-primary/20 to-transparent group-hover:animate-[shimmer_1.5s_infinite]"
-                ></div>
-
-                <div class="relative flex items-center justify-center gap-3">
-                  <span class="text-sm font-black tracking-widest uppercase text-primary">
-                    Continue to Activities
-                  </span>
-
-                  <div
-                    class="flex size-6 items-center justify-center rounded-full bg-primary/20 text-primary transition-all group-hover:translate-x-1 group-hover:bg-primary group-hover:text-white"
-                  >
-                    <i class="fa-solid fa-chevron-right text-[10px]"></i>
-                  </div>
-                </div>
-              </button>
-            </div>
-          }
         </div>
 
-        <div
-          class="bg-surface border border-border-main rounded-[2rem] p-4 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto custom-scroll shadow-sm transition-colors duration-300"
-        >
-          <h3 class="text-text-main font-black text-lg mb-4 px-2">Up Next</h3>
-
-          <div class="space-y-3">
-            @for (item of lessons; track item.id; let i = $index) {
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-5">
+          @for (lesson of lessons; track lesson.id; let i = $index) {
+            <a [routerLink]="['/student/subject', subjectId, 'lesson', lesson.id]" class="block">
               <div
-                (click)="playLesson(item)"
-                [class]="
-                  activeLesson?.id === item.id
-                    ? 'bg-primary/10 border-primary/40 shadow-sm'
-                    : 'bg-text-main/5 border-transparent hover:bg-text-main/10 hover:border-border-main'
-                "
-                class="group flex gap-4 p-3 rounded-2xl border transition-all cursor-pointer relative overflow-hidden"
+                class="flex items-center justify-center rounded-2xl size-24 md:size-28 font-bold text-lg md:text-xl text-white cursor-pointer transition-transform duration-300 hover:scale-110 shadow-sm"
+                [ngClass]="[
+                  i % 10 === 0
+                    ? 'bg-amber-400 hover:bg-amber-500'
+                    : i % 10 === 1
+                      ? 'bg-red-400 hover:bg-red-500'
+                      : i % 10 === 2
+                        ? 'bg-green-400 hover:bg-green-500'
+                        : i % 10 === 3
+                          ? 'bg-blue-400 hover:bg-blue-500'
+                          : i % 10 === 4
+                            ? 'bg-pink-400 hover:bg-pink-500'
+                            : i % 10 === 5
+                              ? 'bg-purple-400 hover:bg-purple-500'
+                              : i % 10 === 6
+                                ? 'bg-indigo-400 hover:bg-indigo-500'
+                                : i % 10 === 7
+                                  ? 'bg-gray-400 hover:bg-gray-500'
+                                  : i % 10 === 8
+                                    ? 'bg-emerald-400 hover:bg-emerald-500'
+                                    : 'bg-orange-400 hover:bg-orange-500',
+                ]"
               >
-                @if (activeLesson?.id === item.id) {
-                  <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-primary"></div>
-                }
-
-                <div
-                  class="relative shrink-0 size-24 bg-text-main/10 rounded-xl overflow-hidden flex items-center justify-center border border-border-main"
-                >
-                  @if (item.videoUrl && isImage(item.videoUrl)) {
-                    <img
-                      [src]="item.videoUrl"
-                      class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition"
-                    />
-                  } @else {
-                    <span
-                      class="text-text-main/30 font-black text-3xl group-hover:scale-110 group-hover:text-primary transition-all"
-                      >{{ i + 1 }}</span
-                    >
-                  }
-
-                  <div
-                    class="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition"
-                  >
-                    <div
-                      class="size-8 rounded-full bg-primary text-white flex items-center justify-center shadow-lg"
-                    >
-                      <i class="fa-solid fa-play text-xs ml-0.5"></i>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="flex flex-col justify-center min-w-0">
-                  <h4
-                    [class]="activeLesson?.id === item.id ? 'text-primary' : 'text-text-main'"
-                    class="font-bold text-sm line-clamp-2 mb-1 group-hover:text-primary transition-colors"
-                  >
-                    {{ item.title }}
-                  </h4>
-                  <p class="text-text-main/50 text-xs line-clamp-1 mb-2 font-medium">
-                    {{ item.description }}
-                  </p>
-
-                  <div class="flex items-center gap-2">
-                    <span
-                      class="text-[10px] uppercase tracking-wider font-bold text-text-main/50 bg-text-main/5 border border-border-main px-2 py-0.5 rounded-md"
-                    >
-                      Lesson {{ i + 1 }}
-                    </span>
-                  </div>
-                </div>
+                <span class="px-2 text-center line-clamp-2">
+                  {{ lesson.title }}
+                </span>
               </div>
-            }
-          </div>
+            </a>
+          }
         </div>
       </div>
     } @else {
       <div
-        class="flex flex-col items-center justify-center py-32 text-center bg-surface border border-border-main rounded-[3rem] mt-8 shadow-sm"
+        class="flex flex-col items-center justify-center py-32 text-center border border-dashed border-border-main rounded-3xl bg-surface"
       >
         <div
-          class="size-24 rounded-full bg-text-main/5 flex items-center justify-center text-text-main/20 mb-6"
+          class="size-24 rounded-2xl bg-background flex items-center justify-center text-text-main/20 mb-6 border border-border-main shadow-sm"
         >
           <i class="fa-solid fa-box-open text-4xl"></i>
         </div>
-        <h2 class="text-2xl font-black text-text-main">No lessons yet</h2>
-        <p class="text-text-main/50 mt-2 font-medium">
+        <h2 class="text-2xl font-black tracking-tight text-text-main">No lessons yet</h2>
+        <p class="text-text-main/50 mt-2 font-bold">
           The teacher hasn't uploaded any content for this subject.
         </p>
         <a
           routerLink="/student/all-subjects"
-          class="mt-6 px-8 py-3 rounded-full bg-primary text-white font-bold hover:opacity-90 transition cursor-pointer shadow-lg shadow-primary/20"
+          class="mt-6 rounded-2xl border border-sky-500/20 bg-sky-500/10 text-sky-500 px-6 py-3 font-bold transition-all hover:bg-sky-500/20 shadow-sm cursor-pointer"
         >
           Go Back
         </a>

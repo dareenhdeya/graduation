@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Import this
-import { ActivatedRoute, RouterLink } from '@angular/router'; // Import RouterLink
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { StudentServiceService } from './../../services/student-service.service';
 import { IStudViewLesson, StudLesson } from '../../interfaces/IStudViewLesson';
 
@@ -20,9 +20,6 @@ export class ViewLessonsComponent implements OnInit {
   lessons: StudLesson[] = []; 
   isLoading = true;
 
-  // Track the currently playing lesson
-  activeLesson: StudLesson | null = null;
-
   ngOnInit(): void {
     this.subjectId = this.route.snapshot.paramMap.get('id') || '';
     if (this.subjectId) {
@@ -36,11 +33,6 @@ export class ViewLessonsComponent implements OnInit {
       next: (res: IStudViewLesson) => {
         this.lessons = res.result || [];
         this.isLoading = false;
-
-        // Auto-select the first lesson to play
-        if (this.lessons.length > 0) {
-          this.activeLesson = this.lessons[0];
-        }
         console.log("Lessons:", this.lessons);
       },
       error: (error) => {
@@ -48,17 +40,5 @@ export class ViewLessonsComponent implements OnInit {
         this.isLoading = false;
       }
     });
-  }
-
-  
-  playLesson(lesson: StudLesson) {
-    this.activeLesson = lesson;
-    // window.scrollTo({ top: 50, behavior: 'smooth' }); // Scroll to player
-  }
-
-  // Helper to detect if the URL is an image/gif (Simple extension check)
-  isImage(url: string): boolean {
-    if (!url) return false;
-    return url.match(/\.(jpeg|jpg|gif|png|webp)$/) != null;
   }
 }

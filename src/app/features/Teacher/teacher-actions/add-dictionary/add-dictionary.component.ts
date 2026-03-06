@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { TeacherServiceService } from '../../services/teacher-service.service';
 import { forkJoin } from 'rxjs'; // Import for parallel requests
 import { IAddToDictionaryResponse } from '../../interfaces/IAddToDictionaryResponse';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -17,18 +18,21 @@ export class AddDictionaryComponent implements OnInit {
 
   private readonly teacherS = inject(TeacherServiceService);
   private readonly fb = inject(FormBuilder);
+  private readonly route = inject(ActivatedRoute);
 
   dictionaryForm!: FormGroup;
   isLoading = false;
 
   // Store image previews for each row
   previews: (string | null)[] = [null];
+  private subjectId: string | null = null;
 
   ngOnInit(): void {
     // Initialize with 1 empty row
     this.dictionaryForm = this.fb.group({
       words: this.fb.array([this.createWordGroup()])
     });
+    this.subjectId = this.route.snapshot.paramMap.get('sid');
   }
 
   get wordsArray(): FormArray {
@@ -81,6 +85,9 @@ export class AddDictionaryComponent implements OnInit {
 
   // --- SUBMIT ---
   onSubmit(): void {
+    if (!this.subjectId) {
+      return;
+    }
     if (this.dictionaryForm.invalid) {
       this.dictionaryForm.markAllAsTouched();
       return;
@@ -88,17 +95,6 @@ export class AddDictionaryComponent implements OnInit {
 
     this.isLoading = true;
 
-    const requests = this.wordsArray.controls.map(control => {
-      const word = control.get('word')?.value;
-      const file = control.get('fileSource')?.value;
-
-      return this.teacherS.addDictionary(word, file);
-    });
-
-    // Send all at once
-    // * forkJoin will wait for all requests to complete and give us an array of responses 
-    // * => from RxJS, used for handling multiple Observables in parallel
-    this.isLoading = true;
     const controls = this.wordsArray.controls;
 
     // CASE 1: Single Item (Direct Request)
@@ -107,7 +103,7 @@ export class AddDictionaryComponent implements OnInit {
       const word = controls[0].get('word')?.value;
       const file = controls[0].get('fileSource')?.value;
 
-      this.teacherS.addDictionary(word, file).subscribe({
+      this.teacherS.addDictionary(this.subjectId, word, file).subscribe({
         next: (response: IAddToDictionaryResponse) => (
           console.log('Success:', response),
           this.isLoading = false,
@@ -127,7 +123,7 @@ export class AddDictionaryComponent implements OnInit {
       const requests = controls.map(control => {
         const word = control.get('word')?.value;
         const file = control.get('fileSource')?.value;
-        return this.teacherS.addDictionary(word, file);
+        return this.teacherS.addDictionary(this.subjectId!, word, file);
       });
 
       forkJoin(requests).subscribe({
