@@ -1,116 +1,129 @@
-<section class="min-h-screen text-white px-4 py-8">
-  <div class="mx-auto max-w-4xl">
-    <div class="flex items-center gap-2">
-      <a
-        routerLink="/admin/users"
-        class="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-2 text-sm hover:bg-white/[0.08] transition"
-      >
-        <i class="fa-solid fa-arrow-left"></i>
-        All Users
-      </a>
-    </div>
+<section class="relative min-h-screen overflow-hidden py-8 px-4 transition-colors duration-300 ">
+  <div class="container mx-auto max-w-4xl relative z-10">
+    
+    <a
+      routerLink="/admin/users"
+      class="mb-6 cursor-pointer inline-flex items-center gap-2 rounded-2xl border border-border-main bg-surface px-4 py-2 text-sm font-bold text-text-main hover:border-primary/50 hover:text-primary transition-all duration-300 hover:-translate-y-0.5 shadow-sm"
+    >
+      <i class="fa-solid fa-arrow-left"></i>
+      All Users
+    </a>
 
     @if (loading) {
-    <div class="mt-6 rounded-2xl border border-white/10 bg-white/[0.06] p-5 text-white/70">
-      Loading...
+    <div class="rounded-3xl border border-border-main bg-surface p-12 text-center text-text-main/70 text-lg font-medium animate-pulse shadow-sm">
+      <i class="fa-solid fa-circle-notch fa-spin mr-3 text-primary text-xl"></i> Loading user details...
     </div>
+    
     } @else if (error) {
-    <div class="mt-6 rounded-2xl border border-red-500/25 bg-red-500/10 p-5 text-red-200">
-      {{ error }}
+    <div class="rounded-3xl border border-red-500/30 bg-red-500/10 p-12 text-center text-red-500 font-semibold text-lg shadow-sm">
+      <i class="fa-solid fa-triangle-exclamation mr-2 text-xl"></i> {{ error }}
     </div>
+    
     } @else if (user) {
 
-    <div
-      class="mt-6 rounded-[28px] border border-white/10 bg-white/[0.06] backdrop-blur-xl shadow-[0_50px_140px_-90px_rgba(0,0,0,.95)] overflow-hidden"
-    >
-      <div class="p-6 sm:p-7 border-b border-white/10">
-        <div class="flex flex-col sm:flex-row sm:items-center gap-5">
+    <div class="relative mt-2 rounded-3xl border border-border-main bg-surface shadow-sm overflow-hidden transition-all">
+      <div class="absolute -right-20 -top-20 size-64 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="p-6 sm:p-8 border-b border-border-main relative z-10">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-6">
+          
           <div class="shrink-0">
             @if (user.pfpURL) {
             <img
               [src]="user.pfpURL"
-              class="size-16 rounded-full object-cover border border-white/10"
+              class="size-20 rounded-full object-cover border-2 border-border-main shadow-sm"
               alt="pfp"
             />
             } @else {
             <div
-              class="size-16 rounded-full flex items-center justify-center bg-purple-600 text-white font-black border border-white/10"
+              class="size-20 rounded-full flex items-center justify-center bg-primary/10 text-primary font-black border-2 border-primary/20 text-3xl shadow-sm uppercase"
             >
-              {{ (user.fName) }}
+              {{ user.fName ? user.fName.charAt(0) : '?' }}
             </div>
             }
           </div>
 
           <div class="min-w-0 flex-1">
-            <div class="flex flex-wrap items-center gap-2">
-              <h1 class="text-2xl font-black tracking-tight truncate">
+            <div class="flex flex-wrap items-center gap-3">
+              <h1 class="text-3xl font-black text-text-main tracking-tight truncate">
                 {{ user.fName }}
               </h1>
 
               <span
-                class="inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold"
+                class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-bold shadow-sm"
                 [class]="statusStyles[user.status]"
               >
+                <span class="size-2 rounded-full bg-current opacity-80"></span>
                 {{ statusLabels[user.status] }}
               </span>
 
               <span
-                class="inline-flex items-center rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-xs text-white/85"
+                class="inline-flex items-center rounded-full border border-border-main bg-surface px-3 py-1.5 text-xs font-bold text-text-main/80"
               >
+                <i class="fa-solid fa-user-tag mr-1.5 text-primary/60"></i>
                 {{ user.role || '-' }}
               </span>
             </div>
 
-            <div class="mt-2 text-sm text-white/60 truncate">
+            <div class="mt-2 text-sm font-medium text-text-main/60 truncate flex items-center gap-2">
+              <i class="fa-solid fa-envelope text-text-main/40"></i>
               {{ user.email || '-' }}
             </div>
 
-            <div class="mt-1 text-xs text-white/45 truncate">ID: {{ user.id }}</div>
+            <div class="mt-1 text-xs font-bold text-text-main/40 uppercase tracking-wider truncate flex items-center gap-2">
+              <i class="fa-solid fa-fingerprint text-text-main/30"></i>
+              ID: {{ user.id }}
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="p-6 sm:p-7">
+      <div class="p-6 sm:p-8 relative z-10">
+        <h3 class="text-sm font-bold uppercase tracking-wider text-text-main/40 mb-4">Personal Information</h3>
+        
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-            <div class="text-xs text-white/55">Phone</div>
-            <div class="mt-1 font-semibold text-white/90">{{ user.phone || '-' }}</div>
+          
+          <div class="rounded-2xl border border-border-main bg-surface p-5 hover:border-primary/20 transition-colors">
+            <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">Phone</div>
+            <div class="font-bold text-text-main text-lg">{{ user.phone || '-' }}</div>
           </div>
 
-          <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-            <div class="text-xs text-white/55">Address</div>
-            <div class="mt-1 font-semibold text-white/90">{{ user.address || '-' }}</div>
+          <div class="rounded-2xl border border-border-main bg-surface p-5 hover:border-primary/20 transition-colors">
+            <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">Birth Date</div>
+            <div class="font-bold text-text-main text-lg">{{ user.birthDate || '-' }}</div>
+          </div>
+          
+          <div class="rounded-2xl border border-border-main bg-surface p-5 sm:col-span-2 hover:border-primary/20 transition-colors">
+            <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">Address</div>
+            <div class="font-bold text-text-main text-lg">{{ user.address || '-' }}</div>
           </div>
 
-          <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-            <div class="text-xs text-white/55">Birth Date</div>
-            <div class="mt-1 font-semibold text-white/90">{{ user.birthDate || '-' }}</div>
+          <div class="rounded-2xl border border-border-main bg-surface p-5 hover:border-primary/20 transition-colors">
+            <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">Subject</div>
+            <div class="font-bold text-text-main text-lg">{{ user.teaches || '-' }}</div>
           </div>
 
-          <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-            <div class="text-xs text-white/55">Subject</div>
-            <div class="mt-1 font-semibold text-white/90">{{ user.teaches || '-' }}</div>
-          </div>
-
-          <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-4 sm:col-span-2">
-            <div class="text-xs text-white/55">Job</div>
-            <div class="mt-1 font-semibold text-white/90">{{ user.job || '-' }}</div>
+          <div class="rounded-2xl border border-border-main bg-surface p-5 hover:border-primary/20 transition-colors">
+            <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">Job</div>
+            <div class="font-bold text-text-main text-lg">{{ user.job || '-' }}</div>
           </div>
         </div>
 
-        <div class="mt-6 flex flex-wrap gap-3">
+        <div class="mt-8 pt-6 border-t border-border-main flex flex-wrap gap-3">
           <button
             type="button"
-            class="cursor-pointer rounded-2xl bg-amber-600 px-4 py-2 text-sm font-semibold hover:bg-amber-500 transition"
+            class="py-2.5 px-5 inline-flex items-center gap-2 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-500 font-bold text-sm transition-all hover:bg-amber-500/20 hover:-translate-y-0.5 cursor-pointer"
           >
+            <i class="fa-solid fa-power-off"></i>
             End Session
           </button>
 
           <button
             type="button"
-            class="cursor-pointer rounded-2xl bg-red-600 px-4 py-2 text-sm font-semibold hover:bg-red-500 transition"
+            class="py-2.5 px-5 inline-flex items-center gap-2 rounded-xl border border-red-500/30 bg-red-500/10 text-red-500 font-bold text-sm transition-all hover:bg-red-500/20 hover:-translate-y-0.5 cursor-pointer"
           >
-            Block
+            <i class="fa-solid fa-ban"></i>
+            Block User
           </button>
         </div>
       </div>

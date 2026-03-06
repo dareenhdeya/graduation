@@ -10,5 +10,5 @@ import { RouterLink } from '@angular/router';
   styleUrl: './student-actions.component.css',
 })
 export class StudentActionsComponent {
-  
+
 }

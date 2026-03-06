@@ -3,19 +3,25 @@ import { baseHttp } from '../../../core/services/base';
 import { IGetTeacherStudents } from '../interfaces/IGetTeacherStudents';
 import { APP_APIs } from '../../../core/constants/appAPIs';
 import { IGetTeacherLessons } from '../interfaces/IGetTeacherLessons';
-import { IWordAttachment } from '../interfaces/IWordAttachment';
 import { IAddToDictionaryResponse } from '../interfaces/IAddToDictionaryResponse';
 import { IEditedLesson, IEditLessonResponse } from '../interfaces/IEditLessonResponse';
+import { ITeacherSubjectsResponse } from '../interfaces/ITeacherSubjects';
+import { ITeacherLessonContentResponse } from '../interfaces/ILessonContent';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TeacherServiceService extends baseHttp {
-  getStudents() {
-    return this.get<IGetTeacherStudents>(APP_APIs.teacherGetStudents, {});
+  getSubjects() {
+    return this.get<ITeacherSubjectsResponse>(APP_APIs.teacherViewSubjects, {});
   }
-  getLessons() {
-    return this.get<IGetTeacherLessons>(APP_APIs.teacherGetLessons, {});
+
+  getStudents(subjectId: string) {
+    return this.get<IGetTeacherStudents>(APP_APIs.teacherGetStudents(subjectId), {});
+  }
+
+  getLessons(subjectId: string) {
+    return this.get<IGetTeacherLessons>(APP_APIs.teacherGetLessons(subjectId), {});
   }
   addLesson(lessonData: FormData) {
     return this.post(APP_APIs.teacherAddLesson, lessonData);
@@ -27,15 +33,22 @@ export class TeacherServiceService extends baseHttp {
     return this.delete(APP_APIs.teacherRemoveLesson(lessonId));
   }
 
+  getLessonDetails(subjectId: string, lessonId: string) {
+    return this.get<ITeacherLessonContentResponse>(APP_APIs.teacherViewLesson(subjectId, lessonId), {});
+  }
 
-  addDictionary(word: string, file: File) {
+  uploadVideo(formData: FormData) {
+    return this.post(APP_APIs.teacherUploadVideo, formData);
+  }
+
+  addDictionary(subjectId: string, word: string, file: File) {
     const formData = new FormData();
 
     formData.append('word', word);
 
     formData.append('files', file);
 
-    return this.post<IAddToDictionaryResponse>(APP_APIs.teacherAddWordAttachment, formData);
+    return this.post<IAddToDictionaryResponse>(APP_APIs.teacherAddWordAttachment(subjectId), formData);
   }
 
   // // Converts Array to FormData

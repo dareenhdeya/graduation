@@ -31,11 +31,11 @@ export class PendingTeachersComponent implements OnInit {
 
   statusLabels = ['Inactive', 'Active', 'Pending', 'Banned', 'Locked'];
   statusStyles: any = {
-    0: 'bg-gray-500/15 text-gray-200 border-gray-500/25', // inactive
-    1: 'bg-green-500/15 text-green-200 border-green-500/25', // active
-    2: 'bg-amber-500/15 text-amber-200 border-amber-500/25', // pending
-    3: 'bg-red-500/15 text-red-200 border-red-500/25', // banned
-    4: 'bg-purple-500/15 text-purple-200 border-purple-500/25', // locked
+    0: 'bg-slate-500/10 text-slate-500 border-slate-500/20',     // Inactive 
+    1: 'bg-green-500/10 text-green-500 border-green-500/20',     // Active
+    2: 'bg-amber-500/10 text-amber-500 border-amber-500/20',     // Pending
+    3: 'bg-red-500/10 text-red-500 border-red-500/20',           // Banned
+    4: 'bg-fuchsia-500/10 text-fuchsia-500 border-fuchsia-500/20',
   };
 
   loading = false;

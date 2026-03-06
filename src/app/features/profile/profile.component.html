@@ -1,164 +1,146 @@
-<section class="min-h-screen text-white px-4 py-10">
+<section class="min-h-screen text-text-main px-4 py-10 transition-colors duration-300">
   <div class="mx-auto max-w-6xl">
-    <h1 class="mb-6 text-2xl md:text-3xl font-black tracking-tight">My Profile</h1>
+    <h1 class="mb-8 text-4xl md:text-5xl font-black tracking-tight">My <span class="text-primary">Profile</span></h1>
 
     @if (loadingProfile) {
-    <div
-      class="rounded-[28px] border border-white/10 bg-white/[0.06] backdrop-blur-xl p-6 text-white/70"
-    >
-      Loading profile...
+    <div class="rounded-3xl border border-border-main bg-surface p-12 text-center text-text-main/70 text-lg font-medium animate-pulse shadow-sm">
+      <i class="fa-solid fa-circle-notch fa-spin mr-3 text-primary text-xl"></i> Loading profile...
     </div>
     } @else if (error) {
-    <div class="rounded-[28px] border border-red-500/25 bg-red-500/10 p-6 text-red-200">
-      {{ error }}
+    <div class="rounded-3xl border border-red-500/30 bg-red-500/10 p-12 text-center text-red-500 font-semibold text-lg shadow-sm">
+      <i class="fa-solid fa-triangle-exclamation mr-2 text-xl"></i> {{ error }}
     </div>
     } @else if (profile; as p) {
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
-      <aside
-        class="lg:col-span-4 rounded-[28px] border border-white/10 bg-white/[0.06] backdrop-blur-xl shadow-[0_60px_160px_-110px_rgba(0,0,0,.95)] overflow-hidden"
-      >
-        <div class="relative h-24 bg-white/[0.06] border-b border-white/10 overflow-hidden">
-          <div
-            class="pointer-events-none absolute -top-10 -left-10 size-40 rounded-full bg-sky-500/10 blur-2xl -z-10"
-          ></div>
-          <div
-            class="pointer-events-none absolute -bottom-12 -right-12 size-44 rounded-full bg-fuchsia-500/10 blur-2xl -z-10"
-          ></div>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      
+      <aside class="lg:col-span-4 rounded-3xl border border-border-main bg-surface overflow-hidden shadow-sm transition-all relative">
+        <div class="relative h-28 bg-surface border-b border-border-main overflow-hidden">
+          <div class="pointer-events-none absolute -top-10 -left-10 size-40 rounded-full bg-primary/10 blur-2xl"></div>
+          <div class="pointer-events-none absolute -bottom-12 -right-12 size-44 rounded-full bg-fuchsia-500/10 blur-2xl"></div>
         </div>
 
-        <div class="px-6 pb-6">
-          <div class="-mt-10 relative z-10 flex items-end justify-between">
+        <div class="px-6 pb-8 relative z-10">
+          <div class="-mt-12 flex items-end justify-between">
             @if (p.pfpURL) {
             <img
               [src]="p.pfpURL"
-              class="size-20 rounded-2xl object-cover border border-white/10 shadow-lg"
+              class="size-24 rounded-full object-cover border-4 border-surface shadow-sm"
               alt="avatar"
             />
             } @else {
             <div
-              class="size-20 text-2xl rounded-2xl border border-white/10 bg-purple-700 flex items-center justify-center text-white/95 font-bold shadow-lg"
+              class="size-24 text-3xl rounded-full border-4 border-surface bg-primary/10 flex items-center justify-center text-primary font-black shadow-sm uppercase"
             >
-              {{ p.fName[0].toUpperCase() }}
+              {{ p.fName[0] }}
             </div>
             }
 
-            <span
-              class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-3 py-1 text-xs text-white/85"
-            >
-              <span class="size-2 rounded-full bg-sky-400"></span>
+            <span class="inline-flex items-center gap-1.5 rounded-full border border-border-main bg-surface px-3 py-1.5 text-xs font-bold text-text-main/80 shadow-sm mb-2">
+              <span class="size-2 rounded-full bg-primary opacity-80"></span>
               {{ p.role || '-' }}
             </span>
           </div>
 
-          <div class="mt-4">
-            <div class="text-xl font-extrabold truncate">{{ p.fName }} {{ p.lName }}</div>
-            <div class="text-white/60 text-sm truncate mt-1">
-              <i class="fa-regular fa-envelope mr-2 text-white/40"></i>
+          <div class="mt-5">
+            <div class="text-2xl font-black truncate text-text-main">{{ p.fName }} {{ p.lName }}</div>
+            <div class="text-text-main/60 font-medium text-sm truncate mt-1 flex items-center gap-2">
+              <i class="fa-regular fa-envelope text-text-main/40"></i>
               {{ p.email || '-' }}
             </div>
           </div>
 
-          <div class="mt-5 flex flex-wrap gap-2">
-            <span
-              class="inline-flex items-center rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-white/75"
-            >
-              <i class="fa-solid fa-phone mr-2 text-white/40"></i>{{ p.phone || '-' }}
+          <div class="mt-6 flex flex-wrap gap-2">
+            <span class="inline-flex items-center rounded-xl border border-border-main bg-surface px-3 py-1.5 text-xs font-bold text-text-main/70">
+              <i class="fa-solid fa-phone mr-2 text-primary/60"></i>{{ p.phone || '-' }}
             </span>
 
-            <span
-              class="inline-flex items-center rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-white/75"
-            >
-              <i class="fa-regular fa-calendar mr-2 text-white/40"></i>{{ p.birthDate || '-' }}
+            <span class="inline-flex items-center rounded-xl border border-border-main bg-surface px-3 py-1.5 text-xs font-bold text-text-main/70">
+              <i class="fa-regular fa-calendar mr-2 text-primary/60"></i>{{ p.birthDate || '-' }}
             </span>
           </div>
 
-          <div class="my-6 h-px bg-white/10"></div>
+          <div class="my-6 h-px bg-border-main"></div>
 
           <div class="grid grid-cols-3 gap-3">
             <button
               type="button"
               (click)="changepass()"
-              class="col-span-2 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-4 text-sm hover:bg-white/[0.09] transition cursor-pointer"
+              class="col-span-2 rounded-xl border border-border-main bg-surface px-4 py-3 text-sm font-bold text-text-main/80 hover:text-primary hover:border-primary/40 transition-all shadow-sm cursor-pointer"
             >
-              <i class="fa fa-key mr-2 text-white/50" aria-hidden="true"></i>Change Password
+              <i class="fa-solid fa-lock mr-2 text-text-main/40"></i>Password
             </button>
 
             <button
               (click)="openEdit()"
-              class="col-span-1 rounded-2xl bg-sky-600 px-4 py-4 text-sm font-semibold hover:bg-sky-500 transition cursor-pointer"
+              class="col-span-1 rounded-xl bg-primary px-4 py-3 text-sm font-bold text-white hover:bg-primary/90 transition-all shadow-sm cursor-pointer hover:-translate-y-0.5"
             >
-              <i class="fa-solid fa-pen mr-2"></i>Edit
+              <i class="fa-solid fa-pen mr-1.5"></i>Edit
             </button>
           </div>
         </div>
       </aside>
 
-      <main class="lg:col-span-8 space-y-5">
-        <div
-          class="rounded-[28px] border border-white/10 bg-white/[0.06] backdrop-blur-xl shadow-[0_60px_160px_-110px_rgba(0,0,0,.95)] p-6"
-        >
-          <div class="flex items-center justify-between mb-4">
-            <div class="font-bold text-lg">Details</div>
-            <span class="text-xs text-white/45">Account info</span>
+      <main class="lg:col-span-8 space-y-6">
+        
+        <div class="rounded-3xl border border-border-main bg-surface p-6 sm:p-8 shadow-sm">
+          <div class="flex items-center justify-between mb-6">
+            <div class="font-black text-xl text-text-main tracking-tight">Details</div>
+            <span class="text-xs font-bold uppercase tracking-wider text-text-main/40">Account info</span>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-              <div class="text-xs text-white/55 mb-1">Phone</div>
-              <div class="font-semibold text-white/90">{{ p.phone || '-' }}</div>
+            <div class="rounded-2xl border border-border-main bg-surface p-5 hover:border-primary/20 transition-colors">
+              <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">Phone</div>
+              <div class="font-bold text-text-main text-lg">{{ p.phone || '-' }}</div>
             </div>
 
-            <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-              <div class="text-xs text-white/55 mb-1">Birth Date</div>
-              <div class="font-semibold text-white/90">{{ p.birthDate || '-' }}</div>
+            <div class="rounded-2xl border border-border-main bg-surface p-5 hover:border-primary/20 transition-colors">
+              <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">Birth Date</div>
+              <div class="font-bold text-text-main text-lg">{{ p.birthDate || '-' }}</div>
             </div>
 
-            <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-4 sm:col-span-2">
-              <div class="text-xs text-white/55 mb-1">Address</div>
-              <div class="font-semibold text-white/90 break-words">{{ p.address || '-' }}</div>
+            <div class="rounded-2xl border border-border-main bg-surface p-5 sm:col-span-2 hover:border-primary/20 transition-colors">
+              <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">Address</div>
+              <div class="font-bold text-text-main text-lg break-words">{{ p.address || '-' }}</div>
             </div>
           </div>
         </div>
 
-        <div class="rounded-[28px] border border-white/10 bg-white/[0.06] backdrop-blur-xl p-6">
-          <div class="flex items-center justify-between mb-4">
-            <div class="font-bold text-lg">Work / Study</div>
-            <span class="text-xs text-white/45">Role-related</span>
+        <div class="rounded-3xl border border-border-main bg-surface p-6 sm:p-8 shadow-sm">
+          <div class="flex items-center justify-between mb-6">
+            <div class="font-black text-xl text-text-main tracking-tight">Work / Study</div>
+            <span class="text-xs font-bold uppercase tracking-wider text-text-main/40">Role-related</span>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             @if (p.role !== 'Parent') {
-            <div
-              class="group relative rounded-2xl border border-white/10 bg-white/[0.04] p-4 transition-all hover:bg-white/[0.07]"
-            >
-              <div class="text-xs text-white/55 mb-1">Subject</div>
+            <div class="group relative rounded-2xl border border-border-main bg-surface p-5 transition-colors hover:border-primary/20">
+              <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2">Subject</div>
 
               @if(p.role === 'Student') {
-              <div class="flex items-center justify-between">
+              <div class="flex items-center justify-between mt-1">
                 <div class="flex items-center gap-2">
-                  <span class="text-xl font-black text-white/90">{{ p.subjectsCount }}</span>
-                  <span class="text-[10px] uppercase tracking-wider text-white/40">Registered</span>
+                  <span class="text-3xl font-black text-text-main leading-none">{{ p.subjectsCount }}</span>
+                  <span class="text-[10px] font-bold uppercase tracking-wider text-text-main/40 leading-none">Registered<br>Courses</span>
                 </div>
 
                 <a
                   routerLink="/student/my-subjects"
-                  class="group/btn flex items-center gap-2 rounded-xl bg-sky-500 px-3 py-1.5 text-xs font-bold text-white transition-all hover:bg-sky-400 hover:shadow-[0_0_20px_-5px_rgba(56,189,248,0.5)] active:scale-95"
+                  class="group/btn flex items-center gap-2 rounded-xl bg-primary/10 border border-primary/20 px-4 py-2 text-xs font-bold text-primary transition-all hover:bg-primary/20 hover:-translate-y-0.5 active:scale-95"
                 >
                   View All
-                  <i
-                    class="fa-solid fa-arrow-right text-[10px] transition-transform group-hover/btn:translate-x-1"
-                  ></i>
+                  <i class="fa-solid fa-arrow-right transition-transform group-hover/btn:translate-x-1"></i>
                 </a>
               </div>
               } @else {
-              <div class="font-semibold text-white/90">{{ p.teaches || '-' }}</div>
+              <div class="font-bold text-text-main text-lg">{{ p.teaches || '-' }}</div>
               }
             </div>
             }
 
-            <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-              <div class="text-xs text-white/55 mb-1">Job</div>
-              <div class="font-semibold text-white/90">{{ p.job || '-' }}</div>
+            <div class="rounded-2xl border border-border-main bg-surface p-5 hover:border-primary/20 transition-colors">
+              <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">Job</div>
+              <div class="font-bold text-text-main text-lg">{{ p.job || '-' }}</div>
             </div>
           </div>
         </div>
@@ -168,450 +150,399 @@
   </div>
 
   @if (showEditModal) {
-  <div class="fixed inset-0 z-50">
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
     <div
-      class="absolute inset-0 bg-[#050814]/70 backdrop-blur-sm"
+      class="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
       (click)="showEditModal = false"
     ></div>
 
-    <div class="absolute inset-0 overflow-y-auto p-4">
-      <div class="min-h-full flex items-center justify-center">
-        <form
-          [formGroup]="editForm"
-          (ngSubmit)="submitEdit()"
-          class="w-full max-w-xl max-h-[90vh] flex flex-col rounded-[32px] border border-white/10 bg-gradient-to-b from-[#0b1020]/95 to-[#070A13]/95 shadow-[0_70px_200px_-120px_rgba(0,0,0,.95)]"
-          (click)="$event.stopPropagation()"
-        >
-          <div class="relative p-6 border-b border-white/10">
-            <div
-              class="pointer-events-none absolute -top-24 -left-24 h-56 w-56 rounded-full bg-sky-500/15 blur-[70px]"
-            ></div>
+    <form
+      [formGroup]="editForm"
+      (ngSubmit)="submitEdit()"
+      class="relative w-full max-w-xl max-h-[90vh] flex flex-col rounded-3xl border border-border-main bg-surface shadow-2xl overflow-hidden z-10 animate-in fade-in zoom-in duration-200"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="relative p-6 sm:p-8 border-b border-border-main bg-surface">
+        <div class="pointer-events-none absolute -top-24 -left-24 h-56 w-56 rounded-full bg-primary/10 blur-[70px]"></div>
+        <div class="pointer-events-none absolute -bottom-24 -right-24 h-56 w-56 rounded-full bg-fuchsia-500/10 blur-[70px]"></div>
 
-            <div
-              class="pointer-events-none absolute -bottom-24 -right-24 h-56 w-56 rounded-full bg-fuchsia-500/15 blur-[70px]"
-            ></div>
-
-            <div class="relative flex items-start justify-between gap-4">
-              <div class="flex items-start gap-4">
-                <div
-                  class="size-12 rounded-2xl bg-white/[0.06] border border-white/10 flex items-center justify-center"
-                >
-                  <i class="fa-solid fa-user-pen text-white/85"></i>
-                </div>
-
-                <div>
-                  <div class="text-xl font-black tracking-tight">Edit Profile</div>
-
-                  <div class="text-sm text-white/55 mt-1">Update your personal information.</div>
-                </div>
-              </div>
-
-              <button
-                type="button"
-                class="cursor-pointer rounded-2xl border border-white/10 bg-white/[0.04] px-3 py-2 text-white/70 hover:bg-white/[0.08] transition"
-                (click)="showEditModal = false"
-              >
-                <i class="fa-solid fa-xmark"></i>
-              </button>
+        <div class="relative flex items-start justify-between gap-4">
+          <div class="flex items-start gap-4">
+            <div class="size-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0 shadow-sm">
+              <i class="fa-solid fa-user-pen text-primary text-lg"></i>
             </div>
-          </div>
-
-          <div class="flex-1 overflow-y-auto modal-scroll p-6 space-y-4">
-            <div class="w-full flex justify-center mt-6 mb-8">
-              <div
-                class="relative w-40 h-40 rounded-full border-4 border-gradient-to-tr from-sky-500 to-fuchsia-500 p-1"
-              >
-                <div
-                  class="w-full h-full rounded-full overflow-hidden bg-white/[0.05] border border-white/10 shadow-lg relative"
-                >
-                  <img
-                    *ngIf="imagePreview; else defaultAvatar"
-                    [src]="imagePreview"
-                    alt="Profile"
-                    class="w-full h-full object-cover"
-                  />
-
-                  <ng-template #defaultAvatar>
-                    <div
-                      class="w-full h-full flex items-center justify-center text-white/30 text-6xl"
-                    >
-                      <i class="fa-solid fa-user"></i>
-                    </div>
-                  </ng-template>
-
-                  <button
-                    type="button"
-                    (click)="openAvatarPicker()"
-                    class="cursor-pointer absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 flex items-center justify-center transition-all duration-300 rounded-full"
-                  >
-                    <i class="fa-solid fa-camera text-white text-2xl"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div class="rounded-3xl border border-white/10 bg-white/[0.04] p-5">
-              <label class="block text-xs text-white/60 mb-2">Name</label>
-              <div class="grid grid-cols-2 gap-4">
-                <div>
-                  <input
-                    formControlName="fName"
-                    [class.border-red-500]="f.fName.touched && f.fName.errors"
-                    class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition focus:border-sky-400/60"
-                  />
-                  @if (f.fName.touched && f.fName.errors) {
-                  <p class="text-[10px] text-red-400 mt-1">First name is must be at least 2 characters long and contain only Arabic or English letters</p>
-                  }
-                </div>
-                <div>
-                  <input
-                    formControlName="lName"
-                    [class.border-red-500]="f.lName.touched && f.lName.errors"
-                    class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition focus:border-sky-400/60"
-                  />
-                  @if (f.lName.touched && f.lName.errors) {
-                  <p class="text-[10px] text-red-400 mt-1">Last name is must be at least 2 characters long and contain only Arabic or English letters</p>
-                  }
-                </div>
-              </div>
-            </div>
-
-            <div class="rounded-3xl border border-white/10 bg-white/[0.04] p-5">
-              <label class="block text-xs text-white/60 mb-2">Email</label>
-              <input
-                formControlName="email"
-                [class.border-red-500]="f.email.touched && f.email.errors"
-                class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
-              />
-              @if (f.email.touched && f.email.errors) {
-              <div class="text-[10px] text-red-400 mt-2 ml-1">
-                @if (f.email.errors['email']) {
-                <span>Please enter a valid email address</span>
-                }
-              </div>
-              }
-            </div>
-
-            <div class="rounded-3xl border border-white/10 bg-white/[0.04] p-5">
-              <label class="block text-xs text-white/60 mb-2">Phone</label>
-              <input
-                formControlName="phone"
-                [class.border-red-500]="f.phone.touched && f.phone.errors"
-                class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 placeholder:text-gray-500 placeholder:italic text-white/90 outline-none transition"
-                placeholder="01#########"
-              />
-              @if (f.phone.touched && f.phone.errors) {
-              <div class="text-[10px] text-red-400 mt-2 ml-1">
-                @if (f.phone.errors['pattern']) {
-                <span>Phone must be 11 digits starting with 0</span>
-                }
-              </div>
-              }
-            </div>
-
-            <div class="rounded-3xl border border-white/10 bg-white/[0.04] p-5">
-              <label class="block text-xs text-white/60 mb-2">Address</label>
-              <input
-                formControlName="address"
-                [class.border-red-500]="f['address'].touched && f['address'].errors"
-                class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10 placeholder:text-gray-500 placeholder:italic"
-                placeholder="Enter your full home address..."
-              />
-
-              @if (f['address'].touched && f['address'].errors) {
-              <div
-                class="text-[10px] text-red-400 mt-2 ml-1 animate-in fade-in slide-in-from-top-1"
-              >
-                @if (f['address'].errors?.['minlength']) {
-                <span>
-                  <i class="fa-solid fa-circle-info mr-1"></i>
-                  Address is too short. Please provide more details (min 10 characters).
-                </span>
-                }
-              </div>
-              }
-            </div>
-
-            @if (profile?.role === 'Parent') {
-            <div class="rounded-3xl border border-white/10 bg-white/[0.04] p-5">
-              <label class="block text-xs text-white/60 mb-2">Job</label>
-              <input
-                formControlName="job"
-                [class.border-red-500]="f['job'].touched && f['job'].errors"
-                class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 placeholder:text-gray-500 placeholder:italic text-white/90 outline-none transition focus:border-sky-400/60"
-                placeholder="e.g. Engineer"
-              />
-
-              @if (f['job'].touched && f['job'].errors) {
-              <div class="text-[10px] text-red-400 mt-2 ml-1">
-                @if (f['job'].errors?.['minlength']) {
-                <span>Job title must be at least 2 characters long</span>
-                }
-              </div>
-              }
-            </div>
-            } @if (editError) {
-            <div
-              class="rounded-3xl border border-red-500/25 bg-red-500/10 p-4 text-sm text-red-200"
-            >
-              {{ editError }}
-            </div>
-            }
-          </div>
-
-          <div
-            class="p-6 border-t border-white/10 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
-          >
             <div>
-              @if (loadingEdit) {
-              <span>Saving...</span>
-              } @else {
-              <span> </span>
-              }
-            </div>
-
-            <div class="flex items-center gap-2">
-              <button
-                type="button"
-                class="cursor-pointer rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white/80 hover:bg-white/[0.08] transition"
-                (click)="showEditModal = false"
-              >
-                Cancel
-              </button>
-
-              <button
-                type="submit"
-                [disabled]="loadingEdit || editForm.invalid"
-                class="cursor-pointer rounded-2xl px-5 py-2.5 text-sm font-bold bg-gradient-to-r from-sky-600 to-fuchsia-600 hover:from-sky-500 hover:to-fuchsia-500 transition"
-              >
-                Save Changes
-              </button>
+              <div class="text-xl font-black tracking-tight text-text-main">Edit Profile</div>
+              <div class="text-sm font-medium text-text-main/60 mt-1">Update your personal information.</div>
             </div>
           </div>
-        </form>
 
-        @if (showAvatarPicker) {
-        <div
-          class="fixed inset-0 z-[60] bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm"
-        >
-          <div
-            class="w-full max-w-3xl rounded-[32px] bg-[#070A13]/80 border border-white/10 p-6 backdrop-blur-2xl shadow-2xl"
-            (click)="$event.stopPropagation()"
+          <button
+            type="button"
+            class="size-9 grid place-items-center rounded-xl border border-border-main bg-surface text-text-main/50 hover:text-text-main hover:bg-border-main/50 transition-all cursor-pointer"
+            (click)="showEditModal = false"
           >
-            <div class="flex items-center justify-between mb-6">
-              <div>
-                <h3 class="text-xl font-bold text-white/90">Choose an Avatar</h3>
-                <p class="text-sm text-white/50">Select a character or upload your own</p>
-              </div>
-              <button
-                type="button"
-                (click)="closeAvatarPicker()"
-                class="cursor-pointer size-10 rounded-xl bg-white/5 flex items-center justify-center text-white/70 hover:bg-white/10 hover:text-white transition"
-              >
-                <i class="fa-solid fa-xmark text-lg"></i>
-              </button>
-            </div>
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
 
-            <div
-              class="flex items-center gap-4 p-4 rounded-2xl bg-white/[0.03] border border-white/5 mb-6"
-            >
-              <input
-                #fileInputPicker
-                type="file"
-                (change)="onFileChange($event); closeAvatarPicker()"
-                class="hidden"
-                accept="image/*"
+      <div class="flex-1 overflow-y-auto modal-scroll p-6 sm:p-8 space-y-5">
+        
+        <div class="w-full flex justify-center mb-8">
+          <div class="relative w-32 h-32 rounded-full border-4 border-surface shadow-sm ring-2 ring-primary/20">
+            <div class="w-full h-full rounded-full overflow-hidden bg-surface relative">
+              <img
+                *ngIf="imagePreview; else defaultAvatar"
+                [src]="imagePreview"
+                alt="Profile"
+                class="w-full h-full object-cover"
               />
-              <button
-                type="button"
-                (click)="fileInputPicker.click()"
-                class="cursor-pointer size-14 rounded-2xl border border-dashed border-white/20 bg-white/5 hover:border-sky-400/50 hover:bg-sky-500/10 flex items-center justify-center text-white/90 transition-all group"
-              >
-                <i class="fa-solid fa-cloud-arrow-up text-xl group-hover:scale-110 transition"></i>
-              </button>
-              <div>
-                <div class="text-sm font-semibold text-white/90">Upload Custom Image</div>
-                <div class="text-xs text-white/40">PNG, JPG up to 2MB</div>
-              </div>
-            </div>
 
-            <div
-              class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-3 max-h-[350px] pr-2 modal-scroll"
-            >
-              @for (a of avatars; track a.id) {
-              <button
-                type="button"
-                (click)="selectAvatar(a.src)"
-                class="cursor-pointer group relative aspect-square rounded-2xl border border-white/10 bg-white/5 overflow-hidden hover:border-sky-500/50 transition-all hover:scale-105"
-              >
-                <img [src]="a.src" class="w-full h-full object-cover" [alt]="a.id" />
-                <div
-                  class="absolute inset-0 bg-sky-500/20 opacity-0 group-hover:opacity-100 transition-opacity"
-                ></div>
-              </button>
-              }
-            </div>
+              <ng-template #defaultAvatar>
+                <div class="w-full h-full flex items-center justify-center text-primary/30 text-5xl bg-primary/5">
+                  <i class="fa-solid fa-user"></i>
+                </div>
+              </ng-template>
 
-            <div class="flex justify-end mt-8">
               <button
                 type="button"
-                (click)="closeAvatarPicker()"
-                class="cursor-pointer rounded-xl bg-white/5 border border-white/10 px-6 py-2.5 text-sm font-medium text-white/70 hover:bg-white/10 transition"
+                (click)="openAvatarPicker()"
+                class="cursor-pointer absolute inset-0 bg-black/50 opacity-0 hover:opacity-100 flex items-center justify-center transition-all duration-300 rounded-full text-white"
               >
-                Close
+                <i class="fa-solid fa-camera text-2xl mb-1"></i>
               </button>
             </div>
           </div>
         </div>
-        }
-      </div>
-    </div>
-  </div>
-  } @if (showChangePassModal) {
-  <div class="fixed inset-0 z-50 overflow-y-auto">
-    <div
-      class="absolute inset-0 bg-[#050814]/70 backdrop-blur-sm"
-      (click)="showChangePassModal = false"
-    ></div>
 
-    <div class="min-h-full flex items-center justify-center p-4">
-      <form
-        [formGroup]="changePassForm"
-        (ngSubmit)="submitChangePassword()"
-        class="relative w-full max-w-md flex flex-col rounded-[32px] border border-white/10 bg-gradient-to-b from-[#0b1020]/95 to-[#070A13]/95 shadow-[0_70px_200px_-120px_rgba(0,0,0,.95)] overflow-hidden"
-        (click)="$event.stopPropagation()"
-      >
-        <div
-          class="pointer-events-none absolute -top-24 -left-24 h-56 w-56 rounded-full bg-sky-500/15 blur-[70px]"
-        ></div>
-        <div
-          class="pointer-events-none absolute -bottom-24 -right-24 h-56 w-56 rounded-full bg-fuchsia-500/15 blur-[70px]"
-        ></div>
-
-        <div class="relative p-6 border-b border-white/10 flex items-start justify-between gap-4">
-          <div class="flex items-start gap-4">
-            <div
-              class="size-12 rounded-2xl bg-white/[0.06] border border-white/10 flex items-center justify-center"
-            >
-              <i class="fa-solid fa-lock text-white/85"></i>
+        <div class="rounded-2xl border border-border-main bg-surface p-5 shadow-inner">
+          <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-3 pl-1">Name</label>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <input
+                formControlName="fName"
+                [class.border-red-500]="f.fName.touched && f.fName.errors"
+                class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm"
+                placeholder="First Name"
+              />
+              @if (f.fName.touched && f.fName.errors) {
+              <p class="text-[10px] font-bold text-red-500 mt-2 pl-1"><i class="fa-solid fa-circle-exclamation mr-1"></i> Invalid first name.</p>
+              }
             </div>
             <div>
-              <div class="text-xl font-black tracking-tight">Security</div>
-              <div class="text-sm text-white/55 mt-1">
-                Update your password to keep your account safe.
-              </div>
+              <input
+                formControlName="lName"
+                [class.border-red-500]="f.lName.touched && f.lName.errors"
+                class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm"
+                placeholder="Last Name"
+              />
+              @if (f.lName.touched && f.lName.errors) {
+              <p class="text-[10px] font-bold text-red-500 mt-2 pl-1"><i class="fa-solid fa-circle-exclamation mr-1"></i> Invalid last name.</p>
+              }
             </div>
+          </div>
+        </div>
+
+        <div class="rounded-2xl border border-border-main bg-surface p-5 shadow-inner">
+          <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-3 pl-1">Email</label>
+          <input
+            formControlName="email"
+            [class.border-red-500]="f.email.touched && f.email.errors"
+            class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm"
+            placeholder="email@example.com"
+          />
+          @if (f.email.touched && f.email.errors) {
+          <div class="text-[10px] font-bold text-red-500 mt-2 pl-1">
+            @if (f.email.errors['email']) { <span><i class="fa-solid fa-circle-exclamation mr-1"></i> Please enter a valid email.</span> }
+          </div>
+          }
+        </div>
+
+        <div class="rounded-2xl border border-border-main bg-surface p-5 shadow-inner">
+          <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-3 pl-1">Phone</label>
+          <input
+            formControlName="phone"
+            [class.border-red-500]="f.phone.touched && f.phone.errors"
+            class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm placeholder:text-text-main/30 placeholder:font-medium"
+            placeholder="01#########"
+          />
+          @if (f.phone.touched && f.phone.errors) {
+          <div class="text-[10px] font-bold text-red-500 mt-2 pl-1">
+            @if (f.phone.errors['pattern']) { <span><i class="fa-solid fa-circle-exclamation mr-1"></i> Phone must be 11 digits starting with 0.</span> }
+          </div>
+          }
+        </div>
+
+        <div class="rounded-2xl border border-border-main bg-surface p-5 shadow-inner">
+          <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-3 pl-1">Address</label>
+          <input
+            formControlName="address"
+            [class.border-red-500]="f['address'].touched && f['address'].errors"
+            class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm placeholder:text-text-main/30 placeholder:font-medium"
+            placeholder="Enter your full home address..."
+          />
+          @if (f['address'].touched && f['address'].errors) {
+          <div class="text-[10px] font-bold text-red-500 mt-2 pl-1 animate-in fade-in slide-in-from-top-1">
+            @if (f['address'].errors?.['minlength']) { <span><i class="fa-solid fa-circle-exclamation mr-1"></i> Address is too short (min 10 chars).</span> }
+          </div>
+          }
+        </div>
+
+        @if (profile?.role === 'Parent') {
+        <div class="rounded-2xl border border-border-main bg-surface p-5 shadow-inner">
+          <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-3 pl-1">Job</label>
+          <input
+            formControlName="job"
+            [class.border-red-500]="f['job'].touched && f['job'].errors"
+            class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm placeholder:text-text-main/30 placeholder:font-medium"
+            placeholder="e.g. Engineer"
+          />
+          @if (f['job'].touched && f['job'].errors) {
+          <div class="text-[10px] font-bold text-red-500 mt-2 pl-1">
+            @if (f['job'].errors?.['minlength']) { <span><i class="fa-solid fa-circle-exclamation mr-1"></i> Job title must be at least 2 characters long.</span> }
+          </div>
+          }
+        </div>
+        } 
+        
+        @if (editError) {
+        <div class="rounded-2xl border border-red-500/30 bg-red-500/10 p-4 text-sm font-semibold text-red-500 shadow-sm">
+          <i class="fa-solid fa-triangle-exclamation mr-2"></i> {{ editError }}
+        </div>
+        }
+      </div>
+
+      <div class="p-6 sm:px-8 sm:py-5 border-t border-border-main bg-surface flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between z-10">
+        <div class="text-sm font-bold text-text-main/50">
+          @if (loadingEdit) { <i class="fa-solid fa-spinner fa-spin mr-2"></i>Saving... } 
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button
+            type="button"
+            class="rounded-xl cursor-pointer border border-border-main bg-surface px-5 py-2.5 text-sm font-bold text-text-main/70 hover:text-text-main hover:border-text-main/30 transition-all shadow-sm w-full sm:w-auto text-center"
+            (click)="showEditModal = false"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            [disabled]="loadingEdit || editForm.invalid"
+            class="rounded-xl cursor-pointer px-6 py-2.5 text-sm font-bold transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed bg-primary hover:bg-primary/90 text-white shadow-primary/20 enabled:hover:-translate-y-0.5 w-full sm:w-auto text-center"
+          >
+            Save Changes
+          </button>
+        </div>
+      </div>
+    </form>
+
+    @if (showAvatarPicker) {
+    <div class="fixed inset-0 z-[60] flex items-center justify-center p-4 backdrop-blur-md bg-black/50">
+      <div
+        class="w-full max-w-3xl rounded-3xl border border-border-main bg-surface p-6 sm:p-8 shadow-2xl animate-in zoom-in-95 duration-200"
+        (click)="$event.stopPropagation()"
+      >
+        <div class="flex items-center justify-between mb-8">
+          <div>
+            <h3 class="text-2xl font-black text-text-main tracking-tight">Choose an Avatar</h3>
+            <p class="text-sm font-medium text-text-main/50 mt-1">Select a character or upload your own.</p>
           </div>
           <button
             type="button"
-            class="cursor-pointer rounded-2xl border border-white/10 bg-white/[0.04] px-3 py-2 text-white/70 hover:bg-white/[0.08] transition"
-            (click)="showChangePassModal = false"
+            (click)="closeAvatarPicker()"
+            class="size-10 grid place-items-center rounded-xl border border-border-main bg-surface text-text-main/50 hover:text-text-main hover:bg-border-main/50 transition-all cursor-pointer"
           >
             <i class="fa-solid fa-xmark"></i>
           </button>
         </div>
 
-        <div class="p-6 space-y-5">
-          <div class="rounded-3xl border border-white/10 bg-white/[0.04] p-5">
-            <label class="block text-xs text-white/60 mb-2">Current Password</label>
-            <div class="relative">
-              <input [type]="showOldPass ? 'text' : 'password'" formControlName="oldPassword"
-              [class.border-red-500/50]=" changePassForm.get('oldPassword')?.touched &&
-              changePassForm.get('oldPassword')?.invalid " class="w-full rounded-2xl
-              placeholder:text-gray-500 placeholder:italic border border-white/10 bg-white/[0.05]
-              px-4 py-3 pr-12 text-white/90 outline-none transition focus:border-sky-400/60"
-              placeholder="••••••••" />
-              <button
-                type="button"
-                (click)="showOldPass = !showOldPass"
-                class="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors cursor-pointer"
-              >
-                <i class="fa-solid" [ngClass]="showOldPass ? 'fa-eye-slash' : 'fa-eye'"></i>
-              </button>
-            </div>
-            @if ( changePassForm.get('oldPassword')?.touched &&
-            changePassForm.get('oldPassword')?.errors?.['required'] ) {
-            <p class="text-[10px] text-red-400 mt-2 ml-1 flex items-center gap-1">
-              <i class="fa-solid fa-circle-exclamation"></i> Current password is required
+        <div class="flex items-center gap-5 p-5 rounded-2xl bg-surface border border-border-main mb-6 shadow-inner">
+          <input
+            #fileInputPicker
+            type="file"
+            (change)="onFileChange($event); closeAvatarPicker()"
+            class="hidden"
+            accept="image/*"
+          />
+          <button
+            type="button"
+            (click)="fileInputPicker.click()"
+            class="cursor-pointer size-16 rounded-2xl border-2 border-dashed border-primary/30 bg-primary/5 hover:border-primary hover:bg-primary/10 flex items-center justify-center text-primary transition-all group shrink-0"
+          >
+            <i class="fa-solid fa-cloud-arrow-up text-2xl group-hover:scale-110 transition-transform"></i>
+          </button>
+          <div>
+            <div class="text-base font-bold text-text-main">Upload Custom Image</div>
+            <div class="text-xs font-bold uppercase tracking-wider text-text-main/40 mt-1">PNG, JPG up to 2MB</div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-4 max-h-[350px] overflow-y-auto modal-scroll pr-2">
+          @for (a of avatars; track a.id) {
+          <button
+            type="button"
+            (click)="selectAvatar(a.src)"
+            class="cursor-pointer group relative aspect-square rounded-2xl border border-border-main bg-surface overflow-hidden hover:border-primary/50 transition-all hover:-translate-y-1 shadow-sm"
+          >
+            <img [src]="a.src" class="w-full h-full object-cover" [alt]="a.id" />
+            <div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          </button>
+          }
+        </div>
+
+        <div class="flex justify-end mt-8 border-t border-border-main pt-6">
+          <button
+            type="button"
+            (click)="closeAvatarPicker()"
+            class="cursor-pointer rounded-xl border border-border-main bg-surface px-6 py-2.5 text-sm font-bold text-text-main/70 hover:text-text-main transition-all shadow-sm"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+  } 
+  
+  @if (showChangePassModal) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div
+      class="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
+      (click)="showChangePassModal = false"
+    ></div>
+
+    <form
+      [formGroup]="changePassForm"
+      (ngSubmit)="submitChangePassword()"
+      class="relative w-full max-w-md flex flex-col rounded-3xl border border-border-main bg-surface shadow-2xl overflow-hidden z-10 animate-in fade-in zoom-in duration-200"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="pointer-events-none absolute -top-24 -left-24 h-56 w-56 rounded-full bg-primary/10 blur-[70px]"></div>
+      
+      <div class="relative p-6 sm:p-8 border-b border-border-main bg-surface flex items-start justify-between gap-4">
+        <div class="flex items-start gap-4">
+          <div class="size-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0 shadow-sm">
+            <i class="fa-solid fa-lock text-amber-500 text-lg"></i>
+          </div>
+          <div>
+            <div class="text-xl font-black tracking-tight text-text-main">Security</div>
+            <div class="text-sm font-medium text-text-main/60 mt-1">Update your password securely.</div>
+          </div>
+        </div>
+        <button
+          type="button"
+          class="size-9 grid place-items-center rounded-xl border border-border-main bg-surface text-text-main/50 hover:text-text-main hover:bg-border-main/50 transition-all cursor-pointer"
+          (click)="showChangePassModal = false"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="p-6 sm:p-8 space-y-5">
+        
+        <div class="rounded-2xl border border-border-main bg-surface p-5 shadow-inner">
+          <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-3 pl-1">Current Password</label>
+          <div class="relative">
+            <input 
+              [type]="showOldPass ? 'text' : 'password'" 
+              formControlName="oldPassword"
+              [class.border-red-500]="changePassForm.get('oldPassword')?.touched && changePassForm.get('oldPassword')?.invalid" 
+              class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 pr-12 text-sm font-semibold text-text-main outline-none transition-all focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 shadow-sm placeholder:text-text-main/30"
+              placeholder="••••••••" 
+            />
+            <button
+              type="button"
+              (click)="showOldPass = !showOldPass"
+              class="absolute right-4 top-1/2 -translate-y-1/2 text-text-main/40 hover:text-amber-500 transition-colors cursor-pointer"
+            >
+              <i class="fa-solid" [ngClass]="showOldPass ? 'fa-eye-slash' : 'fa-eye'"></i>
+            </button>
+          </div>
+          @if (changePassForm.get('oldPassword')?.touched && changePassForm.get('oldPassword')?.errors?.['required']) {
+          <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1">
+            <i class="fa-solid fa-circle-exclamation"></i> Current password is required
+          </p>
+          }
+        </div>
+
+        <div class="rounded-2xl border border-border-main bg-surface p-5 shadow-inner">
+          <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-3 pl-1">New Password</label>
+          <div class="relative">
+            <input 
+              [type]="showNewPass ? 'text' : 'password'" 
+              formControlName="newPassword"
+              [class.border-red-500]="changePassForm.get('newPassword')?.touched && changePassForm.get('newPassword')?.invalid" 
+              class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 pr-12 text-sm font-semibold text-text-main outline-none transition-all focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 shadow-sm placeholder:text-text-main/30"
+              placeholder="Create a strong password" 
+            />
+            <button
+              type="button"
+              (click)="showNewPass = !showNewPass"
+              class="absolute right-4 top-1/2 -translate-y-1/2 text-text-main/40 hover:text-amber-500 transition-colors cursor-pointer"
+            >
+              <i class="fa-solid" [ngClass]="showNewPass ? 'fa-eye-slash' : 'fa-eye'"></i>
+            </button>
+          </div>
+
+          @let newPass = changePassForm.get('newPassword'); 
+          @if (newPass?.touched && newPass?.invalid) {
+          <div class="mt-3 space-y-2 px-1 animate-in fade-in slide-in-from-top-1">
+            @if (newPass?.errors?.['required']) {
+            <p class="text-[10px] font-bold text-red-500 flex items-center gap-1">
+              <i class="fa-solid fa-circle-exclamation"></i> New password is required
             </p>
-            }
-          </div>
-
-          <div class="rounded-3xl border border-white/10 bg-white/[0.04] p-5">
-            <label class="block text-xs text-white/60 mb-2">New Password</label>
-            <div class="relative">
-              <input [type]="showNewPass ? 'text' : 'password'" formControlName="newPassword"
-              [class.border-red-500/50]=" changePassForm.get('newPassword')?.touched &&
-              changePassForm.get('newPassword')?.invalid " class="w-full rounded-2xl
-              placeholder:text-gray-500 placeholder:italic border border-white/10 bg-white/[0.05]
-              px-4 py-3 pr-12 text-white/90 outline-none transition focus:border-fuchsia-400/60"
-              placeholder="Create a strong password" />
-              <button
-                type="button"
-                (click)="showNewPass = !showNewPass"
-                class="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors cursor-pointer"
-              >
-                <i class="fa-solid" [ngClass]="showNewPass ? 'fa-eye-slash' : 'fa-eye'"></i>
-              </button>
-            </div>
-
-            @let newPass = changePassForm.get('newPassword'); @if (newPass?.touched &&
-            newPass?.invalid) {
-            <div class="mt-3 space-y-2 px-1 animate-in fade-in slide-in-from-top-1">
-              @if (newPass?.errors?.['required']) {
-              <p class="text-[10px] text-red-400 flex items-center gap-1">
-                <i class="fa-solid fa-circle-exclamation"></i> New password is required
-              </p>
-              } @if (newPass?.errors?.['minlength']) {
-              <p class="text-[10px] text-amber-400 flex items-center gap-1">
-                <i class="fa-solid fa-circle-info"></i> Minimum 8 characters required
-              </p>
-              } @if (newPass?.errors?.['pattern']) {
-              <div class="rounded-xl bg-white/[0.03] border border-white/5 p-3 space-y-2">
-                <p class="text-[10px] text-sky-400 font-semibold mb-1">Password must contain:</p>
-                <ul class="grid grid-cols-2 gap-x-2 gap-y-1">
-                  <li class="text-[9px] text-white/50 flex items-center gap-1">
-                    <i class="fa-solid fa-check text-[7px]"></i> Upper & Lowercase
-                  </li>
-                  <li class="text-[9px] text-white/50 flex items-center gap-1">
-                    <i class="fa-solid fa-check text-[7px]"></i> At least one Number
-                  </li>
-                  <li class="text-[9px] text-white/50 flex items-center gap-1">
-                    <i class="fa-solid fa-check text-[7px]"></i> Special character (@$!%*?)
-                  </li>
-                </ul>
-              </div>
-              }
+            } @if (newPass?.errors?.['minlength']) {
+            <p class="text-[10px] font-bold text-amber-500 flex items-center gap-1">
+              <i class="fa-solid fa-circle-info"></i> Minimum 8 characters required
+            </p>
+            } @if (newPass?.errors?.['pattern']) {
+            <div class="rounded-xl bg-surface border border-border-main p-3 space-y-2 mt-2 shadow-sm">
+              <p class="text-[10px] text-text-main font-bold uppercase tracking-wider mb-1">Password must contain:</p>
+              <ul class="grid grid-cols-2 gap-x-2 gap-y-1.5">
+                <li class="text-[10px] font-medium text-text-main/60 flex items-center gap-1.5">
+                  <i class="fa-solid fa-check text-[8px] text-amber-500"></i> Upper & Lowercase
+                </li>
+                <li class="text-[10px] font-medium text-text-main/60 flex items-center gap-1.5">
+                  <i class="fa-solid fa-check text-[8px] text-amber-500"></i> At least one Number
+                </li>
+                <li class="text-[10px] font-medium text-text-main/60 flex items-center gap-1.5 col-span-2">
+                  <i class="fa-solid fa-check text-[8px] text-amber-500"></i> Special character (@$!%*?)
+                </li>
+              </ul>
             </div>
             }
-          </div>
-
-          @if (changePassError) {
-          <div class="rounded-2xl border border-red-500/25 bg-red-500/10 p-4 text-xs text-red-200">
-            <i class="fa-solid fa-triangle-exclamation mr-2"></i>
-            {{ changePassError }}
           </div>
           }
         </div>
 
-        <div class="p-6 border-t border-white/10 flex items-center justify-end gap-3">
-          <button
-            type="button"
-            class="cursor-pointer rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-2.5 text-sm text-white/80 hover:bg-white/[0.08] transition"
-            (click)="showChangePassModal = false"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            [disabled]="loadingChangePass || changePassForm.invalid"
-            class="cursor-pointer rounded-2xl px-6 py-2.5 text-sm font-bold bg-gradient-to-r from-sky-600 to-fuchsia-600 hover:from-sky-500 hover:to-fuchsia-500 disabled:opacity-50 disabled:cursor-not-allowed transition shadow-lg shadow-sky-500/10"
-          >
-            {{ loadingChangePass ? 'Updating...' : 'Update Password' }}
-          </button>
+        @if (changePassError) {
+        <div class="rounded-2xl border border-red-500/30 bg-red-500/10 p-4 text-xs font-bold text-red-500 shadow-sm flex items-center gap-2">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          {{ changePassError }}
         </div>
-      </form>
-    </div>
+        }
+      </div>
+
+      <div class="p-6 sm:px-8 sm:py-5 border-t border-border-main bg-surface flex items-center justify-end gap-3 z-10">
+        <button
+          type="button"
+          class="rounded-xl cursor-pointer border border-border-main bg-surface px-5 py-2.5 text-sm font-bold text-text-main/70 hover:text-text-main hover:border-text-main/30 transition-all shadow-sm"
+          (click)="showChangePassModal = false"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          [disabled]="loadingChangePass || changePassForm.invalid"
+          class="rounded-xl cursor-pointer px-6 py-2.5 text-sm font-bold transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed bg-amber-500 hover:bg-amber-600 text-white shadow-amber-500/20 enabled:hover:-translate-y-0.5"
+        >
+          @if(loadingChangePass){ <i class="fa-solid fa-spinner fa-spin mr-2"></i>Updating... } @else { Update Password }
+        </button>
+      </div>
+    </form>
   </div>
   }
 </section>

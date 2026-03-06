@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'; // 1. Import Forms
 import { TeacherServiceService } from '../../services/teacher-service.service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -17,10 +17,12 @@ import { IEditedLesson } from '../../interfaces/IEditLessonResponse';
 export class GetTeacherLessonsComponent implements OnInit {
 
   private readonly teacherService = inject(TeacherServiceService);
+  private readonly route = inject(ActivatedRoute);
   private readonly fb = inject(FormBuilder);
 
   lessons: ILesson[] = [];
   isLoading = true;
+  subjectId: string | null = null;
 
   // --- EDIT MODAL STATE ---
   isEditModalOpen = false;
@@ -29,6 +31,7 @@ export class GetTeacherLessonsComponent implements OnInit {
   editForm!: FormGroup;
 
   ngOnInit(): void {
+    this.subjectId = this.route.snapshot.paramMap.get('sid');
     this.getLessons();
     // Initialize the form
     this.editForm = this.fb.group({
@@ -38,8 +41,12 @@ export class GetTeacherLessonsComponent implements OnInit {
   }
 
   getLessons() {
+    if (!this.subjectId) {
+      this.isLoading = false;
+      return;
+    }
     this.isLoading = true;
-    this.teacherService.getLessons().subscribe({
+    this.teacherService.getLessons(this.subjectId).subscribe({
       next: (response) => {
         this.lessons = response.result || [];
         this.isLoading = false;

@@ -5,7 +5,6 @@ import { StudentServiceService } from '../../services/student-service.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { IStudSubDetailsResponse, StudentSubject } from '../../interfaces/IStudSubDetailsResponse';
 import { IEnrollSubResponse } from '../../interfaces/IEnrollSubResponse';
-import { IViewEnrolledSub } from '../../interfaces/IViewEnrolledSub';
 
 @Component({
   selector: 'app-subject-details',
@@ -22,12 +21,10 @@ export class SubjectDetailsComponent implements OnInit {
   subjectId!: string
   subject: StudentSubject | null = null; // Changed to null for safety
   isLoading = true;
-  isEnrolled = false;
 
   ngOnInit(): void {
     this.subjectId = this.route.snapshot.paramMap.get('id') || '';
     this.viewSubject(this.subjectId);
-    this.checkEnrollmentStatus();
   }
 
   viewSubject(subjectId: string) {
@@ -45,14 +42,14 @@ export class SubjectDetailsComponent implements OnInit {
       }
     });
   }
-
+  
 
   // Enroll in subject
 
 
   enrollSub(id: string) {
     this.studentService.enrollSubject(id).subscribe({
-      next: (res: IEnrollSubResponse) => {
+      next: (res : IEnrollSubResponse) => {
         console.log(res.message, "🥳🥳🥳🥳🥳");
         this.router.navigate(['/student/my-subjects']);
         alert(res.message);
@@ -60,22 +57,6 @@ export class SubjectDetailsComponent implements OnInit {
       error: (err: HttpErrorResponse) => {
         console.log(err.error.message || 'Error enrolling in subject');
         alert(err.error.message || 'Error enrolling in subject');
-      }
-    });
-  }
-  // get isEnrolled(): boolean {
-
-  // }
-
-  checkEnrollmentStatus() {
-    this.studentService.viewEnrolledSubjects().subscribe({
-      next: (res: IViewEnrolledSub) => {
-        const enrolledSubjects = res.result;
-
-        this.isEnrolled = enrolledSubjects.some(sub => sub.subjectId === this.subjectId);
-      },
-      error: (err) => {
-        console.error('Error fetching enrolled subjects:', err);
       }
     });
   }
