@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../core/auth/services/auth.service';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ViewProfileResponse, ProfileData } from '../../core/auth/interfaces/IProfileResponse';
@@ -14,6 +15,7 @@ import { RouterLink } from '@angular/router';
 export class ProfileComponent {
   private readonly authService = inject(AuthService);
   private readonly fb = inject(FormBuilder);
+  private toastr = inject(ToastrService);
 
   loadingProfile = true;
   loadingEdit = false;
@@ -174,6 +176,7 @@ export class ProfileComponent {
 
   submitEdit() {
     if (this.editForm.invalid) {
+      this.toastr.warning('Please fill in all required fields correctly.', 'Warning');
       console.log('invalidddddddddddd');
       return;
     }
@@ -200,6 +203,7 @@ export class ProfileComponent {
       next: (res) => {
         console.log('editttt', res);
 
+        this.toastr.success('Profile updated successfully.', 'Success');
         this.showEditModal = false;
         this.authService.refreshProfile();
         this.imagePreview = null;
@@ -216,6 +220,7 @@ export class ProfileComponent {
         } else {
           this.editError = err?.error?.title || 'Failed to update profile';
         }
+        this.toastr.error(this.editError, 'Error');
         this.loadingEdit = false;
       },
     });
@@ -230,7 +235,10 @@ export class ProfileComponent {
   }
 
   submitChangePassword() {
-    if (this.changePassForm.invalid) return;
+    if (this.changePassForm.invalid) {
+      this.toastr.warning('Please fill in all required fields correctly.', 'Warning');
+      return;
+    }
 
     this.loadingChangePass = true;
     this.changePassError = '';
@@ -243,12 +251,13 @@ export class ProfileComponent {
     this.authService.changePassword(payload).subscribe({
       next: () => {
         console.log('save change');
-
+        this.toastr.success('Password changed successfully.', 'Success');
         this.showChangePassModal = false;
         this.loadingChangePass = false;
       },
       error: (err) => {
         this.changePassError = err?.error?.message || 'Failed to change password';
+        this.toastr.error(this.changePassError, 'Error');
         this.loadingChangePass = false;
       },
     });

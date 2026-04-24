@@ -16,6 +16,7 @@ export interface ITeacherLessonContentResult {
   title: string;
   videosCount: number;
   videos: ITeacherVideo[];
+  levels?: any;
 }
 
 export interface ITeacherLessonContentResponse {

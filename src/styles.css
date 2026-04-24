@@ -6,6 +6,7 @@
 @import './styles/variables.css';
 @import './styles/base.css';
 @import './styles/themes.css';
+@import 'ngx-toastr/toastr';
 
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -35,5 +36,5 @@
 }
 
 body {
-  background-color: #101131;
+  background-color: var(--bg-main);
 }

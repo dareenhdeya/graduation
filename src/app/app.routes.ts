@@ -34,6 +34,12 @@ import { AddDictionaryComponent } from './features/Teacher/teacher-actions/add-d
 import { TeacherSubjectDashboardComponent } from './features/Teacher/teacher-actions/teacher-subject-dashboard/teacher-subject-dashboard.component';
 import { ManageLessonComponent } from './features/Teacher/teacher-actions/manage-lesson/manage-lesson.component';
 
+import { CreateQuizComponent } from './features/Teacher/teacher-actions/quizzes/create-quiz.component';
+import { EditQuizComponent } from './features/Teacher/teacher-actions/quizzes/edit-quiz/edit-quiz.component';
+import { QuizzesListComponent } from './features/Teacher/teacher-actions/teacher-subject-dashboard/quizzes-list/quizzes-list.component';
+import { ViewQuizComponent } from './features/Teacher/teacher-actions/quizzes/view-quiz/view-quiz.component';
+import { SolveQuizComponent } from './features/Student/student-actions/quizzes/solve-quiz/solve-quiz.component';
+
 export const routes: Routes = [
   {
     path: '',
@@ -94,7 +100,14 @@ export const routes: Routes = [
           { path: 'subject/:sid/add-lesson', component: AddLessonComponent, title: 'Add Lesson' },
           { path: 'subject/:sid/lesson/:lid/manage', component: ManageLessonComponent, title: 'Manage Lesson' },
           { path: 'subject/:sid/students', component: GetTeacherStudentsComponent, title: 'My Students' },
-          { path: 'subject/:sid/add-dictionary', component: AddDictionaryComponent, title: 'Add Dictionary' }
+          { path: 'subject/:sid/add-dictionary', component: AddDictionaryComponent, title: 'Add Dictionary' },
+          { path: 'subject/:sid/quizzes', component: QuizzesListComponent, title: 'Subject Quizzes' },
+          { path: 'subject/:sid/quizzes/create', component: CreateQuizComponent, title: 'Create Quiz' },
+          { path: 'subject/:sid/quizzes/view/:qid', component: ViewQuizComponent, title: 'View Quiz' },
+          { path: 'subject/:sid/quizzes/edit/:qid', component: EditQuizComponent, title: 'Edit Quiz' },
+          { path: 'subject/:sid/lesson/:lid/exercise', component: CreateQuizComponent, title: 'Add Exercise to Lesson' },
+          { path: 'subject/:sid/lesson/:lid/exercise/view/:qid', component: ViewQuizComponent, title: 'View Exercise' },
+          { path: 'subject/:sid/lesson/:lid/exercise/edit/:qid', component: EditQuizComponent, title: 'Edit Exercise' },
         ],
       },
       // --- STUDENT ROUTES ---
@@ -122,6 +135,16 @@ export const routes: Routes = [
             path: 'my-subjects',
             component: ViewEnrolledSubjectsComponent,
             title: 'My Enrolled Subjects',
+          },
+          { 
+            path: 'subject/:sid/quizzes/:qid/solve', 
+            component: SolveQuizComponent, 
+            title: 'Solve Quiz' 
+          },
+          { 
+            path: 'subject/:sid/lesson/:lid/exercise/:qid/solve', 
+            component: SolveQuizComponent, 
+            title: 'Solve Exercise' 
           },
         ],
       },

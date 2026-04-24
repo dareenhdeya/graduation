@@ -26,8 +26,8 @@ export class TeacherServiceService extends baseHttp {
   addLesson(lessonData: FormData) {
     return this.post(APP_APIs.teacherAddLesson, lessonData);
   }
-  editLesson(lessonId: string, lessonData: IEditedLesson) {
-    return this.patch<IEditLessonResponse>(APP_APIs.teacherEditLesson(lessonId), lessonData);
+  editLesson(lessonData: IEditedLesson) {
+    return this.patch<IEditLessonResponse>(APP_APIs.teacherEditLesson, lessonData);
   }
   removeLesson(lessonId: string) {
     return this.delete(APP_APIs.teacherRemoveLesson(lessonId));
@@ -41,6 +41,10 @@ export class TeacherServiceService extends baseHttp {
     return this.post(APP_APIs.teacherUploadVideo, formData);
   }
 
+  deleteVideo(videoId: string) {
+    return this.delete(APP_APIs.teacherRemoveVideo(videoId));
+  }
+
   addDictionary(subjectId: string, word: string, file: File) {
     const formData = new FormData();
 
@@ -49,6 +53,34 @@ export class TeacherServiceService extends baseHttp {
     formData.append('files', file);
 
     return this.post<IAddToDictionaryResponse>(APP_APIs.teacherAddWordAttachment(subjectId), formData);
+  }
+
+  createExercise(formData: FormData) {
+    return this.post(APP_APIs.teacherCreateExercise, formData);
+  }
+
+  getQuizzes(subjectId: string) {
+    return this.get<any>(APP_APIs.teacherGetQuizzes(subjectId), {});
+  }
+
+  viewQuiz(sid: string, quizId: string, lid: string | null = null) {
+    if (lid) {
+      return this.get<any>(APP_APIs.teacherViewLessonQuiz(sid, lid, quizId), {});
+    }
+    return this.get<any>(APP_APIs.teacherViewQuiz(sid, quizId), {});
+  }
+
+  editQuiz(formData: FormData) {
+    return this.patch<any>(APP_APIs.teacherEditQuiz, formData);
+  }
+
+  listPrerequisites(sid: string, perquisiteType: number) {
+    return this.get<any>(APP_APIs.teacherListPrerequisites, {}, {
+      headers: {
+        sid: sid,
+        perquisiteType: perquisiteType.toString(),
+      },
+    });
   }
 
   // // Converts Array to FormData

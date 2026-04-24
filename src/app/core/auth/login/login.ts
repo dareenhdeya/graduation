@@ -4,6 +4,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -13,6 +14,7 @@ import { Router, RouterLink } from '@angular/router';
 })
 export class Login implements OnInit {
   private readonly authService = inject(AuthService);
+  private readonly toastrService = inject(ToastrService);
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
   private readonly cookieService = inject(CookieService);
@@ -56,9 +58,11 @@ export class Login implements OnInit {
           this.authService.getProfile().subscribe({
             next: (res) => {
               const role = res.data.role;
-
+              this.toastrService.success('Login successful');
               this.authService.setRole(role);
-              this.authService.redirectByRole(role);
+              setTimeout(() => {
+                this.authService.redirectByRole(role);
+              }, 1000);
 
               console.log('login res:', res);
               this.isLoading = false;
@@ -80,10 +84,13 @@ export class Login implements OnInit {
           } else {
             this.errMsg = rawMsg;
           }
+          this.toastrService.error(this.errMsg, 'Error');
         },
       });
     } else {
+      this.toastrService.warning('Please fill in all required fields correctly.', 'Warning');
       this.loginForm.markAllAsTouched();
     }
   }
+
 }

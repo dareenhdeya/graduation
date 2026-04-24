@@ -6,6 +6,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { IAproveResponse, IAproveTeacher, IAdminSubject } from '../../../interfaces/IAdminSubject.interface';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common'; // Important for @if and forms
+import { ToastrService } from 'ngx-toastr';
 
 type Role = 'Parent' | 'Teacher' | 'Student';
 
@@ -19,6 +20,7 @@ type Role = 'Parent' | 'Teacher' | 'Student';
 export class PendingTeachersComponent implements OnInit {
   private readonly adminService = inject(AdminServiceService);
   private readonly router = inject(Router);
+  private toastr = inject(ToastrService);
 
   private roleToId(role: string | null | undefined): 1 | 2 | 3 {
     switch (role) {
@@ -140,6 +142,7 @@ export class PendingTeachersComponent implements OnInit {
     console.log(payload);
     this.adminService.approveTeacher(payload).subscribe({
       next: (response: IAproveResponse) => {
+        this.toastr.success('Teacher activated successfully.', 'Success');
         console.log(response.message);
         this.activating = false;
         this.closeModal();
@@ -148,7 +151,7 @@ export class PendingTeachersComponent implements OnInit {
       error: (err: HttpErrorResponse) => {
         console.log(err.message);
         this.activating = false;
-        alert('Failed to activate teacher: ' + err.message);
+        this.toastr.error(err.message || 'Failed to activate teacher.', 'Error');
       }
     });
   }

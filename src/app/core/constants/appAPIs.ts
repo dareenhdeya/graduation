@@ -35,12 +35,18 @@ export const APP_APIs = {
   teacherGetStudents: (sid: string) => `${environment.apiUrl}Teacher/get-students/${sid}`,
   teacherGetLessons: (sid: string) => `${environment.apiUrl}Teacher/get-lessons/${sid}`,
   teacherAddLesson: `${environment.apiUrl}Teacher/Add-lesson`,
-  teacherEditLesson: (id: string) => `${environment.apiUrl}Teacher/Edit-Lesson/${id}`,
+  teacherEditLesson: `${environment.apiUrl}Teacher/Edit-Lesson`,
   teacherRemoveLesson: (id: string) => `${environment.apiUrl}Teacher/Remove-Lesson/${id}`,
   teacherViewLesson: (sid: string, lid: string) => `${environment.apiUrl}Teacher/View-Lesson/${sid}/${lid}`,
   teacherUploadVideo: `${environment.apiUrl}Teacher/Upload-Video`,
+  teacherRemoveVideo: (vid: string) => `${environment.apiUrl}Teacher/Remove-Video/${vid}`,
   teacherAddWordAttachment: (sid: string) => `${environment.apiUrl}Teacher/Add-words-to-Dictionary/${sid}`,
-
+  teacherCreateExercise: `${environment.apiUrl}Teacher/Create-Exercise`,
+  teacherGetQuizzes: (sid: string) => `${environment.apiUrl}Teacher/List-Quizes/${sid}`,
+  teacherViewQuiz: (sid: string, qid: string) => `${environment.apiUrl}Teacher/subjects/${sid}/levels/${qid}`,
+  teacherViewLessonQuiz: (sid: string, lid: string, qid: string) => `${environment.apiUrl}Teacher/subjects/${sid}/lessons/${lid}/levels/${qid}`,
+  teacherEditQuiz: `${environment.apiUrl}Teacher/Edit-Level`,
+  teacherListPrerequisites: `${environment.apiUrl}Teacher/list-Perquisites`,
   //* Student
   studentGetAllSubjects: `${environment.apiUrl}Student/View-Subjects`,
   studentGetSubjectDetails: (id: string) => `${environment.apiUrl}Student/View-Subject/${id}`,
@@ -50,6 +56,9 @@ export const APP_APIs = {
   studentEnrollSubject: (id: string) => `${environment.apiUrl}Student/Enroll-subject/${id}`,
   studentViewEnrolledSubjects: `${environment.apiUrl}Student/View-Enrolled-Subjects`,
   studentCompleteLesseon: `${environment.apiUrl}Student/Complete-lesson`,
+  studentStartQuiz: `${environment.apiUrl}Student/Start-Quiz`,
+  studentViewExercise: `${environment.apiUrl}Student/View-Exercise`,
+  studentSubmitAnswers: `${environment.apiUrl}Student/Submit-Answers`,
 
 
 

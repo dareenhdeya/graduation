@@ -3,6 +3,7 @@ import { AdminServiceService } from '../../../services/admin-service.service';
 import { Router, RouterLink } from '@angular/router';
 import { IAdminSubject } from '../../../interfaces/IAdminSubject.interface';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-subject-crud',
@@ -13,6 +14,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 export class SubjectCrudComponent implements OnInit {
   private admin = inject(AdminServiceService);
   private router = inject(Router);
+  private toastr = inject(ToastrService);
 
   filterType = new FormControl<'all' | 'deaf' | 'normal'>('all', { nonNullable: true });
 
@@ -75,6 +77,7 @@ export class SubjectCrudComponent implements OnInit {
   add() {
     const name = this.subjectName.value.trim();
     if (!name) {
+      this.toastr.warning('Subject name is required', 'Warning');
       this.addError = 'Subject name is required';
       return;
     }
@@ -84,6 +87,7 @@ export class SubjectCrudComponent implements OnInit {
 
     this.admin.addSubject({ subjectName: name, deaf_mute: this.deafMute.value }).subscribe({
       next: () => {
+        this.toastr.success('Subject added successfully.', 'Success');
         this.openAdd = false;
         this.subjectName.setValue('');
         this.deafMute.setValue(false);
@@ -95,6 +99,7 @@ export class SubjectCrudComponent implements OnInit {
         console.log('add subjects: ', err);
 
         this.addError = err?.title || 'Failed to add subject';
+        this.toastr.error(this.addError, 'Error');
       },
     });
   }

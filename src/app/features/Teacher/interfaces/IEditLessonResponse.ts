@@ -5,4 +5,8 @@ export interface IEditLessonResponse {
 export interface IEditedLesson {
 	title: string;
 	description: string;
+	subjectId: string;
+	lid: string;
+	perquisiteType?: number;
+	perquisite?: string | null;
 }

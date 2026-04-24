@@ -37,36 +37,58 @@
 
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-5">
           @for (lesson of lessons; track lesson.id; let i = $index) {
-            <a [routerLink]="['/student/subject', subjectId, 'lesson', lesson.id]" class="block">
-              <div
-                class="flex items-center justify-center rounded-2xl size-24 md:size-28 font-bold text-lg md:text-xl text-white cursor-pointer transition-transform duration-300 hover:scale-110 shadow-sm"
-                [ngClass]="[
-                  i % 10 === 0
-                    ? 'bg-amber-400 hover:bg-amber-500'
-                    : i % 10 === 1
-                      ? 'bg-red-400 hover:bg-red-500'
-                      : i % 10 === 2
-                        ? 'bg-green-400 hover:bg-green-500'
-                        : i % 10 === 3
-                          ? 'bg-blue-400 hover:bg-blue-500'
-                          : i % 10 === 4
-                            ? 'bg-pink-400 hover:bg-pink-500'
-                            : i % 10 === 5
-                              ? 'bg-purple-400 hover:bg-purple-500'
-                              : i % 10 === 6
-                                ? 'bg-indigo-400 hover:bg-indigo-500'
-                                : i % 10 === 7
-                                  ? 'bg-gray-400 hover:bg-gray-500'
-                                  : i % 10 === 8
-                                    ? 'bg-emerald-400 hover:bg-emerald-500'
-                                    : 'bg-orange-400 hover:bg-orange-500',
-                ]"
-              >
-                <span class="px-2 text-center line-clamp-2">
-                  {{ lesson.title }}
-                </span>
+
+            <!-- LOCKED lesson -->
+            @if (lesson.locked) {
+              <div class="block" title="Complete the previous lesson to unlock this one">
+                <div
+                  class="relative flex flex-col items-center justify-center rounded-2xl size-24 md:size-28 font-bold text-base md:text-lg text-white/60 cursor-not-allowed shadow-sm bg-gray-300 dark:bg-gray-700 opacity-70 select-none"
+                >
+                  <!-- lock overlay -->
+                  <div class="absolute inset-0 rounded-2xl bg-black/20 flex flex-col items-center justify-center gap-1">
+                    <i class="fa-solid fa-lock text-2xl text-white/80 drop-shadow"></i>
+                    <span class="px-2 text-center line-clamp-2 text-xs text-white/80 font-semibold">
+                      {{ lesson.title }}
+                    </span>
+                  </div>
+                </div>
               </div>
-            </a>
+            }
+
+            <!-- UNLOCKED lesson -->
+            @else {
+              <a [routerLink]="['/student/subject', subjectId, 'lesson', lesson.id]" class="block">
+                <div
+                  class="flex items-center justify-center rounded-2xl size-24 md:size-28 font-bold text-lg md:text-xl text-white cursor-pointer transition-transform duration-300 hover:scale-110 shadow-sm"
+                  [ngClass]="[
+                    i % 10 === 0
+                      ? 'bg-amber-400 hover:bg-amber-500'
+                      : i % 10 === 1
+                        ? 'bg-red-400 hover:bg-red-500'
+                        : i % 10 === 2
+                          ? 'bg-green-400 hover:bg-green-500'
+                          : i % 10 === 3
+                            ? 'bg-blue-400 hover:bg-blue-500'
+                            : i % 10 === 4
+                              ? 'bg-pink-400 hover:bg-pink-500'
+                              : i % 10 === 5
+                                ? 'bg-purple-400 hover:bg-purple-500'
+                                : i % 10 === 6
+                                  ? 'bg-indigo-400 hover:bg-indigo-500'
+                                  : i % 10 === 7
+                                    ? 'bg-gray-400 hover:bg-gray-500'
+                                    : i % 10 === 8
+                                      ? 'bg-emerald-400 hover:bg-emerald-500'
+                                      : 'bg-orange-400 hover:bg-orange-500',
+                  ]"
+                >
+                  <span class="px-2 text-center line-clamp-2">
+                    {{ lesson.title }}
+                  </span>
+                </div>
+              </a>
+            }
+
           }
         </div>
       </div>

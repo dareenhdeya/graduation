@@ -5,6 +5,7 @@ import { TeacherServiceService } from '../../services/teacher-service.service';
 import { forkJoin } from 'rxjs'; // Import for parallel requests
 import { IAddToDictionaryResponse } from '../../interfaces/IAddToDictionaryResponse';
 import { ActivatedRoute } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -19,6 +20,7 @@ export class AddDictionaryComponent implements OnInit {
   private readonly teacherS = inject(TeacherServiceService);
   private readonly fb = inject(FormBuilder);
   private readonly route = inject(ActivatedRoute);
+  private toastr = inject(ToastrService);
 
   dictionaryForm!: FormGroup;
   isLoading = false;
@@ -89,6 +91,7 @@ export class AddDictionaryComponent implements OnInit {
       return;
     }
     if (this.dictionaryForm.invalid) {
+      this.toastr.warning('Please fill in all required fields.', 'Warning');
       this.dictionaryForm.markAllAsTouched();
       return;
     }
@@ -106,12 +109,14 @@ export class AddDictionaryComponent implements OnInit {
       this.teacherS.addDictionary(this.subjectId, word, file).subscribe({
         next: (response: IAddToDictionaryResponse) => (
           console.log('Success:', response),
+          this.toastr.success('Item added to dictionary.', 'Success'),
           this.isLoading = false,
           this.dictionaryForm.reset(),
           this.previews = [null] // Reset preview for single item
         ),
         error: (err) => {
           console.error('Error:', err);
+          this.toastr.error('Failed to add item.', 'Error');
           this.isLoading = false;
         }
       });
@@ -129,12 +134,14 @@ export class AddDictionaryComponent implements OnInit {
       forkJoin(requests).subscribe({
         next: (response: IAddToDictionaryResponse[]) => (
           console.log('All Success:', response),
+          this.toastr.success('Items added to dictionary.', 'Success'),
           this.isLoading = false,
           this.dictionaryForm.reset(),
           this.previews = [null] // Reset previews after batch submission
         ),
         error: (err) => {
           console.error('Error in batch:', err);
+          this.toastr.error('Failed to add items.', 'Error');
           this.isLoading = false;
         }
 

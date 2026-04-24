@@ -1,14 +1,15 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TeacherServiceService } from '../../services/teacher-service.service';
 import { ITeacherLessonContentResult, ITeacherVideo } from '../../interfaces/ILessonContent';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-manage-lesson',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './manage-lesson.component.html',
   styleUrl: './manage-lesson.component.css',
 })
@@ -16,6 +17,7 @@ export class ManageLessonComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly teacherService = inject(TeacherServiceService);
   private readonly fb = inject(FormBuilder);
+  private toastr = inject(ToastrService);
 
   subjectId: string | null = null;
   lessonId: string | null = null;
@@ -25,15 +27,50 @@ export class ManageLessonComponent implements OnInit {
   lesson: ITeacherLessonContentResult | null = null;
   videos: ITeacherVideo[] = [];
 
+  // Upload form
   uploadForm: FormGroup = this.fb.group({
     title: ['', [Validators.required, Validators.minLength(3)]],
     description: ['', [Validators.required, Validators.minLength(3)]],
     videoFile: [null, [Validators.required]],
   });
-
   selectedFile: File | null = null;
   mediaPreview: string | ArrayBuffer | null = null;
   isImage = false;
+
+  // Edit video modal
+  isEditVideoModalOpen = false;
+  isEditingVideo = false;
+  currentVideo: ITeacherVideo | null = null;
+  editVideoForm: FormGroup = this.fb.group({
+    title: ['', [Validators.required, Validators.minLength(3)]],
+    description: ['', [Validators.required, Validators.minLength(3)]],
+  });
+
+  // Delete video confirm
+  isDeleteVideoModalOpen = false;
+  videoToDelete: ITeacherVideo | null = null;
+  isDeletingVideo = false;
+
+  // Toast
+  toastMessage = '';
+  toastType: 'success' | 'error' = 'success';
+  toastVisible = false;
+  private toastTimer: any;
+
+  get hasExercise(): boolean {
+    const levelData = this.lesson?.levels || (this.lesson as any)?.level;
+    if (Array.isArray(levelData)) return levelData.length > 0;
+    return !!levelData;
+  }
+
+  get exerciseId(): string {
+    const levelData = this.lesson?.levels || (this.lesson as any)?.level;
+    if (!levelData) return '';
+    if (Array.isArray(levelData)) {
+       return levelData[0]?.id || levelData[0]?.ID || levelData[0]?.Id || '';
+    }
+    return levelData.id || levelData.ID || levelData.Id || '';
+  }
 
   ngOnInit(): void {
     this.subjectId = this.route.snapshot.paramMap.get('sid');
@@ -54,9 +91,7 @@ export class ManageLessonComponent implements OnInit {
         this.videos = res.result?.videos || [];
         this.isLoading = false;
       },
-      error: () => {
-        this.isLoading = false;
-      },
+      error: () => { this.isLoading = false; },
     });
   }
 
@@ -66,13 +101,10 @@ export class ManageLessonComponent implements OnInit {
       this.selectedFile = input.files[0];
       this.uploadForm.patchValue({ videoFile: this.selectedFile });
       this.uploadForm.get('videoFile')?.markAsTouched();
-
       if (this.selectedFile.type.startsWith('image/')) {
         this.isImage = true;
         const reader = new FileReader();
-        reader.onload = () => {
-          this.mediaPreview = reader.result;
-        };
+        reader.onload = () => { this.mediaPreview = reader.result; };
         reader.readAsDataURL(this.selectedFile);
       } else {
         this.isImage = false;
@@ -83,12 +115,11 @@ export class ManageLessonComponent implements OnInit {
 
   uploadVideo(): void {
     if (this.uploadForm.invalid || !this.subjectId || !this.lessonId || !this.selectedFile) {
+      this.toastr.warning('Please fill in all required fields and select a video.', 'Warning');
       this.uploadForm.markAllAsTouched();
       return;
     }
-
     this.isUploading = true;
-
     const formData = new FormData();
     formData.append('LId', this.lessonId);
     formData.append('subjectID', this.subjectId);
@@ -103,20 +134,82 @@ export class ManageLessonComponent implements OnInit {
         this.selectedFile = null;
         this.mediaPreview = null;
         this.loadLesson();
+        this.toastr.success('Video uploaded successfully!', 'Success');
       },
       error: (err) => {
         console.error(err);
         this.isUploading = false;
+        this.toastr.error('Failed to upload video.', 'Error');
       },
     });
   }
 
-  editVideo(_video: ITeacherVideo) {
-    // Placeholder for future implementation
+  // --- Edit Video ---
+  openEditVideoModal(video: ITeacherVideo) {
+    this.currentVideo = video;
+    this.editVideoForm.patchValue({ title: video.title, description: video.description });
+    this.isEditVideoModalOpen = true;
   }
 
-  deleteVideo(_video: ITeacherVideo) {
-    // Placeholder for future implementation
+  closeEditVideoModal() {
+    this.isEditVideoModalOpen = false;
+    this.currentVideo = null;
+    this.editVideoForm.reset();
+  }
+
+  saveVideoEdit() {
+    if (this.editVideoForm.invalid || !this.currentVideo?.vId) {
+      this.toastr.warning('Please fill in all required fields.', 'Warning');
+      this.editVideoForm.markAllAsTouched();
+      return;
+    }
+    this.isEditingVideo = true;
+    const { title, description } = this.editVideoForm.value;
+    const index = this.videos.findIndex(v => v.vId === this.currentVideo!.vId);
+    if (index !== -1) {
+      this.videos[index] = { ...this.videos[index], title, description };
+    }
+    this.isEditingVideo = false;
+    this.closeEditVideoModal();
+    this.toastr.success('Video updated successfully!', 'Success');
+  }
+
+  // --- Delete Video ---
+  openDeleteVideoModal(video: ITeacherVideo) {
+    this.videoToDelete = video;
+    this.isDeleteVideoModalOpen = true;
+  }
+
+  closeDeleteVideoModal() {
+    this.videoToDelete = null;
+    this.isDeleteVideoModalOpen = false;
+  }
+
+  confirmDeleteVideo() {
+    if (!this.videoToDelete?.vId) return;
+    this.isDeletingVideo = true;
+    this.teacherService.deleteVideo(this.videoToDelete.vId).subscribe({
+      next: () => {
+        this.videos = this.videos.filter(v => v.vId !== this.videoToDelete!.vId);
+        this.isDeletingVideo = false;
+        this.closeDeleteVideoModal();
+        this.toastr.success('Video deleted successfully.', 'Success');
+      },
+      error: (err) => {
+        console.error(err);
+        this.isDeletingVideo = false;
+        this.closeDeleteVideoModal();
+        this.toastr.error('Failed to delete video.', 'Error');
+      },
+    });
+  }
+
+  // --- Toast ---
+  showToast(message: string, type: 'success' | 'error') {
+    clearTimeout(this.toastTimer);
+    this.toastMessage = message;
+    this.toastType = type;
+    this.toastVisible = true;
+    this.toastTimer = setTimeout(() => { this.toastVisible = false; }, 3500);
   }
 }
-
