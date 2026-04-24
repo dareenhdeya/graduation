@@ -203,7 +203,9 @@ export class ProfileComponent {
       next: (res) => {
         console.log('editttt', res);
 
-        this.toastr.success('Profile updated successfully.', 'Success');
+        setTimeout(() => {
+          this.toastr.success('Profile updated successfully.', 'Success');
+        }, 850);
         this.showEditModal = false;
         this.authService.refreshProfile();
         this.imagePreview = null;
@@ -220,7 +222,9 @@ export class ProfileComponent {
         } else {
           this.editError = err?.error?.title || 'Failed to update profile';
         }
-        this.toastr.error(this.editError, 'Error');
+        setTimeout(() => {
+          this.toastr.error(this.editError, 'Error');
+        }, 850);
         this.loadingEdit = false;
       },
     });
@@ -251,13 +255,17 @@ export class ProfileComponent {
     this.authService.changePassword(payload).subscribe({
       next: () => {
         console.log('save change');
-        this.toastr.success('Password changed successfully.', 'Success');
+        setTimeout(() => {
+          this.toastr.success('Password changed successfully.', 'Success');
+        }, 850);
         this.showChangePassModal = false;
         this.loadingChangePass = false;
       },
       error: (err) => {
         this.changePassError = err?.error?.message || 'Failed to change password';
-        this.toastr.error(this.changePassError, 'Error');
+        setTimeout(() => {
+          this.toastr.error(this.changePassError, 'Error');
+        }, 850);
         this.loadingChangePass = false;
       },
     });

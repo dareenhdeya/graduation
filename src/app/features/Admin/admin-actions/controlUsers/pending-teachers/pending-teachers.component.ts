@@ -142,7 +142,9 @@ export class PendingTeachersComponent implements OnInit {
     console.log(payload);
     this.adminService.approveTeacher(payload).subscribe({
       next: (response: IAproveResponse) => {
-        this.toastr.success('Teacher activated successfully.', 'Success');
+        setTimeout(() => {
+          this.toastr.success('Teacher activated successfully.', 'Success');
+        }, 850);
         console.log(response.message);
         this.activating = false;
         this.closeModal();
@@ -151,7 +153,9 @@ export class PendingTeachersComponent implements OnInit {
       error: (err: HttpErrorResponse) => {
         console.log(err.message);
         this.activating = false;
-        this.toastr.error(err.message || 'Failed to activate teacher.', 'Error');
+        setTimeout(() => {
+          this.toastr.error(err.message || 'Failed to activate teacher.', 'Error');
+        }, 850);
       }
     });
   }

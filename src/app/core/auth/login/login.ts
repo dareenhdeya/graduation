@@ -58,7 +58,9 @@ export class Login implements OnInit {
           this.authService.getProfile().subscribe({
             next: (res) => {
               const role = res.data.role;
-              this.toastrService.success('Login successful');
+              setTimeout(() => {
+                this.toastrService.success('Login successful');
+              }, 850);
               this.authService.setRole(role);
               setTimeout(() => {
                 this.authService.redirectByRole(role);
@@ -84,7 +86,9 @@ export class Login implements OnInit {
           } else {
             this.errMsg = rawMsg;
           }
-          this.toastrService.error(this.errMsg, 'Error');
+          setTimeout(() => {
+            this.toastrService.error(this.errMsg, 'Error');
+          }, 850);
         },
       });
     } else {

@@ -108,12 +108,16 @@ export class UserCrudComponent implements OnInit {
 
     this.adminService.endSession(u.id).subscribe({
       next: () => {
-        this.toastr.success('Session ended successfully.', 'Success');
+        setTimeout(() => {
+          this.toastr.success('Session ended successfully.', 'Success');
+        }, 850);
         this.loadUsers();
       },
       error: (err) => {
         this.error = err?.error?.message || err?.message || 'Failed to end session';
-        this.toastr.error(this.error, 'Error');
+        setTimeout(() => {
+          this.toastr.error(this.error, 'Error');
+        }, 850);
       },
     });
   }
@@ -124,12 +128,16 @@ export class UserCrudComponent implements OnInit {
 
     this.adminService.blockUser(u.id).subscribe({
       next: () => {
-        this.toastr.success('User blocked successfully.', 'Success');
+        setTimeout(() => {
+          this.toastr.success('User blocked successfully.', 'Success');
+        }, 850);
         this.loadUsers();
       },
       error: (err) => {
         this.error = err?.error?.message || err?.message || 'Failed to block user';
-        this.toastr.error(this.error, 'Error');
+        setTimeout(() => {
+          this.toastr.error(this.error, 'Error');
+        }, 850);
       },
     });
   }

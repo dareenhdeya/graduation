@@ -74,12 +74,16 @@ export class ViewAllSubjectsComponent implements OnInit {
     this.studentService.enrollSubject(id).subscribe({
       next: (res: IEnrollSubResponse) => {
         console.log(res.message, "🥳🥳🥳🥳🥳");
-        this.toastr.success(res.message || 'Enrolled successfully.', 'Success');
+        setTimeout(() => {
+          this.toastr.success(res.message || 'Enrolled successfully.', 'Success');
+        }, 850);
         this.router.navigate(['/student/my-subjects']);
       },
       error: (err: HttpErrorResponse) => {
         console.log(err.error?.message || 'Error enrolling in subject');
-        this.toastr.error(err.error?.message || 'Error enrolling in subject', 'Error');
+        setTimeout(() => {
+          this.toastr.error(err.error?.message || 'Error enrolling in subject', 'Error');
+        }, 850);
       }
     });
   }

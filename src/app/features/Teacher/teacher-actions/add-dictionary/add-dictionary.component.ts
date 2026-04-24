@@ -109,14 +109,18 @@ export class AddDictionaryComponent implements OnInit {
       this.teacherS.addDictionary(this.subjectId, word, file).subscribe({
         next: (response: IAddToDictionaryResponse) => (
           console.log('Success:', response),
-          this.toastr.success('Item added to dictionary.', 'Success'),
+          setTimeout(() => {
+            this.toastr.success('Item added to dictionary.', 'Success');
+          }, 850),
           this.isLoading = false,
           this.dictionaryForm.reset(),
           this.previews = [null] // Reset preview for single item
         ),
         error: (err) => {
           console.error('Error:', err);
-          this.toastr.error('Failed to add item.', 'Error');
+          setTimeout(() => {
+            this.toastr.error('Failed to add item.', 'Error');
+          }, 850);
           this.isLoading = false;
         }
       });
@@ -134,14 +138,18 @@ export class AddDictionaryComponent implements OnInit {
       forkJoin(requests).subscribe({
         next: (response: IAddToDictionaryResponse[]) => (
           console.log('All Success:', response),
-          this.toastr.success('Items added to dictionary.', 'Success'),
+          setTimeout(() => {
+            this.toastr.success('Items added to dictionary.', 'Success');
+          }, 850),
           this.isLoading = false,
           this.dictionaryForm.reset(),
           this.previews = [null] // Reset previews after batch submission
         ),
         error: (err) => {
           console.error('Error in batch:', err);
-          this.toastr.error('Failed to add items.', 'Error');
+          setTimeout(() => {
+            this.toastr.error('Failed to add items.', 'Error');
+          }, 850);
           this.isLoading = false;
         }
 

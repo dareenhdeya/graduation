@@ -417,7 +417,9 @@ export class CreateQuizComponent implements OnInit {
 
         this.teacherService.createExercise(formData).subscribe({
             next: () => {
-                this.toastr.success('Quiz created successfully.', 'Success');
+                setTimeout(() => {
+                    this.toastr.success('Quiz created successfully.', 'Success');
+                }, 850);
                 this.isSubmitting = false;
                 this.submitSuccess = true;
                 this.levelForm.reset({ name: '', passingGradePercentage: 60, levelDifficulty: 'Easy', perquisiteType: PerquisiteType.None, perquisiteId: null });
@@ -432,7 +434,9 @@ export class CreateQuizComponent implements OnInit {
             error: (err) => {
                 console.error(err);
                 this.submitError = err?.error?.message ?? 'Failed to create exercise. Please try again.';
-                this.toastr.error(this.submitError, 'Error');
+                setTimeout(() => {
+                    this.toastr.error(this.submitError, 'Error');
+                }, 850);
                 this.isSubmitting = false;
             },
         });

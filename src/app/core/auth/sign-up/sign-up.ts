@@ -281,7 +281,9 @@ export class SignUp implements OnInit {
 
     this.authService.signUp(fd).subscribe({
       next: () => {
-        this.toastr.success('Registration successful. Please login.', 'Success');
+        setTimeout(() => {
+          this.toastr.success('Registration successful. Please login.', 'Success');
+        }, 850);
         this.isLoading = false;
         this.router.navigateByUrl('/login');
       },
@@ -300,7 +302,9 @@ export class SignUp implements OnInit {
           'Registration failed';
 
         this.errMsg = firstMsg;
-        this.toastr.error(this.errMsg, 'Error');
+        setTimeout(() => {
+          this.toastr.error(this.errMsg, 'Error');
+        }, 850);
       },
     });
   }
