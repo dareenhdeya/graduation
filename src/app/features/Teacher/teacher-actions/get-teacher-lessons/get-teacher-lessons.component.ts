@@ -105,13 +105,17 @@ export class GetTeacherLessonsComponent implements OnInit {
         this.lessons = this.lessons.filter(l => l.id !== this.lessonToDelete!.id);
         this.isDeleting = false;
         this.closeDeleteModal();
-        this.toastr.success('Lesson deleted successfully.', 'Success');
+        setTimeout(() => {
+          this.toastr.success('Lesson deleted successfully.', 'Success');
+        }, 850);
       },
       error: (err) => {
         console.error(err);
         this.isDeleting = false;
         this.closeDeleteModal();
-        this.toastr.error('Failed to delete lesson.', 'Error');
+        setTimeout(() => {
+          this.toastr.error('Failed to delete lesson.', 'Error');
+        }, 850);
       }
     });
   }
@@ -204,12 +208,16 @@ export class GetTeacherLessonsComponent implements OnInit {
         }
         this.isSubmitting = false;
         this.closeEditModal();
-        this.toastr.success('Lesson updated successfully!', 'Success');
+        setTimeout(() => {
+          this.toastr.success('Lesson updated successfully!', 'Success');
+        }, 850);
       },
       error: (err) => {
         console.error(err);
         this.isSubmitting = false;
-        this.toastr.error('Failed to update lesson.', 'Error');
+        setTimeout(() => {
+          this.toastr.error('Failed to update lesson.', 'Error');
+        }, 850);
       }
     });
   }

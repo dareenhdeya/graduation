@@ -574,7 +574,9 @@ export class EditQuizComponent implements OnInit {
 
         this.teacherService.editQuiz(formData).subscribe({
             next: () => {
-                this.toastr.success('Quiz updated successfully.', 'Success');
+                setTimeout(() => {
+                    this.toastr.success('Quiz updated successfully.', 'Success');
+                }, 850);
                 this.isSubmitting = false;
                 this.submitSuccess = true;
                 setTimeout(() => {
@@ -587,7 +589,9 @@ export class EditQuizComponent implements OnInit {
             error: (err: any) => {
                 console.error(err);
                 this.submitError = err?.error?.message ?? 'Failed to edit exercise. Please try again.';
-                this.toastr.error(this.submitError, 'Error');
+                setTimeout(() => {
+                    this.toastr.error(this.submitError, 'Error');
+                }, 850);
                 this.isSubmitting = false;
             },
         });

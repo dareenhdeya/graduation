@@ -103,7 +103,9 @@ export class AddLessonComponent {
 
     this.teacherService.addLesson(formData).subscribe({
       next: () => {
-        this.toastr.success('Lesson added successfully.', 'Success');
+        setTimeout(() => {
+          this.toastr.success('Lesson added successfully.', 'Success');
+        }, 850);
         this.isLoading = false;
         this.lessonForm.reset({ perquisiteType: PerquisiteType.None, perquisiteId: null });
         this.prerequisiteOptions = [];
@@ -113,7 +115,9 @@ export class AddLessonComponent {
       },
       error: (err) => {
         console.error('Error', err);
-        this.toastr.error('Failed to add lesson.', 'Error');
+        setTimeout(() => {
+          this.toastr.error('Failed to add lesson.', 'Error');
+        }, 850);
         this.isLoading = false;
       },
     });

@@ -134,12 +134,16 @@ export class ManageLessonComponent implements OnInit {
         this.selectedFile = null;
         this.mediaPreview = null;
         this.loadLesson();
-        this.toastr.success('Video uploaded successfully!', 'Success');
+        setTimeout(() => {
+          this.toastr.success('Video uploaded successfully!', 'Success');
+        }, 850);
       },
       error: (err) => {
         console.error(err);
         this.isUploading = false;
-        this.toastr.error('Failed to upload video.', 'Error');
+        setTimeout(() => {
+          this.toastr.error('Failed to upload video.', 'Error');
+        }, 850);
       },
     });
   }
@@ -193,13 +197,17 @@ export class ManageLessonComponent implements OnInit {
         this.videos = this.videos.filter(v => v.vId !== this.videoToDelete!.vId);
         this.isDeletingVideo = false;
         this.closeDeleteVideoModal();
-        this.toastr.success('Video deleted successfully.', 'Success');
+        setTimeout(() => {
+          this.toastr.success('Video deleted successfully.', 'Success');
+        }, 850);
       },
       error: (err) => {
         console.error(err);
         this.isDeletingVideo = false;
         this.closeDeleteVideoModal();
-        this.toastr.error('Failed to delete video.', 'Error');
+        setTimeout(() => {
+          this.toastr.error('Failed to delete video.', 'Error');
+        }, 850);
       },
     });
   }

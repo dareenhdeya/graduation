@@ -98,13 +98,17 @@ export class ForgotpassComponent {
 
     this.authService.requestPasswordChange(user).subscribe({
       next: () => {
-        this.toastr.success('OTP sent successfully.', 'Success');
+        setTimeout(() => {
+          this.toastr.success('OTP sent successfully.', 'Success');
+        }, 850);
         this.currentStep = 2;
         this.loading = false;
       },
       error: (err) => {
         this.errMsg = err.userMessage || err.error?.message || 'Failed to send OTP';
-        this.toastr.error(this.errMsg, 'Error');
+        setTimeout(() => {
+          this.toastr.error(this.errMsg, 'Error');
+        }, 850);
         this.loading = false;
       },
     });
@@ -127,14 +131,18 @@ export class ForgotpassComponent {
 
     this.authService.verifyOtp(payload).subscribe({
       next: () => {
-        this.toastr.success('OTP verified successfully.', 'Success');
+        setTimeout(() => {
+          this.toastr.success('OTP verified successfully.', 'Success');
+        }, 850);
         this.otpVerified = true;
         this.currentStep = 3;
         this.loading = false;
       },
       error: (err) => {
         this.errMsg = err.userMessage || err.error?.message || 'Invalid OTP';
-        this.toastr.error(this.errMsg, 'Error');
+        setTimeout(() => {
+          this.toastr.error(this.errMsg, 'Error');
+        }, 850);
         this.loading = false;
       },
     });
@@ -161,14 +169,18 @@ export class ForgotpassComponent {
 
     this.authService.resetPassword(newPassword).subscribe({
       next: () => {
-        this.toastr.success('Password reset successfully.', 'Success');
+        setTimeout(() => {
+          this.toastr.success('Password reset successfully.', 'Success');
+        }, 850);
         this.loading = false;
         this.authService.logout();
         this.router.navigate(['/login']);
       },
       error: (err) => {
         this.errMsg = err.userMessage || err.error?.message || 'Reset password failed';
-        this.toastr.error(this.errMsg, 'Error');
+        setTimeout(() => {
+          this.toastr.error(this.errMsg, 'Error');
+        }, 850);
         this.loading = false;
       },
     });

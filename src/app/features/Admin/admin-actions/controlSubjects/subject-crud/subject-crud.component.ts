@@ -87,7 +87,9 @@ export class SubjectCrudComponent implements OnInit {
 
     this.admin.addSubject({ subjectName: name, deaf_mute: this.deafMute.value }).subscribe({
       next: () => {
-        this.toastr.success('Subject added successfully.', 'Success');
+        setTimeout(() => {
+          this.toastr.success('Subject added successfully.', 'Success');
+        }, 850);
         this.openAdd = false;
         this.subjectName.setValue('');
         this.deafMute.setValue(false);
@@ -99,7 +101,9 @@ export class SubjectCrudComponent implements OnInit {
         console.log('add subjects: ', err);
 
         this.addError = err?.title || 'Failed to add subject';
-        this.toastr.error(this.addError, 'Error');
+        setTimeout(() => {
+          this.toastr.error(this.addError, 'Error');
+        }, 850);
       },
     });
   }
