@@ -15,7 +15,8 @@ export interface IStudLessonContentResult {
   title: string;
   videosCount: number;
   videos: IStudVideo[];
-  // exercises?: any; // uncomment when activities shape is known
+  locked?: boolean;
+  levels?: any;
 }
 
 export interface IStudLessonContentResponse {

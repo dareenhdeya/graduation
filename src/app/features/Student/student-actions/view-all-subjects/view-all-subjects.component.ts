@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';   // Impor
 import { IStudAllSubResponse, StudentAllSubject } from '../../interfaces/IStudAllSubResponse'; // Check path
 import { StudentServiceService } from '../../services/student-service.service';
 import { IEnrollSubResponse } from '../../interfaces/IEnrollSubResponse';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-view-all-subjects',
@@ -18,6 +19,7 @@ export class ViewAllSubjectsComponent implements OnInit {
   private readonly studentService = inject(StudentServiceService);
   private readonly route = inject(ActivatedRoute)
   private readonly router = inject(Router)
+  private toastr = inject(ToastrService);
   allSub: StudentAllSubject[] = [];
   isLoading = true; // Add loading state
 
@@ -72,12 +74,12 @@ export class ViewAllSubjectsComponent implements OnInit {
     this.studentService.enrollSubject(id).subscribe({
       next: (res: IEnrollSubResponse) => {
         console.log(res.message, "🥳🥳🥳🥳🥳");
+        this.toastr.success(res.message || 'Enrolled successfully.', 'Success');
         this.router.navigate(['/student/my-subjects']);
-        alert(res.message);
       },
       error: (err: HttpErrorResponse) => {
-        console.log(err.error.message || 'Error enrolling in subject');
-        alert(err.error.message || 'Error enrolling in subject');
+        console.log(err.error?.message || 'Error enrolling in subject');
+        this.toastr.error(err.error?.message || 'Error enrolling in subject', 'Error');
       }
     });
   }

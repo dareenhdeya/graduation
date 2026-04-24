@@ -1,37 +1,29 @@
-<section class="relative min-h-[calc(100vh)] overflow-hidden bg-[#070A13]">
+<section class="relative min-h-[calc(100vh)] overflow-hidden bg-background transition-colors duration-300">
   <div
-    class="pointer-events-none absolute -top-64 -left-72 h-[520px] w-[820px] rounded-[999px] bg-sky-500/12 blur-[130px]"
+    class="pointer-events-none absolute -top-64 -left-72 h-[520px] w-[820px] rounded-[999px] bg-primary/10 blur-[130px]"
   ></div>
   <div
-    class="pointer-events-none absolute -bottom-72 -right-60 h-[720px] w-[720px] rounded-full bg-fuchsia-500/12 blur-[140px]"
+    class="pointer-events-none absolute -bottom-72 -right-60 h-[720px] w-[720px] rounded-full bg-primary/10 blur-[140px]"
   ></div>
 
   <div class="relative z-10 min-h-screen flex items-center justify-center px-4">
     <div class="w-full max-w-2xl">
-      <div
-        class="relative rounded-[32px] border border-white/10 bg-white/[0.06] backdrop-blur-xl shadow-[0_50px_140px_-90px_rgba(0,0,0,.95)] px-6 md:px-8 pb-8 pt-12"
-      >
+      <div class="rounded-3xl border border-border-main bg-surface p-6 sm:p-8 shadow-xl relative overflow-hidden z-10">
         <div class="text-center">
-          <h1 class="text-3xl md:text-4xl font-black tracking-tight text-white">Login Now</h1>
+          <h1 class="text-3xl md:text-4xl font-black tracking-tight text-text-main text-center mb-2">Login Now</h1>
+          <p class="text-sm font-medium text-text-main/50 text-center mb-8">Welcome back. Enter your credentials to access your account.</p>
         </div>
 
         @if (errMsg) {
-          <div class="mt-6 rounded-2xl border px-4 py-3 text-sm transition-all"
-               [class.border-yellow-500/25]="errMsg.includes('pending')"
-               [class.bg-yellow-500/10]="errMsg.includes('pending')"
-               [class.text-yellow-200]="errMsg.includes('pending')"
-               [class.border-red-500/25]="!errMsg.includes('pending')"
-               [class.bg-red-500/10]="!errMsg.includes('pending')"
-               [class.text-red-200]="!errMsg.includes('pending')">
-            
+          <div class="rounded-2xl border border-red-500/30 bg-red-500/10 p-4 text-sm font-bold text-red-500 shadow-sm flex items-center gap-2 mb-6">
             @if (errMsg.includes('pending')) {
-              <p><i class="fas fa-clock mr-2"></i> Waiting for admin approval</p>
+              <p><i class="fas fa-clock mr-2 text-yellow-500"></i> <span class="text-yellow-500">Waiting for admin approval</span></p>
             } @else if (errMsg.includes('credentials')) {
               <p><i class="fas fa-exclamation-circle mr-2"></i> Invalid email or password</p>
             } @else if (errMsg.includes('deactivated')) {
               <p><i class="fas fa-ban mr-2"></i> Account is deactivated</p>
             } @else {
-              <p>{{ errMsg }}</p>
+              <p><i class="fas fa-exclamation-circle mr-2"></i> {{ errMsg }}</p>
             }
           </div>
         }
@@ -41,54 +33,53 @@
           loginForm.get('password');
 
           <div>
-            <label class="block text-sm font-medium text-white/80 mb-2">Email</label>
+            <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Email</label>
             <input
               formControlName="usernameorEmail"
               type="email"
-              class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10 invalid:border-red-500/50"
+              class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all placeholder:text-text-main/30 focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm"
               placeholder="name@email.com"
             />
 
             @if (emailCont?.touched && emailCont?.errors) {
                @if (emailCont?.getError('required')) {
-            <p class="text-red-400 text-sm mt-1">Email is required.</p>
+            <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"><i class="fas fa-exclamation-circle"></i> Email is required.</p>
             }
            @if (emailCont?.get('email')?.hasError('email')) {
-              <p class="text-red-400 text-sm mt-1">Enter valid email.</p>
+              <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"><i class="fas fa-exclamation-circle"></i> Enter valid email.</p>
               }
           }
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-white/80 mb-2">Password</label>
+            <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Password</label>
 
             <div class="relative">
               <input
                 formControlName="password"
                 [type]="showPass ? 'text' : 'password'"
-                class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 pr-12 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10 invalid:border-red-500/50"
+                class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all placeholder:text-text-main/30 focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm pr-12"
               />
 
               <button
                 type="button"
                 (click)="showPass = !showPass"
-                class="absolute cursor-pointer top-1/2 right-3 -translate-y-1/2 size-9 rounded-xl border-white/10 bg-white/[0.04] text-white/65 hover:text-white hover:bg-white/[0.08] transition flex items-center justify-center"
+                class="absolute right-4 top-1/2 -translate-y-1/2 text-text-main/40 hover:text-primary transition-colors cursor-pointer"
                 aria-label="Toggle password visibility"
               >
-                @if (showPass) { <i class="fas fa-eye-slash"></i> } @else {
-                <i class="fas fa-eye"></i> }
+                @if (showPass) { <i class="fas fa-eye-slash"></i> } @else { <i class="fas fa-eye"></i> }
               </button>
             </div>
 
             @if (passCont?.touched && passCont?.errors) { @if (passCont?.getError('required')) {
-            <p class="text-red-400 text-sm mt-1">Password is required.</p>
+            <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"><i class="fas fa-exclamation-circle"></i> Password is required.</p>
             } @else if (passCont?.getError('pattern')) {
-            <p class="text-red-400 text-sm mt-1">Password must be at least 8 characters long, contain upper and lower case letters, a number, and a special character</p>
+            <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"><i class="fas fa-exclamation-circle"></i> Password must be at least 8 characters long, contain upper and lower case letters, a number, and a special character</p>
             } }
           </div>
 
           <div class="flex items-center justify-between pt-1">
-            <a class="text-sky-300 hover:underline text-sm" routerLink="/forgotpass">
+            <a class="text-primary font-bold hover:text-primary/80 transition-colors cursor-pointer text-sm" routerLink="/forgotpass">
               Forgot password?
             </a>
           </div>
@@ -96,16 +87,16 @@
           <button
             type="submit"
             [disabled]="isLoading"
-            class="btn-solid cursor-pointer w-full mt-2 h-12 rounded-2xl font-semibold text-white disabled:opacity-60 disabled:cursor-not-allowed"
+            class="w-full rounded-2xl bg-primary px-6 py-3.5 text-sm font-bold text-white transition-all shadow-sm hover:bg-primary/90 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed shadow-primary/20 cursor-pointer mt-2"
           >
             <span class="flex items-center justify-center gap-2">
               Login @if (isLoading) { <i class="fas fa-spinner fa-spin"></i> }
             </span>
           </button>
 
-          <p class="text-sm text-white/55 text-center mt-4">
+          <p class="text-sm font-medium text-text-main/50 text-center mt-4">
             Don't have an account?
-            <a routerLink="/register" class="text-sky-300 hover:underline">Register</a>
+            <a routerLink="/register" class="text-primary font-bold hover:text-primary/80 transition-colors cursor-pointer text-sm">Register</a>
           </p>
         </form>
       </div>

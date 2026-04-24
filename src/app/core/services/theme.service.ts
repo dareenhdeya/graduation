@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 
@@ -32,10 +33,15 @@ export class ThemeService {
   primaryColor$ = this.primaryColorSubject.asObservable();
 
   colors = AVAILABLE_COLORS;
-  constructor() {
-    this.initializeTheme();
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+    // التأكد من أننا في المتصفح وليس السيرفر
+    if (isPlatformBrowser(this.platformId)) {
+      console.log("platform Browser");
+      this.initializeTheme();
+    } else {
+      console.log("platform Server");
+    }
   }
-
   initializeTheme(): void {
     // Check local storage
     const storedTheme = localStorage.getItem('theme');

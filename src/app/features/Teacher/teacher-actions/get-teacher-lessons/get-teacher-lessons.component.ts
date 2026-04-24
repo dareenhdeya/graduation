@@ -1,11 +1,19 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'; // 1. Import Forms
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TeacherServiceService } from '../../services/teacher-service.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ILesson } from '../../interfaces/IGetTeacherLessons';
 import { IEditedLesson } from '../../interfaces/IEditLessonResponse';
+import { ToastrService } from 'ngx-toastr';
+
+// Mirrors backend enum: None = 0, Lesson = 1, Quiz = 2
+export enum PerquisiteType {
+  None = 0,
+  Lesson = 1,
+  Quiz = 2,
+}
 
 @Component({
   selector: 'app-get-teacher-lessons',
@@ -19,6 +27,7 @@ export class GetTeacherLessonsComponent implements OnInit {
   private readonly teacherService = inject(TeacherServiceService);
   private readonly route = inject(ActivatedRoute);
   private readonly fb = inject(FormBuilder);
+  private toastr = inject(ToastrService);
 
   lessons: ILesson[] = [];
   isLoading = true;
@@ -30,21 +39,40 @@ export class GetTeacherLessonsComponent implements OnInit {
   currentLessonId: string | null = null;
   editForm!: FormGroup;
 
+  // --- DELETE CONFIRM STATE ---
+  isDeleteModalOpen = false;
+  lessonToDelete: ILesson | null = null;
+  isDeleting = false;
+
+  // --- TOAST STATE ---
+  toastMessage = '';
+  toastType: 'success' | 'error' = 'success';
+  toastVisible = false;
+  private toastTimer: any;
+
+  // --- PREREQUISITE STATE ---
+  isLoadingPrerequisites = false;
+  prerequisiteOptions: { id: string; title: string }[] = [];
+
+  readonly perquisiteTypes = [
+    { value: PerquisiteType.None, label: 'None' },
+    { value: PerquisiteType.Lesson, label: 'Lesson' },
+    { value: PerquisiteType.Quiz, label: 'Quiz' },
+  ];
+
   ngOnInit(): void {
     this.subjectId = this.route.snapshot.paramMap.get('sid');
     this.getLessons();
-    // Initialize the form
     this.editForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(3)]],
-      description: ['', [Validators.required, Validators.minLength(10)]]
+      description: ['', [Validators.required, Validators.minLength(10)]],
+      perquisiteType: [PerquisiteType.None],
+      perquisiteId: [null],
     });
   }
 
   getLessons() {
-    if (!this.subjectId) {
-      this.isLoading = false;
-      return;
-    }
+    if (!this.subjectId) { this.isLoading = false; return; }
     this.isLoading = true;
     this.teacherService.getLessons(this.subjectId).subscribe({
       next: (response) => {
@@ -58,74 +86,140 @@ export class GetTeacherLessonsComponent implements OnInit {
     });
   }
 
+  // --- DELETE FLOW ---
+  openDeleteModal(lesson: ILesson) {
+    this.lessonToDelete = lesson;
+    this.isDeleteModalOpen = true;
+  }
 
-  deleteLesson(id: string) {
-    if (confirm('Are you sure you want to delete this lesson? This cannot be undone.')) {
-      this.teacherService.removeLesson(id).subscribe({
-        next: () => {
-          // Remove from local array instantly (UI update)
-          this.lessons = this.lessons.filter(l => l.id !== id);
-          alert('Lesson deleted successfully.');
+  closeDeleteModal() {
+    this.lessonToDelete = null;
+    this.isDeleteModalOpen = false;
+  }
+
+  confirmDelete() {
+    if (!this.lessonToDelete) return;
+    this.isDeleting = true;
+    this.teacherService.removeLesson(this.lessonToDelete.id).subscribe({
+      next: () => {
+        this.lessons = this.lessons.filter(l => l.id !== this.lessonToDelete!.id);
+        this.isDeleting = false;
+        this.closeDeleteModal();
+        this.toastr.success('Lesson deleted successfully.', 'Success');
+      },
+      error: (err) => {
+        console.error(err);
+        this.isDeleting = false;
+        this.closeDeleteModal();
+        this.toastr.error('Failed to delete lesson.', 'Error');
+      }
+    });
+  }
+
+  // --- EDIT FLOW ---
+  openEditModal(lesson: ILesson) {
+    this.isEditModalOpen = true;
+    this.currentLessonId = lesson.id;
+    const pType = (lesson as any).perquisiteType ?? (lesson as any).PerquisiteType ?? PerquisiteType.None;
+    const pId = (lesson as any).perquisite ?? (lesson as any).Perquisite ?? (lesson as any).perquisiteId ?? null;
+    this.editForm.patchValue({
+      title: lesson.title,
+      description: lesson.description,
+      perquisiteType: pType,
+      perquisiteId: pId,
+    });
+    this.prerequisiteOptions = [];
+    if (pType !== PerquisiteType.None && this.subjectId) {
+      this.isLoadingPrerequisites = true;
+      this.teacherService.listPrerequisites(this.subjectId, pType).subscribe({
+        next: (res: any) => {
+          this.prerequisiteOptions = (res?.result ?? []).map((item: any) => ({
+            id: item.id ?? item.Id,
+            title: item.title ?? item.Title ?? item.name ?? item.Name ?? 'Unnamed',
+          }));
+          this.isLoadingPrerequisites = false;
+          if (pId) this.editForm.get('perquisiteId')?.setValue(pId);
         },
-        error: (err) => {
-          console.error(err);
-          alert('Failed to delete lesson.');
-        }
+        error: () => { this.isLoadingPrerequisites = false; },
       });
     }
   }
 
-
-
-  // Open Modal & Fill Data
-  openEditModal(lesson: ILesson) {
-    this.isEditModalOpen = true;
-    this.currentLessonId = lesson.id;
-    
-    this.editForm.patchValue({
-      title: lesson.title,
-      description: lesson.description
-    });
+  get selectedEditType(): number {
+    return this.editForm.get('perquisiteType')?.value ?? PerquisiteType.None;
   }
 
-  //  Close Modal & Reset
+  onEditTypeChange(): void {
+    this.editForm.get('perquisiteId')?.setValue(null);
+    this.prerequisiteOptions = [];
+
+    const type = this.selectedEditType;
+    if (type !== PerquisiteType.None && this.subjectId) {
+      this.isLoadingPrerequisites = true;
+      this.teacherService.listPrerequisites(this.subjectId, type).subscribe({
+        next: (res: any) => {
+          this.prerequisiteOptions = (res?.result ?? []).map((item: any) => ({
+            id: item.id ?? item.Id,
+            title: item.title ?? item.Title ?? item.name ?? item.Name ?? 'Unnamed',
+          }));
+          this.isLoadingPrerequisites = false;
+        },
+        error: (err) => {
+          console.error('Error loading prerequisites', err);
+          this.isLoadingPrerequisites = false;
+        },
+      });
+    }
+  }
+
   closeEditModal() {
     this.isEditModalOpen = false;
     this.currentLessonId = null;
     this.editForm.reset();
+    this.prerequisiteOptions = [];
   }
 
-  
   saveEdit() {
     if (this.editForm.invalid || !this.currentLessonId) {
+      this.toastr.warning('Please fill in all required fields.', 'Warning');
       this.editForm.markAllAsTouched();
       return;
     }
-
     this.isSubmitting = true;
-    const { title, description } = this.editForm.value;
+    const { title, description, perquisiteType, perquisiteId } = this.editForm.value;
+    const editedLesson: IEditedLesson = {
+      title,
+      description,
+      subjectId: this.subjectId!,
+      lid: this.currentLessonId,
+      perquisiteType: Number(perquisiteType),
+      perquisite: Number(perquisiteType) !== PerquisiteType.None ? perquisiteId : null,
+    };
 
-    
-    const editedLesson: IEditedLesson = this.editForm.value;
-
-
-    this.teacherService.editLesson(this.currentLessonId, editedLesson).subscribe({
-      next: (res) => {
-   
+    this.teacherService.editLesson(editedLesson).subscribe({
+      next: () => {
         const index = this.lessons.findIndex(l => l.id === this.currentLessonId);
         if (index !== -1) {
           this.lessons[index] = { ...this.lessons[index], title, description };
         }
-        
         this.isSubmitting = false;
         this.closeEditModal();
-        alert('Lesson updated successfully!');
+        this.toastr.success('Lesson updated successfully!', 'Success');
       },
       error: (err) => {
         console.error(err);
         this.isSubmitting = false;
-        alert('Failed to update lesson.');
+        this.toastr.error('Failed to update lesson.', 'Error');
       }
     });
+  }
+
+  // --- TOAST HELPER ---
+  showToast(message: string, type: 'success' | 'error') {
+    if (type === 'success') {
+      this.toastr.success(message, 'Success');
+    } else {
+      this.toastr.error(message, 'Error');
+    }
   }
 }

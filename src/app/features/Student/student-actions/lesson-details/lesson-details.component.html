@@ -7,6 +7,19 @@
           <div class="h-24 bg-white/5 rounded-2xl" *ngFor="let i of [1, 2, 3, 4]"></div>
         </div>
       </div>
+    } @else if (lesson && isLocked) {
+      <div class="flex flex-col items-center justify-center py-20 text-center min-h-[60vh] animate-in fade-in zoom-in duration-500">
+        <div class="size-32 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center mb-8 shadow-2xl backdrop-blur-md relative overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-br from-red-500/10 to-purple-500/10"></div>
+          <i class="fa-solid fa-lock text-6xl text-white/50 drop-shadow-xl relative z-10"></i>
+          <div class="absolute -bottom-8 -right-8 size-32 bg-red-500/20 blur-3xl rounded-full"></div>
+        </div>
+        <h2 class="text-4xl md:text-5xl font-black text-white tracking-tight mb-4 drop-shadow-sm">Restricted Area</h2>
+        <p class="text-white/60 text-lg md:text-xl max-w-lg mb-10 leading-relaxed font-medium">You must complete prior requirements or prerequisites to unlock this lesson and view its contents.</p>
+        <a [routerLink]="['/student/subject-lessons', lesson.subjectId]" class="inline-flex items-center justify-center h-14 px-8 rounded-full bg-white/5 hover:bg-white/15 border border-white/10 text-white font-bold transition-all hover:-translate-y-1 hover:shadow-[0_0_30px_-5px_rgba(255,255,255,0.1)] active:scale-95">
+          <i class="fa-solid fa-arrow-left-long mr-3"></i> Back to the Course Path
+        </a>
+      </div>
     } @else if (lesson && activeVideo) {
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
         <div class="lg:col-span-2 space-y-6 sticky top-24">

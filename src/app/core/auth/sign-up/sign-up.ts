@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
 
 type RoleId = 0 | 1 | 2 | 3;
 type GenderId = 1 | 2;
@@ -18,6 +19,7 @@ export class SignUp implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private toastr = inject(ToastrService);
 
   isLoading = false;
   showPass: boolean = false;
@@ -227,6 +229,7 @@ export class SignUp implements OnInit {
     this.submitted = true;
 
     if (this.signUpForm.invalid) {
+      this.toastr.warning('Please fill in all required fields correctly.', 'Warning');
       this.signUpForm.markAllAsTouched();
       return;
     }
@@ -236,6 +239,7 @@ export class SignUp implements OnInit {
     const gender = Number(v.Gender) as GenderId;
 
     if (![1, 2].includes(gender)) {
+      this.toastr.warning('Please select a gender.', 'Warning');
       this.signUpForm.get('Gender')?.setErrors({ required: true });
       return;
     }
@@ -277,6 +281,7 @@ export class SignUp implements OnInit {
 
     this.authService.signUp(fd).subscribe({
       next: () => {
+        this.toastr.success('Registration successful. Please login.', 'Success');
         this.isLoading = false;
         this.router.navigateByUrl('/login');
       },
@@ -295,6 +300,7 @@ export class SignUp implements OnInit {
           'Registration failed';
 
         this.errMsg = firstMsg;
+        this.toastr.error(this.errMsg, 'Error');
       },
     });
   }

@@ -7,6 +7,7 @@ import { IRegisterResponse } from '../interfaces/IRegisterResponse';
 import { ProfileData, ViewProfileResponse } from '../interfaces/IProfileResponse';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { BehaviorSubject, map, tap } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
 
 export interface IVerifyOtpBody {
   emailOrUserName: string;
@@ -100,6 +101,8 @@ export class AuthService extends baseHttp {
     return this.post<any>(APP_APIs.logout, {});
   }
 
+  private readonly cookieService = inject(CookieService);
+
   logoutAndRedirect() {
     this.logout().subscribe({
       next: () => this.router.navigateByUrl('/login'),
@@ -109,6 +112,16 @@ export class AuthService extends baseHttp {
     });
   }
 
+   redirectLogin() {
+    this.roleSubject.next(null);
+    this.profileSubject.next(null);
+    
+    // Clear cookies so the loggedinGuard knows we are truly logged out
+    this.cookieService.delete('refreshToken', '/');
+    this.cookieService.delete('refreshToken');
+    
+    this.router.navigateByUrl('/login');
+  }
   redirectByRole(role: Role) {
     const map: Record<Role, string> = {
       Admin: '/admin/dashboard',

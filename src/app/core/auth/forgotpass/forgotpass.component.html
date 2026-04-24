@@ -1,258 +1,284 @@
-<section class="relative min-h-[calc(100vh)] overflow-hidden bg-[#070A13]">
-    <div
-      class="pointer-events-none absolute -top-64 -left-72 h-[520px] w-[820px] rounded-[999px] bg-sky-500/12 blur-[130px]"
-    ></div>
-    <div
-      class="pointer-events-none absolute -bottom-72 -right-60 h-[720px] w-[720px] rounded-full bg-fuchsia-500/12 blur-[140px]"
-    ></div>
-  
-    <div class="relative z-10 min-h-screen flex items-center justify-center px-4">
-      <div class="mx-auto w-full max-w-3xl">
-        <div
-          class="relative rounded-[32px] border border-white/10 bg-white/[0.06] backdrop-blur-xl
-                 shadow-[0_50px_140px_-90px_rgba(0,0,0,.95)] p-6 md:p-8"
-        >
-          <div class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3">
-            <div class="flex items-center gap-2 overflow-x-auto no-scrollbar">
-              @for (s of steps; track s.id; let i = $index) {
+<section class="relative min-h-[calc(100vh)] overflow-hidden bg-background transition-colors duration-300">
+  <div
+    class="pointer-events-none absolute -top-64 -left-72 h-[520px] w-[820px] rounded-[999px] bg-primary/10 blur-[130px]"
+  ></div>
+  <div
+    class="pointer-events-none absolute -bottom-72 -right-60 h-[720px] w-[720px] rounded-full bg-primary/10 blur-[140px]"
+  ></div>
+
+  <div class="relative z-10 min-h-screen flex items-center justify-center px-4">
+    <div class="mx-auto w-full max-w-3xl">
+      <div
+        class="bg-surface backdrop-blur-xl rounded-3xl border border-border-main p-8 shadow-2xl relative z-10"
+      >
+        <div class="w-full rounded-2xl border border-border-main bg-background px-4 py-3">
+          <div class="flex items-center gap-2 overflow-x-auto no-scrollbar">
+            @for (s of steps; track s.id; let i = $index) {
+              <button
+                type="button"
+                (click)="goTo(s.id)"
+                [disabled]="!canGoTo(s.id)"
+                class="group flex items-center gap-2 shrink-0 rounded-xl px-2 py-2 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <span
+                  class="grid place-items-center h-9 w-9 rounded-full text-sm font-semibold border transition border-border-main text-text-main/70 bg-background group-hover:border-primary/50 group-hover:text-text-main"
+                  [class.!border-primary]="currentStep === s.id"
+                  [class.!text-primary]="currentStep === s.id"
+                  [class.!bg-primary/10]="currentStep === s.id"
+                >
+                  {{ s.id }}
+                </span>
+
+                <span
+                  class="text-sm font-medium whitespace-nowrap transition text-text-main/70 group-hover:text-text-main"
+                  [class.!text-text-main]="currentStep === s.id"
+                >
+                  {{ s.label }}
+                </span>
+
+                @if (i < steps.length - 1) {
+                  <span class="mx-1 text-text-main/25 select-none">»</span>
+                }
+              </button>
+            }
+          </div>
+        </div>
+
+        @if (errMsg) {
+          <div
+            class="rounded-2xl border border-red-500/30 bg-red-500/10 p-4 text-sm font-bold text-red-500 shadow-sm flex items-center gap-2 mb-6"
+          >
+            <i class="fas fa-exclamation-circle mr-2"></i> {{ errMsg }}
+          </div>
+        }
+
+        <div class="mt-7">
+          @if (currentStep === 1) {
+            <div class="text-center">
+              <h2 class="text-3xl md:text-4xl font-black tracking-tight text-text-main mb-2">
+                Forgot Password
+              </h2>
+              <p class="text-sm font-medium text-text-main/50 text-center mb-8">
+                Enter your email or username to receive an OTP.
+              </p>
+            </div>
+
+            <form [formGroup]="emailForm" (ngSubmit)="submitEmail()" class="mt-7 space-y-5">
+              <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1"
+                  >Email or Username</label
+                >
+                <input
+                  formControlName="emailOrUserName"
+                  type="text"
+                  placeholder="name@email.com or username"
+                  class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-text-main/30"
+                />
+                @if (
+                  emailForm.get('emailOrUserName')?.touched &&
+                  emailForm.get('emailOrUserName')?.getError('required')
+                ) {
+                  <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"><i class="fas fa-exclamation-circle mr-1"></i> Email/Username is required</p>
+                }
+                @if (emailForm.get('emailOrUserName')?.hasError('emailOrUserName')) {
+                  <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"><i class="fas fa-exclamation-circle mr-1"></i> Enter valid email.</p>
+                }
+              </div>
+
+              <div class="flex items-center justify-between py-1">
+                <p class="text-sm font-medium text-text-main/50 text-center">
+                  Back to
+                  <a routerLink="/login" class="text-primary font-bold hover:text-primary/80 transition-colors cursor-pointer">login</a>
+                </p>
+              </div>
+
+              <button
+                type="submit"
+                [disabled]="loading"
+                class="w-full rounded-2xl bg-primary py-4 text-sm font-bold text-white hover:bg-primary/90 transition-all hover:-translate-y-0.5 shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <span class="flex items-center justify-center gap-2">
+                  Send OTP
+                  @if (loading) {
+                    <span
+                      class="h-5 w-5 rounded-full border-2 border-white/40 border-t-white animate-spin"
+                    ></span>
+                  }
+                </span>
+              </button>
+            </form>
+          }
+
+          @if (currentStep === 2) {
+            <div class="text-center">
+              <h2 class="text-3xl md:text-4xl font-black tracking-tight text-text-main mb-2">Verify OTP</h2>
+              <p class="text-sm font-medium text-text-main/50 text-center mb-8">
+                We sent an OTP to <span class="text-text-main font-medium">{{ savedUser }}</span
+                >.
+              </p>
+            </div>
+
+            <form [formGroup]="otpForm" (ngSubmit)="submitOtp()" class="mt-7 space-y-5">
+              <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">OTP</label>
+                <input
+                  formControlName="otp"
+                  type="text"
+                  inputmode="numeric"
+                  placeholder="Enter OTP"
+                  class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all tracking-[0.3em] placeholder:text-text-main/30"
+                />
+                @if (otpForm.get('otp')?.touched && otpForm.get('otp')?.getError('required')) {
+                  <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"><i class="fas fa-exclamation-circle mr-1"></i> OTP is required</p>
+                }
+              </div>
+
+              <div class="flex items-center gap-3">
                 <button
                   type="button"
-                  (click)="goTo(s.id)"
-                  [disabled]="!canGoTo(s.id)"
-                  class="group flex items-center gap-2 shrink-0 rounded-xl px-2 py-2 transition
-                         disabled:opacity-50 disabled:cursor-not-allowed"
+                  (click)="goTo(1)"
+                  [disabled]="loading"
+                  class="flex-1 rounded-2xl border border-border-main bg-background hover:bg-black/5 text-text-main font-semibold transition py-4 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <span
-                    class="grid place-items-center h-9 w-9 rounded-full text-sm font-semibold border transition
-                           border-white/15 text-white/70 bg-white/[0.04]
-                           group-hover:border-sky-400/50 group-hover:text-white"
-                    [class.!border-sky-400]="currentStep === s.id"
-                    [class.!text-white]="currentStep === s.id"
-                    [class.!bg-sky-500/15]="currentStep === s.id"
-                  >
-                    {{ s.id }}
-                  </span>
-  
-                  <span
-                    class="text-sm font-medium whitespace-nowrap transition text-white/70 group-hover:text-white"
-                    [class.!text-white]="currentStep === s.id"
-                  >
-                    {{ s.label }}
-                  </span>
-  
-                  @if (i < steps.length - 1) {
-                    <span class="mx-1 text-white/25 select-none">»</span>
-                  }
+                  Back
                 </button>
-              }
-            </div>
-          </div>
-  
-          @if (errMsg) {
-            <div class="mt-5 rounded-2xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-200">
-              {{ errMsg }}
-            </div>
-          }
-  
-          <div class="mt-7">
-            @if (currentStep === 1) {
-              <div class="text-center">
-                <h2 class="text-2xl md:text-3xl font-black tracking-tight text-white">Forgot Password</h2>
-                <p class="mt-2 text-sm text-white/60">Enter your email or username to receive an OTP.</p>
-              </div>
-  
-              <form [formGroup]="emailForm" (ngSubmit)="submitEmail()" class="mt-7 space-y-5">
-                <div>
-                  <label class="block text-sm font-medium text-white/80 mb-2">Email or Username</label>
-                  <input
-                    formControlName="emailOrUserName"
-                    type="text"
-                    placeholder="name@email.com or username"
-                    class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90
-                           placeholder:text-white/35 outline-none transition
-                           focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
-                  />
-                  @if (emailForm.get('emailOrUserName')?.touched &&
-                  emailForm.get('emailOrUserName')?.getError('required')) {
-                    <p class="mt-2 text-sm text-red-300">Email/Username is required</p>
-                  } @if (emailForm.get('emailOrUserName')?.hasError('emailOrUserName')) {
-              <p class="text-red-400 text-sm mt-1">Enter valid email.</p>
-              }
-                </div>
-  
-                <div class="flex items-center justify-between py-1">
-                  <p class="text-sm text-white/55 text-center">
-                    Back to
-                    <a routerLink="/login" class="text-sky-300 hover:underline">login</a>
-                  </p>
-                </div>
 
                 <button
                   type="submit"
                   [disabled]="loading"
-                  class="cursor-pointer btn-solid w-full h-12 rounded-2xl font-semibold text-white
-                         disabled:opacity-60 disabled:cursor-not-allowed"
+                  class="flex-1 w-full rounded-2xl bg-primary py-4 text-sm font-bold text-white hover:bg-primary/90 transition-all hover:-translate-y-0.5 shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <span class="flex items-center justify-center gap-2">
-                    Send OTP
+                    Verify
                     @if (loading) {
-                      <span class="h-5 w-5 rounded-full border-2 border-white/40 border-t-white animate-spin"></span>
+                      <span
+                        class="h-5 w-5 rounded-full border-2 border-white/40 border-t-white animate-spin"
+                      ></span>
                     }
                   </span>
                 </button>
-              </form>
-            }
-  
-            @if (currentStep === 2) {
-              <div class="text-center">
-                <h2 class="text-2xl md:text-3xl font-black tracking-tight text-white">Verify OTP</h2>
-                <p class="mt-2 text-sm text-white/60">
-                  We sent an OTP to <span class="text-white/90 font-medium">{{ savedUser }}</span>.
-                </p>
               </div>
-  
-              <form [formGroup]="otpForm" (ngSubmit)="submitOtp()" class="mt-7 space-y-5">
-                <div>
-                  <label class="block text-sm font-medium text-white/80 mb-2">OTP</label>
+            </form>
+          }
+
+          @if (currentStep === 3) {
+            <div class="text-center">
+              <h2 class="text-3xl md:text-4xl font-black tracking-tight text-text-main mb-2">
+                Reset Password
+              </h2>
+              <p class="text-sm font-medium text-text-main/50 text-center mb-8">Create a new password for your account.</p>
+            </div>
+
+            <form [formGroup]="resetForm" (ngSubmit)="submitReset()" class="mt-7 space-y-5">
+              <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">New Password</label>
+                <div class="relative">
                   <input
-                    formControlName="otp"
-                    type="text"
-                    inputmode="numeric"
-                    placeholder="Enter OTP"
-                    class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90
-                           placeholder:text-white/35 outline-none transition tracking-[0.3em]
-                           focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
+                    [type]="showNewPass ? 'text' : 'password'"
+                    formControlName="newPassword"
+                    [class.border-red-400]="
+                      resetForm.get('newPassword')?.touched && resetForm.get('newPassword')?.invalid
+                    "
+                    placeholder="Enter new password"
+                    class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 pr-12 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-text-main/30"
                   />
-                  @if (otpForm.get('otp')?.touched && otpForm.get('otp')?.getError('required')) {
-                    <p class="mt-2 text-sm text-red-300">OTP is required</p>
-                  }
-                </div>
-  
-                <div class="flex items-center gap-3">
                   <button
                     type="button"
-                    (click)="goTo(1)"
-                    [disabled]="loading"
-                    class="cursor-pointer flex-1 h-12 rounded-2xl border border-white/10 bg-white/[0.05] hover:bg-white/[0.08]
-                           text-white/80 font-semibold transition disabled:opacity-60 disabled:cursor-not-allowed"
+                    (click)="showNewPass = !showNewPass"
+                    class="absolute right-4 top-1/2 -translate-y-1/2 text-text-main/40 hover:text-primary transition-colors cursor-pointer"
                   >
-                    Back
+                    <i
+                      class="fa-solid"
+                      [class.fa-eye-slash]="showNewPass"
+                      [class.fa-eye]="!showNewPass"
+                    ></i>
                   </button>
-  
-                  <button
-                    type="submit"
-                    [disabled]="loading"
-                    class="cursor-pointer btn-solid flex-1 h-12 rounded-2xl font-semibold text-white
-                           disabled:opacity-60 disabled:cursor-not-allowed"
-                  >
-                    <span class="flex items-center justify-center gap-2">
-                      Verify
-                      @if (loading) {
-                        <span class="h-5 w-5 rounded-full border-2 border-white/40 border-t-white animate-spin"></span>
-                      }
-                    </span>
-                  </button>
-                </div>
-              </form>
-            }
-  
-            @if (currentStep === 3) {
-              <div class="text-center">
-                <h2 class="text-2xl md:text-3xl font-black tracking-tight text-white">Reset Password</h2>
-                <p class="mt-2 text-sm text-white/60">Create a new password for your account.</p>
-              </div>
-  
-              <form [formGroup]="resetForm" (ngSubmit)="submitReset()" class="mt-7 space-y-5">
-                <div>
-                  <label class="block text-sm font-medium text-white/80 mb-2">New Password</label>
-                  <div class="relative">
-                    <input
-                      [type]="showNewPass ? 'text' : 'password'"
-                      formControlName="newPassword"
-                      [class.border-red-400]="resetForm.get('newPassword')?.touched && resetForm.get('newPassword')?.invalid"
-                      placeholder="Enter new password"
-                      class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 pr-12 text-white/90 outline-none transition focus:border-sky-400/60 placeholder:text-gray-500 placeholder:italic"
-                    />
-                    <button type="button" (click)="showNewPass = !showNewPass" class="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white cursor-pointer">
-                      <i class="fa-solid" 
-                      [class.fa-eye-slash]="showNewPass" 
-                      [class.fa-eye]="!showNewPass"></i>                    </button>
-                  </div>
-                  
-                  @let nPass = resetForm.get('newPassword');
-                  @if (nPass?.touched && nPass?.invalid) {
-                    <div class="mt-2 space-y-1 ml-1">
-                      @if (nPass?.errors?.['required']) {
-                        <p class="text-xs text-red-300">Password is required</p>
-                      }
-                      @if (nPass?.errors?.['pattern']) {
-                        <p class="text-[10px] text-red-200 leading-relaxed">
-                          Must include: Upper, lower, number, and special character (@$!%*?&).
-                        </p>
-                      }
-                    </div>
-                  }
-                </div>
-                
-                <div class="mt-4">
-                  <label class="block text-sm font-medium text-white/80 mb-2">Confirm Password</label>
-                  <div class="relative">
-                    <input
-                      [type]="showConfirmPass ? 'text' : 'password'"
-                      formControlName="confirmPassword"
-                      [class.border-red-400]="resetForm.hasError('mismatch') && resetForm.get('confirmPassword')?.touched"
-                      placeholder="Confirm new password"
-                      class="w-full rounded-2xl placeholder:text-gray-500 placeholder:italic border border-white/10 bg-white/[0.05] px-4 py-3 pr-12 text-white/90 outline-none transition focus:border-sky-400/60"
-                    />
-                    <button type="button" (click)="showConfirmPass = !showConfirmPass" class="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white cursor-pointer">
-                      <i class="fa-solid" 
-         [class.fa-eye-slash]="showNewPass" 
-         [class.fa-eye]="!showNewPass"></i>
-                    </button>
-                  </div>
-                
-                  @if (resetForm.get('confirmPassword')?.touched) {
-                    <div class="mt-2 space-y-1 ml-1">
-                      @if (resetForm.get('confirmPassword')?.hasError('required')) {
-                        <p class="text-xs text-red-300">Confirming password is required</p>
-                      }
-                      @if (resetForm.hasError('mismatch') && !resetForm.get('confirmPassword')?.hasError('required')) {
-                        <p class="text-xs text-red-300 italic">Passwords do not match</p>
-                      }
-                    </div>
-                  }
                 </div>
 
-                <div class="flex items-center gap-3">
+                @let nPass = resetForm.get('newPassword');
+                @if (nPass?.touched && nPass?.invalid) {
+                  <div class="mt-2 space-y-1 ml-1">
+                    @if (nPass?.errors?.['required']) {
+                      <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"><i class="fas fa-exclamation-circle mr-1"></i> Password is required</p>
+                    }
+                    @if (nPass?.errors?.['pattern']) {
+                      <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
+                        <i class="fas fa-exclamation-circle mr-1"></i> Must include: Upper, lower, number, and special character (@$!%*?&).
+                      </p>
+                    }
+                  </div>
+                }
+              </div>
+
+              <div class="mt-4">
+                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Confirm Password</label>
+                <div class="relative">
+                  <input
+                    [type]="showConfirmPass ? 'text' : 'password'"
+                    formControlName="confirmPassword"
+                    [class.border-red-400]="
+                      resetForm.hasError('mismatch') && resetForm.get('confirmPassword')?.touched
+                    "
+                    placeholder="Confirm new password"
+                    class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 pr-12 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-text-main/30"
+                  />
                   <button
                     type="button"
-                    (click)="goTo(2)"
-                    [disabled]="loading"
-                    class="cursor-pointer flex-1 h-12 rounded-2xl border border-white/10 bg-white/[0.05] hover:bg-white/[0.08]
-                           text-white/80 font-semibold transition disabled:opacity-60 disabled:cursor-not-allowed"
+                    (click)="showConfirmPass = !showConfirmPass"
+                    class="absolute right-4 top-1/2 -translate-y-1/2 text-text-main/40 hover:text-primary transition-colors cursor-pointer"
                   >
-                    Back
-                  </button>
-  
-                  <button
-                    type="submit"
-                    [disabled]="loading"
-                    class="cursor-pointer btn-solid flex-1 h-12 rounded-2xl font-semibold text-white
-                           disabled:opacity-60 disabled:cursor-not-allowed"
-                  >
-                    <span class="flex items-center justify-center gap-2">
-                      Reset Password
-                      @if (loading) {
-                        <span class="h-5 w-5 rounded-full border-2 border-white/40 border-t-white animate-spin"></span>
-                      }
-                    </span>
+                    <i
+                      class="fa-solid"
+                      [class.fa-eye-slash]="showNewPass"
+                      [class.fa-eye]="!showNewPass"
+                    ></i>
                   </button>
                 </div>
-              </form>
-            }
-          </div>
+
+                @if (resetForm.get('confirmPassword')?.touched) {
+                  <div class="mt-2 space-y-1 ml-1">
+                    @if (resetForm.get('confirmPassword')?.hasError('required')) {
+                      <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"><i class="fas fa-exclamation-circle mr-1"></i> Confirming password is required</p>
+                    }
+                    @if (
+                      resetForm.hasError('mismatch') &&
+                      !resetForm.get('confirmPassword')?.hasError('required')
+                    ) {
+                      <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"><i class="fas fa-exclamation-circle mr-1"></i> Passwords do not match</p>
+                    }
+                  </div>
+                }
+              </div>
+
+              <div class="flex items-center gap-3">
+                <button
+                  type="button"
+                  (click)="goTo(2)"
+                  [disabled]="loading"
+                  class="flex-1 rounded-2xl border border-border-main bg-background hover:bg-black/5 text-text-main font-semibold transition py-4 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Back
+                </button>
+
+                <button
+                  type="submit"
+                  [disabled]="loading"
+                  class="flex-1 w-full rounded-2xl bg-primary py-4 text-sm font-bold text-white hover:bg-primary/90 transition-all hover:-translate-y-0.5 shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <span class="flex items-center justify-center gap-2">
+                    Reset Password
+                    @if (loading) {
+                      <span
+                        class="h-5 w-5 rounded-full border-2 border-white/40 border-t-white animate-spin"
+                      ></span>
+                    }
+                  </span>
+                </button>
+              </div>
+            </form>
+          }
         </div>
       </div>
     </div>
-  </section>
-  
+  </div>
+</section>

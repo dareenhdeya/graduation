@@ -9,8 +9,7 @@
           >
         </h1>
         <p class="text-text-main/50 font-bold text-sm mt-1">
-          You have <span class="text-text-main font-bold">{{ students.length }}</span> active
-          students
+          Showing <span class="text-text-main font-bold">{{ filteredStudents.length }}</span> of {{ students.length }} students
         </p>
       </div>
 
@@ -21,6 +20,7 @@
         <input
           type="text"
           placeholder="Search students..."
+          [(ngModel)]="searchTerm"
           class="w-full rounded-2xl border border-border-main bg-background py-3.5 pl-10 pr-4 text-sm font-semibold text-text-main focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all shadow-sm placeholder:text-text-main/30"
         />
       </div>
@@ -52,9 +52,23 @@
           Your classroom is empty. Students who join will appear here.
         </p>
       </div>
+    } @else if (filteredStudents.length === 0) {
+      <div
+        class="flex flex-col items-center justify-center py-24 text-center border border-dashed border-border-main rounded-3xl bg-surface"
+      >
+        <div
+          class="size-20 rounded-2xl bg-background flex items-center justify-center text-text-main/20 mb-4 border border-border-main shadow-sm"
+        >
+          <i class="fa-solid fa-magnifying-glass text-3xl"></i>
+        </div>
+        <h3 class="text-xl font-black tracking-tight text-text-main">No Results Found</h3>
+        <p class="text-text-main/50 font-bold max-w-xs mx-auto mt-2">
+          No students match "{{ searchTerm }}". Try a different name or email.
+        </p>
+      </div>
     } @else {
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-        @for (student of students; track student.id) {
+        @for (student of filteredStudents; track student.id) {
           <div
             class="group relative rounded-3xl border border-border-main bg-surface p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 shadow-sm flex flex-col items-center text-center"
           >

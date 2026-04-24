@@ -36,4 +36,20 @@ export class StudentServiceService extends baseHttp {
     return this.get<IViewEnrolledSub>(APP_APIs.studentViewEnrolledSubjects, {});
   }
 
+  viewExercise(sid: string, lid: string, eid: string) {
+    return this.get<any>(APP_APIs.studentViewExercise, {}, {
+      headers: { sid, lid, eid }
+    });
+  }
+
+  startQuiz(sid: string, eid: string) {
+    return this.get<any>(APP_APIs.studentStartQuiz, {}, {
+      headers: { sid, eid }
+    });
+  }
+
+  submitAnswers(payload: any) {
+    return this.post<any>(APP_APIs.studentSubmitAnswers, payload);
+  }
+
 }

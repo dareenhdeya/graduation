@@ -3,6 +3,7 @@ import { IADMIN } from '../../../interfaces/iadmin.interface';
 import { Router, RouterLink } from '@angular/router';
 import { AdminServiceService } from '../../../services/admin-service.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 type Role = 'Parent' | 'Teacher' | 'Student';
 
 @Component({
@@ -14,6 +15,7 @@ type Role = 'Parent' | 'Teacher' | 'Student';
 export class UserCrudComponent implements OnInit {
   private readonly adminService = inject(AdminServiceService);
   private readonly router = inject(Router);
+  private toastr = inject(ToastrService);
 
   private roleToId(role: string | null | undefined): 1 | 2 | 3 {
     switch (role) {
@@ -106,10 +108,12 @@ export class UserCrudComponent implements OnInit {
 
     this.adminService.endSession(u.id).subscribe({
       next: () => {
+        this.toastr.success('Session ended successfully.', 'Success');
         this.loadUsers();
       },
       error: (err) => {
         this.error = err?.error?.message || err?.message || 'Failed to end session';
+        this.toastr.error(this.error, 'Error');
       },
     });
   }
@@ -120,10 +124,12 @@ export class UserCrudComponent implements OnInit {
 
     this.adminService.blockUser(u.id).subscribe({
       next: () => {
+        this.toastr.success('User blocked successfully.', 'Success');
         this.loadUsers();
       },
       error: (err) => {
         this.error = err?.error?.message || err?.message || 'Failed to block user';
+        this.toastr.error(this.error, 'Error');
       },
     });
   }
