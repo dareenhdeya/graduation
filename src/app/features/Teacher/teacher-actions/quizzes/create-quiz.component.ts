@@ -53,6 +53,11 @@ export class CreateQuizComponent implements OnInit {
     answerImages: Map<string, File> = new Map();
     matchAnswerImages: Map<string, File> = new Map();
 
+    // Preview Data URLs (generated via FileReader)
+    questionPreviews: Map<string, string> = new Map();
+    answerPreviews: Map<string, string> = new Map();
+    matchAnswerPreviews: Map<string, string> = new Map();
+
     // Answer type per MCQ answer: 'eIdx-qIdx-aIdx' → 'text' | 'image'
     answerTypes: Map<string, AnswerType> = new Map();
     // Match answer type per Matching question: 'eIdx-qIdx' → 'text' | 'image'
@@ -148,11 +153,56 @@ export class CreateQuizComponent implements OnInit {
                 this.questionImages.delete(key);
                 this.answerImages.delete(key);
                 this.matchAnswerImages.delete(key);
+                this.questionPreviews.delete(key);
+                this.answerPreviews.delete(key);
+                this.matchAnswerPreviews.delete(key);
                 this.matchAnswerTypes.delete(key);
                 this.answerTypes.delete(key);
             }
         }
         this.exercises.removeAt(eIndex);
+    }
+
+    /** Clear all text/image content from an exercise while keeping its structure. */
+    clearExercise(eIndex: number): void {
+        this.exercises.at(eIndex).get('name')?.setValue('');
+        const qs = this.questions(eIndex);
+        for (let q = 0; q < qs.length; q++) {
+            qs.at(q).get('prompt_text')?.setValue('');
+            qs.at(q).get('score')?.setValue(10);
+            qs.at(q).get('matchAnswer')?.setValue('');
+            const as = this.answers(eIndex, q);
+            for (let a = 0; a < as.length; a++) {
+                as.at(a).get('answer')?.setValue('');
+                const aKey = this.aImgKey(eIndex, q, a);
+                this.answerImages.delete(aKey);
+                this.answerPreviews.delete(aKey);
+            }
+            const qKey = this.qImgKey(eIndex, q);
+            this.questionImages.delete(qKey);
+            this.questionPreviews.delete(qKey);
+            const mKey = this.matchKey(eIndex, q);
+            this.matchAnswerImages.delete(mKey);
+            this.matchAnswerPreviews.delete(mKey);
+        }
+    }
+
+    /** Reset an exercise back to a fresh default state (1 question, 2 answers). */
+    resetExercise(eIndex: number): void {
+        // Clean up all maps for this exercise
+        for (const map of [this.questionImages, this.answerImages, this.matchAnswerImages, this.questionPreviews, this.answerPreviews, this.matchAnswerPreviews, this.matchAnswerTypes, this.answerTypes] as Map<string, any>[]) {
+            for (const key of [...map.keys()]) {
+                if (key.startsWith(`${eIndex}-`)) map.delete(key);
+            }
+        }
+        // Remove all existing questions
+        const qs = this.questions(eIndex);
+        while (qs.length) qs.removeAt(0);
+        // Reset exercise-level fields to defaults
+        this.exercises.at(eIndex).get('name')?.setValue('');
+        this.exercises.at(eIndex).get('type')?.setValue('MCQ');
+        // Add one fresh question
+        this.addQuestion(eIndex);
     }
 
     setExerciseType(eIndex: number, type: ExerciseType): void {
@@ -167,7 +217,7 @@ export class CreateQuizComponent implements OnInit {
 
     addQuestion(eIndex: number): void {
         const questionGroup = this.fb.group({
-            prompt_text: ['', [Validators.required, Validators.minLength(3)]],
+            prompt_text: [''],
             score: [10, [Validators.required, Validators.min(1)]],
             matchAnswer: [''],        // used only for Matching type
             answers: this.fb.array([]),
@@ -256,23 +306,47 @@ export class CreateQuizComponent implements OnInit {
 
     onQuestionImageSelect(event: Event, eIndex: number, qIndex: number): void {
         const input = event.target as HTMLInputElement;
-        if (input.files?.length) {
-            this.questionImages.set(this.qImgKey(eIndex, qIndex), input.files[0]);
-        }
+        const file = input.files?.[0];
+        if (!file) return;
+        const key = this.qImgKey(eIndex, qIndex);
+        this.questionImages.set(key, file);
+        const reader = new FileReader();
+        reader.onload = (e) => this.questionPreviews.set(key, e.target!.result as string);
+        reader.readAsDataURL(file);
     }
 
     onMcqAnswerImageSelect(event: Event, eIndex: number, qIndex: number, aIndex: number): void {
         const input = event.target as HTMLInputElement;
-        if (input.files?.length) {
-            this.answerImages.set(this.aImgKey(eIndex, qIndex, aIndex), input.files[0]);
-        }
+        const file = input.files?.[0];
+        if (!file) return;
+        const key = this.aImgKey(eIndex, qIndex, aIndex);
+        this.answerImages.set(key, file);
+        const reader = new FileReader();
+        reader.onload = (e) => this.answerPreviews.set(key, e.target!.result as string);
+        reader.readAsDataURL(file);
     }
 
     onMatchAnswerImageSelect(event: Event, eIndex: number, qIndex: number): void {
         const input = event.target as HTMLInputElement;
-        if (input.files?.length) {
-            this.matchAnswerImages.set(this.matchKey(eIndex, qIndex), input.files[0]);
-        }
+        const file = input.files?.[0];
+        if (!file) return;
+        const key = this.matchKey(eIndex, qIndex);
+        this.matchAnswerImages.set(key, file);
+        const reader = new FileReader();
+        reader.onload = (e) => this.matchAnswerPreviews.set(key, e.target!.result as string);
+        reader.readAsDataURL(file);
+    }
+
+    getQuestionPreview(eIndex: number, qIndex: number): string {
+        return this.questionPreviews.get(this.qImgKey(eIndex, qIndex)) ?? '';
+    }
+
+    getMcqAnswerPreview(eIndex: number, qIndex: number, aIndex: number): string {
+        return this.answerPreviews.get(this.aImgKey(eIndex, qIndex, aIndex)) ?? '';
+    }
+
+    getMatchAnswerPreview(eIndex: number, qIndex: number): string {
+        return this.matchAnswerPreviews.get(this.matchKey(eIndex, qIndex)) ?? '';
     }
 
     getQuestionImageName(eIndex: number, qIndex: number): string {
@@ -427,6 +501,9 @@ export class CreateQuizComponent implements OnInit {
                 this.questionImages.clear();
                 this.answerImages.clear();
                 this.matchAnswerImages.clear();
+                this.questionPreviews.clear();
+                this.answerPreviews.clear();
+                this.matchAnswerPreviews.clear();
                 this.answerTypes.clear();
                 this.matchAnswerTypes.clear();
                 this.addExercise();
