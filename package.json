@@ -24,6 +24,7 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^21.2.10",
+    "@angular/cdk": "^21.2.8",
     "@angular/common": "^20.3.0",
     "@angular/compiler": "^20.3.0",
     "@angular/core": "^20.3.0",
@@ -34,6 +35,8 @@
     "@angular/ssr": "^20.3.11",
     "@fortawesome/fontawesome-free": "^7.1.0",
     "@tailwindcss/postcss": "^4.1.17",
+    "@types/canvas-confetti": "^1.9.0",
+    "canvas-confetti": "^1.9.4",
     "express": "^5.1.0",
     "ngx-cookie-service": "^21.1.0",
     "ngx-spinner": "^21.1.0",

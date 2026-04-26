@@ -26,7 +26,7 @@ export class App implements OnInit {
   currentVideo = this.loadingVideos[0];
   ngOnInit(): void {
     this.loader.spinnerObservable.subscribe((status) => {
-      if (status.show) {
+      if (status?.show) {
         this.pickRandomVideo();
       }
     });

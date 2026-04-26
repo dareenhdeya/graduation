@@ -53,6 +53,19 @@ export class EditQuizComponent implements OnInit {
     answerImages: Map<string, File> = new Map();
     matchAnswerImages: Map<string, File> = new Map();
 
+    // Preview Data URLs (generated via FileReader)
+    questionPreviews: Map<string, string> = new Map();
+    answerPreviews: Map<string, string> = new Map();
+    matchAnswerPreviews: Map<string, string> = new Map();
+
+    // Existing Cloudinary URLs loaded from the API (fallback when no FileReader preview)
+    existingQuestionImgPaths: Map<string, string> = new Map();
+    existingAnswerImgPaths: Map<string, string> = new Map();
+    existingMatchImgPaths: Map<string, string> = new Map();
+
+    // Snapshot of original API data for per-exercise reset
+    private originalData: any = null;
+
     // Answer type per MCQ answer: 'eIdx-qIdx-aIdx' → 'text' | 'image'
     answerTypes: Map<string, AnswerType> = new Map();
     // Match answer type per Matching question: 'eIdx-qIdx' → 'text' | 'image'
@@ -129,7 +142,11 @@ export class EditQuizComponent implements OnInit {
         
         if (this.quizId && this.subjectId) {
             this.teacherService.viewQuiz(this.subjectId, this.quizId, this.lessonId).subscribe({
-                next: (res) => this.populateForm(res.result || res.data || res),
+                next: (res) => {
+                    const data = res.result || res.data || res;
+                    this.originalData = data;
+                    this.populateForm(data);
+                },
                 error: (err) => {
                     console.error(err);
                     this.submitError = 'Failed to load quiz data.';
@@ -207,7 +224,7 @@ export class EditQuizComponent implements OnInit {
                 
                 const qGroup = this.fb.group({
                     id: [qId],
-                    prompt_text: [promptText, [Validators.required, Validators.minLength(3)]],
+                    prompt_text: [promptText],
                     score: [score, [Validators.required, Validators.min(1)]],
                     matchAnswer: [''],
                     matchAnswerId: [null], // for matching single answer
@@ -215,9 +232,11 @@ export class EditQuizComponent implements OnInit {
                 });
                 this.questions(eIdx).push(qGroup);
 
-                // Note: File inputs cannot be pre-populated programmatically.
-                // We'd rely on standard patch value and require re-upload, or build logic for existing image urls.
-                // Assuming minimal changes needed inside component layout. We initialize with default text fields.
+                // Store existing question image URL from API
+                const qImgUrl = q.imgPath || q.ImgPath || q.prompt_image || null;
+                if (qImgUrl) {
+                    this.existingQuestionImgPaths.set(this.qImgKey(eIdx, qIdx), qImgUrl);
+                }
                 
                 if (exTypeStr === 'MCQ') {
                      const mcqAnswers = q.answers || q.Answers || [];
@@ -231,7 +250,16 @@ export class EditQuizComponent implements OnInit {
                              isCorrect: [isCorrect]
                          });
                          this.answers(eIdx, qIdx).push(aGroup);
-                         this.answerTypes.set(this.aImgKey(eIdx, qIdx, aIdx), 'text');
+                         const ansImgUrl = ans.imgPath || ans.ImgPath || null;
+                         // Image answer: answer text is empty AND backend stored an imgPath
+                         const isImageAnswer = !answerVal.trim() && !!ansImgUrl;
+                         if (isImageAnswer) {
+                             const aKey = this.aImgKey(eIdx, qIdx, aIdx);
+                             this.existingAnswerImgPaths.set(aKey, ansImgUrl);
+                             this.answerTypes.set(aKey, 'image');
+                         } else {
+                             this.answerTypes.set(this.aImgKey(eIdx, qIdx, aIdx), 'text');
+                         }
                      });
                      if (mcqAnswers.length === 0) {
                          this.addAnswer(eIdx, qIdx);
@@ -245,6 +273,12 @@ export class EditQuizComponent implements OnInit {
                        const mAnsObj = q.answer || q.Answer;
                        mAnswer = mAnsObj.answer || mAnsObj.Answer || (typeof mAnsObj === 'string' ? mAnsObj : '');
                        mAnswerId = mAnsObj.id || mAnsObj.Id || null;
+                       // Store existing match answer image URL if present
+                       const mImgUrl = mAnsObj.imgPath || mAnsObj.ImgPath || null;
+                       if (mImgUrl) {
+                           this.existingMatchImgPaths.set(this.matchKey(eIdx, qIdx), mImgUrl);
+                           this.matchAnswerTypes.set(this.matchKey(eIdx, qIdx), 'image');
+                       }
                      }
                      const mGroup = this.questions(eIdx).at(qIdx) as FormGroup;
                      if (!mGroup.contains('matchAnswer')) {
@@ -283,11 +317,99 @@ export class EditQuizComponent implements OnInit {
                 this.questionImages.delete(key);
                 this.answerImages.delete(key);
                 this.matchAnswerImages.delete(key);
+                this.questionPreviews.delete(key);
+                this.answerPreviews.delete(key);
+                this.matchAnswerPreviews.delete(key);
                 this.matchAnswerTypes.delete(key);
                 this.answerTypes.delete(key);
             }
         }
         this.exercises.removeAt(eIndex);
+    }
+
+    /** Clear all text/image content from an exercise while keeping its structure. */
+    clearExercise(eIndex: number): void {
+        this.exercises.at(eIndex).get('name')?.setValue('');
+        const qs = this.questions(eIndex);
+        for (let q = 0; q < qs.length; q++) {
+            qs.at(q).get('prompt_text')?.setValue('');
+            qs.at(q).get('score')?.setValue(10);
+            qs.at(q).get('matchAnswer')?.setValue('');
+            const as = this.answers(eIndex, q);
+            for (let a = 0; a < as.length; a++) {
+                as.at(a).get('answer')?.setValue('');
+                const aKey = this.aImgKey(eIndex, q, a);
+                this.answerImages.delete(aKey);
+                this.answerPreviews.delete(aKey);
+            }
+            const qKey = this.qImgKey(eIndex, q);
+            this.questionImages.delete(qKey);
+            this.questionPreviews.delete(qKey);
+            const mKey = this.matchKey(eIndex, q);
+            this.matchAnswerImages.delete(mKey);
+            this.matchAnswerPreviews.delete(mKey);
+        }
+    }
+
+    /** Reset an exercise back to the originally loaded API data. */
+    resetExercise(eIndex: number): void {
+        if (!this.originalData) return;
+        const exercises = this.originalData.Exercise || this.originalData.exercise || this.originalData.exercises || this.originalData.items || [];
+        const exData = exercises[eIndex];
+        if (!exData) return;
+
+        // Clean up all image/type maps for this exercise
+        for (const map of [this.questionImages, this.answerImages, this.matchAnswerImages, this.questionPreviews, this.answerPreviews, this.matchAnswerPreviews, this.matchAnswerTypes, this.answerTypes] as Map<string, any>[]) {
+            for (const key of [...map.keys()]) {
+                if (key.startsWith(`${eIndex}-`)) map.delete(key);
+            }
+        }
+
+        // Remove existing questions
+        const qs = this.questions(eIndex);
+        while (qs.length) qs.removeAt(0);
+
+        // Restore exercise-level fields
+        const exTypeInt = exData.type ?? exData.Type ?? exData.exerciseType;
+        const exTypeStr: ExerciseType = (exTypeInt === 1 || exTypeInt === '1' || exTypeInt === 'MCQ') ? 'MCQ' : 'Matching';
+        this.exercises.at(eIndex).get('name')?.setValue(exData.name || exData.Name || '');
+        this.exercises.at(eIndex).get('type')?.setValue(exTypeStr);
+
+        // Restore questions
+        const questionsList = exData.questions || exData.Questions || [];
+        questionsList.forEach((q: any, qIdx: number) => {
+            const promptText = q.prompt_text || q.prompt || '';
+            const score = q.score || 10;
+            const qId = q.qid || q.Qid || q.id || q.Id || null;
+            const qGroup = this.fb.group({
+                id: [qId],
+                prompt_text: [promptText],
+                score: [score, [Validators.required, Validators.min(1)]],
+                matchAnswer: [''],
+                matchAnswerId: [null],
+                answers: this.fb.array([]),
+            });
+            qs.push(qGroup);
+            if (exTypeStr === 'MCQ') {
+                const mcqAnswers = q.answers || q.Answers || [];
+                mcqAnswers.forEach((ans: any, aIdx: number) => {
+                    const aGroup = this.fb.group({
+                        id: [ans.id || ans.Id || null],
+                        answer: [ans.answer || ans.Answer || ''],
+                        isCorrect: [ans.isCorrect || ans.IsCorrect || false],
+                    });
+                    this.answers(eIndex, qIdx).push(aGroup);
+                    this.answerTypes.set(this.aImgKey(eIndex, qIdx, aIdx), 'text');
+                });
+                if (mcqAnswers.length === 0) { this.addAnswer(eIndex, qIdx); this.addAnswer(eIndex, qIdx); }
+            } else {
+                this.matchAnswerTypes.set(this.matchKey(eIndex, qIdx), 'text');
+                const mAnsObj = q.answer || q.Answer;
+                const mAnswer = mAnsObj ? (mAnsObj.answer || mAnsObj.Answer || '') : '';
+                qGroup.get('matchAnswer')?.setValue(mAnswer);
+            }
+        });
+        if (questionsList.length === 0) { this.addQuestion(eIndex); }
     }
 
     setExerciseType(eIndex: number, type: ExerciseType): void {
@@ -303,7 +425,7 @@ export class EditQuizComponent implements OnInit {
     addQuestion(eIndex: number): void {
         const questionGroup = this.fb.group({
             id: [null],
-            prompt_text: ['', [Validators.required, Validators.minLength(3)]],
+            prompt_text: [''],
             score: [10, [Validators.required, Validators.min(1)]],
             matchAnswer: [''],        // used only for Matching type
             matchAnswerId: [null],
@@ -394,23 +516,50 @@ export class EditQuizComponent implements OnInit {
 
     onQuestionImageSelect(event: Event, eIndex: number, qIndex: number): void {
         const input = event.target as HTMLInputElement;
-        if (input.files?.length) {
-            this.questionImages.set(this.qImgKey(eIndex, qIndex), input.files[0]);
-        }
+        const file = input.files?.[0];
+        if (!file) return;
+        const key = this.qImgKey(eIndex, qIndex);
+        this.questionImages.set(key, file);
+        const reader = new FileReader();
+        reader.onload = (e) => this.questionPreviews.set(key, e.target!.result as string);
+        reader.readAsDataURL(file);
     }
 
     onMcqAnswerImageSelect(event: Event, eIndex: number, qIndex: number, aIndex: number): void {
         const input = event.target as HTMLInputElement;
-        if (input.files?.length) {
-            this.answerImages.set(this.aImgKey(eIndex, qIndex, aIndex), input.files[0]);
-        }
+        const file = input.files?.[0];
+        if (!file) return;
+        const key = this.aImgKey(eIndex, qIndex, aIndex);
+        this.answerImages.set(key, file);
+        const reader = new FileReader();
+        reader.onload = (e) => this.answerPreviews.set(key, e.target!.result as string);
+        reader.readAsDataURL(file);
     }
 
     onMatchAnswerImageSelect(event: Event, eIndex: number, qIndex: number): void {
         const input = event.target as HTMLInputElement;
-        if (input.files?.length) {
-            this.matchAnswerImages.set(this.matchKey(eIndex, qIndex), input.files[0]);
-        }
+        const file = input.files?.[0];
+        if (!file) return;
+        const key = this.matchKey(eIndex, qIndex);
+        this.matchAnswerImages.set(key, file);
+        const reader = new FileReader();
+        reader.onload = (e) => this.matchAnswerPreviews.set(key, e.target!.result as string);
+        reader.readAsDataURL(file);
+    }
+
+    getQuestionPreview(eIndex: number, qIndex: number): string {
+        const key = this.qImgKey(eIndex, qIndex);
+        return this.questionPreviews.get(key) || this.existingQuestionImgPaths.get(key) || '';
+    }
+
+    getMcqAnswerPreview(eIndex: number, qIndex: number, aIndex: number): string {
+        const key = this.aImgKey(eIndex, qIndex, aIndex);
+        return this.answerPreviews.get(key) || this.existingAnswerImgPaths.get(key) || '';
+    }
+
+    getMatchAnswerPreview(eIndex: number, qIndex: number): string {
+        const key = this.matchKey(eIndex, qIndex);
+        return this.matchAnswerPreviews.get(key) || this.existingMatchImgPaths.get(key) || '';
     }
 
     getQuestionImageName(eIndex: number, qIndex: number): string {
@@ -433,7 +582,9 @@ export class EditQuizComponent implements OnInit {
             const text: string = this.answers(eIndex, qIndex).at(aIndex).get('answer')?.value ?? '';
             return text.trim().length > 0;
         }
-        return this.answerImages.has(this.aImgKey(eIndex, qIndex, aIndex));
+        // Image type: accept a newly uploaded file OR an existing Cloudinary URL
+        const key = this.aImgKey(eIndex, qIndex, aIndex);
+        return this.answerImages.has(key) || this.existingAnswerImgPaths.has(key);
     }
 
     allMcqAnswersHaveContent(eIndex: number, qIndex: number): boolean {
@@ -450,7 +601,9 @@ export class EditQuizComponent implements OnInit {
             const val: string = this.questions(eIndex).at(qIndex).get('matchAnswer')?.value ?? '';
             return val.trim().length > 0;
         }
-        return this.matchAnswerImages.has(this.matchKey(eIndex, qIndex));
+        // Image type: accept a newly uploaded file OR an existing Cloudinary URL
+        const key = this.matchKey(eIndex, qIndex);
+        return this.matchAnswerImages.has(key) || this.existingMatchImgPaths.has(key);
     }
 
     // ── Submit ─────────────────────────────────────────────
@@ -471,7 +624,7 @@ export class EditQuizComponent implements OnInit {
                 const qs = this.questions(e);
                 for (let q = 0; q < qs.length; q++) {
                     const qGrp = qs.at(q);
-                    if (qGrp.get('prompt_text')?.invalid) errs.push(`Exercise ${e + 1} Question ${q + 1} Text`);
+
                     if (qGrp.get('score')?.invalid) errs.push(`Exercise ${e + 1} Question ${q + 1} Score`);
                 }
             }

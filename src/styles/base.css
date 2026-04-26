@@ -80,3 +80,42 @@ body::-webkit-scrollbar-thumb {
     scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
   }
 }
+
+/* ── Date / Time input: native calendar icon adapts to theme ── */
+input[type="date"],
+input[type="datetime-local"],
+input[type="time"],
+input[type="month"],
+input[type="week"] {
+  color-scheme: light;
+  color: var(--text-color);
+}
+
+:root.dark input[type="date"],
+:root.dark input[type="datetime-local"],
+:root.dark input[type="time"],
+:root.dark input[type="month"],
+:root.dark input[type="week"] {
+  color-scheme: dark;
+}
+
+/* ── Select: native dropdown popup adapts to theme ── */
+select {
+  color-scheme: light;
+  color: var(--text-color);
+  background-color: var(--bg-surface);
+}
+
+select option {
+  background-color: var(--bg-surface);
+  color: var(--text-color);
+}
+
+:root.dark select {
+  color-scheme: dark;
+}
+
+:root.dark select option {
+  background-color: var(--bg-main);
+  color: var(--text-color);
+}

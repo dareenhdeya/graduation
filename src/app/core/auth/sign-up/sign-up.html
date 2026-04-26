@@ -1,4 +1,6 @@
-<section class="relative h-[calc(100vh)] overflow-hidden bg-background transition-colors duration-300">
+<section
+  class="relative h-[calc(100vh)] overflow-hidden bg-background transition-colors duration-300"
+>
   <div
     class="pointer-events-none absolute -top-64 -left-72 h-[520px] w-[820px] rounded-[999px] bg-primary/10 blur-[130px]"
   ></div>
@@ -42,7 +44,9 @@
         </div>
 
         <div class="text-center">
-          <h1 class="text-3xl md:text-4xl font-black tracking-tight text-text-main mb-2">Create Account</h1>
+          <h1 class="text-3xl md:text-4xl font-black tracking-tight text-text-main mb-2">
+            Create Account
+          </h1>
         </div>
 
         @if (errMsg) {
@@ -61,39 +65,56 @@
           <div class="overflow-y-auto pr-2 custom-scroll flex-1 min-h-0 space-y-5">
             <div>
               <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Role</label>
+                <label
+                  class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1"
+                  >Role</label
+                >
                 <select
                   formControlName="role"
                   class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all"
                 >
                   @for (r of roles; track r.id) {
-                    <option class="bg-background text-text-main" [value]="r.id">{{ r.label }}</option>
+                    <option class="bg-background text-text-main" [value]="r.id">
+                      {{ r.label }}
+                    </option>
                   }
                 </select>
               </div>
             </div>
 
             <div>
-              <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Gender</label>
+              <label
+                class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1"
+                >Gender</label
+              >
               <select
                 formControlName="Gender"
                 [class.border-red-500]="isInvalid('Gender')"
                 class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all"
               >
-                <option class="bg-background text-text-main" value="" disabled>Select gender</option>
+                <option class="bg-background text-text-main" value="" disabled>
+                  Select gender
+                </option>
                 <option class="bg-background text-text-main" [value]="1">Male</option>
                 <option class="bg-background text-text-main" [value]="2">Female</option>
               </select>
 
               @if (isInvalid('Gender')) {
                 @if (signUpForm.get('Gender')?.hasError('required')) {
-                  <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">Gender is required.</p>
+                  <p
+                    class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"
+                  >
+                    Gender is required.
+                  </p>
                 }
               }
             </div>
 
             <div>
-              <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Email</label>
+              <label
+                class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1"
+                >Email</label
+              >
               <input
                 formControlName="email"
                 [class.border-red-500]="isInvalid('email')"
@@ -104,16 +125,27 @@
 
               @if (isInvalid('email')) {
                 @if (signUpForm.get('email')?.hasError('required')) {
-                  <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">Email is required.</p>
+                  <p
+                    class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"
+                  >
+                    Email is required.
+                  </p>
                 }
                 @if (signUpForm.get('email')?.hasError('email')) {
-                  <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">Enter valid email.</p>
+                  <p
+                    class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"
+                  >
+                    Enter valid email.
+                  </p>
                 }
               }
             </div>
 
             <div>
-              <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Password</label>
+              <label
+                class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1"
+                >Password</label
+              >
 
               <div class="relative">
                 <input
@@ -142,10 +174,16 @@
                 (signUpForm.get('password')?.touched || submitted)
               ) {
                 @if (signUpForm.get('password')?.hasError('required')) {
-                  <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">Password is required.</p>
+                  <p
+                    class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"
+                  >
+                    Password is required.
+                  </p>
                 }
                 @if (signUpForm.get('password')?.hasError('pattern')) {
-                  <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
+                  <p
+                    class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"
+                  >
                     Password must be at least 8 characters and include an uppercase letter, a
                     lowercase letter, a number, and a special character.
                   </p>
@@ -155,7 +193,10 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">First Name</label>
+                <label
+                  class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1"
+                  >First Name</label
+                >
                 <input
                   formControlName="FName"
                   [class.border-red-500]="isInvalid('FName')"
@@ -165,19 +206,34 @@
 
                 @if (isInvalid('FName')) {
                   @if (signUpForm.get('FName')?.hasError('required')) {
-                    <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">First name is required.</p>
+                    <p
+                      class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"
+                    >
+                      First name is required.
+                    </p>
                   }
                   @if (signUpForm.get('FName')?.hasError('minlength')) {
-                    <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">Minimum 2 characters.</p>
+                    <p
+                      class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"
+                    >
+                      Minimum 2 characters.
+                    </p>
                   }
                   @if (signUpForm.get('FName')?.hasError('pattern')) {
-                    <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">Letters only.</p>
+                    <p
+                      class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"
+                    >
+                      Letters only.
+                    </p>
                   }
                 }
               </div>
 
               <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Last Name</label>
+                <label
+                  class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1"
+                  >Last Name</label
+                >
                 <input
                   formControlName="LName"
                   [class.border-red-500]="isInvalid('LName')"
@@ -186,13 +242,25 @@
                 />
                 @if (isInvalid('LName')) {
                   @if (signUpForm.get('LName')?.hasError('required')) {
-                    <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">Last name is required.</p>
+                    <p
+                      class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"
+                    >
+                      Last name is required.
+                    </p>
                   }
                   @if (signUpForm.get('LName')?.hasError('minlength')) {
-                    <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">Minimum 2 characters.</p>
+                    <p
+                      class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"
+                    >
+                      Minimum 2 characters.
+                    </p>
                   }
                   @if (signUpForm.get('LName')?.hasError('pattern')) {
-                    <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">Letters only.</p>
+                    <p
+                      class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"
+                    >
+                      Letters only.
+                    </p>
                   }
                 }
               </div>
@@ -201,7 +269,10 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <!-- @if (+signUpForm.get('role')?.value !== 1) { -->
               <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Phone Number</label>
+                <label
+                  class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1"
+                  >Phone Number</label
+                >
                 <input
                   formControlName="phoneNumber"
                   [class.border-red-500]="isInvalid('phoneNumber')"
@@ -211,40 +282,60 @@
 
                 @if (isInvalid('phoneNumber')) {
                   @if (signUpForm.get('phoneNumber')?.hasError('required')) {
-                    <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">Phone number is required.</p>
+                    <p
+                      class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"
+                    >
+                      Phone number is required.
+                    </p>
                   }
                   @if (signUpForm.get('phoneNumber')?.hasError('pattern')) {
-                    <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">Invalid phone format.</p>
+                    <p
+                      class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"
+                    >
+                      Invalid phone format.
+                    </p>
                   }
                 }
               </div>
               <!-- } @else { -->
               <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Birth Date</label>
+                <label
+                  class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1"
+                  >Birth Date</label
+                >
                 <input
                   type="date"
                   formControlName="BirthDate"
                   [class.border-red-500]="isInvalid('BirthDate')"
-                  class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-text-main/30"
+                  class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all"
                   placeholder="Birth date"
                 />
 
                 @if (isInvalid('BirthDate')) {
                   @if (signUpForm.get('BirthDate')?.hasError('required')) {
-                    <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">Birthdate is required.</p>
+                    <p
+                      class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"
+                    >
+                      Birthdate is required.
+                    </p>
                   }
                 }
               </div>
 
               @if (+signUpForm.get('role')?.value! === 1) {
                 <div>
-                  <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Disability</label>
+                  <label
+                    class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1"
+                    >Disability</label
+                  >
                   <select
                     formControlName="Disability"
                     class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all"
                   >
                     @for (d of Disability; track d.id) {
-                      <option class="bg-background text-text-main" [value]="d.id">{{ d.label }}</option>
+                      <option class="bg-background text-text-main" [value]="d.id">
+                        {{ d.label }}
+                      </option>
                     }
                   </select>
                 </div>
@@ -252,7 +343,10 @@
               <!-- } -->
 
               <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Address</label>
+                <label
+                  class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1"
+                  >Address</label
+                >
                 <input
                   formControlName="Address"
                   [class.border-red-500]="isInvalid('Address')"
@@ -262,10 +356,18 @@
 
                 @if (isInvalid('Address')) {
                   @if (signUpForm.get('Address')?.hasError('required')) {
-                    <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">Address is required.</p>
+                    <p
+                      class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"
+                    >
+                      Address is required.
+                    </p>
                   }
                   @if (signUpForm.get('Address')?.hasError('minlength')) {
-                    <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">Minimum 10 characters.</p>
+                    <p
+                      class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"
+                    >
+                      Minimum 10 characters.
+                    </p>
                   }
                 }
               </div>
@@ -273,7 +375,10 @@
 
             @if (+signUpForm.get('role')?.value! === 2) {
               <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Job</label>
+                <label
+                  class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1"
+                  >Job</label
+                >
                 <input
                   formControlName="Job"
                   [class.border-red-500]="isInvalid('Job')"
@@ -283,10 +388,18 @@
 
                 @if (isInvalid('Job')) {
                   @if (signUpForm.get('Job')?.hasError('required')) {
-                    <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">Job is required.</p>
+                    <p
+                      class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"
+                    >
+                      Job is required.
+                    </p>
                   }
                   @if (signUpForm.get('Job')?.hasError('minlength')) {
-                    <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">Minimum 2 characters.</p>
+                    <p
+                      class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"
+                    >
+                      Minimum 2 characters.
+                    </p>
                   }
                 }
               </div>
@@ -311,7 +424,11 @@
 
             <p class="text-sm font-medium text-text-main/50 text-center mt-4">
               Already have an account?
-              <a routerLink="/login" class="text-primary font-bold hover:text-primary/80 transition-colors cursor-pointer">Login</a>
+              <a
+                routerLink="/login"
+                class="text-primary font-bold hover:text-primary/80 transition-colors cursor-pointer"
+                >Login</a
+              >
             </p>
           </div>
         </form>
