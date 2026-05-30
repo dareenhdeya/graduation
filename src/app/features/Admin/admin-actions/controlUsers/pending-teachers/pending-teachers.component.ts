@@ -76,11 +76,11 @@ export class PendingTeachersComponent implements OnInit {
   get filteredUsers(): IADMIN[] {
     const q = this.search.value.trim().toLowerCase();
     return this.users.filter((u) => {
-      const isPendingTeacher = u.role === 'Teacher' && Number(u.status) === 2;
+      const isTeacher = u.role === 'Teacher';
       const name = (u.fName ?? '').toLowerCase();
       const email = (u.email ?? '').toLowerCase();
       const textOk = !q || name.includes(q) || email.includes(q);
-      return isPendingTeacher && textOk;
+      return isTeacher && textOk;
     });
   }
 

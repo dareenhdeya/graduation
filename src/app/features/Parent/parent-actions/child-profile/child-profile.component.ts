@@ -29,7 +29,6 @@ export class ChildProfileComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-
     this.route.paramMap.subscribe(params => {
       this.childId = params.get('id');
 
@@ -56,15 +55,15 @@ export class ChildProfileComponent implements OnInit {
     });
   }
 
-
   getInitials(fName: string, lName: string): string {
     return (fName.charAt(0) + lName.charAt(0)).toUpperCase();
   }
-  getDisabilityLabel(id: any): string {
 
+  getDisabilityLabel(id: any): string {
     const type = this.disabilityMap.find(d => d.id === Number(id));
     return type ? type.label : 'Unknown';
   }
+  
   getDisabilityIcon(id: any): string {
     const type = this.disabilityMap.find(d => d.id === Number(id));
     return type ? type.icon : 'fa-solid fa-circle-question';
