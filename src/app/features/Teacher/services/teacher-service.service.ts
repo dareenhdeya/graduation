@@ -29,8 +29,12 @@ export class TeacherServiceService extends baseHttp {
   editLesson(lessonData: IEditedLesson) {
     return this.patch<IEditLessonResponse>(APP_APIs.teacherEditLesson, lessonData);
   }
-  removeLesson(lessonId: string) {
-    return this.delete(APP_APIs.teacherRemoveLesson(lessonId));
+  
+  removeLesson(subjectId: string, lessonId: string) {
+    return this.deleteWithBody<any>(
+      APP_APIs.teacherRemoveLesson,
+      { subjectId, uid: lessonId, lid: lessonId }
+    );
   }
 
   getLessonDetails(subjectId: string, lessonId: string) {

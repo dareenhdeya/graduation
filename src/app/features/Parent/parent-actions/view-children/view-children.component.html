@@ -27,14 +27,15 @@
       </button>
     </div>
 
-    @if (errorMessage) {
+    <!-- @if (errorMessage) {
     <div
       class="rounded-2xl border border-red-500/20 bg-red-500/10 p-6 text-center text-red-200 mb-8"
     >
       <i class="fa-solid fa-triangle-exclamation text-3xl mb-2"></i>
       <p>{{ errorMessage }}</p>
     </div>
-    } @if (isLoading) {
+    }  -->
+    @if (isLoading) {
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       @for (item of [1, 2, 3]; track item) {
       <div class="rounded-3xl border border-white/5 bg-white/5 p-6 animate-pulse h-64">
@@ -53,6 +54,14 @@
       }
     </div>
     } @else {
+
+    <!-- @if (deleteError) {
+    <div
+      class="rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-center text-red-200 mb-6 text-sm"
+    >
+      {{ deleteError }}
+    </div>
+    } -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       @for (child of children; track child.id) {
       <div
@@ -119,7 +128,7 @@
             </div>
           </div>
 
-          <div class="mt-auto grid grid-cols-2 gap-3">
+          <div class="mt-auto grid grid-cols-3 gap-3">
             <button
               [routerLink]="['/parent/child-profile/', child.id]"
               class="cursor-pointer py-3 rounded-xl bg-sky-600/10 text-sky-400 font-bold text-sm hover:bg-sky-600 hover:text-white transition border border-sky-600/20 shadow-lg shadow-sky-900/10 hover:shadow-sky-600/20"
@@ -131,6 +140,17 @@
               class="cursor-pointer py-3 rounded-xl bg-white/5 text-white/70 font-bold text-sm hover:bg-white/10 hover:text-white transition border border-white/10"
             >
               Progress
+            </button>
+            <button
+              (click)="deleteChild(child)"
+              [disabled]="deletingId === child.id"
+              class="cursor-pointer py-3 rounded-xl bg-red-500/10 text-red-400 font-bold text-sm hover:bg-red-500 hover:text-white transition border border-red-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              @if (deletingId === child.id) {
+              <i class="fa-solid fa-spinner fa-spin"></i>
+              } @else {
+              <i class="fa-solid fa-trash"></i>
+              }
             </button>
           </div>
         </div>
@@ -147,7 +167,8 @@
         <h3 class="text-xl font-bold text-white mb-2">No Children Found</h3>
         <p class="text-white/50 mb-6">You haven't registered any children yet.</p>
         <button
-          class="px-6 py-3 rounded-xl bg-sky-600 text-white font-semibold hover:bg-sky-500 transition shadow-lg shadow-sky-900/20"
+          routerLink="/parent/register-student"
+          class="cursor-pointer px-6 py-3 rounded-xl bg-sky-600 text-white font-semibold hover:bg-sky-500 transition shadow-lg shadow-sky-900/20"
         >
           Register a Child
         </button>
@@ -156,4 +177,46 @@
     </div>
     }
   </div>
+  @if (childToDelete) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" (click)="cancelDelete()"></div>
+
+    <div
+      class="relative z-10 w-full max-w-md rounded-3xl border border-white/10 bg-[#0d1117] p-8 shadow-2xl"
+    >
+      <div class="flex justify-center mb-6">
+        <div
+          class="size-16 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400 text-2xl"
+        >
+          <i class="fa-solid fa-trash"></i>
+        </div>
+      </div>
+
+      <h3 class="text-xl font-black text-white text-center mb-2">Remove Child</h3>
+      <p class="text-white/50 text-center text-sm mb-8">
+        Are you sure you want to remove
+        <span class="text-white font-bold">{{ childToDelete.fName }}</span
+        >? This action cannot be undone.
+      </p>
+
+      <div class="grid grid-cols-2 gap-3">
+        <button
+          (click)="cancelDelete()"
+          class="cursor-pointer py-3 rounded-xl bg-white/5 text-white/70 font-bold text-sm hover:bg-white/10 hover:text-white transition border border-white/10"
+        >
+          Cancel
+        </button>
+        <button
+          (click)="confirmDelete()"
+          [disabled]="deletingId === childToDelete.id"
+          class="cursor-pointer py-3 rounded-xl bg-red-500/10 text-red-400 font-bold text-sm hover:bg-red-500 hover:text-white transition border border-red-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          @if (deletingId === childToDelete.id) {
+          <i class="fa-solid fa-spinner fa-spin"></i>
+          } @else { Remove }
+        </button>
+      </div>
+    </div>
+  </div>
+  }
 </section>

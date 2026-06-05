@@ -85,6 +85,15 @@ export abstract class baseHttp {
     });
   }
 
+  protected deleteWithBody<T>(url: string, body: {}, options?: JsonOptions) {
+    return this.http.delete<T>(url, {
+      ...(options ?? {}),
+      body: body,
+      observe: 'body',
+      responseType: 'json',
+    });
+  }
+
   protected postText(url: string, data: {}, options?: TextOptions) {
     return this.http.post(url, data, { ...(options ?? {}), observe: 'body', responseType: 'text' });
   }
