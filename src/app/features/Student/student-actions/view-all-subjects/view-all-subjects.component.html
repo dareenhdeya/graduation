@@ -1,69 +1,83 @@
-<section class="relative min-h-screen pt-28 pb-10 px-4 overflow-hidden">
-  <div
-    class="pointer-events-none absolute top-20 left-10 h-96 w-96 rounded-full bg-blue-600/10 blur-[100px]"
-  ></div>
-  <div
-    class="pointer-events-none absolute bottom-20 right-10 h-96 w-96 rounded-full bg-purple-600/10 blur-[100px]"
-  ></div>
-
+<section
+  class="relative min-h-screen pt-28 pb-10 px-4 overflow-hidden transition-colors duration-300"
+>
   <div class="container mx-auto max-w-7xl relative z-10">
-    <div class="text-center mb-12">
-      <h1 class="text-3xl md:text-5xl font-black text-white tracking-tight mb-3">
-        Explore
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-400"
-          >Subjects</span
+    <div class="text-center mb-16">
+      <h1 class="text-3xl md:text-5xl font-black text-text-main tracking-tight mb-4">
+        Discover New
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-400"
+          >Adventures</span
         >
       </h1>
-      <p class="text-white/50 text-lg">Select a subject to view details and stats</p>
+      <p class="text-text-main/50 text-lg font-medium">
+        Find your next favorite class and start learning today!
+      </p>
     </div>
 
     @if (isLoading) {
-      <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         @for (item of [1, 2, 3, 4]; track item) {
-          <div class="rounded-3xl border border-white/5 bg-white/[0.02] h-60 animate-pulse"></div>
+          <div
+            class="rounded-[2.5rem] border border-border-main bg-text-main/5 h-80 animate-pulse"
+          ></div>
         }
       </div>
-
     } @else {
-      <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div
+        class="flex flex-col sm:flex-row justify-center items-center gap-0 sm:gap-y-12 sm:-space-x-14 px-8"
+      >
         @for (sub of allSub; track sub.subjectId; let i = $index) {
-          <a
-            [routerLink]="['/student/subject', sub.subjectId]"
-            class="group relative flex flex-col items-center justify-center text-center rounded-3xl border border-white/10 bg-white/5 p-8 transition-all duration-300 hover:-translate-y-2 hover:bg-white/[0.08] hover:border-sky-500/30 hover:shadow-2xl hover:shadow-sky-900/20 cursor-pointer"
+          <div
+            (mouseenter)="setHovered(i)"
+            [ngClass]="overlapCard(i)"
+            [class]="
+              'group relative z-10 w-full sm:w-[300px] shrink-0 flex flex-col items-center text-center rounded-[2.5rem] border-2 dark:border shadow-md border-border-main   p-8 transition-all duration-500 ease-out overflow-hidden ' +
+              getCardBgColor(i)
+            "
           >
             <div
+              class="absolute inset-0 bg-gradient-to-b from-transparent to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+            ></div>
+
+            <div
               [class]="
-                'size-20 rounded-2xl flex items-center justify-center text-3xl shadow-lg border border-white/10 mb-6 transition-transform duration-300 group-hover:scale-110 ' +
+                'relative z-10 size-24 rounded-[2rem] flex items-center justify-center text-4xl shadow-lg border border-border-main mb-6 transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-3 ' +
                 getBgColor(i) +
                 ' ' +
                 getColor(i)
               "
             >
-              <i class="fa-solid fa-graduation-cap"></i>
+              <i class="fa-solid fa-star"></i>
             </div>
 
             <h2
-              class="text-xl font-bold text-white mb-2 group-hover:text-sky-300 transition-colors"
+              class="relative z-10 text-2xl font-black text-text-main mb-3 group-hover:text-primary transition-colors line-clamp-2"
             >
               {{ sub.subjectName }}
             </h2>
 
             @if (sub.deaf_mute) {
               <span
-                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-pink-500/10 text-pink-400 text-xs font-bold border border-pink-500/20 uppercase tracking-wider mb-4"
+                class="relative z-10 inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-pink-500/10 text-pink-600 dark:text-pink-400 text-[11px] font-black border border-pink-500/20 uppercase tracking-widest mb-6"
               >
                 <i class="fa-solid fa-hands-asl-interpreting"></i> Accessible
               </span>
+            } @else {
+              <div class="mb-6 h-7"></div>
             }
 
-            <div
-              class="mt-auto opacity-0 transform translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300"
-            >
-              <span class="text-sky-400 text-sm font-semibold flex items-center gap-2">
-                View Details <i class="fa-solid fa-arrow-right"></i>
-              </span>
+            <div class="relative z-10 mt-auto w-full pt-4">
+              <button
+                (click)="enrollSub(sub.subjectId)"
+                class="w-full flex items-center justify-center translate-y-52 group-hover:translate-y-0 gap-2 cursor-pointer bg-text-main text-background px-6 py-4 rounded-2xl font-black text-sm uppercase tracking-wide hover:bg-primary hover:text-white transition-all duration-500 shadow-lg shadow-text-main/10 hover:shadow-primary/30 active:scale-95"
+              >
+                <i
+                  class="fa-solid fa-bolt text-yellow-400 group-hover:text-white transition-colors"
+                ></i>
+                Enroll Now
+              </button>
             </div>
-          </a>
+          </div>
         }
       </div>
     }

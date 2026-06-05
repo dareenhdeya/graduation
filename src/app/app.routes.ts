@@ -17,6 +17,7 @@ import { SubjectDetailsComponent } from './features/Student/student-actions/subj
 import { ViewAllSubjectsComponent } from './features/Student/student-actions/view-all-subjects/view-all-subjects.component';
 import { ViewLessonsComponent } from './features/Student/student-actions/view-lessons/view-lessons.component';
 import { ViewEnrolledSubjectsComponent } from './features/Student/student-actions/view-enrolled-subjects/view-enrolled-subjects.component';
+import { LessonDetailsComponent } from './features/Student/student-actions/lesson-details/lesson-details.component';
 import { authGuard } from './core/guards/auth/auth-guard';
 import { logedinGuard } from './core/guards/logedin/logedin-guard';
 import { roleGuard } from './core/guards/role/role-guard';
@@ -28,6 +29,18 @@ import { PendingTeachersComponent } from './features/Admin/admin-actions/control
 import { ParentActionsComponent } from './features/Parent/parent-actions/parent-actions.component';
 import { RegisterStudentComponent } from './features/Parent/parent-actions/register-student/register-student.component';
 import { ViewChildrenComponent } from './features/Parent/parent-actions/view-children/view-children.component';
+import { ChildProfileComponent } from './features/Parent/parent-actions/child-profile/child-profile.component';
+import { AddDictionaryComponent } from './features/Teacher/teacher-actions/add-dictionary/add-dictionary.component';
+import { TeacherSubjectDashboardComponent } from './features/Teacher/teacher-actions/teacher-subject-dashboard/teacher-subject-dashboard.component';
+import { ManageLessonComponent } from './features/Teacher/teacher-actions/manage-lesson/manage-lesson.component';
+
+import { CreateQuizComponent } from './features/Teacher/teacher-actions/quizzes/create-quiz.component';
+import { EditQuizComponent } from './features/Teacher/teacher-actions/quizzes/edit-quiz/edit-quiz.component';
+import { QuizzesListComponent } from './features/Teacher/teacher-actions/teacher-subject-dashboard/quizzes-list/quizzes-list.component';
+import { ViewQuizComponent } from './features/Teacher/teacher-actions/quizzes/view-quiz/view-quiz.component';
+import { SolveQuizComponent } from './features/Student/student-actions/quizzes/solve-quiz/solve-quiz.component';
+import { StudentSubjectsComponent } from './features/Parent/parent-actions/student-subjects/student-subjects.component';
+import { SubjectReportComponent } from './features/Parent/parent-actions/subject-report/subject-report.component';
 
 export const routes: Routes = [
   {
@@ -84,9 +97,67 @@ export const routes: Routes = [
         data: { roles: ['Teacher'] },
         children: [
           { path: 'dashboard', component: TeacherActionsComponent, title: 'Teacher Dashboard' },
-          { path: 'lessons', component: GetTeacherLessonsComponent, title: 'My Lessons' },
-          { path: 'add-lesson', component: AddLessonComponent, title: 'Add Lesson' },
-          { path: 'students', component: GetTeacherStudentsComponent, title: 'My Students' },
+          {
+            path: 'subject/:sid',
+            component: TeacherSubjectDashboardComponent,
+            title: 'Manage Subject',
+          },
+          {
+            path: 'subject/:sid/lessons',
+            component: GetTeacherLessonsComponent,
+            title: 'My Lessons',
+          },
+          { path: 'subject/:sid/add-lesson', component: AddLessonComponent, title: 'Add Lesson' },
+          {
+            path: 'subject/:sid/lesson/:lid/manage',
+            component: ManageLessonComponent,
+            title: 'Manage Lesson',
+          },
+          {
+            path: 'subject/:sid/students',
+            component: GetTeacherStudentsComponent,
+            title: 'My Students',
+          },
+          {
+            path: 'subject/:sid/add-dictionary',
+            component: AddDictionaryComponent,
+            title: 'Add Dictionary',
+          },
+          {
+            path: 'subject/:sid/quizzes',
+            component: QuizzesListComponent,
+            title: 'Subject Quizzes',
+          },
+          {
+            path: 'subject/:sid/quizzes/create',
+            component: CreateQuizComponent,
+            title: 'Create Quiz',
+          },
+          {
+            path: 'subject/:sid/quizzes/view/:qid',
+            component: ViewQuizComponent,
+            title: 'View Quiz',
+          },
+          {
+            path: 'subject/:sid/quizzes/edit/:qid',
+            component: EditQuizComponent,
+            title: 'Edit Quiz',
+          },
+          {
+            path: 'subject/:sid/lesson/:lid/exercise',
+            component: CreateQuizComponent,
+            title: 'Add Exercise to Lesson',
+          },
+          {
+            path: 'subject/:sid/lesson/:lid/exercise/view/:qid',
+            component: ViewQuizComponent,
+            title: 'View Exercise',
+          },
+          {
+            path: 'subject/:sid/lesson/:lid/exercise/edit/:qid',
+            component: EditQuizComponent,
+            title: 'Edit Exercise',
+          },
         ],
       },
       // --- STUDENT ROUTES ---
@@ -106,9 +177,24 @@ export const routes: Routes = [
             title: 'Subject Lessons',
           },
           {
+            path: 'subject/:sid/lesson/:lid',
+            component: LessonDetailsComponent,
+            title: 'Lesson Details',
+          },
+          {
             path: 'my-subjects',
             component: ViewEnrolledSubjectsComponent,
             title: 'My Enrolled Subjects',
+          },
+          {
+            path: 'subject/:sid/quizzes/:qid/solve',
+            component: SolveQuizComponent,
+            title: 'Solve Quiz',
+          },
+          {
+            path: 'subject/:sid/lesson/:lid/exercise/:qid/solve',
+            component: SolveQuizComponent,
+            title: 'Solve Exercise',
           },
         ],
       },
@@ -118,11 +204,26 @@ export const routes: Routes = [
         canActivate: [roleGuard],
         data: { roles: ['Parent'] },
         children: [
-          {path: 'dashboard', component: ParentActionsComponent, title: 'Parent Dashboard' },
-          {path: 'register-student', component: RegisterStudentComponent, title: 'Register Student' },
-          {path: 'view-children', component: ViewChildrenComponent, title: 'View Children' },
-        ]
-      }
+          { path: 'dashboard', component: ParentActionsComponent, title: 'Parent Dashboard' },
+          {
+            path: 'register-student',
+            component: RegisterStudentComponent,
+            title: 'Register Student',
+          },
+          { path: 'view-children', component: ViewChildrenComponent, title: 'View Children' },
+          { path: 'child-profile/:id', component: ChildProfileComponent, title: 'Child Profile' },
+          {
+            path: 'student-subjects/:id',
+            component: StudentSubjectsComponent,
+            title: 'Child Subjects',
+          },
+          {
+            path: 'subject-report/:sid/:studentId/:subjectName',
+            component: SubjectReportComponent,
+            title: 'Subject Report',
+          },
+        ],
+      },
     ],
   },
   {

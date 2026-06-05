@@ -1,132 +1,89 @@
-<section class="min-h-screen text-white px-4 py-10">
-  <div class="mx-auto max-w-6xl">
-    <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between mb-6">
+<section class="relative min-h-screen overflow-hidden py-10 px-4 transition-colors duration-300 ">
+  <div class="container mx-auto max-w-6xl relative z-10">
+    
+    <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between mb-12">
       <div>
-        <h1 class="text-2xl md:text-3xl font-black tracking-tight">Admin Dashboard</h1>
-        <p class="text-white/55 text-sm mt-1">Overview & quick actions.</p>
+        <h1 class="text-4xl md:text-5xl font-black text-text-main tracking-tight mb-2">
+          Admin
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-amber-500">Overview</span>
+        </h1>
+        <p class="text-text-main/50 text-lg">System statistics and quick actions.</p>
       </div>
 
       <a
         routerLink="/admin/users"
-        class="rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-2 text-sm hover:bg-white/[0.10] transition"
+        class="rounded-2xl border border-border-main bg-surface px-6 py-3 text-sm font-bold text-text-main hover:border-primary/50 hover:text-primary transition-all duration-300 hover:-translate-y-1 shadow-sm hover:shadow-[0_0_5px_var(--brand-primary)]"
       >
         <i class="fa-solid fa-users mr-2"></i>Manage Users
       </a>
     </div>
 
     @if (loading) {
-    <div
-      class="rounded-[28px] border border-white/10 bg-white/[0.06] backdrop-blur-xl p-6 text-white/70"
-    >
-      Loading dashboard...
+    <div class="rounded-3xl border border-border-main bg-surface p-12 text-center text-text-main/70 text-lg font-medium animate-pulse shadow-sm">
+      <i class="fa-solid fa-circle-notch fa-spin mr-3 text-primary text-xl"></i> Loading dashboard...
     </div>
+    
     } @else if (error) {
-    <div class="rounded-[28px] border border-red-500/25 bg-red-500/10 p-6 text-red-200">
-      {{ error }}
+    <div class="rounded-3xl border border-red-500/30 bg-red-500/10 p-12 text-center text-red-500 font-semibold text-lg shadow-sm">
+      <i class="fa-solid fa-triangle-exclamation mr-2 text-xl"></i> {{ error }}
     </div>
+    
     } @else {
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-      <div class="rounded-[26px] border border-white/10 bg-white/[0.06] backdrop-blur-xl p-5">
-        <div class="text-white/55 text-xs">Total Users</div>
-        <div class="mt-2 text-3xl font-black">{{ stats.users }}</div>
-      </div>
-
-      <div class="rounded-[26px] border border-white/10 bg-white/[0.06] backdrop-blur-xl p-5">
-        <div class="text-white/55 text-xs">Teachers</div>
-        <div class="mt-2 text-3xl font-black">{{ stats.teachers }}</div>
-        <div class="mt-2 text-xs text-white/55">
-          Pending: <span class="text-white font-semibold">{{ stats.pendingTeachers }}</span>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      
+      <div class="relative overflow-hidden rounded-3xl border border-border-main cursor-pointer hover:shadow-md shadow bg-surface/20 p-6 transition-all duration-300 hover:border-primary/30 hover:-translate-y-1">
+        <div class="absolute -right-6 -top-6 size-24 bg-primary/10 rounded-full blur-xl transition duration-300 group-hover:bg-primary/20"></div>
+        <div class="relative z-10">
+          <div class="text-text-main/50 text-xs font-bold uppercase tracking-wider mb-1">Total Users</div>
+          <div class="mt-2 text-4xl font-black text-text-main">{{ stats.users }}</div>
         </div>
       </div>
 
-      <div class="rounded-[26px] border border-white/10 bg-white/[0.06] backdrop-blur-xl p-5">
-        <div class="text-white/55 text-xs">Students</div>
-        <div class="mt-2 text-3xl font-black">{{ stats.students }}</div>
+      <div class="relative overflow-hidden rounded-3xl border border-border-main cursor-pointer hover:shadow-md shadow bg-surface/20 p-6 transition-all duration-300 hover:border-amber-500/30 hover:-translate-y-1">
+        <div class="absolute -right-6 -top-6 size-24 bg-amber-500/10 rounded-full blur-xl"></div>
+        <div class="relative z-10">
+          <div class="text-text-main/50 text-xs font-bold uppercase tracking-wider mb-1">Teachers</div>
+          <div class="mt-2 text-4xl font-black text-text-main">{{ stats.teachers }}</div>
+          <div class="mt-3 text-sm text-text-main/60 font-medium">
+            Pending: <span class="text-amber-500 font-bold ml-1">{{ stats.pendingTeachers }}</span>
+          </div>
+        </div>
       </div>
 
-      <div class="rounded-[26px] border border-white/10 bg-white/[0.06] backdrop-blur-xl p-5">
-        <div class="text-white/55 text-xs">Parents</div>
-        <div class="mt-2 text-3xl font-black">{{ stats.parents }}</div>
+      <div class="relative overflow-hidden rounded-3xl border border-border-main cursor-pointer hover:shadow-md shadow bg-surface/20 p-6 transition-all duration-300 hover:border-green-500/30 hover:-translate-y-1">
+        <div class="absolute -right-6 -top-6 size-24 bg-green-500/10 rounded-full blur-xl"></div>
+        <div class="relative z-10">
+          <div class="text-text-main/50 text-xs font-bold uppercase tracking-wider mb-1">Students</div>
+          <div class="mt-2 text-4xl font-black text-text-main">{{ stats.students }}</div>
+        </div>
       </div>
 
-      <div
-        class="rounded-[26px] border border-white/10 bg-white/[0.06] backdrop-blur-xl p-5 sm:col-span-2"
-      >
-        <div class="text-white/55 text-xs">Blocked Users</div>
-        <div class="mt-2 text-3xl font-black">{{ stats.blockedUsers }}</div>
+      <div class="relative overflow-hidden rounded-3xl border border-border-main cursor-pointer hover:shadow-md shadow bg-surface/20 p-6 transition-all duration-300 hover:border-blue-500/30 hover:-translate-y-1">
+        <div class="absolute -right-6 -top-6 size-24 bg-blue-500/10 rounded-full blur-xl"></div>
+        <div class="relative z-10">
+          <div class="text-text-main/50 text-xs font-bold uppercase tracking-wider mb-1">Parents</div>
+          <div class="mt-2 text-4xl font-black text-text-main">{{ stats.parents }}</div>
+        </div>
       </div>
 
-      <div
-        class="rounded-[26px] border border-white/10 bg-white/[0.06] backdrop-blur-xl p-5 sm:col-span-2"
-      >
-        <div class="text-white/55 text-xs">Subjects</div>
-        <div class="mt-2 text-3xl font-black">{{ stats.subjects }}</div>
+      <div class="relative overflow-hidden rounded-3xl border border-border-main cursor-pointer hover:shadow-md shadow bg-surface/20 p-6 sm:col-span-2 transition-all duration-300 hover:border-red-500/30 hover:-translate-y-1">
+        <div class="absolute -right-10 -top-10 size-32 bg-red-500/10 rounded-full blur-2xl"></div>
+        <div class="relative z-10">
+          <div class="text-text-main/50 text-xs font-bold uppercase tracking-wider mb-1">Blocked Users</div>
+          <div class="mt-2 text-4xl font-black text-red-500">{{ stats.blockedUsers }}</div>
+        </div>
+      </div>
+
+      <div class="relative overflow-hidden rounded-3xl border border-border-main cursor-pointer hover:shadow-md shadow bg-surface/20 p-6 sm:col-span-2 transition-all duration-300 hover:border-fuchsia-500/30 hover:-translate-y-1">
+        <div class="absolute -right-10 -top-10 size-32 bg-fuchsia-500/10 rounded-full blur-2xl"></div>
+        <div class="relative z-10">
+          <div class="text-text-main/50 text-xs font-bold uppercase tracking-wider mb-1">Subjects</div>
+          <div class="mt-2 text-4xl font-black text-text-main">{{ stats.subjects }}</div>
+        </div>
       </div>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      <a
-        routerLink="/admin/users"
-        class="group rounded-[26px] border border-white/10 bg-white/[0.06] backdrop-blur-xl p-5 hover:bg-white/[0.10] transition"
-      >
-        <div class="flex items-center justify-between">
-          <div>
-            <div class="text-white/55 text-xs">Manage</div>
-            <div class="mt-1 font-extrabold text-lg">Users</div>
-          </div>
-          <div
-            class="size-12 rounded-2xl bg-white/[0.05] border border-white/10 flex items-center justify-center"
-          >
-            <i class="fa-solid fa-users text-white/85 text-lg"></i>
-          </div>
-        </div>
-        <div class="mt-4 text-white/50 text-xs group-hover:text-white/70 transition">
-          Open users list <i class="fa-solid fa-arrow-right ml-1"></i>
-        </div>
-      </a>
-
-      <a
-        routerLink="/admin/subjects"
-        class="group rounded-[26px] border border-white/10 bg-white/[0.06] backdrop-blur-xl p-5 hover:bg-white/[0.10] transition"
-      >
-        <div class="flex items-center justify-between">
-          <div>
-            <div class="text-white/55 text-xs">Manage</div>
-            <div class="mt-1 font-extrabold text-lg">Subjects</div>
-          </div>
-          <div
-            class="size-12 rounded-2xl bg-white/[0.05] border border-white/10 flex items-center justify-center"
-          >
-            <i class="fa-solid fa-book text-white/85 text-lg"></i>
-          </div>
-        </div>
-        <div class="mt-4 text-white/50 text-xs group-hover:text-white/70 transition">
-          Open subjects list <i class="fa-solid fa-arrow-right ml-1"></i>
-        </div>
-      </a>
-
-      <a
-        routerLink="/admin/users"
-        class="group rounded-[26px] border border-white/10 bg-white/[0.06] backdrop-blur-xl p-5 hover:bg-white/[0.10] transition"
-      >
-        <div class="flex items-center justify-between">
-          <div>
-            <div class="text-white/55 text-xs">Review</div>
-            <div class="mt-1 font-extrabold text-lg">Pending Teachers</div>
-          </div>
-          <div
-            class="size-12 rounded-2xl bg-white/[0.05] border border-white/10 flex items-center justify-center"
-          >
-            <i class="fa-solid fa-user-clock text-white/85 text-lg"></i>
-          </div>
-        </div>
-        <div class="mt-4 text-white/50 text-xs group-hover:text-white/70 transition">
-          View pending <i class="fa-solid fa-arrow-right ml-1"></i>
-        </div>
-      </a>
-    </div>
-    <!-- <app-admin-actions /> -->
+    <app-admin-actions />
     }
   </div>
 </section>

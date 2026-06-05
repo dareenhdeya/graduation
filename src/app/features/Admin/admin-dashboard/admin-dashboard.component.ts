@@ -1,9 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { forkJoin } from 'rxjs';
+import { catchError, forkJoin, of } from 'rxjs';
 import { AdminServiceService } from '../services/admin-service.service';
 import { IADMIN } from '../interfaces/iadmin.interface';
-import { AdminActionsComponent } from "../admin-actions/admin-actions.component";
+import { AdminActionsComponent } from '../admin-actions/admin-actions.component';
 
 type AdminStats = {
   users: number;
@@ -46,7 +46,17 @@ export class AdminDashboardComponent implements OnInit {
 
     forkJoin({
       usersRes: this.admin.showUsers(),
-      subjectsRes: this.admin.listSubjects(),
+      subjectsRes: this.admin.listSubjects().pipe(
+        catchError((err) => {
+          if (err.status === 404) {
+            return of({
+              data: [],
+            });
+          }
+
+          throw err;
+        })
+      ),
     }).subscribe({
       next: ({ usersRes, subjectsRes }) => {
         const users: IADMIN[] = Array.isArray(usersRes?.data) ? usersRes.data : [];

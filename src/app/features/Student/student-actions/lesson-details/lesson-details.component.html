@@ -1,0 +1,171 @@
+<section class="relative min-h-screen pt-24 pb-10 px-4 overflow-hidden">
+  <div class="container mx-auto max-w-7xl relative z-10">
+    @if (isLoading) {
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-pulse">
+        <div class="lg:col-span-2 h-[400px] bg-white/5 rounded-3xl"></div>
+        <div class="space-y-4">
+          <div class="h-24 bg-white/5 rounded-2xl" *ngFor="let i of [1, 2, 3, 4]"></div>
+        </div>
+      </div>
+    } @else if (lesson && isLocked) {
+      <div class="flex flex-col items-center justify-center py-20 text-center min-h-[60vh] animate-in fade-in zoom-in duration-500">
+        <div class="size-32 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center mb-8 shadow-2xl backdrop-blur-md relative overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-br from-red-500/10 to-purple-500/10"></div>
+          <i class="fa-solid fa-lock text-6xl text-white/50 drop-shadow-xl relative z-10"></i>
+          <div class="absolute -bottom-8 -right-8 size-32 bg-red-500/20 blur-3xl rounded-full"></div>
+        </div>
+        <h2 class="text-4xl md:text-5xl font-black text-white tracking-tight mb-4 drop-shadow-sm">Restricted Area</h2>
+        <p class="text-white/60 text-lg md:text-xl max-w-lg mb-10 leading-relaxed font-medium">You must complete prior requirements or prerequisites to unlock this lesson and view its contents.</p>
+        <a [routerLink]="['/student/subject-lessons', lesson.subjectId]" class="inline-flex items-center justify-center h-14 px-8 rounded-full bg-white/5 hover:bg-white/15 border border-white/10 text-white font-bold transition-all hover:-translate-y-1 hover:shadow-[0_0_30px_-5px_rgba(255,255,255,0.1)] active:scale-95">
+          <i class="fa-solid fa-arrow-left-long mr-3"></i> Back to the Course Path
+        </a>
+      </div>
+    } @else if (lesson && activeVideo) {
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        <div class="lg:col-span-2 space-y-6 sticky top-24">
+          <div
+            class="relative w-full aspect-video bg-black rounded-3xl overflow-hidden border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] group"
+          >
+            @if (activeVideo.videoUrl) {
+              @if (isImage(activeVideo.videoUrl)) {
+                <img
+```html
+[src]="activeVideo.videoUrl"
+```
+                  class="w-full h-full object-contain bg-black/50"
+                  alt="Lesson Content"
+                />
+                <div
+                  class="absolute bottom-4 right-4 bg-black/60 px-3 py-1 rounded-full text-xs text-white backdrop-blur"
+                >
+                  <i class="fa-regular fa-image"></i> Visual Content
+                </div>
+              } @else {
+                <video
+                  [src]="activeVideo.videoUrl"
+                  controls
+                  autoplay
+                  class="w-full h-full object-contain"
+                  controlsList="nodownload"
+                ></video>
+              }
+            } @else {
+              <div
+                class="w-full h-full flex flex-col items-center justify-center text-white/20 bg-white/20"
+              >
+                <div class="size-20 rounded-full bg-white/5 flex items-center justify-center mb-4">
+                  <i class="fa-solid fa-lock text-3xl"></i>
+                </div>
+                <p class="text-lg font-medium">Content locked or unavailable</p>
+                <p class="text-sm">Please contact your teacher</p>
+              </div>
+            }
+          </div>
+
+          <div class="bg-white/5 border border-white/10 rounded-3xl p-6 md:p-8 backdrop-blur-md">
+            <div class="flex items-start justify-between gap-4 mb-4">
+              <h2 class="text-2xl md:text-3xl font-bold text-white leading-tight">
+                {{ activeVideo.title || lesson.title }}
+              </h2>
+              <span
+                class="whitespace-nowrap px-3 py-1 rounded-full bg-white/5 text-white/40 text-xs border border-white/5"
+              >
+                <i class="fa-regular fa-calendar mr-1"></i>
+                {{ activeVideo.releaseDate | date : 'mediumDate' }}
+              </span>
+            </div>
+
+            <p class="text-white/70 leading-relaxed text-lg mb-8">
+              {{ activeVideo.description }}
+            </p>
+
+            <!-- NOTE: Activities integration point.
+                 When activities APIs are implemented and Exercises are exposed on the lesson result,
+                 set hasActivities = true and update this button handler to:
+                 - Navigate to the first activity for this lesson, OR
+                 - After activities are done, call the Complete-lesson endpoint and show completion state.
+            -->
+            <button
+              type="button"
+              (click)="goNextOrComplete()"
+              class="group relative w-full cursor-pointer mt-8 overflow-hidden rounded-2xl border border-sky-500/30 bg-sky-500/10 py-4 transition-all duration-300 hover:bg-sky-500/20 hover:border-sky-500/60 hover:shadow-[0_0_30px_-10px_rgba(14,165,233,0.3)]"
+            >
+              <div
+                class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-sky-400/10 to-transparent group-hover:animate-[shimmer_1.5s_infinite]"
+              ></div>
+
+              <div class="relative flex items-center justify-center gap-3">
+                <span class="text-sm font-bold tracking-widest uppercase text-sky-400 group-hover:text-sky-300">
+                  {{ buttonLabel }}
+                </span>
+
+                <div
+                  class="flex size-6 items-center justify-center rounded-full bg-sky-500/20 text-sky-400 transition-all group-hover:translate-x-1 group-hover:bg-sky-500 group-hover:text-white"
+                >
+                  <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                </div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <div
+          class="bg-[#0b1021] border border-white/5 rounded-3xl p-4 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto custom-scroll"
+        >
+          <h3 class="text-white font-bold text-lg mb-4 px-2">Videos in this Lesson</h3>
+
+          <div class="space-y-3">
+            @for (item of videos; track item.vId; let i = $index) {
+              <div
+                (click)="activeVideoIndex = i"
+                [class]="
+                  activeVideo?.vId === item.vId
+                    ? 'bg-sky-500/10 border-sky-500/50 shadow-[0_0_20px_rgba(14,165,233,0.15)]'
+                    : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-white/20'
+                "
+                class="group flex gap-4 p-3 rounded-2xl border transition-all cursor-pointer relative overflow-hidden"
+              >
+                @if (activeVideo?.vId === item.vId) {
+                  <div class="absolute left-0 top-0 bottom-0 w-1 bg-sky-500"></div>
+                }
+
+                <div
+                  class="relative shrink-0 size-24 bg-black/40 rounded-xl overflow-hidden flex items-center justify-center border border-white/5"
+                >
+                  <span class="text-white/20 font-black text-2xl group-hover:scale-110 transition">
+                    {{ i + 1 }}
+                  </span>
+
+                  <div
+                    class="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition"
+                  >
+                    <div
+                      class="size-8 rounded-full bg-sky-500 text-white flex items-center justify-center shadow-lg"
+                    >
+                      <i class="fa-solid fa-play text-xs ml-0.5"></i>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex flex-col justify-center min-w-0">
+                  <h4
+                    [class]="activeVideo?.vId === item.vId ? 'text-sky-400' : 'text-white'"
+                    class="font-bold text-sm line-clamp-2 mb-1 group-hover:text-sky-300 transition-colors"
+                  >
+                    {{ item.title }}
+                  </h4>
+                  <p class="text-white/40 text-xs line-clamp-1 mb-2">
+                    {{ item.description }}
+                  </p>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    } @else {
+      <div class="text-white">Lesson not found.</div>
+    }
+  </div>
+</section>
+

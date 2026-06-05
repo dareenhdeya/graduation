@@ -1,6 +1,7 @@
 export interface IADMIN {
   id: string;
-  name: string | null;
+  fName: string | null;
+  lName: string | null;
   email: string | null;
   status: number;
   address: string | null;
@@ -11,6 +12,8 @@ export interface IADMIN {
   pfpURL: string | null;
   teaches: string | null;
   job: string | null;
+  subjectsCount: number;
+  parentContactInfo: string | null;
 }
 
 export interface ShowUsersResponse {

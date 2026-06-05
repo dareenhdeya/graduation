@@ -3,17 +3,28 @@ import { IADMIN } from '../../../interfaces/iadmin.interface';
 import { Router, RouterLink } from '@angular/router';
 import { AdminServiceService } from '../../../services/admin-service.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import {
+  IAproveResponse,
+  IAproveTeacher,
+  IAdminSubject,
+} from '../../../interfaces/IAdminSubject.interface';
+import { HttpErrorResponse } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
+
 type Role = 'Parent' | 'Teacher' | 'Student';
 
 @Component({
   selector: 'app-pending-teachers',
-  imports: [ReactiveFormsModule],
+  standalone: true,
+  imports: [ReactiveFormsModule, RouterLink, CommonModule],
   templateUrl: './pending-teachers.component.html',
   styleUrl: './pending-teachers.component.css',
 })
 export class PendingTeachersComponent implements OnInit {
   private readonly adminService = inject(AdminServiceService);
   private readonly router = inject(Router);
+  private toastr = inject(ToastrService);
 
   private roleToId(role: string | null | undefined): 1 | 2 | 3 {
     switch (role) {
@@ -30,19 +41,24 @@ export class PendingTeachersComponent implements OnInit {
 
   statusLabels = ['Inactive', 'Active', 'Pending', 'Banned', 'Locked'];
   statusStyles: any = {
-    0: 'bg-gray-500/15 text-gray-200 border-gray-500/25', // inactive
-    1: 'bg-green-500/15 text-green-200 border-green-500/25', // active
-    2: 'bg-amber-500/15 text-amber-200 border-amber-500/25', // pending
-    3: 'bg-red-500/15 text-red-200 border-red-500/25', // banned
-    4: 'bg-purple-500/15 text-purple-200 border-purple-500/25', // locked
+    0: 'bg-slate-500/10 text-slate-500 border-slate-500/20', // inactive
+    1: 'bg-green-500/10 text-green-500 border-green-500/20', // active
+    2: 'bg-amber-500/10 text-amber-500 border-amber-500/20', // pending
+    3: 'bg-red-500/10 text-red-500 border-red-500/20', // banned
+    4: 'bg-fuchsia-500/10 text-fuchsia-500 border-fuchsia-500/20',
   };
 
   loading = false;
   error = '';
-
   users: IADMIN[] = [];
-
   search = new FormControl<string>('', { nonNullable: true });
+
+  showModal = false;
+  selectedTeacher: IADMIN | null = null;
+  subjects: IAdminSubject[] = [];
+  loadingSubjects = false;
+  selectedSubjectId = new FormControl('', { nonNullable: true });
+  activating = false;
 
   ngOnInit(): void {
     this.loadUsers();
@@ -54,8 +70,6 @@ export class PendingTeachersComponent implements OnInit {
 
     this.adminService.showUsers().subscribe({
       next: (res) => {
-        console.log('=========show-users===========', res);
-
         this.users = Array.isArray(res?.data) ? res.data : [];
         this.loading = false;
       },
@@ -68,20 +82,17 @@ export class PendingTeachersComponent implements OnInit {
 
   get filteredUsers(): IADMIN[] {
     const q = this.search.value.trim().toLowerCase();
-
     return this.users.filter((u) => {
-      const isPendingTeacher = u.role === 'Teacher' && Number(u.status) === 2;
-
-      const name = (u.name ?? '').toLowerCase();
+      const isTeacher = u.role === 'Teacher';
+      const name = (u.fName ?? '').toLowerCase();
       const email = (u.email ?? '').toLowerCase();
       const textOk = !q || name.includes(q) || email.includes(q);
-
-      return isPendingTeacher && textOk;
+      return isTeacher && textOk;
     });
   }
 
   getInitial(u: IADMIN): string {
-    const n = (u.name || '').trim();
+    const n = (u.fName || '').trim();
     return n ? n.charAt(0).toUpperCase() : '?';
   }
 
@@ -92,5 +103,63 @@ export class PendingTeachersComponent implements OnInit {
     });
   }
 
-  activate() {}
+  openActivateModal(teacher: IADMIN) {
+    this.selectedTeacher = teacher;
+    this.showModal = true;
+    this.selectedSubjectId.setValue('');
+
+    if (this.subjects.length === 0) {
+      this.loadSubjects();
+    }
+  }
+
+  closeModal() {
+    this.showModal = false;
+    this.selectedTeacher = null;
+    this.selectedSubjectId.setValue('');
+  }
+
+  loadSubjects() {
+    this.loadingSubjects = true;
+    this.adminService.listSubjects().subscribe({
+      next: (res: any) => {
+        this.subjects = Array.isArray(res?.data) ? res.data : [];
+        this.loadingSubjects = false;
+      },
+      error: (err) => {
+        console.log('Failed to load subjects', err);
+        this.loadingSubjects = false;
+      },
+    });
+  }
+
+  confirmActivation() {
+    if (!this.selectedTeacher || !this.selectedSubjectId.value) return;
+
+    this.activating = true;
+
+    const payload: IAproveTeacher = {
+      teacherId: this.selectedTeacher.id,
+      subjectId: this.selectedSubjectId.value,
+    };
+    console.log(payload);
+    this.adminService.approveTeacher(payload).subscribe({
+      next: (response: IAproveResponse) => {
+        setTimeout(() => {
+          this.toastr.success('Teacher activated successfully.', 'Success');
+        }, 850);
+        console.log(response.message);
+        this.activating = false;
+        this.closeModal();
+        this.loadUsers();
+      },
+      error: (err: HttpErrorResponse) => {
+        console.log(err.message);
+        this.activating = false;
+        setTimeout(() => {
+          this.toastr.error(err.message || 'Failed to activate teacher.', 'Error');
+        }, 850);
+      },
+    });
+  }
 }

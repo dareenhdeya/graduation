@@ -1,10 +1,18 @@
 export interface StudLesson {
 	id: string;
+	subjectId: string;
 	title: string;
-	description: string;
+	description?: string;
+	videosCount: number;
+	locked: boolean;
+	nlid: string | null;
+	next: string;
+	nextType: number;
+	videos: any[];
+	levels: any | null;
 	videoFile?: any;
 	videoUrl?: any;
-	releaseDate: string;
+	releaseDate?: string;
 }
 
 export interface IStudViewLesson {

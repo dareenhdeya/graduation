@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
 import { RouterOutlet } from '@angular/router';
+import { ColorPickerComponent } from "../../../shared/components/color-picker/color-picker.component";
 
 type BgLetter = {
   id: number;
@@ -15,7 +16,7 @@ type BgLetter = {
 
 @Component({
   selector: 'app-main-layout',
-  imports: [NavbarComponent, RouterOutlet],
+  imports: [NavbarComponent, RouterOutlet, ColorPickerComponent],
   templateUrl: './main-layout.html',
   styleUrl: './main-layout.css',
 })

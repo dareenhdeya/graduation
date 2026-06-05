@@ -1,0 +1,580 @@
+<section class="relative min-h-screen pt-28 pb-10 px-4 overflow-hidden">
+  <div class="container mx-auto max-w-5xl relative z-10">
+    @if (isLoading()) {
+      <div class="flex items-center justify-center min-h-[50vh]">
+        <div class="flex flex-col items-center">
+          <i class="fa-solid fa-spinner fa-spin text-4xl text-primary mb-4"></i>
+          <p class="text-text-main/50 font-bold">Loading assessment...</p>
+        </div>
+      </div>
+    } @else {
+      <!-- PRE-START -->
+      @if (quizState() === 'pre-start') {
+        <div
+          class="max-w-3xl mx-auto rounded-3xl border border-border-main bg-surface shadow-lg overflow-hidden animate-in fade-in zoom-in duration-500"
+        >
+          <div class="bg-gradient-to-r from-violet-500/10 to-primary/10 p-10 md:p-14 text-center">
+            <div
+              class="size-20 rounded-3xl bg-background border border-border-main flex items-center justify-center mx-auto mb-6 shadow-sm"
+            >
+              <i class="fa-solid fa-file-contract text-4xl text-primary"></i>
+            </div>
+            <h1 class="text-3xl md:text-5xl font-black text-text-main tracking-tight mb-4">
+              {{ quizTitle }}
+            </h1>
+            <p class="text-text-main/60 text-lg font-medium">
+              Please review the assignment details before beginning.
+            </p>
+          </div>
+          <div class="p-8 md:p-10 bg-background/50">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+              <div
+                class="flex items-center gap-4 bg-surface rounded-2xl p-5 border border-border-main shadow-sm"
+              >
+                <div
+                  class="size-12 rounded-xl bg-orange-500/10 text-orange-500 flex items-center justify-center text-xl shrink-0"
+                >
+                  <i class="fa-solid fa-fire"></i>
+                </div>
+                <div>
+                  <p class="text-xs uppercase tracking-wider font-extrabold text-text-main/40 mb-1">
+                    Difficulty
+                  </p>
+                  <p class="font-bold text-text-main text-lg">{{ quizDifficulty }}</p>
+                </div>
+              </div>
+              <div
+                class="flex items-center gap-4 bg-surface rounded-2xl p-5 border border-border-main shadow-sm"
+              >
+                <div
+                  class="size-12 rounded-xl bg-sky-500/10 text-sky-500 flex items-center justify-center text-xl shrink-0"
+                >
+                  <i class="fa-solid fa-stopwatch"></i>
+                </div>
+                <div>
+                  <p class="text-xs uppercase tracking-wider font-extrabold text-text-main/40 mb-1">
+                    Time Limit
+                  </p>
+                  <p class="font-bold text-text-main text-lg">
+                    {{ durationMinutes() > 0 ? durationMinutes() + ' Minutes' : 'No Time Limit' }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="bg-blue-500/10 border-l-4 border-blue-500 p-5 rounded-r-2xl mb-10">
+              <h4 class="font-bold text-blue-500 mb-2 flex items-center gap-2">
+                <i class="fa-solid fa-circle-info"></i> Instructions
+              </h4>
+              <p class="text-text-main/70 text-sm leading-relaxed">
+                Ensure you have a stable internet connection. Use <strong>Save Draft</strong> to
+                pause without submitting. If the timer runs out, answers submit automatically.
+              </p>
+            </div>
+            <div
+              class="flex flex-col md:flex-row items-center gap-4 border-t border-border-main pt-8"
+            >
+              @if (lessonId()) {
+                <a
+                  [routerLink]="['/student/subject-lessons', subjectId()]"
+                  class="w-full md:w-auto px-8 py-4 rounded-2xl border border-border-main font-bold text-text-main hover:bg-surface transition-colors cursor-pointer text-center"
+                  >Cancel</a
+                >
+              } @else {
+                <a
+                  [routerLink]="['/student/my-subjects']"
+                  class="w-full md:w-auto px-8 py-4 rounded-2xl border border-border-main font-bold text-text-main hover:bg-surface transition-colors cursor-pointer text-center"
+                  >Cancel</a
+                >
+              }
+              <button
+                (click)="startQuiz()"
+                class="w-full relative group overflow-hidden px-8 py-4 rounded-2xl bg-gradient-to-r from-violet-500 to-primary font-bold text-white shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+              >
+                <div
+                  class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform"
+                ></div>
+                <span class="relative z-10 flex items-center justify-center gap-2 text-lg"
+                  >Start Assessment <i class="fa-solid fa-arrow-right"></i
+                ></span>
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- IN-PROGRESS / SUBMITTING -->
+      @if (quizState() === 'in-progress' || quizState() === 'submitting') {
+        <!-- Sticky Header -->
+        <div
+          class="sticky  z-40 bg-background/80 backdrop-blur-xl border border-border-main rounded-3xl p-4 md:p-6 shadow-sm mb-10 flex flex-col md:flex-row items-center justify-between gap-4"
+        >
+          <div>
+            <h2 class="text-xl font-black text-text-main line-clamp-1">{{ quizTitle }}</h2>
+            <p class="text-text-main/50 text-xs font-bold mt-1">
+              Please answer all questions below
+            </p>
+          </div>
+          <div class="flex items-center gap-3">
+            @if (durationMinutes() > 0) {
+              <div
+                class="flex items-center gap-2 bg-red-500/10 border border-red-500/20 text-red-500 px-4 py-2 rounded-xl font-mono text-xl md:text-2xl font-black shadow-inner"
+              >
+                <i class="fa-solid fa-hourglass-half text-sm animate-pulse"></i>
+                {{ formattedTime }}
+              </div>
+            }
+            <button
+              (click)="saveDraft()"
+              [disabled]="quizState() === 'submitting'"
+              class="h-12 px-5 rounded-xl border border-border-main bg-surface text-text-main font-bold hover:bg-background hover:text-sky-500 transition-colors shadow-sm disabled:opacity-50"
+            >
+              <i class="fa-solid fa-floppy-disk mr-2"></i> Save Draft
+            </button>
+            <button
+              (click)="submitQuiz()"
+              [disabled]="quizState() === 'submitting'"
+              class="h-12 px-6 rounded-xl bg-primary text-white font-bold hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all active:scale-[0.98] disabled:opacity-50 flex items-center gap-2"
+            >
+              @if (quizState() === 'submitting') {
+                <i class="fa-solid fa-spinner fa-spin"></i> Submitting...
+              } @else {
+                <i class="fa-solid fa-paper-plane"></i> Submit Answers
+              }
+            </button>
+          </div>
+        </div>
+
+        <!-- Quiz Form -->
+        <form [formGroup]="quizForm" class="space-y-12">
+          <ng-container formArrayName="exercises">
+            @for (exControl of exercisesFormArray.controls; track $index; let eIdx = $index) {
+              <div
+                [formGroupName]="eIdx"
+                class="rounded-3xl border border-border-main bg-surface p-6 md:p-8 shadow-sm"
+              >
+                <!-- Exercise Header -->
+                <div
+                  class="flex flex-col md:flex-row items-center justify-between gap-4 mb-8 pb-6 border-b border-border-main"
+                >
+                  <div class="flex items-center gap-4">
+                    <div
+                      class="size-12 rounded-2xl bg-text-main/5 flex items-center justify-center font-black text-xl text-text-main border border-border-main"
+                    >
+                      {{ eIdx + 1 }}
+                    </div>
+                    <h3 class="text-xl md:text-2xl font-black text-text-main">
+                      {{
+                        exControl.value.exerciseType == 2 ? 'Matching Exercise' : 'Multiple Choice'
+                      }}
+                    </h3>
+                  </div>
+                  <span
+                    class="px-4 py-1.5 rounded-full bg-text-main/5 text-text-main/60 font-bold text-sm border border-border-main"
+                  >
+                    {{ getExerciseQuestions(eIdx).length }} Questions
+                  </span>
+                </div>
+
+                <div formArrayName="questions">
+                  <!-- ═══ MCQ ═══ -->
+                  @if (exControl.value.exerciseType == 1) {
+                    <div class="space-y-8">
+                      @for (
+                        qControl of getExerciseQuestions(eIdx);
+                        track $index;
+                        let qIdx = $index
+                      ) {
+                        <div
+                          [formGroupName]="qIdx"
+                          class="bg-background rounded-2xl p-6 border border-border-main relative"
+                        >
+                          <div
+                            class="absolute -left-3 -top-3 size-8 rounded-full bg-primary text-white flex items-center justify-center font-black text-sm shadow-md border-2 border-background"
+                          >
+                            {{ qIdx + 1 }}
+                          </div>
+
+                          <div class="mb-6 pl-4">
+                            @if (getExerciseQuestions(eIdx)[qIdx]?.prompt_text) {
+                              <p class="text-lg font-bold text-text-main mb-3">
+                                {{ getExerciseQuestions(eIdx)[qIdx].prompt_text }}
+                              </p>
+                            }
+                            @if (getExerciseQuestions(eIdx)[qIdx]?.imgPath) {
+                              <img
+                                [src]="getExerciseQuestions(eIdx)[qIdx].imgPath"
+                                alt="Question image"
+                                class="max-h-48 rounded-2xl object-contain border border-border-main shadow-sm"
+                              />
+                            }
+                          </div>
+
+                          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 pl-4">
+                            @for (
+                              ans of getQuestionAnswers(getExerciseQuestions(eIdx)[qIdx]);
+                              track $index
+                            ) {
+                              @let isSelected =
+                                exercisesFormArray.at(eIdx).get('questions')?.value[qIdx]
+                                  .selectedAnswerId === (ans.id || ans.Id);
+                              <div
+                                class="rounded-2xl border-2 transition-all cursor-pointer select-none overflow-hidden group"
+                                (click)="selectAnswer(eIdx, qIdx, ans.id || ans.Id)"
+                                [class.border-primary]="isSelected"
+                                [class.bg-primary/5]="isSelected"
+                                [class.border-border-main]="!isSelected"
+                                [class.bg-surface]="!isSelected"
+                              >
+                                @if (ans.imgPath && !ans.answer) {
+                                  <div class="relative aspect-square overflow-hidden">
+                                    <img
+                                      [src]="ans.imgPath"
+                                      alt="Answer"
+                                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                    />
+                                    @if (isSelected) {
+                                      <div
+                                        class="absolute inset-0 bg-primary/20 flex items-center justify-center"
+                                      >
+                                        <div
+                                          class="size-8 rounded-full bg-primary flex items-center justify-center shadow-lg"
+                                        >
+                                          <i class="fa-solid fa-check text-white text-sm"></i>
+                                        </div>
+                                      </div>
+                                    }
+                                  </div>
+                                } @else {
+                                  <div class="flex items-center gap-3 px-4 py-4">
+                                    <div
+                                      class="shrink-0 size-6 rounded-lg flex items-center justify-center border-2 transition-all"
+                                      [class.border-primary]="isSelected"
+                                      [class.bg-primary]="isSelected"
+                                      [class.border-border-main]="!isSelected"
+                                    >
+                                      @if (isSelected) {
+                                        <i class="fa-solid fa-check text-white text-[10px]"></i>
+                                      }
+                                    </div>
+                                    <span class="font-semibold text-text-main text-sm">{{
+                                      ans.answer || ans.Answer
+                                    }}</span>
+                                  </div>
+                                }
+                              </div>
+                            }
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  } @else {
+                    <!-- ═══ MATCHING — DRAW-A-LINE ═══ -->
+                    <div class="space-y-6">
+                      <!-- Instruction bar -->
+                      <div
+                        class="flex items-center gap-3 p-4 rounded-2xl bg-violet-500/5 border border-violet-500/20 text-violet-400 text-sm font-bold select-none"
+                      >
+                        <i class="fa-solid fa-pen-nib text-lg shrink-0"></i>
+                        <span
+                          >Drag from a <strong class="text-sky-400">Question</strong> dot → release
+                          on an <strong class="text-violet-400">Answer</strong> dot to draw a match.
+                          Click a line to remove it.</span
+                        >
+                      </div>
+
+                      <!-- The matching arena -->
+                      <div class="relative w-full" [id]="'match-area-' + eIdx">
+                        <!-- SVG overlay for lines -->
+                        <svg
+                          class="absolute inset-0 w-full h-full z-30 overflow-visible"
+                          style="pointer-events: none"
+                        >
+                          <defs>
+                            <filter
+                              [id]="'glow-' + eIdx"
+                              x="-50%"
+                              y="-50%"
+                              width="200%"
+                              height="200%"
+                            >
+                              <feGaussianBlur stdDeviation="4" result="blur" />
+                              <feMerge>
+                                <feMergeNode in="blur" />
+                                <feMergeNode in="SourceGraphic" />
+                              </feMerge>
+                            </filter>
+                          </defs>
+
+                          <!-- Completed lines -->
+                          @for (line of getSvgLines(eIdx); track line.qid) {
+                            <path
+                              [attr.d]="line.d"
+                              [attr.stroke]="line.color"
+                              stroke-width="5"
+                              fill="none"
+                              stroke-linecap="round"
+                              [attr.filter]="'url(#glow-' + eIdx + ')'"
+                              style="pointer-events: stroke; cursor: pointer"
+                              (click)="clearMatch(eIdx, line.qid)"
+                              class="transition-opacity hover:opacity-60"
+                            />
+                            <!-- Hit-area (wider invisible path for easier clicking) -->
+                            <path
+                              [attr.d]="line.d"
+                              stroke="transparent"
+                              stroke-width="20"
+                              fill="none"
+                              style="pointer-events: stroke; cursor: pointer"
+                              (click)="clearMatch(eIdx, line.qid)"
+                            />
+                          }
+
+                          <!-- Active (in-progress) drag line -->
+                          @if (isDrawingLine && drawEIdx === eIdx) {
+                            <path
+                              [attr.d]="getActiveDragPath(eIdx)"
+                              stroke="#38bdf8"
+                              stroke-width="3"
+                              fill="none"
+                              stroke-linecap="round"
+                              stroke-dasharray="12 6"
+                              opacity="0.8"
+                            />
+                          }
+                        </svg>
+
+                        <!-- Two columns -->
+                        <div
+                          class="grid grid-cols-[1fr_3fr_1fr] md:grid-cols-[1fr_4fr_1fr] items-start"
+                        >
+                          <!-- LEFT: Questions -->
+                          <div class="space-y-6 relative z-10">
+                            <p
+                              class="text-[10px] font-black uppercase tracking-widest text-sky-400/70 mb-2 pl-1"
+                            >
+                              Questions
+                            </p>
+                            @for (q of getExerciseQuestions(eIdx); track q.qid || q.id) {
+                              @let qid = (q.qid || q.id || q.Id)?.toString();
+                              @let line = getLineForQuestion(eIdx, qid);
+                              <div class="relative group/qcard">
+                                <!-- Card — entire card is the drag handle -->
+                                <div
+                                  [id]="'q-card-' + eIdx + '-' + qid"
+                                  class="rounded-2xl overflow-hidden border-2 transition-all duration-300 select-none cursor-crosshair hover:ring-2 hover:ring-sky-400/50"
+                                  [style.border-color]="line ? line.color : ''"
+                                  [class.border-border-main]="!line"
+                                  [class.shadow-lg]="!!line"
+                                  (mousedown)="startDrawingLine($event, eIdx, q)"
+                                  title="Drag to match with an answer"
+                                >
+                                  <img
+                                    [src]="q.imgPath"
+                                    alt="Question"
+                                    class="w-full aspect-square object-cover pointer-events-none"
+                                    draggable="false"
+                                  />
+                                  <!-- Matched badge -->
+                                  @if (line) {
+                                    <div
+                                      class="absolute top-2 left-2 size-6 rounded-full flex items-center justify-center shadow-md"
+                                      [style.background-color]="line.color"
+                                    >
+                                      <i class="fa-solid fa-check text-white text-[10px]"></i>
+                                    </div>
+                                  }
+                                </div>
+                                <!-- Anchor dot — visual indicator only, no pointer events -->
+                                <div
+                                  [id]="'q-dot-' + eIdx + '-' + qid"
+                                  class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-20 size-5 rounded-full border-2 border-surface shadow-md pointer-events-none transition-transform"
+                                  [class.scale-125]="
+                                    isDrawingLine && drawEIdx === eIdx && drawQid === qid
+                                  "
+                                  [style.background-color]="line ? line.color : '#38bdf8'"
+                                ></div>
+                              </div>
+                            }
+                          </div>
+
+                          <!-- CENTER gap (where lines breathe) -->
+                          <div></div>
+
+                          <!-- RIGHT: Answers -->
+                          <div class="space-y-6 relative z-10">
+                            <p
+                              class="text-[10px] font-black uppercase tracking-widest text-violet-400/70 mb-2 pl-1"
+                            >
+                              Answers
+                            </p>
+                            @for (ans of getMatchingAnswers(eIdx); track ans.id || ans.Id) {
+                              @let aid = (ans.id || ans.Id)?.toString();
+                              @let line = getLineForAnswer(eIdx, aid);
+                              <div class="relative group/acard">
+                                <!-- Card -->
+                                <div
+                                  [id]="'a-card-' + eIdx + '-' + aid"
+                                  class="rounded-2xl overflow-hidden border-2 transition-all duration-300 select-none cursor-pointer"
+                                  [style.border-color]="line ? line.color : ''"
+                                  [class.border-border-main]="!line"
+                                  [class.shadow-lg]="!!line"
+                                  (mouseup)="completeMatch($event, eIdx, ans)"
+                                >
+                                  <img
+                                    [src]="ans.imgPath"
+                                    alt="Answer"
+                                    class="w-full aspect-square object-cover"
+                                    draggable="false"
+                                    [class.opacity-100]="!!line"
+                                    [class.brightness-75]="
+                                      isDrawingLine && drawEIdx === eIdx && !!line
+                                    "
+                                  />
+                                  <!-- Matched badge -->
+                                  @if (line) {
+                                    <div
+                                      class="absolute top-2 right-2 size-6 rounded-full flex items-center justify-center shadow-md"
+                                      [style.background-color]="line.color"
+                                    >
+                                      <i class="fa-solid fa-link text-white text-[10px]"></i>
+                                    </div>
+                                  }
+                                  <!-- Drop hint glow when dragging -->
+                                  @if (isDrawingLine && drawEIdx === eIdx) {
+                                    <div
+                                      class="absolute inset-0 bg-violet-500/10 border-2 border-violet-400/50 rounded-2xl pointer-events-none transition-opacity animate-pulse"
+                                    ></div>
+                                  }
+                                </div>
+                                <!-- Target anchor dot (left edge) -->
+                                <div
+                                  [id]="'a-dot-' + eIdx + '-' + aid"
+                                  class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-20 size-5 rounded-full border-2 border-surface shadow-md pointer-events-none"
+                                  [style.background-color]="line ? line.color : '#818cf8'"
+                                ></div>
+                              </div>
+                            }
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Summary row -->
+                      <div class="flex items-center justify-between pt-2 px-1">
+                        <p class="text-xs font-bold text-text-main/40">
+                          {{ matchSelections.get(eIdx)?.size ?? 0 }} /
+                          {{ getExerciseQuestions(eIdx).length }} matched
+                        </p>
+                        @if ((matchSelections.get(eIdx)?.size ?? 0) > 0) {
+                          <p class="text-xs font-bold text-text-main/40 italic">
+                            Click any line to remove a match
+                          </p>
+                        }
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+          </ng-container>
+        </form>
+      }
+
+      <!-- COMPLETED — minimal banner shown while modal loads -->
+      @if (quizState() === 'completed' && !showResultModal()) {
+        <div class="flex flex-col items-center justify-center min-h-[60vh] text-center animate-in fade-in zoom-in duration-500">
+          <i class="fa-solid fa-check-double text-6xl text-green-500 mb-6"></i>
+          <h2 class="text-3xl font-black text-text-main mb-3">Submitted!</h2>
+          <p class="text-text-main/50 font-semibold">Loading your results…</p>
+        </div>
+      }
+    }
+  </div>
+</section>
+
+<!-- ══ RESULT MODAL ══════════════════════════════════════════════════════ -->
+@if (showResultModal() && resultData()) {
+  <div class="fixed inset-0 z-[200] flex items-center justify-center p-4">
+
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-md animate-in fade-in duration-300"></div>
+
+    <!-- Card -->
+    <div class="relative z-10 w-full max-w-md animate-in fade-in zoom-in-95 duration-400">
+      <div class="rounded-[28px] border overflow-hidden shadow-2xl"
+           [class.border-green-500/30]="resultData()!.passed"
+           [class.border-red-500/30]="!resultData()!.passed">
+
+        <!-- Header -->
+        <div class="p-8 text-center relative overflow-hidden bg-background">
+
+          <!-- Glow -->
+          <div class="absolute -top-12 left-1/2 -translate-x-1/2 size-48 rounded-full blur-3xl opacity-25 pointer-events-none"
+               [class.bg-green-500]="resultData()!.passed"
+               [class.bg-red-500]="!resultData()!.passed"></div>
+
+          <!-- Score Ring -->
+          <div class="relative mx-auto mb-5 size-28">
+            <svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="42" fill="none" stroke-width="8"
+                      [attr.stroke]="resultData()!.passed ? 'rgba(34,197,94,0.15)' : 'rgba(239,68,68,0.15)'" />
+              <circle cx="50" cy="50" r="42" fill="none" stroke-width="8"
+                      stroke-linecap="round"
+                      [attr.stroke]="resultData()!.passed ? '#22c55e' : '#ef4444'"
+                      [attr.stroke-dasharray]="263.9"
+                      [attr.stroke-dashoffset]="263.9 * (1 - resultData()!.percentage / 100)" />
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+              <span class="text-2xl font-black leading-none"
+                    [class.text-green-400]="resultData()!.passed"
+                    [class.text-red-400]="!resultData()!.passed">
+                {{ resultData()!.percentage }}%
+              </span>
+              <span class="text-[10px] font-bold text-text-main/40 uppercase tracking-wide mt-0.5">Score</span>
+            </div>
+          </div>
+
+          <!-- Badge -->
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-black mb-4 border"
+               [class.bg-green-500/10]="resultData()!.passed"
+               [class.border-green-500/30]="resultData()!.passed"
+               [class.text-green-400]="resultData()!.passed"
+               [class.bg-red-500/10]="!resultData()!.passed"
+               [class.border-red-500/30]="!resultData()!.passed"
+               [class.text-red-400]="!resultData()!.passed">
+            <i [class]="resultData()!.passed ? 'fa-solid fa-trophy' : 'fa-solid fa-rotate-right'"></i>
+            {{ resultData()!.passed ? 'Passed!' : 'Not Yet' }}
+          </div>
+
+          <!-- API message -->
+          <p class="text-text-main/70 text-sm leading-relaxed font-semibold px-2">
+            {{ resultData()!.message }}
+          </p>
+        </div>
+
+        <!-- Actions -->
+        <div class="bg-surface/60 px-6 py-5 flex flex-col sm:flex-row gap-3 border-t border-border-main">
+          @if (!resultData()!.passed) {
+            <button
+              (click)="showResultModal.set(false); quizState.set('pre-start')"
+              class="flex-1 h-12 rounded-2xl border border-border-main font-bold text-sm text-text-main hover:bg-background transition-all flex items-center justify-center gap-2"
+            >
+              <i class="fa-solid fa-rotate-right"></i> Try Again
+            </button>
+          }
+          <button
+            (click)="navigateAfterResult()"
+            class="flex-1 h-12 rounded-2xl font-bold text-sm text-white flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg"
+            [class.bg-gradient-to-r]="true"
+            [class.from-green-500]="resultData()!.passed" [class.to-emerald-600]="resultData()!.passed"
+            [class.from-violet-500]="!resultData()!.passed" [class.to-primary]="!resultData()!.passed"
+          >
+            <i class="fa-solid fa-arrow-left"></i>
+            {{ lessonId() ? 'Back to Lesson' : 'Back to Subjects' }}
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+}
+

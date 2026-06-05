@@ -1,10 +1,12 @@
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from './../../../core/auth/services/auth.service';
 import { Component, inject } from '@angular/core';
+import { ThemeService } from '../../../core/services/theme.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterLink],
+  imports: [RouterLink , CommonModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
 })
@@ -32,7 +34,7 @@ export class NavbarComponent {
   // }
   firstLetter: string = 'U';
   profileImage: string | null = null;
-
+   readonly themeService = inject(ThemeService)
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   isMenuOpen = false; //* For mobile menu toggle

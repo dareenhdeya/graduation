@@ -1,4 +1,4 @@
-export type Role = 'Parent' | 'Teacher' | 'Student';
+export type Role = 'Admin' | 'Parent' | 'Teacher' | 'Student';
 
 export interface ProfileData {
   id: string;
@@ -12,12 +12,12 @@ export interface ProfileData {
   birthDate?: string | null;
   pfpURL?: string | null;
   disability?: string | null;
-  teaches?:  string | null;
+  teaches?: string | null;
   job?: string | null;
-  status: number | null;
+  subjectsCount: number | null;
 }
 
 export interface ViewProfileResponse {
   message: string;
   data: ProfileData;
-};
+}

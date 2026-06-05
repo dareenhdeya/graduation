@@ -4,6 +4,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -13,6 +14,7 @@ import { Router, RouterLink } from '@angular/router';
 })
 export class Login implements OnInit {
   private readonly authService = inject(AuthService);
+  private readonly toastrService = inject(ToastrService);
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
   private readonly cookieService = inject(CookieService);
@@ -30,13 +32,13 @@ export class Login implements OnInit {
 
   initForm(): void {
     this.loginForm = this.fb.group({
-      usernameorEmail: [null, [Validators.required]],
+      usernameorEmail: [null, [Validators.required, Validators.email]],
       password: [
         '',
         [
           Validators.required,
           Validators.pattern(
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()_+\-])[A-Za-z\d@$!%*?&#^()_+\-]{8,}$/
           ),
         ],
       ],
@@ -52,10 +54,26 @@ export class Login implements OnInit {
       this.errMsg = '';
 
       this.subscription = this.authService.login(this.loginForm.value).subscribe({
-        next: (res) => {
-          console.log('login res:', res);
-          this.router.navigate(['/home']);
-          this.isLoading = false;
+        next: () => {
+          this.authService.getProfile().subscribe({
+            next: (res) => {
+              const role = res.data.role;
+              setTimeout(() => {
+                this.toastrService.success('Login successful');
+              }, 850);
+              this.authService.setRole(role);
+              setTimeout(() => {
+                this.authService.redirectByRole(role);
+              }, 1000);
+
+              console.log('login res:', res);
+              this.isLoading = false;
+            },
+            error: () => {
+              this.isLoading = false;
+              this.errMsg = 'Failed to load profile';
+            },
+          });
         },
         error: (err) => {
           this.isLoading = false;
@@ -68,10 +86,15 @@ export class Login implements OnInit {
           } else {
             this.errMsg = rawMsg;
           }
+          setTimeout(() => {
+            this.toastrService.error(this.errMsg, 'Error');
+          }, 850);
         },
       });
     } else {
+      this.toastrService.warning('Please fill in all required fields correctly.', 'Warning');
       this.loginForm.markAllAsTouched();
     }
   }
+
 }

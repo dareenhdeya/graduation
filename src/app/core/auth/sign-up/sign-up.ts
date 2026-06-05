@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
 
 type RoleId = 0 | 1 | 2 | 3;
 type GenderId = 1 | 2;
@@ -18,6 +19,7 @@ export class SignUp implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private toastr = inject(ToastrService);
 
   isLoading = false;
   showPass: boolean = false;
@@ -33,9 +35,9 @@ export class SignUp implements OnInit {
   ];
 
   Disability: { id: number; label: string }[] = [
-    { id: 0, label: 'None' },
-    { id: 1, label: 'Hearing' },
-    { id: 2, label: 'Speech' },
+    { id: 1, label: 'None' },
+    { id: 2, label: 'Hearing' },
+    { id: 3, label: 'Speech' },
   ];
 
   submitted = false;
@@ -105,21 +107,21 @@ export class SignUp implements OnInit {
       '',
       [
         Validators.required,
-        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/),
+        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()_+\-])[A-Za-z\d@$!%*?&#^()_+\-]{8,}$/),
       ],
     ],
     role: [1 as any, [Validators.required]],
 
     Gender: ['', [Validators.required]],
 
-    FName: ['', [Validators.required, Validators.minLength(2), Validators.pattern('^[a-zA-Z]+$')]],
-    LName: ['', [Validators.required, Validators.minLength(2), Validators.pattern('^[a-zA-Z]+$')]],
+    FName: ['', [Validators.required, Validators.minLength(2), Validators.pattern('^[a-zA-Zء-ي]+$')]],
+    LName: ['', [Validators.required, Validators.minLength(2), Validators.pattern('^[a-zA-Zء-ي]+$')]],
     phoneNumber: ['', [Validators.required, Validators.pattern('^0[0-9]{10}$')]],
     Address: ['', [Validators.required, Validators.minLength(10)]],
     BirthDate: ['', [Validators.required]],
-    Job: ['', [Validators.minLength(2)]],
+    Job: ['', [Validators.required,Validators.minLength(2)]],
     SubjectID: [''],
-    Disability: [0 as any],
+    Disability: [1 as any],
   });
 
   ngOnInit(): void {
@@ -227,6 +229,7 @@ export class SignUp implements OnInit {
     this.submitted = true;
 
     if (this.signUpForm.invalid) {
+      this.toastr.warning('Please fill in all required fields correctly.', 'Warning');
       this.signUpForm.markAllAsTouched();
       return;
     }
@@ -236,6 +239,7 @@ export class SignUp implements OnInit {
     const gender = Number(v.Gender) as GenderId;
 
     if (![1, 2].includes(gender)) {
+      this.toastr.warning('Please select a gender.', 'Warning');
       this.signUpForm.get('Gender')?.setErrors({ required: true });
       return;
     }
@@ -277,6 +281,9 @@ export class SignUp implements OnInit {
 
     this.authService.signUp(fd).subscribe({
       next: () => {
+        setTimeout(() => {
+          this.toastr.success('Registration successful. Please login.', 'Success');
+        }, 850);
         this.isLoading = false;
         this.router.navigateByUrl('/login');
       },
@@ -295,6 +302,9 @@ export class SignUp implements OnInit {
           'Registration failed';
 
         this.errMsg = firstMsg;
+        setTimeout(() => {
+          this.toastr.error(this.errMsg, 'Error');
+        }, 850);
       },
     });
   }

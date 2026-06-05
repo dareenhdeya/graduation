@@ -2,7 +2,15 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TeacherServiceService } from '../../services/teacher-service.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+
+// Mirrors backend enum: None = 0, Lesson = 1, Quiz = 2
+export enum PerquisiteType {
+  None = 0,
+  Lesson = 1,
+  Quiz = 2,
+}
 
 @Component({
   selector: 'app-add-lesson',
@@ -12,77 +20,104 @@ import { Router } from '@angular/router';
   styleUrl: './add-lesson.component.css',
 })
 export class AddLessonComponent {
-  private fb = inject(FormBuilder);
+  private readonly fb = inject(FormBuilder);
   private readonly teacherService = inject(TeacherServiceService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private toastr = inject(ToastrService);
 
-  selectedFile: File | null = null;
-  mediaPreview: string | ArrayBuffer | null = null;
-  isImage = false;
   isLoading = false;
+  isLoadingPrerequisites = false;
+  private subjectId: string | null = this.route.snapshot.paramMap.get('sid');
+
+  // Prerequisite options fetched from backend
+  prerequisiteOptions: { id: string; title: string }[] = [];
+
+  readonly perquisiteTypes = [
+    { value: PerquisiteType.None, label: 'None' },
+    { value: PerquisiteType.Lesson, label: 'Lesson' },
+    { value: PerquisiteType.Quiz, label: 'Quiz' },
+  ];
 
   lessonForm: FormGroup = this.fb.group({
     title: ['', [Validators.required, Validators.minLength(3)]],
-    description: ['', [Validators.required]],
-    videoFile: [null, [Validators.required]],
+    perquisiteType: [PerquisiteType.None, Validators.required],
+    perquisiteId: [null],
   });
 
-  onFileSelect(event: Event): void {
-    const input = event.target as HTMLInputElement;
+  get selectedType(): number {
+    return this.lessonForm.get('perquisiteType')?.value ?? PerquisiteType.None;
+  }
 
-    if (input.files && input.files.length > 0) {
-      this.selectedFile = input.files[0];
+  onTypeChange(): void {
+    // Reset the selected item whenever type changes
+    this.lessonForm.get('perquisiteId')?.setValue(null);
+    this.prerequisiteOptions = [];
 
-      // Patch to form
-      this.lessonForm.patchValue({ videoFile: this.selectedFile });
-      this.lessonForm.get('videoFile')?.markAsTouched();
-
-      // Check type for preview
-      if (this.selectedFile.type.startsWith('image/')) {
-        this.isImage = true;
-        const reader = new FileReader();
-        reader.onload = () => {
-          this.mediaPreview = reader.result;
-        };
-        reader.readAsDataURL(this.selectedFile);
-      } else {
-        this.isImage = false;
-        this.mediaPreview = null;
-      }
+    const type = this.selectedType;
+    if (type !== PerquisiteType.None && this.subjectId) {
+      this.isLoadingPrerequisites = true;
+      this.teacherService.listPrerequisites(this.subjectId, type).subscribe({
+        next: (res: any) => {
+          // Backend returns { result: [...] }
+          this.prerequisiteOptions = (res?.result ?? []).map((item: any) => ({
+            id: item.id ?? item.Id,
+            title: item.title ?? item.Title ?? item.name ?? item.Name ?? 'Unnamed',
+          }));
+          this.isLoadingPrerequisites = false;
+        },
+        error: (err) => {
+          console.error('Error loading prerequisites', err);
+          this.isLoadingPrerequisites = false;
+        },
+      });
     }
   }
 
   onSubmit(): void {
     if (this.lessonForm.invalid) {
+      this.toastr.warning('Please fill in all required fields.', 'Warning');
       this.lessonForm.markAllAsTouched();
       return;
     }
 
+    if (!this.subjectId) return;
+
+    // Require a selected item if type is not None
+    const type: number = this.selectedType;
+    const prereqId: string | null = this.lessonForm.get('perquisiteId')?.value;
+    if (type !== PerquisiteType.None && !prereqId) {
+      this.lessonForm.get('perquisiteId')?.markAsTouched();
+      return;
+    }
+
     this.isLoading = true;
+
     const formData = new FormData();
-
     formData.append('title', this.lessonForm.get('title')?.value);
-    formData.append('description', this.lessonForm.get('description')?.value);
-
-    // Append the file with the name 'videoFile' //* (حسن عاملها كدا مع انها بتقبل اي نوع)
-    if (this.selectedFile) {
-      formData.append('videoFile', this.selectedFile);
+    formData.append('subjectId', this.subjectId);
+    formData.append('perquisiteType', type.toString());
+    if (type !== PerquisiteType.None && prereqId) {
+      formData.append('perquisite', prereqId);
     }
 
     this.teacherService.addLesson(formData).subscribe({
-      next: (res) => {
-        console.log('Success', res);
-        this.isLoading = false;
-        // clr inputs
-        this.lessonForm.reset();
+      next: () => {
         setTimeout(() => {
-          this.router.navigate(['/teacher/lessons']);
-        }, 1000);
-        this.selectedFile = null;
-        this.mediaPreview = null;
+          this.toastr.success('Lesson added successfully.', 'Success');
+        }, 850);
+        this.isLoading = false;
+        this.lessonForm.reset({ perquisiteType: PerquisiteType.None, perquisiteId: null });
+        this.prerequisiteOptions = [];
+        setTimeout(() => {
+          this.router.navigate(['/teacher/subject', this.subjectId, 'lessons']);
+        }, 500);
       },
       error: (err) => {
         console.error('Error', err);
+        setTimeout(() => {
+          this.toastr.error('Failed to add lesson.', 'Error');
+        }, 850);
         this.isLoading = false;
       },
     });

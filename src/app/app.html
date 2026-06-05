@@ -4,3 +4,19 @@
   </div>
   <!-- <app-footer/> -->
 </div>
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.85)" type="custom" [fullScreen]="true">
+  <div class="flex flex-col items-center justify-center">
+    <video
+      #vid
+      src="{{ currentVideo }}"
+      [autoplay]="true"
+      [loop]="true"
+      [muted]="true"
+      playsinline
+      (canplay)="vid.play()"
+      class="w-40 h-40 object-contain drop-shadow-2xl"
+    ></video>
+
+    <p class="mt-6 text-white font-bold text-xl tracking-widest animate-pulse">Loading...</p>
+  </div>
+</ngx-spinner>

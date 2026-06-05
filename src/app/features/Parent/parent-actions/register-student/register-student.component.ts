@@ -92,8 +92,12 @@ export class RegisterStudentComponent implements OnDestroy {
     this.showAvatarPicker = false;
   }
 
-  openAvatarPicker() { this.showAvatarPicker = true; }
-  closeAvatarPicker() { this.showAvatarPicker = false; }
+  openAvatarPicker() {
+    this.showAvatarPicker = true;
+  }
+  closeAvatarPicker() {
+    this.showAvatarPicker = false;
+  }
 
   onFileChange(e: Event) {
     const input = e.target as HTMLInputElement;
@@ -155,8 +159,8 @@ export class RegisterStudentComponent implements OnDestroy {
       next: () => {
         this.isLoading = false;
         // Redirect or show success message
-        // this.router.navigateByUrl('/parent/dashboard'); 
-        alert("Student registered successfully");
+        // this.router.navigateByUrl('/parent/dashboard');
+        alert('Student registered successfully'); //====================================toaster========================================================================================
         this.router.navigateByUrl('/parent/dashboard');
       },
       error: (err: HttpErrorResponse) => {

@@ -5,6 +5,7 @@ import { StudentServiceService } from '../../services/student-service.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { IStudSubDetailsResponse, StudentSubject } from '../../interfaces/IStudSubDetailsResponse';
 import { IEnrollSubResponse } from '../../interfaces/IEnrollSubResponse';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-subject-details',
@@ -18,6 +19,7 @@ export class SubjectDetailsComponent implements OnInit {
   private readonly studentService = inject(StudentServiceService);
   private readonly route = inject(ActivatedRoute)
   private readonly router = inject(Router)
+  private toastr = inject(ToastrService);
   subjectId!: string
   subject: StudentSubject | null = null; // Changed to null for safety
   isLoading = true;
@@ -51,12 +53,16 @@ export class SubjectDetailsComponent implements OnInit {
     this.studentService.enrollSubject(id).subscribe({
       next: (res : IEnrollSubResponse) => {
         console.log(res.message, "🥳🥳🥳🥳🥳");
+        setTimeout(() => {
+          this.toastr.success(res.message || 'Enrolled successfully.', 'Success');
+        }, 850);
         this.router.navigate(['/student/my-subjects']);
-        alert(res.message);
       },
       error: (err: HttpErrorResponse) => {
-        console.log(err.error.message || 'Error enrolling in subject');
-        alert(err.error.message || 'Error enrolling in subject');
+        console.log(err.error?.message || 'Error enrolling in subject');
+        setTimeout(() => {
+          this.toastr.error(err.error?.message || 'Error enrolling in subject', 'Error');
+        }, 850);
       }
     });
   }

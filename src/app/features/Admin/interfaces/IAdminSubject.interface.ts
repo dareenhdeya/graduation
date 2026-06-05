@@ -27,3 +27,11 @@ export interface AddSubjectResponse {
   message: string;
   data: any;
 }
+export interface IAproveTeacher {
+	teacherId: string;
+	subjectId: string;
+}
+
+export interface IAproveResponse {
+	message: string;
+}

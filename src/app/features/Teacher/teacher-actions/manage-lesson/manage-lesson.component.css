@@ -1,0 +1,29 @@
+/* Layout and look handled by Tailwind utility classes in the template */
+
+/* scrollbar */
+body {
+    --sb-track-color: var(--bg-main);
+    --sb-thumb-color: var(--color-primary);
+    --sb-size: 10px;
+}
+
+#videos::-webkit-scrollbar {
+    width: var(--sb-size)
+}
+
+#videos::-webkit-scrollbar-track {
+    background: var(--sb-track-color);
+    border-radius: 3px;
+}
+
+#videos::-webkit-scrollbar-thumb {
+    background: var(--color-primary);
+    border-radius: 3px;
+
+}
+
+@supports not selector(::-webkit-scrollbar) {
+    #videos {
+        scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+    }
+}

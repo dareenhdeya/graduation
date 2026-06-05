@@ -1,18 +1,21 @@
 import { Component, inject } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../core/auth/services/auth.service';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ViewProfileResponse, ProfileData } from '../../core/auth/interfaces/IProfileResponse';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterLink],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
 })
 export class ProfileComponent {
   private readonly authService = inject(AuthService);
   private readonly fb = inject(FormBuilder);
+  private toastr = inject(ToastrService);
 
   loadingProfile = true;
   loadingEdit = false;
@@ -35,15 +38,15 @@ export class ProfileComponent {
       [
         Validators.required,
         Validators.minLength(8),
-        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/),
+        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()_+\-])[A-Za-z\d@$!%*?&#^()_+\-]{8,}$/),
       ],
     ],
   });
 
   editForm = this.fb.group({
-    fName: ['', [Validators.required, Validators.minLength(2), Validators.pattern('^[a-zA-Z]+$')]],
-    lName: ['', [Validators.required, Validators.minLength(2), Validators.pattern('^[a-zA-Z]+$')]],
-    email: ['', [Validators.required, Validators.email]],
+    fName: ['', [ Validators.minLength(2), Validators.pattern('^[a-zA-Zء-ي]+$')]],
+    lName: ['', [ Validators.minLength(2), Validators.pattern('^[a-zA-Zء-ي]+$')]],
+    email: ['', [ Validators.email]],
     address: ['', [Validators.minLength(10)]],
     phone: ['', [Validators.pattern('^0[0-9]{10}$')]],
     job: ['', [Validators.minLength(2)]],
@@ -173,6 +176,7 @@ export class ProfileComponent {
 
   submitEdit() {
     if (this.editForm.invalid) {
+      this.toastr.warning('Please fill in all required fields correctly.', 'Warning');
       console.log('invalidddddddddddd');
       return;
     }
@@ -199,6 +203,9 @@ export class ProfileComponent {
       next: (res) => {
         console.log('editttt', res);
 
+        setTimeout(() => {
+          this.toastr.success('Profile updated successfully.', 'Success');
+        }, 850);
         this.showEditModal = false;
         this.authService.refreshProfile();
         this.imagePreview = null;
@@ -215,6 +222,9 @@ export class ProfileComponent {
         } else {
           this.editError = err?.error?.title || 'Failed to update profile';
         }
+        setTimeout(() => {
+          this.toastr.error(this.editError, 'Error');
+        }, 850);
         this.loadingEdit = false;
       },
     });
@@ -229,7 +239,10 @@ export class ProfileComponent {
   }
 
   submitChangePassword() {
-    if (this.changePassForm.invalid) return;
+    if (this.changePassForm.invalid) {
+      this.toastr.warning('Please fill in all required fields correctly.', 'Warning');
+      return;
+    }
 
     this.loadingChangePass = true;
     this.changePassError = '';
@@ -242,12 +255,17 @@ export class ProfileComponent {
     this.authService.changePassword(payload).subscribe({
       next: () => {
         console.log('save change');
-
+        setTimeout(() => {
+          this.toastr.success('Password changed successfully.', 'Success');
+        }, 850);
         this.showChangePassModal = false;
         this.loadingChangePass = false;
       },
       error: (err) => {
         this.changePassError = err?.error?.message || 'Failed to change password';
+        setTimeout(() => {
+          this.toastr.error(this.changePassError, 'Error');
+        }, 850);
         this.loadingChangePass = false;
       },
     });
