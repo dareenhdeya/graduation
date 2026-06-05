@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { baseHttp } from '../../../core/services/base';
 import { HttpHeaders } from '@angular/common/http';
 import { IRegStudResponse } from '../interfaces/IRegStudResponse';
-import { IViewChildrenResponse } from '../interfaces/IViewChildrenResponse';
+import { IChildren, IViewChildrenResponse } from '../interfaces/IViewChildrenResponse';
 import { IViewChildProfile } from '../interfaces/IViewChildProfile';
 import { IViewStudentSubjectsResponse } from '../interfaces/IViewStudentSubjects.interface';
 import { IViewSubjectReportResponse } from '../interfaces/IViewSubjectReport.interface';
@@ -37,6 +37,13 @@ viewSubjectReport(sid: string, studentId: string) {
     APP_APIs.parentViewSubjectReport,
     {},
     { headers: new HttpHeaders({ sid, studentId }) }
+  );
+}
+
+deleteStudent(child: IChildren) {
+  return this.deleteWithBody<{ message: string }>(
+    APP_APIs.parentDeleteStudent,
+    child
   );
 }
 }

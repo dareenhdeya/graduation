@@ -23,7 +23,6 @@ export enum PerquisiteType {
   styleUrl: './get-teacher-lessons.component.css',
 })
 export class GetTeacherLessonsComponent implements OnInit {
-
   private readonly teacherService = inject(TeacherServiceService);
   private readonly route = inject(ActivatedRoute);
   private readonly fb = inject(FormBuilder);
@@ -72,7 +71,10 @@ export class GetTeacherLessonsComponent implements OnInit {
   }
 
   getLessons() {
-    if (!this.subjectId) { this.isLoading = false; return; }
+    if (!this.subjectId) {
+      this.isLoading = false;
+      return;
+    }
     this.isLoading = true;
     this.teacherService.getLessons(this.subjectId).subscribe({
       next: (response) => {
@@ -82,7 +84,7 @@ export class GetTeacherLessonsComponent implements OnInit {
       error: (error: HttpErrorResponse) => {
         console.error('Error:', error.message);
         this.isLoading = false;
-      }
+      },
     });
   }
 
@@ -100,9 +102,9 @@ export class GetTeacherLessonsComponent implements OnInit {
   confirmDelete() {
     if (!this.lessonToDelete) return;
     this.isDeleting = true;
-    this.teacherService.removeLesson(this.lessonToDelete.id).subscribe({
+    this.teacherService.removeLesson(this.subjectId!, this.lessonToDelete.id).subscribe({
       next: () => {
-        this.lessons = this.lessons.filter(l => l.id !== this.lessonToDelete!.id);
+        this.lessons = this.lessons.filter((l) => l.id !== this.lessonToDelete!.id);
         this.isDeleting = false;
         this.closeDeleteModal();
         setTimeout(() => {
@@ -116,7 +118,7 @@ export class GetTeacherLessonsComponent implements OnInit {
         setTimeout(() => {
           this.toastr.error('Failed to delete lesson.', 'Error');
         }, 850);
-      }
+      },
     });
   }
 
@@ -124,8 +126,13 @@ export class GetTeacherLessonsComponent implements OnInit {
   openEditModal(lesson: ILesson) {
     this.isEditModalOpen = true;
     this.currentLessonId = lesson.id;
-    const pType = (lesson as any).perquisiteType ?? (lesson as any).PerquisiteType ?? PerquisiteType.None;
-    const pId = (lesson as any).perquisite ?? (lesson as any).Perquisite ?? (lesson as any).perquisiteId ?? null;
+    const pType =
+      (lesson as any).perquisiteType ?? (lesson as any).PerquisiteType ?? PerquisiteType.None;
+    const pId =
+      (lesson as any).perquisite ??
+      (lesson as any).Perquisite ??
+      (lesson as any).perquisiteId ??
+      null;
     this.editForm.patchValue({
       title: lesson.title,
       description: lesson.description,
@@ -144,7 +151,9 @@ export class GetTeacherLessonsComponent implements OnInit {
           this.isLoadingPrerequisites = false;
           if (pId) this.editForm.get('perquisiteId')?.setValue(pId);
         },
-        error: () => { this.isLoadingPrerequisites = false; },
+        error: () => {
+          this.isLoadingPrerequisites = false;
+        },
       });
     }
   }
@@ -202,7 +211,7 @@ export class GetTeacherLessonsComponent implements OnInit {
 
     this.teacherService.editLesson(editedLesson).subscribe({
       next: () => {
-        const index = this.lessons.findIndex(l => l.id === this.currentLessonId);
+        const index = this.lessons.findIndex((l) => l.id === this.currentLessonId);
         if (index !== -1) {
           this.lessons[index] = { ...this.lessons[index], title, description };
         }
@@ -218,7 +227,7 @@ export class GetTeacherLessonsComponent implements OnInit {
         setTimeout(() => {
           this.toastr.error('Failed to update lesson.', 'Error');
         }, 850);
-      }
+      },
     });
   }
 
