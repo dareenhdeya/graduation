@@ -36,7 +36,7 @@ export const APP_APIs = {
   teacherGetLessons: (sid: string) => `${environment.apiUrl}Teacher/get-lessons/${sid}`,
   teacherAddLesson: `${environment.apiUrl}Teacher/Add-lesson`,
   teacherEditLesson: `${environment.apiUrl}Teacher/Edit-Lesson`,
-  teacherRemoveLesson: (id: string) => `${environment.apiUrl}Teacher/Remove-Lesson/${id}`,
+  teacherRemoveLesson: `${environment.apiUrl}Teacher/Remove-Lesson`,
   teacherViewLesson: (sid: string, lid: string) =>
     `${environment.apiUrl}Teacher/View-Lesson/${sid}/${lid}`,
   teacherUploadVideo: `${environment.apiUrl}Teacher/Upload-Video`,
@@ -71,4 +71,5 @@ export const APP_APIs = {
   parentViewChildProfile: (id: string) => `${environment.apiUrl}Parent/View-Profile/${id}`,
   parentViewStudentSubjects: `${environment.apiUrl}Parent/View-Student-Subjects`,
   parentViewSubjectReport: `${environment.apiUrl}Parent/view-subject-report`,
+  parentDeleteStudent: `${environment.apiUrl}Parent/Delete-Student`,
 };
