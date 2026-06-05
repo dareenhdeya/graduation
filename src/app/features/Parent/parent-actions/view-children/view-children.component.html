@@ -122,12 +122,13 @@
           <div class="mt-auto grid grid-cols-2 gap-3">
             <button
               [routerLink]="['/parent/child-profile/', child.id]"
-              class="py-3 rounded-xl bg-sky-600/10 text-sky-400 font-bold text-sm hover:bg-sky-600 hover:text-white transition border border-sky-600/20 shadow-lg shadow-sky-900/10 hover:shadow-sky-600/20"
+              class="cursor-pointer py-3 rounded-xl bg-sky-600/10 text-sky-400 font-bold text-sm hover:bg-sky-600 hover:text-white transition border border-sky-600/20 shadow-lg shadow-sky-900/10 hover:shadow-sky-600/20"
             >
               View Profile
             </button>
             <button
-              class="py-3 rounded-xl bg-white/5 text-white/70 font-bold text-sm hover:bg-white/10 hover:text-white transition border border-white/10"
+              [routerLink]="['/parent/student-subjects/', child.id]"
+              class="cursor-pointer py-3 rounded-xl bg-white/5 text-white/70 font-bold text-sm hover:bg-white/10 hover:text-white transition border border-white/10"
             >
               Progress
             </button>
