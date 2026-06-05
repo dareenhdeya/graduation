@@ -39,6 +39,8 @@ import { EditQuizComponent } from './features/Teacher/teacher-actions/quizzes/ed
 import { QuizzesListComponent } from './features/Teacher/teacher-actions/teacher-subject-dashboard/quizzes-list/quizzes-list.component';
 import { ViewQuizComponent } from './features/Teacher/teacher-actions/quizzes/view-quiz/view-quiz.component';
 import { SolveQuizComponent } from './features/Student/student-actions/quizzes/solve-quiz/solve-quiz.component';
+import { StudentSubjectsComponent } from './features/Parent/parent-actions/student-subjects/student-subjects.component';
+import { SubjectReportComponent } from './features/Parent/parent-actions/subject-report/subject-report.component';
 
 export const routes: Routes = [
   {
@@ -95,19 +97,67 @@ export const routes: Routes = [
         data: { roles: ['Teacher'] },
         children: [
           { path: 'dashboard', component: TeacherActionsComponent, title: 'Teacher Dashboard' },
-          { path: 'subject/:sid', component: TeacherSubjectDashboardComponent, title: 'Manage Subject' },
-          { path: 'subject/:sid/lessons', component: GetTeacherLessonsComponent, title: 'My Lessons' },
+          {
+            path: 'subject/:sid',
+            component: TeacherSubjectDashboardComponent,
+            title: 'Manage Subject',
+          },
+          {
+            path: 'subject/:sid/lessons',
+            component: GetTeacherLessonsComponent,
+            title: 'My Lessons',
+          },
           { path: 'subject/:sid/add-lesson', component: AddLessonComponent, title: 'Add Lesson' },
-          { path: 'subject/:sid/lesson/:lid/manage', component: ManageLessonComponent, title: 'Manage Lesson' },
-          { path: 'subject/:sid/students', component: GetTeacherStudentsComponent, title: 'My Students' },
-          { path: 'subject/:sid/add-dictionary', component: AddDictionaryComponent, title: 'Add Dictionary' },
-          { path: 'subject/:sid/quizzes', component: QuizzesListComponent, title: 'Subject Quizzes' },
-          { path: 'subject/:sid/quizzes/create', component: CreateQuizComponent, title: 'Create Quiz' },
-          { path: 'subject/:sid/quizzes/view/:qid', component: ViewQuizComponent, title: 'View Quiz' },
-          { path: 'subject/:sid/quizzes/edit/:qid', component: EditQuizComponent, title: 'Edit Quiz' },
-          { path: 'subject/:sid/lesson/:lid/exercise', component: CreateQuizComponent, title: 'Add Exercise to Lesson' },
-          { path: 'subject/:sid/lesson/:lid/exercise/view/:qid', component: ViewQuizComponent, title: 'View Exercise' },
-          { path: 'subject/:sid/lesson/:lid/exercise/edit/:qid', component: EditQuizComponent, title: 'Edit Exercise' },
+          {
+            path: 'subject/:sid/lesson/:lid/manage',
+            component: ManageLessonComponent,
+            title: 'Manage Lesson',
+          },
+          {
+            path: 'subject/:sid/students',
+            component: GetTeacherStudentsComponent,
+            title: 'My Students',
+          },
+          {
+            path: 'subject/:sid/add-dictionary',
+            component: AddDictionaryComponent,
+            title: 'Add Dictionary',
+          },
+          {
+            path: 'subject/:sid/quizzes',
+            component: QuizzesListComponent,
+            title: 'Subject Quizzes',
+          },
+          {
+            path: 'subject/:sid/quizzes/create',
+            component: CreateQuizComponent,
+            title: 'Create Quiz',
+          },
+          {
+            path: 'subject/:sid/quizzes/view/:qid',
+            component: ViewQuizComponent,
+            title: 'View Quiz',
+          },
+          {
+            path: 'subject/:sid/quizzes/edit/:qid',
+            component: EditQuizComponent,
+            title: 'Edit Quiz',
+          },
+          {
+            path: 'subject/:sid/lesson/:lid/exercise',
+            component: CreateQuizComponent,
+            title: 'Add Exercise to Lesson',
+          },
+          {
+            path: 'subject/:sid/lesson/:lid/exercise/view/:qid',
+            component: ViewQuizComponent,
+            title: 'View Exercise',
+          },
+          {
+            path: 'subject/:sid/lesson/:lid/exercise/edit/:qid',
+            component: EditQuizComponent,
+            title: 'Edit Exercise',
+          },
         ],
       },
       // --- STUDENT ROUTES ---
@@ -136,15 +186,15 @@ export const routes: Routes = [
             component: ViewEnrolledSubjectsComponent,
             title: 'My Enrolled Subjects',
           },
-          { 
-            path: 'subject/:sid/quizzes/:qid/solve', 
-            component: SolveQuizComponent, 
-            title: 'Solve Quiz' 
+          {
+            path: 'subject/:sid/quizzes/:qid/solve',
+            component: SolveQuizComponent,
+            title: 'Solve Quiz',
           },
-          { 
-            path: 'subject/:sid/lesson/:lid/exercise/:qid/solve', 
-            component: SolveQuizComponent, 
-            title: 'Solve Exercise' 
+          {
+            path: 'subject/:sid/lesson/:lid/exercise/:qid/solve',
+            component: SolveQuizComponent,
+            title: 'Solve Exercise',
           },
         ],
       },
@@ -154,12 +204,26 @@ export const routes: Routes = [
         canActivate: [roleGuard],
         data: { roles: ['Parent'] },
         children: [
-          {path: 'dashboard', component: ParentActionsComponent, title: 'Parent Dashboard' },
-          {path: 'register-student', component: RegisterStudentComponent, title: 'Register Student' },
-          {path: 'view-children', component: ViewChildrenComponent, title: 'View Children' },
-          {path: 'child-profile/:id', component: ChildProfileComponent, title: 'Child Profile' },
-        ]
-      }
+          { path: 'dashboard', component: ParentActionsComponent, title: 'Parent Dashboard' },
+          {
+            path: 'register-student',
+            component: RegisterStudentComponent,
+            title: 'Register Student',
+          },
+          { path: 'view-children', component: ViewChildrenComponent, title: 'View Children' },
+          { path: 'child-profile/:id', component: ChildProfileComponent, title: 'Child Profile' },
+          {
+            path: 'student-subjects/:id',
+            component: StudentSubjectsComponent,
+            title: 'Child Subjects',
+          },
+          {
+            path: 'subject-report/:sid/:studentId/:subjectName',
+            component: SubjectReportComponent,
+            title: 'Subject Report',
+          },
+        ],
+      },
     ],
   },
   {

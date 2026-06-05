@@ -12,6 +12,8 @@ export interface IADMIN {
   pfpURL: string | null;
   teaches: string | null;
   job: string | null;
+  subjectsCount: number;
+  parentContactInfo: string | null;
 }
 
 export interface ShowUsersResponse {

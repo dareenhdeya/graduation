@@ -1,6 +1,5 @@
-<section class="relative min-h-screen overflow-hidden py-8 px-4 transition-colors duration-300 ">
+<section class="relative min-h-screen py-8 px-4 transition-colors duration-300">
   <div class="container mx-auto max-w-4xl relative z-10">
-    
     <a
       routerLink="/admin/users"
       class="mb-6 cursor-pointer inline-flex items-center gap-2 rounded-2xl border border-border-main bg-surface px-4 py-2 text-sm font-bold text-text-main hover:border-primary/50 hover:text-primary transition-all duration-300 hover:-translate-y-0.5 shadow-sm"
@@ -10,23 +9,31 @@
     </a>
 
     @if (loading) {
-    <div class="rounded-3xl border border-border-main bg-surface p-12 text-center text-text-main/70 text-lg font-medium animate-pulse shadow-sm">
-      <i class="fa-solid fa-circle-notch fa-spin mr-3 text-primary text-xl"></i> Loading user details...
+    <div
+      class="rounded-3xl border border-border-main bg-surface p-12 text-center text-text-main/70 text-lg font-medium animate-pulse shadow-sm"
+    >
+      <i class="fa-solid fa-circle-notch fa-spin mr-3 text-primary text-xl"></i> Loading user
+      details...
     </div>
-    
+
     } @else if (error) {
-    <div class="rounded-3xl border border-red-500/30 bg-red-500/10 p-12 text-center text-red-500 font-semibold text-lg shadow-sm">
+    <div
+      class="rounded-3xl border border-red-500/30 bg-red-500/10 p-12 text-center text-red-500 font-semibold text-lg shadow-sm"
+    >
       <i class="fa-solid fa-triangle-exclamation mr-2 text-xl"></i> {{ error }}
     </div>
-    
+
     } @else if (user) {
 
-    <div class="relative mt-2 rounded-3xl border border-border-main bg-surface shadow-sm overflow-hidden transition-all">
-      <div class="absolute -right-20 -top-20 size-64 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+    <div
+      class="relative mt-2 rounded-3xl border border-border-main bg-surface shadow-sm overflow-hidden transition-all"
+    >
+      <div
+        class="absolute -right-20 -top-20 size-64 bg-primary/5 rounded-full blur-3xl pointer-events-none"
+      ></div>
 
       <div class="p-6 sm:p-8 border-b border-border-main relative z-10">
         <div class="flex flex-col sm:flex-row sm:items-center gap-6">
-          
           <div class="shrink-0">
             @if (user.pfpURL) {
             <img
@@ -65,12 +72,16 @@
               </span>
             </div>
 
-            <div class="mt-2 text-sm font-medium text-text-main/60 truncate flex items-center gap-2">
+            <div
+              class="mt-2 text-sm font-medium text-text-main/60 truncate flex items-center gap-2"
+            >
               <i class="fa-solid fa-envelope text-text-main/40"></i>
               {{ user.email || '-' }}
             </div>
 
-            <div class="mt-1 text-xs font-bold text-text-main/40 uppercase tracking-wider truncate flex items-center gap-2">
+            <div
+              class="mt-1 text-xs font-bold text-text-main/40 uppercase tracking-wider truncate flex items-center gap-2"
+            >
               <i class="fa-solid fa-fingerprint text-text-main/30"></i>
               ID: {{ user.id }}
             </div>
@@ -79,37 +90,56 @@
       </div>
 
       <div class="p-6 sm:p-8 relative z-10">
-        <h3 class="text-sm font-bold uppercase tracking-wider text-text-main/40 mb-4">Personal Information</h3>
-        
+        <h3 class="text-sm font-bold uppercase tracking-wider text-text-main/40 mb-4">
+          Personal Information
+        </h3>
+
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          
-          <div class="rounded-2xl border border-border-main bg-surface p-5 hover:border-primary/20 transition-colors">
-            <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">Phone</div>
+          <div
+            class="rounded-2xl border border-border-main bg-surface p-5 hover:border-primary/20 transition-colors"
+          >
+            <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">
+              Phone
+            </div>
             <div class="font-bold text-text-main text-lg">{{ user.phone || '-' }}</div>
           </div>
 
-          <div class="rounded-2xl border border-border-main bg-surface p-5 hover:border-primary/20 transition-colors">
-            <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">Birth Date</div>
+          <div
+            class="rounded-2xl border border-border-main bg-surface p-5 hover:border-primary/20 transition-colors"
+          >
+            <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">
+              Birth Date
+            </div>
             <div class="font-bold text-text-main text-lg">{{ user.birthDate || '-' }}</div>
           </div>
-          
-          <div class="rounded-2xl border border-border-main bg-surface p-5 sm:col-span-2 hover:border-primary/20 transition-colors">
-            <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">Address</div>
+
+          <div
+            class="rounded-2xl border border-border-main bg-surface p-5 sm:col-span-2 hover:border-primary/20 transition-colors"
+          >
+            <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">
+              Address
+            </div>
             <div class="font-bold text-text-main text-lg">{{ user.address || '-' }}</div>
           </div>
 
-          <div class="rounded-2xl border border-border-main bg-surface p-5 hover:border-primary/20 transition-colors">
-            <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">Subject</div>
+          <div
+            class="rounded-2xl border border-border-main bg-surface p-5 hover:border-primary/20 transition-colors"
+          >
+            <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">
+              Subject
+            </div>
             <div class="font-bold text-text-main text-lg">{{ user.teaches || '-' }}</div>
           </div>
 
-          <div class="rounded-2xl border border-border-main bg-surface p-5 hover:border-primary/20 transition-colors">
+          <div
+            class="rounded-2xl border border-border-main bg-surface p-5 hover:border-primary/20 transition-colors"
+          >
             <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">Job</div>
             <div class="font-bold text-text-main text-lg">{{ user.job || '-' }}</div>
           </div>
         </div>
 
-        <div class="mt-8 pt-6 border-t border-border-main flex flex-wrap gap-3">
+        <!-- <div class="mt-8 pt-6 border-t border-border-main flex flex-wrap gap-3">
           <button
             type="button"
             class="py-2.5 px-5 inline-flex items-center gap-2 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-500 font-bold text-sm transition-all hover:bg-amber-500/20 hover:-translate-y-0.5 cursor-pointer"
@@ -125,9 +155,122 @@
             <i class="fa-solid fa-ban"></i>
             Block User
           </button>
+        </div> -->
+
+        <div class="mt-8 pt-6 border-t border-border-main flex flex-wrap gap-3">
+          <button
+            type="button"
+            [disabled]="user.status === 2"
+            class="cursor-pointer py-2.5 px-5 inline-flex items-center gap-2 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-500 font-bold text-sm transition-all hover:bg-amber-500/20 hover:-translate-y-0.5 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+            (click)="onEndSession()"
+          >
+            <i class="fa-solid fa-power-off"></i>
+            End Session
+          </button>
+
+          @if (user.status !== 3) {
+          <button
+            type="button"
+            [disabled]="user.status === 2"
+            class="cursor-pointer py-2.5 px-5 inline-flex items-center gap-2 rounded-xl border border-red-500/30 bg-red-500/10 text-red-500 font-bold text-sm transition-all hover:bg-red-500/20 hover:-translate-y-0.5 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+            (click)="onBlockUser()"
+          >
+            <i class="fa-solid fa-ban"></i>
+            Block User
+          </button>
+          } @else {
+          <button
+            type="button"
+            class="cursor-pointer py-2.5 px-5 inline-flex items-center gap-2 rounded-xl border border-green-500/30 bg-green-500/10 text-green-500 font-bold text-sm transition-all hover:bg-green-500/20 hover:-translate-y-0.5 cursor-pointer"
+            (click)="onBlockUser()"
+          >
+            <i class="fa-solid fa-unlock"></i>
+            Unblock User
+          </button>
+          }
+
+          <button
+            type="button"
+            class="cursor-pointer py-2.5 px-5 inline-flex items-center gap-2 rounded-xl border border-purple-500/30 bg-purple-500/10 text-purple-500 font-bold text-sm transition-all hover:bg-purple-500/20 hover:-translate-y-0.5 cursor-pointer"
+            (click)="promptDelete()"
+          >
+            <i class="fa-solid fa-trash"></i>
+            Remove User
+          </button>
         </div>
       </div>
     </div>
     }
   </div>
+  @if (showDeleteModal && userToDelete) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+    <div
+      class="rounded-3xl border border-border-main bg-surface p-8 shadow-2xl max-w-sm w-full mx-4"
+    >
+      <div class="mb-5 flex items-center gap-3">
+        <div
+          class="size-12 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center"
+        >
+          <i class="fa-solid fa-trash text-red-500 text-lg"></i>
+        </div>
+        <div>
+          <h3 class="font-black text-text-main text-lg">Remove User</h3>
+          <p class="text-text-main/50 text-sm">This action cannot be undone</p>
+        </div>
+      </div>
+
+      @if (userToDelete.role === 'Parent') {
+      <p class="text-text-main/70 text-sm mb-6">
+        This user is a <span class="font-bold text-text-main">Parent</span>. Do you want to delete
+        only the parent account or also remove all linked children?
+      </p>
+      <div class="flex flex-col gap-3">
+        <button
+          type="button"
+          class="cursor-pointer w-full py-3 rounded-2xl border border-purple-500/30 bg-purple-500/10 text-purple-500 font-bold hover:bg-purple-500/20 transition-all"
+          (click)="confirmDelete(false)"
+        >
+          <i class="fa-solid fa-user mr-2"></i> Delete Parent Only
+        </button>
+        <button
+          type="button"
+          class="cursor-pointer w-full py-3 rounded-2xl border border-red-500/30 bg-red-500/10 text-red-500 font-bold hover:bg-red-500/20 transition-all"
+          (click)="confirmDelete(true)"
+        >
+          <i class="fa-solid fa-users mr-2"></i> Delete Parent & All Children
+        </button>
+        <button
+          type="button"
+          class="cursor-pointer w-full py-3 rounded-2xl border border-border-main text-text-main/60 font-bold hover:bg-primary/5 transition-all"
+          (click)="showDeleteModal = false; userToDelete = null"
+        >
+          Cancel
+        </button>
+      </div>
+      } @else {
+      <p class="text-text-main/70 text-sm mb-6">
+        Are you sure you want to remove
+        <span class="font-bold text-text-main">{{ userToDelete.fName }}</span
+        >? This action cannot be undone.
+      </p>
+      <div class="flex flex-col gap-3">
+        <button
+          type="button"
+          class="cursor-pointer w-full py-3 rounded-2xl border border-red-500/30 bg-red-500/10 text-red-500 font-bold hover:bg-red-500/20 transition-all"
+          (click)="confirmDelete(false)"
+        >
+          <i class="fa-solid fa-trash mr-2"></i> Yes, Remove User
+        </button>
+        <button
+          type="button"
+          class="cursor-pointer w-full py-3 rounded-2xl border border-border-main text-text-main/60 font-bold hover:bg-primary/5 transition-all"
+          (click)="showDeleteModal = false; userToDelete = null"
+        >
+          Cancel
+        </button>
+      </div>
+      }
+    </div>
+  </div>
+  }
 </section>

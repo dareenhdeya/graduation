@@ -3,9 +3,13 @@ import { IADMIN } from '../../../interfaces/iadmin.interface';
 import { Router, RouterLink } from '@angular/router';
 import { AdminServiceService } from '../../../services/admin-service.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { IAproveResponse, IAproveTeacher, IAdminSubject } from '../../../interfaces/IAdminSubject.interface';
+import {
+  IAproveResponse,
+  IAproveTeacher,
+  IAdminSubject,
+} from '../../../interfaces/IAdminSubject.interface';
 import { HttpErrorResponse } from '@angular/common/http';
-import { CommonModule } from '@angular/common'; // Important for @if and forms
+import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 
 type Role = 'Parent' | 'Teacher' | 'Student';
@@ -24,19 +28,23 @@ export class PendingTeachersComponent implements OnInit {
 
   private roleToId(role: string | null | undefined): 1 | 2 | 3 {
     switch (role) {
-      case 'Student': return 1;
-      case 'Parent': return 2;
-      case 'Teacher': return 3;
-      default: return 2;
+      case 'Student':
+        return 1;
+      case 'Parent':
+        return 2;
+      case 'Teacher':
+        return 3;
+      default:
+        return 2;
     }
   }
 
   statusLabels = ['Inactive', 'Active', 'Pending', 'Banned', 'Locked'];
   statusStyles: any = {
-    0: 'bg-slate-500/10 text-slate-500 border-slate-500/20',     // Inactive 
-    1: 'bg-green-500/10 text-green-500 border-green-500/20',     // Active
-    2: 'bg-amber-500/10 text-amber-500 border-amber-500/20',     // Pending
-    3: 'bg-red-500/10 text-red-500 border-red-500/20',           // Banned
+    0: 'bg-slate-500/10 text-slate-500 border-slate-500/20', // inactive
+    1: 'bg-green-500/10 text-green-500 border-green-500/20', // active
+    2: 'bg-amber-500/10 text-amber-500 border-amber-500/20', // pending
+    3: 'bg-red-500/10 text-red-500 border-red-500/20', // banned
     4: 'bg-fuchsia-500/10 text-fuchsia-500 border-fuchsia-500/20',
   };
 
@@ -45,7 +53,6 @@ export class PendingTeachersComponent implements OnInit {
   users: IADMIN[] = [];
   search = new FormControl<string>('', { nonNullable: true });
 
-  // --- Modal State Variables ---
   showModal = false;
   selectedTeacher: IADMIN | null = null;
   subjects: IAdminSubject[] = [];
@@ -96,14 +103,11 @@ export class PendingTeachersComponent implements OnInit {
     });
   }
 
-  // --- Modal Logic ---
-
   openActivateModal(teacher: IADMIN) {
     this.selectedTeacher = teacher;
     this.showModal = true;
     this.selectedSubjectId.setValue('');
 
-    // Only fetch subjects if we haven't already
     if (this.subjects.length === 0) {
       this.loadSubjects();
     }
@@ -117,7 +121,6 @@ export class PendingTeachersComponent implements OnInit {
 
   loadSubjects() {
     this.loadingSubjects = true;
-    // We reuse the listSubjects endpoint from your admin service
     this.adminService.listSubjects().subscribe({
       next: (res: any) => {
         this.subjects = Array.isArray(res?.data) ? res.data : [];
@@ -126,7 +129,7 @@ export class PendingTeachersComponent implements OnInit {
       error: (err) => {
         console.log('Failed to load subjects', err);
         this.loadingSubjects = false;
-      }
+      },
     });
   }
 
@@ -137,7 +140,7 @@ export class PendingTeachersComponent implements OnInit {
 
     const payload: IAproveTeacher = {
       teacherId: this.selectedTeacher.id,
-      subjectId: this.selectedSubjectId.value
+      subjectId: this.selectedSubjectId.value,
     };
     console.log(payload);
     this.adminService.approveTeacher(payload).subscribe({
@@ -148,7 +151,7 @@ export class PendingTeachersComponent implements OnInit {
         console.log(response.message);
         this.activating = false;
         this.closeModal();
-        this.loadUsers(); // Refresh the list to remove the activated teacher
+        this.loadUsers();
       },
       error: (err: HttpErrorResponse) => {
         console.log(err.message);
@@ -156,7 +159,7 @@ export class PendingTeachersComponent implements OnInit {
         setTimeout(() => {
           this.toastr.error(err.message || 'Failed to activate teacher.', 'Error');
         }, 850);
-      }
+      },
     });
   }
 }

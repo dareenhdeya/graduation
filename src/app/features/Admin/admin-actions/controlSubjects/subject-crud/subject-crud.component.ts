@@ -31,6 +31,9 @@ export class SubjectCrudComponent implements OnInit {
   addError = '';
   openAdd = false;
 
+  subjectToDelete: IAdminSubject | null = null;
+  showDeleteModal = false;
+
   ngOnInit(): void {
     this.loadSubjects();
   }
@@ -46,12 +49,16 @@ export class SubjectCrudComponent implements OnInit {
       },
       error: (err) => {
         this.loading = false;
-        console.log('list subjects: ', err);
-        this.error = err?.error?.message || err?.userMessage || 'Failed to load subjects';
+        const status = err?.status;
+        if (status === 404 || status === 204) {
+          this.subjects = [];
+        } else {
+          console.log('list subjects: ', err);
+          this.error = err?.error?.message || err?.message || 'Failed to load subjects';
+        }
       },
     });
   }
-
   get filteredSubjects(): IAdminSubject[] {
     const q = this.search.value.trim().toLowerCase();
 
@@ -104,6 +111,32 @@ export class SubjectCrudComponent implements OnInit {
         setTimeout(() => {
           this.toastr.error(this.addError, 'Error');
         }, 850);
+      },
+    });
+  }
+
+  promptRemove(s: IAdminSubject, e: MouseEvent) {
+    e.stopPropagation();
+    this.subjectToDelete = s;
+    this.showDeleteModal = true;
+  }
+
+  confirmRemove() {
+    if (!this.subjectToDelete) return;
+    this.showDeleteModal = false;
+
+    this.admin.removeSubject(this.subjectToDelete.subjectId).subscribe({
+      next: () => {
+        setTimeout(() => this.toastr.success('Subject removed successfully.', 'Success'), 850);
+        this.subjectToDelete = null;
+        this.loadSubjects();
+      },
+      error: (err) => {
+        setTimeout(
+          () => this.toastr.error(err?.error?.message || 'Failed to remove subject', 'Error'),
+          850
+        );
+        this.subjectToDelete = null;
       },
     });
   }

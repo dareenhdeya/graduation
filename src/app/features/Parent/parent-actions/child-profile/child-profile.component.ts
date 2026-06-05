@@ -13,14 +13,12 @@ import { IViewChildProfile, IChildProfile } from '../../interfaces/IViewChildPro
   styleUrl: './child-profile.component.css',
 })
 export class ChildProfileComponent implements OnInit {
-
   private readonly parentService = inject(ParentServiceService);
   private readonly route = inject(ActivatedRoute);
 
   childId: string | null = null;
   childProfile: IChildProfile | null = null;
   isLoading = true;
-
 
   readonly disabilityMap = [
     { id: 0, label: 'None', icon: 'fa-solid fa-person-walking' },
@@ -29,7 +27,7 @@ export class ChildProfileComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.subscribe((params) => {
       this.childId = params.get('id');
 
       if (this.childId) {
@@ -47,6 +45,7 @@ export class ChildProfileComponent implements OnInit {
         this.childProfile = res.data;
         this.isLoading = false;
         console.log(this.childProfile);
+        console.log(res);
       },
       error: (err: HttpErrorResponse) => {
         console.error(err.error.message || 'Error fetching profile.');
@@ -60,12 +59,12 @@ export class ChildProfileComponent implements OnInit {
   }
 
   getDisabilityLabel(id: any): string {
-    const type = this.disabilityMap.find(d => d.id === Number(id));
+    const type = this.disabilityMap.find((d) => d.id === Number(id));
     return type ? type.label : 'Unknown';
   }
-  
+
   getDisabilityIcon(id: any): string {
-    const type = this.disabilityMap.find(d => d.id === Number(id));
+    const type = this.disabilityMap.find((d) => d.id === Number(id));
     return type ? type.icon : 'fa-solid fa-circle-question';
   }
 }

@@ -157,12 +157,15 @@
             >
               <i class="fa-solid fa-user-shield"></i>
             </div>
+
+            @if (childProfile.parent) {
             <div>
               <p class="text-white text-sm font-bold">
                 {{ childProfile.parent.fName }} {{ childProfile.parent.lName }}
               </p>
               <p class="text-white/40 text-xs">{{ childProfile.parent.phoneNumber }}</p>
             </div>
+            }
           </div>
         </div>
       </div>
