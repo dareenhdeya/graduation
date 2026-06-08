@@ -40,7 +40,7 @@ export const APP_APIs = {
   teacherViewLesson: (sid: string, lid: string) =>
     `${environment.apiUrl}Teacher/View-Lesson/${sid}/${lid}`,
   teacherUploadVideo: `${environment.apiUrl}Teacher/Upload-Video`,
-  teacherRemoveVideo: (vid: string) => `${environment.apiUrl}Teacher/Remove-Video/${vid}`,
+  teacherRemoveVideo: `${environment.apiUrl}Teacher/Delete-Video`,
   teacherAddWordAttachment: (sid: string) =>
     `${environment.apiUrl}Teacher/Add-words-to-Dictionary/${sid}`,
   teacherCreateExercise: `${environment.apiUrl}Teacher/Create-Exercise`,
@@ -51,6 +51,9 @@ export const APP_APIs = {
     `${environment.apiUrl}Teacher/subjects/${sid}/lessons/${lid}/levels/${qid}`,
   teacherEditQuiz: `${environment.apiUrl}Teacher/Edit-Level`,
   teacherListPrerequisites: `${environment.apiUrl}Teacher/list-Perquisites`,
+  teacherDeleteLevel: `${environment.apiUrl}Teacher/Delete-Level`,
+  teacherUpdateCv: `${environment.apiUrl}Teacher/Update-CV`,
+  
   //* Student
   studentGetAllSubjects: `${environment.apiUrl}Student/View-Subjects`,
   studentGetSubjectDetails: (id: string) => `${environment.apiUrl}Student/View-Subject/${id}`,
@@ -64,6 +67,7 @@ export const APP_APIs = {
   studentStartQuiz: `${environment.apiUrl}Student/Start-Quiz`,
   studentViewExercise: `${environment.apiUrl}Student/View-Exercise`,
   studentSubmitAnswers: `${environment.apiUrl}Student/Submit-Answers`,
+  studentViewSubmissions: `${environment.apiUrl}Student/View-Submissions`,
 
   // * Parent
   parentRegisterStudent: `${environment.apiUrl}Parent/register-student`,

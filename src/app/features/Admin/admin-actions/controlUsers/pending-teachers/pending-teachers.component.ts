@@ -59,6 +59,13 @@ export class PendingTeachersComponent implements OnInit {
   loadingSubjects = false;
   selectedSubjectId = new FormControl('', { nonNullable: true });
   activating = false;
+  isDropdownOpen = false;
+
+  get selectedSubjectName(): string | null {
+    if (!this.selectedSubjectId.value) return null;
+    const sub = this.subjects.find((s) => s.subjectId === this.selectedSubjectId.value);
+    return sub ? sub.subjectName : null;
+  }
 
   ngOnInit(): void {
     this.loadUsers();
@@ -117,6 +124,7 @@ export class PendingTeachersComponent implements OnInit {
     this.showModal = false;
     this.selectedTeacher = null;
     this.selectedSubjectId.setValue('');
+    this.isDropdownOpen = false;
   }
 
   loadSubjects() {

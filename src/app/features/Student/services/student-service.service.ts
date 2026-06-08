@@ -7,13 +7,12 @@ import { IStudViewLesson } from '../interfaces/IStudViewLesson';
 import { IStudLessonContentResponse } from '../interfaces/IStudLessonContent';
 import { IEnrollSubResponse } from '../interfaces/IEnrollSubResponse';
 import { IViewEnrolledSub } from '../interfaces/IViewEnrolledSub';
+import { IStudSubmissionsResponse } from '../interfaces/IStudSubmissions.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StudentServiceService extends baseHttp {
-
-
   getAllSubjects() {
     return this.get<IStudAllSubResponse>(APP_APIs.studentGetAllSubjects, {});
   }
@@ -24,7 +23,10 @@ export class StudentServiceService extends baseHttp {
     return this.get<IStudViewLesson>(APP_APIs.studentGetLessons(subjectId), {});
   }
   getLessonDetails(subjectId: string, lessonId: string) {
-    return this.get<IStudLessonContentResponse>(APP_APIs.studentGetLessonDetails(subjectId, lessonId), {});
+    return this.get<IStudLessonContentResponse>(
+      APP_APIs.studentGetLessonDetails(subjectId, lessonId),
+      {}
+    );
   }
   completeLesson(subjectId: string, lessonId: string) {
     return this.post(APP_APIs.studentCompleteLesson, { Sid: subjectId, Lid: lessonId });
@@ -37,19 +39,30 @@ export class StudentServiceService extends baseHttp {
   }
 
   viewExercise(sid: string, lid: string, eid: string) {
-    return this.get<any>(APP_APIs.studentViewExercise, {}, {
-      headers: { sid, lid, eid }
-    });
+    return this.get<any>(
+      APP_APIs.studentViewExercise,
+      {},
+      {
+        headers: { sid, lid, eid },
+      }
+    );
   }
 
   startQuiz(sid: string, eid: string) {
-    return this.get<any>(APP_APIs.studentStartQuiz, {}, {
-      headers: { sid, eid }
-    });
+    return this.get<any>(
+      APP_APIs.studentStartQuiz,
+      {},
+      {
+        headers: { sid, eid },
+      }
+    );
   }
 
   submitAnswers(payload: any) {
     return this.post<any>(APP_APIs.studentSubmitAnswers, payload);
   }
 
+  viewSubmissions() {
+    return this.get<IStudSubmissionsResponse>(APP_APIs.studentViewSubmissions, {});
+  }
 }

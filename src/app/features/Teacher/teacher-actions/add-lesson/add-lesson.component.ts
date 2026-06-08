@@ -46,7 +46,7 @@ export class AddLessonComponent {
   });
 
   get selectedType(): number {
-    return this.lessonForm.get('perquisiteType')?.value ?? PerquisiteType.None;
+    return Number(this.lessonForm.get('perquisiteType')?.value) ?? PerquisiteType.None;
   }
 
   onTypeChange(): void {
@@ -54,7 +54,7 @@ export class AddLessonComponent {
     this.lessonForm.get('perquisiteId')?.setValue(null);
     this.prerequisiteOptions = [];
 
-    const type = this.selectedType;
+    const type = Number(this.selectedType);
     if (type !== PerquisiteType.None && this.subjectId) {
       this.isLoadingPrerequisites = true;
       this.teacherService.listPrerequisites(this.subjectId, type).subscribe({

@@ -4,10 +4,11 @@ import { AdminServiceService } from '../../../services/admin-service.service';
 import { IADMIN } from '../../../interfaces/iadmin.interface';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { SafeUrlPipe } from '../../../../../core/pipes/safe-url.pipe';
 
 @Component({
   selector: 'app-user-details',
-  imports: [RouterLink],
+  imports: [RouterLink, SafeUrlPipe],
   templateUrl: './user-details.component.html',
   styleUrl: './user-details.component.css',
 })
@@ -30,6 +31,7 @@ export class UserDetailsComponent implements OnInit {
   error = '';
   user: IADMIN | null = null;
   showDeleteModal = false;
+  showCvModal = false;
   userToDelete: IADMIN | null = null;
 
   ngOnInit(): void {

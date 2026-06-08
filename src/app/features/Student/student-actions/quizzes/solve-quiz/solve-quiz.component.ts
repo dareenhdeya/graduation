@@ -48,7 +48,7 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
   resultData = signal<{ percentage: number; passed: boolean; message: string } | null>(null);
 
   // ── Matching: shuffled display arrays ──────────────────────────
-  matchingAnswers: Map<number, any[]> = new Map();   // eIdx → shuffled answers
+  matchingAnswers: Map<number, any[]> = new Map(); // eIdx → shuffled answers
 
   // ── Matching: selections & SVG lines ───────────────────────────
   // matchSelections[eIdx] = Map<qid, aid>
@@ -56,14 +56,24 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
   svgLines: Map<number, SvgLine[]> = new Map();
 
   // Line color palette
-  readonly LINE_COLORS = ['#38bdf8', '#fb923c','#818cf8','#34d399','#e879f9','#facc15','#f87171'];
+  readonly LINE_COLORS = [
+    '#38bdf8',
+    '#fb923c',
+    '#818cf8',
+    '#34d399',
+    '#e879f9',
+    '#facc15',
+    '#f87171',
+  ];
 
   // ── Drag-line state ────────────────────────────────────────────
   isDrawingLine = false;
   drawEIdx = -1;
   drawQid: string | null = null;
-  drawX1 = 0; drawY1 = 0;   // anchor on question dot (absolute)
-  drawX2 = 0; drawY2 = 0;   // current mouse (absolute)
+  drawX1 = 0;
+  drawY1 = 0; // anchor on question dot (absolute)
+  drawX2 = 0;
+  drawY2 = 0; // current mouse (absolute)
 
   constructor(
     private route: ActivatedRoute,
@@ -75,13 +85,16 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.quizForm = this.fb.group({ exercises: this.fb.array([]) });
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.subscribe((params) => {
       const sid = params.get('sid');
       const lid = params.get('lid');
       const qid = params.get('qid');
       if (sid) this.subjectId.set(sid);
       if (lid) this.lessonId.set(lid);
-      if (qid) { this.quizId.set(qid); this.fetchQuizDetails(qid); }
+      if (qid) {
+        this.quizId.set(qid);
+        this.fetchQuizDetails(qid);
+      }
     });
   }
 
@@ -110,13 +123,16 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
   get formattedTime(): string {
     const t = this.timeLeftSeconds();
     if (t <= 0) return '00:00';
-    return `${Math.floor(t/60).toString().padStart(2,'0')}:${(t%60).toString().padStart(2,'0')}`;
+    return `${Math.floor(t / 60)
+      .toString()
+      .padStart(2, '0')}:${(t % 60).toString().padStart(2, '0')}`;
   }
 
   // ── Data Fetching ──────────────────────────────────────────────
   fetchQuizDetails(qid: string) {
     this.isLoading.set(true);
-    const sid = this.subjectId(), lid = this.lessonId();
+    const sid = this.subjectId(),
+      lid = this.lessonId();
     const sub$ = lid
       ? this.studentService.viewExercise(sid, lid, qid)
       : this.studentService.startQuiz(sid, qid);
@@ -132,7 +148,7 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
       error: () => {
         this.toastr.error('Failed to load. Please try again.', 'Error');
         this.isLoading.set(false);
-      }
+      },
     });
   }
 
@@ -149,18 +165,22 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
       const exType = ex.exerciseType ?? ex.ExerciseType ?? ex.type ?? ex.Type;
 
       const questionsArray = this.fb.array(
-        qList.map((q: any) => this.fb.group({
-          questionId: [q.Qid || q.qid || q.id || q.Id],
-          prompt_text: [q.prompt_text || ''],
-          selectedAnswerId: [null]
-        }))
+        qList.map((q: any) =>
+          this.fb.group({
+            questionId: [q.Qid || q.qid || q.id || q.Id],
+            prompt_text: [q.prompt_text || ''],
+            selectedAnswerId: [null],
+          })
+        )
       );
 
-      this.exercisesFormArray.push(this.fb.group({
-        exerciseId: [ex.id || ex.Id],
-        exerciseType: [exType],
-        questions: questionsArray
-      }));
+      this.exercisesFormArray.push(
+        this.fb.group({
+          exerciseId: [ex.id || ex.Id],
+          exerciseType: [exType],
+          questions: questionsArray,
+        })
+      );
 
       if (exType === 2 || exType === '2' || exType === 'Matching') {
         const answersList = ex.answers || ex.Answers || [];
@@ -186,13 +206,18 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
       this.timeLeftSeconds.set(mins * 60);
       this.timerInterval = setInterval(() => {
         const c = this.timeLeftSeconds();
-        if (c <= 1) { clearInterval(this.timerInterval); this.timeLeftSeconds.set(0); this.autoSubmit(); }
-        else this.timeLeftSeconds.set(c - 1);
+        if (c <= 1) {
+          clearInterval(this.timerInterval);
+          this.timeLeftSeconds.set(0);
+          this.autoSubmit();
+        } else this.timeLeftSeconds.set(c - 1);
       }, 1000);
     }
   }
 
-  get draftKey() { return `quiz_draft_${this.quizId()}`; }
+  get draftKey() {
+    return `quiz_draft_${this.quizId()}`;
+  }
 
   saveDraft() {
     if (this.quizState() !== 'in-progress') return;
@@ -207,9 +232,14 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
     } catch {}
   }
 
-  clearDraft() { localStorage.removeItem(this.draftKey); }
+  clearDraft() {
+    localStorage.removeItem(this.draftKey);
+  }
 
-  autoSubmit() { this.toastr.error('Time is up! Submitting...', 'Time Up'); this.submitQuiz(); }
+  autoSubmit() {
+    this.toastr.error('Time is up! Submitting...', 'Time Up');
+    this.submitQuiz();
+  }
 
   submitQuiz() {
     this.quizState.set('submitting');
@@ -227,7 +257,7 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
       SubjectFK: this.subjectId(),
       LevelFK: this.quizId(),
       LessonID: this.lessonId() || null,
-      sEDTOs: sedtos
+      sEDTOs: sedtos,
     };
 
     this.studentService.submitAnswers(payload).subscribe({
@@ -239,7 +269,7 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
         this.resultData.set({
           percentage: result.percentage ?? 0,
           passed: result.passed ?? false,
-          message: res?.message || (result.passed ? 'Well done! You passed!' : 'Keep practicing!')
+          message: res?.message || (result.passed ? 'Well done! You passed!' : 'Keep practicing!'),
         });
         this.showResultModal.set(true);
         if (result.passed) this.launchConfetti();
@@ -247,7 +277,7 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
       error: () => {
         this.toastr.error('Failed to submit. Save draft and retry.', 'Error');
         this.quizState.set('in-progress');
-      }
+      },
     });
   }
 
@@ -275,16 +305,28 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
 
     // Initial big burst
     fire(0.25, { spread: 26, startVelocity: 55 });
-    fire(0.2,  { spread: 60 });
+    fire(0.2, { spread: 60 });
     fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
-    fire(0.1,  { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
-    fire(0.1,  { spread: 120, startVelocity: 45 });
+    fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+    fire(0.1, { spread: 120, startVelocity: 45 });
 
     // Side cannons for sustained effect
     const frame = () => {
       if (Date.now() > end) return;
-      confetti({ particleCount: 3, angle: 60,  spread: 55, origin: { x: 0 }, disableForReducedMotion: true });
-      confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, disableForReducedMotion: true });
+      confetti({
+        particleCount: 3,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0 },
+        disableForReducedMotion: true,
+      });
+      confetti({
+        particleCount: 3,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1 },
+        disableForReducedMotion: true,
+      });
       requestAnimationFrame(frame);
     };
     frame();
@@ -307,8 +349,12 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
   }
 
   // ── Matching: Display ──────────────────────────────────────────
-  getMatchingAnswers(eIdx: number): any[] { return this.matchingAnswers.get(eIdx) ?? []; }
-  getSvgLines(eIdx: number): SvgLine[] { return this.svgLines.get(eIdx) ?? []; }
+  getMatchingAnswers(eIdx: number): any[] {
+    return this.matchingAnswers.get(eIdx) ?? [];
+  }
+  getSvgLines(eIdx: number): SvgLine[] {
+    return this.svgLines.get(eIdx) ?? [];
+  }
 
   isQuestionMatched(eIdx: number, qid: string): boolean {
     return this.matchSelections.get(eIdx)?.has(qid) ?? false;
@@ -322,11 +368,11 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
   }
 
   getLineForQuestion(eIdx: number, qid: string): SvgLine | undefined {
-    return this.getSvgLines(eIdx).find(l => l.qid === qid);
+    return this.getSvgLines(eIdx).find((l) => l.qid === qid);
   }
 
   getLineForAnswer(eIdx: number, aid: string): SvgLine | undefined {
-    return this.getSvgLines(eIdx).find(l => l.aid === aid);
+    return this.getSvgLines(eIdx).find((l) => l.aid === aid);
   }
 
   // ── Matching: SVG Line Drawing ─────────────────────────────────
@@ -382,7 +428,9 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
 
     const sels = this.matchSelections.get(eIdx) ?? new Map<string, string>();
     // Remove any other question that was matched to this answer
-    sels.forEach((v, k) => { if (v === aid) sels.delete(k); });
+    sels.forEach((v, k) => {
+      if (v === aid) sels.delete(k);
+    });
     sels.set(qid, aid);
     this.matchSelections.set(eIdx, sels);
 
@@ -420,7 +468,10 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
     const cr = container.getBoundingClientRect();
 
     const sels = this.matchSelections.get(eIdx);
-    if (!sels) { this.svgLines.set(eIdx, []); return; }
+    if (!sels) {
+      this.svgLines.set(eIdx, []);
+      return;
+    }
 
     const lines: SvgLine[] = [];
     let colorIdx = 0;
@@ -435,6 +486,14 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
       const y1 = qr.top + qr.height / 2 - cr.top;
       const x2 = ar.left + ar.width / 2 - cr.left;
       const y2 = ar.top + ar.height / 2 - cr.top;
+      console.log('line', {
+        qid,
+        aid,
+        x1,
+        y1,
+        x2,
+        y2,
+      });
       const cp = Math.abs(x2 - x1) * 0.5;
       const d = `M ${x1} ${y1} C ${x1 + cp} ${y1}, ${x2 - cp} ${y2}, ${x2} ${y2}`;
       lines.push({ qid, aid, d, color: this.LINE_COLORS[colorIdx++ % this.LINE_COLORS.length] });
@@ -447,8 +506,10 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
     const container = document.getElementById(`match-area-${eIdx}`);
     if (!container) return '';
     const cr = container.getBoundingClientRect();
-    const x1 = this.drawX1 - cr.left, y1 = this.drawY1 - cr.top;
-    const x2 = this.drawX2 - cr.left, y2 = this.drawY2 - cr.top;
+    const x1 = this.drawX1 - cr.left,
+      y1 = this.drawY1 - cr.top;
+    const x2 = this.drawX2 - cr.left,
+      y2 = this.drawY2 - cr.top;
     const cp = Math.abs(x2 - x1) * 0.5;
     return `M ${x1} ${y1} C ${x1 + cp} ${y1}, ${x2 - cp} ${y2}, ${x2} ${y2}`;
   }
@@ -469,9 +530,15 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
 
   // Keep for legacy click-based matching / MCQ
   activeMatchingQuestion = signal<{ eIdx: number; qIdx: number } | null>(null);
-  setActiveQuestion(eIdx: number, qIdx: number) { this.activeMatchingQuestion.set({ eIdx, qIdx }); }
-  isAnswerMapped(eIdx: number, aid: string) { return this.isAnswerMatched(eIdx, aid); }
-  getMappedAnswerText(eIdx: number, qIdx: number): string { return ''; }
+  setActiveQuestion(eIdx: number, qIdx: number) {
+    this.activeMatchingQuestion.set({ eIdx, qIdx });
+  }
+  isAnswerMapped(eIdx: number, aid: string) {
+    return this.isAnswerMatched(eIdx, aid);
+  }
+  getMappedAnswerText(eIdx: number, qIdx: number): string {
+    return '';
+  }
   getExerciseAnswers(eIdx: number): any[] {
     return this.getExercisesList(this.quizData())[eIdx]?.answers || [];
   }
