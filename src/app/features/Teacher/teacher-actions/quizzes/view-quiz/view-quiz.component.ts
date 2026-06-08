@@ -1,7 +1,9 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TeacherServiceService } from '../../../services/teacher-service.service';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-view-quiz',
@@ -16,9 +18,13 @@ export class ViewQuizComponent implements OnInit {
   isLoading = signal<boolean>(true);
   lessonId = signal<string | null>(null);
 
+  isDeleting = signal<boolean>(false);
+  isDeleteModalOpen = signal<boolean>(false);
+  router = inject(Router);
+
   constructor(
     private route: ActivatedRoute,
-    private teacherService: TeacherServiceService
+    private teacherService: TeacherServiceService,
   ) { }
 
   ngOnInit() {
@@ -103,4 +109,36 @@ export class ViewQuizComponent implements OnInit {
 
     return [];
   }
+
+
+
+openDeleteModal() {
+  this.isDeleteModalOpen.set(true);
+}
+
+closeDeleteModal() {
+  this.isDeleteModalOpen.set(false);
+}
+
+confirmDelete() {
+  const data = this.quizData();
+  if (!data) return;
+  this.isDeleting.set(true);
+  this.teacherService.deleteLevel(data).subscribe({
+    next: () => {
+      this.isDeleting.set(false);
+      this.closeDeleteModal();
+      if (this.lessonId()) {
+        this.router.navigate(['/teacher/subject', this.subjectId(), 'lesson', this.lessonId(), 'manage']);
+      } else {
+        this.router.navigate(['/teacher/subject', this.subjectId(), 'quizzes']);
+      }
+    },
+    error: (err) => {
+      console.error(err);
+      this.isDeleting.set(false);
+      this.closeDeleteModal();
+    }
+  });
+}
 }

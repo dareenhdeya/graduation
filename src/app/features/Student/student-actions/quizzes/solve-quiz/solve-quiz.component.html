@@ -93,7 +93,7 @@
                 <div
                   class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform"
                 ></div>
-                <span class="relative z-10 flex items-center justify-center gap-2 text-lg"
+                <span class="cursor-pointer relative z-10 flex items-center justify-center gap-2 text-lg"
                   >Start Assessment <i class="fa-solid fa-arrow-right"></i
                 ></span>
               </button>
@@ -307,13 +307,23 @@
 
                           <!-- Completed lines -->
                           @for (line of getSvgLines(eIdx); track line.qid) {
-                            <path
+                            <!-- <path
                               [attr.d]="line.d"
                               [attr.stroke]="line.color"
                               stroke-width="5"
                               fill="none"
                               stroke-linecap="round"
                               [attr.filter]="'url(#glow-' + eIdx + ')'"
+                              style="pointer-events: stroke; cursor: pointer"
+                              (click)="clearMatch(eIdx, line.qid)"
+                              class="transition-opacity hover:opacity-60" 
+                            /> -->
+                            <path
+                              [attr.d]="line.d"
+                              [attr.stroke]="line.color"
+                              stroke-width="5"
+                              fill="none"
+                              stroke-linecap="round"
                               style="pointer-events: stroke; cursor: pointer"
                               (click)="clearMatch(eIdx, line.qid)"
                               class="transition-opacity hover:opacity-60"
@@ -359,7 +369,7 @@
                               @let line = getLineForQuestion(eIdx, qid);
                               <div class="relative group/qcard">
                                 <!-- Card — entire card is the drag handle -->
-                                <div
+                                <!-- <div
                                   [id]="'q-card-' + eIdx + '-' + qid"
                                   class="rounded-2xl overflow-hidden border-2 transition-all duration-300 select-none cursor-crosshair hover:ring-2 hover:ring-sky-400/50"
                                   [style.border-color]="line ? line.color : ''"
@@ -374,7 +384,6 @@
                                     class="w-full aspect-square object-cover pointer-events-none"
                                     draggable="false"
                                   />
-                                  <!-- Matched badge -->
                                   @if (line) {
                                     <div
                                       class="absolute top-2 left-2 size-6 rounded-full flex items-center justify-center shadow-md"
@@ -383,7 +392,28 @@
                                       <i class="fa-solid fa-check text-white text-[10px]"></i>
                                     </div>
                                   }
-                                </div>
+                                </div> -->
+                                <div
+  [id]="'q-card-' + eIdx + '-' + qid"
+  class="rounded-2xl overflow-hidden border-2 transition-all duration-300 select-none cursor-crosshair hover:ring-2 hover:ring-sky-400/50 min-h-[80px] flex items-center justify-center"
+  [style.border-color]="line ? line.color : ''"
+  [class.border-border-main]="!line"
+  [class.shadow-lg]="!!line"
+  (mousedown)="startDrawingLine($event, eIdx, q)"
+>
+  @if (q.imgPath) {
+    <img [src]="q.imgPath" alt="Question" class="w-full aspect-square object-cover pointer-events-none" draggable="false" />
+  } @else {
+    <p class="text-text-main font-bold text-sm text-center px-3 py-4 pointer-events-none">
+      {{ q.prompt_text || q.text || q.Text || q.prompt || 'Question' }}
+    </p>
+  }
+  @if (line) {
+    <div class="absolute top-2 left-2 size-6 rounded-full flex items-center justify-center shadow-md" [style.background-color]="line.color">
+      <i class="fa-solid fa-check text-white text-[10px]"></i>
+    </div>
+  }
+</div>
                                 <!-- Anchor dot — visual indicator only, no pointer events -->
                                 <div
                                   [id]="'q-dot-' + eIdx + '-' + qid"
@@ -413,6 +443,33 @@
                               <div class="relative group/acard">
                                 <!-- Card -->
                                 <div
+                                [id]="'a-card-' + eIdx + '-' + aid"
+                                class="rounded-2xl overflow-hidden border-2 transition-all duration-300 select-none cursor-pointer min-h-[80px] flex items-center justify-center relative"
+                                [style.border-color]="line ? line.color : ''"
+                                [class.border-border-main]="!line"
+                                [class.shadow-lg]="!!line"
+                                (mouseup)="completeMatch($event, eIdx, ans)"
+                              >
+                                @if (ans.imgPath) {
+                                  <img [src]="ans.imgPath" alt="Answer" class="w-full aspect-square object-cover" draggable="false" />
+                                } @else {
+                                  <p class="text-text-main font-bold text-sm text-center px-3 py-4 pointer-events-none">
+                                    {{ ans.answer || ans.Answer || ans.text || ans.Text || 'Answer' }}
+                                  </p>
+                                }
+                                @if (line) {
+                                  <div
+                                    class="absolute top-2 right-2 size-6 rounded-full flex items-center justify-center shadow-md"
+                                    [style.background-color]="line.color"
+                                  >
+                                    <i class="fa-solid fa-link text-white text-[10px]"></i>
+                                  </div>
+                                }
+                                @if (isDrawingLine && drawEIdx === eIdx) {
+                                  <div class="absolute inset-0 bg-violet-500/10 border-2 border-violet-400/50 rounded-2xl pointer-events-none transition-opacity animate-pulse"></div>
+                                }
+                              </div>
+                                <!-- <div
                                   [id]="'a-card-' + eIdx + '-' + aid"
                                   class="rounded-2xl overflow-hidden border-2 transition-all duration-300 select-none cursor-pointer"
                                   [style.border-color]="line ? line.color : ''"
@@ -430,7 +487,6 @@
                                       isDrawingLine && drawEIdx === eIdx && !!line
                                     "
                                   />
-                                  <!-- Matched badge -->
                                   @if (line) {
                                     <div
                                       class="absolute top-2 right-2 size-6 rounded-full flex items-center justify-center shadow-md"
@@ -439,13 +495,12 @@
                                       <i class="fa-solid fa-link text-white text-[10px]"></i>
                                     </div>
                                   }
-                                  <!-- Drop hint glow when dragging -->
                                   @if (isDrawingLine && drawEIdx === eIdx) {
                                     <div
                                       class="absolute inset-0 bg-violet-500/10 border-2 border-violet-400/50 rounded-2xl pointer-events-none transition-opacity animate-pulse"
                                     ></div>
                                   }
-                                </div>
+                                </div> -->
                                 <!-- Target anchor dot (left edge) -->
                                 <div
                                   [id]="'a-dot-' + eIdx + '-' + aid"

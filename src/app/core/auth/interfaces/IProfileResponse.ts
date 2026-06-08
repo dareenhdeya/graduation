@@ -15,6 +15,7 @@ export interface ProfileData {
   teaches?: string | null;
   job?: string | null;
   subjectsCount: number | null;
+  cvPath?: string | null;
 }
 
 export interface ViewProfileResponse {

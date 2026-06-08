@@ -27,6 +27,8 @@ export class SignUp implements OnInit {
   fileErrMsg = '';
 
   selectedFile: File | null = null;
+  selectedCvFile: File | null = null;
+  cvFileName: string | null = null;
 
   roles: { id: RoleId; label: string }[] = [
     { id: 1, label: 'Student' },
@@ -119,9 +121,10 @@ export class SignUp implements OnInit {
     phoneNumber: ['', [Validators.required, Validators.pattern('^0[0-9]{10}$')]],
     Address: ['', [Validators.required, Validators.minLength(10)]],
     BirthDate: ['', [Validators.required]],
-    Job: ['', [Validators.required,Validators.minLength(2)]],
+    Job: ['', [Validators.required, Validators.minLength(2)]],
     SubjectID: [''],
     Disability: [1 as any],
+    cv: [null as File | null],
   });
 
   ngOnInit(): void {
@@ -136,6 +139,7 @@ export class SignUp implements OnInit {
   private applyRoleRules(role: RoleId) {
     const jobCtrl = this.signUpForm.get('Job')!;
     const subjectCtrl = this.signUpForm.get('SubjectID')!;
+    const cvCtrl = this.signUpForm.get('cv')!;
 
     if (role == 2) {
       jobCtrl.setValidators([Validators.required]);
@@ -145,13 +149,25 @@ export class SignUp implements OnInit {
     }
     jobCtrl.updateValueAndValidity({ emitEvent: false });
 
-    // if (role === 3) {
-    //   // subjectCtrl.setValidators([Validators.required]);
-    // } else {
-    //   subjectCtrl.clearValidators();
-    //   subjectCtrl.setValue('');
-    // }
+    if (role === 3) {
+      cvCtrl.setValidators([Validators.required]);
+    } else {
+      cvCtrl.clearValidators();
+      this.selectedCvFile = null;
+      this.cvFileName = null;
+    }
+    cvCtrl.updateValueAndValidity({ emitEvent: false });
+
     subjectCtrl.updateValueAndValidity({ emitEvent: false });
+  }
+
+  onCvChange(e: Event) {
+    const input = e.target as HTMLInputElement;
+    const file = input.files?.[0] || null;
+    this.selectedCvFile = file;
+    this.cvFileName = file ? file.name : null;
+    this.signUpForm.patchValue({ cv: file });
+    this.signUpForm.get('cv')!.markAsTouched();
   }
 
   onFileChange(e: Event) {
@@ -277,6 +293,7 @@ export class SignUp implements OnInit {
     fd.append('Disability', String(v.Disability || 0));
 
     if (role !== 3) fd.append('Job', String(v.Job || ''));
+    if (role === 3 && this.selectedCvFile) fd.append('cv', this.selectedCvFile);
     if (role === 3 && v.SubjectID) fd.append('SubjectID', String(v.SubjectID || ''));
 
     this.authService.signUp(fd).subscribe({

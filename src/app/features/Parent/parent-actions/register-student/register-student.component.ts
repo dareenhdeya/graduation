@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ParentServiceService } from '../../services/parent-service.service';
+import { ToastrService } from 'ngx-toastr';
 
 type GenderId = 1 | 2;
 
@@ -17,6 +18,7 @@ export class RegisterStudentComponent implements OnDestroy {
   private readonly fb = inject(FormBuilder);
   private readonly parentService = inject(ParentServiceService);
   private readonly router = inject(Router);
+  private readonly toastrService = inject(ToastrService);
 
   isLoading = false;
   showPass: boolean = false;
@@ -112,6 +114,7 @@ export class RegisterStudentComponent implements OnDestroy {
   // --- Submit Logic ---
   async submit() {
     if (this.signUpForm.invalid) {
+      this.toastrService.warning('Please fill in all required fields correctly.', 'Warning');
       this.signUpForm.markAllAsTouched();
       return;
     }
@@ -158,10 +161,12 @@ export class RegisterStudentComponent implements OnDestroy {
     this.parentService.registerStudent(fd).subscribe({
       next: () => {
         this.isLoading = false;
-        // Redirect or show success message
-        // this.router.navigateByUrl('/parent/dashboard');
-        alert('Student registered successfully'); //====================================toaster========================================================================================
-        this.router.navigateByUrl('/parent/dashboard');
+
+        this.toastrService.success('Student registered successfully');
+
+        setTimeout(() => {
+          this.router.navigateByUrl('/parent/dashboard');
+        }, 1000);
       },
       error: (err: HttpErrorResponse) => {
         this.isLoading = false;
@@ -175,6 +180,7 @@ export class RegisterStudentComponent implements OnDestroy {
           'Registration failed';
 
         this.errMsg = firstMsg;
+        this.toastrService.error(this.errMsg, 'Error');
       },
     });
   }
