@@ -5,15 +5,18 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ViewProfileResponse, ProfileData } from '../../core/auth/interfaces/IProfileResponse';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { SafeUrlPipe } from '../../core/pipes/safe-url.pipe';
+import { TeacherServiceService } from '../Teacher/services/teacher-service.service';
 
 @Component({
   selector: 'app-profile',
-  imports: [ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [ReactiveFormsModule, CommonModule, RouterLink, SafeUrlPipe],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
 })
 export class ProfileComponent {
   private readonly authService = inject(AuthService);
+  private readonly teacherService = inject(TeacherServiceService);
   private readonly fb = inject(FormBuilder);
   private toastr = inject(ToastrService);
 
@@ -23,6 +26,7 @@ export class ProfileComponent {
   editError = '';
   profile: ProfileData | null = null;
   showEditModal = false;
+  showCvModal = false;
   imagePreview: string | null = null;
 
   showChangePassModal = false;
@@ -44,9 +48,9 @@ export class ProfileComponent {
   });
 
   editForm = this.fb.group({
-    fName: ['', [ Validators.minLength(2), Validators.pattern('^[a-zA-Zء-ي]+$')]],
-    lName: ['', [ Validators.minLength(2), Validators.pattern('^[a-zA-Zء-ي]+$')]],
-    email: ['', [ Validators.email]],
+    fName: ['', [Validators.minLength(2), Validators.pattern('^[a-zA-Zء-ي]+$')]],
+    lName: ['', [Validators.minLength(2), Validators.pattern('^[a-zA-Zء-ي]+$')]],
+    email: ['', [Validators.email]],
     address: ['', [Validators.minLength(10)]],
     phone: ['', [Validators.pattern('^0[0-9]{10}$')]],
     job: ['', [Validators.minLength(2)]],
@@ -267,6 +271,32 @@ export class ProfileComponent {
           this.toastr.error(this.changePassError, 'Error');
         }, 850);
         this.loadingChangePass = false;
+      },
+    });
+  }
+
+  onCvSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+  
+    if (!input.files?.length) return;
+  
+    const file = input.files[0];
+  
+    if (file.type !== 'application/pdf') {
+      this.toastr.error('Please upload a PDF file');
+      return;
+    }
+  
+    this.teacherService.updateCv(file).subscribe({
+      next: () => {
+        this.toastr.success('CV updated successfully');
+  
+        this.authService.refreshProfile();
+      },
+      error: (err) => {
+        this.toastr.error(
+          err?.error?.message || 'Failed to update CV'
+        );
       },
     });
   }

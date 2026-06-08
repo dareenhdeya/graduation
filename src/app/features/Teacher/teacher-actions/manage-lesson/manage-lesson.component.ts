@@ -67,7 +67,7 @@ export class ManageLessonComponent implements OnInit {
     const levelData = this.lesson?.levels || (this.lesson as any)?.level;
     if (!levelData) return '';
     if (Array.isArray(levelData)) {
-       return levelData[0]?.id || levelData[0]?.ID || levelData[0]?.Id || '';
+      return levelData[0]?.id || levelData[0]?.ID || levelData[0]?.Id || '';
     }
     return levelData.id || levelData.ID || levelData.Id || '';
   }
@@ -91,7 +91,9 @@ export class ManageLessonComponent implements OnInit {
         this.videos = res.result?.videos || [];
         this.isLoading = false;
       },
-      error: () => { this.isLoading = false; },
+      error: () => {
+        this.isLoading = false;
+      },
     });
   }
 
@@ -104,7 +106,9 @@ export class ManageLessonComponent implements OnInit {
       if (this.selectedFile.type.startsWith('image/')) {
         this.isImage = true;
         const reader = new FileReader();
-        reader.onload = () => { this.mediaPreview = reader.result; };
+        reader.onload = () => {
+          this.mediaPreview = reader.result;
+        };
         reader.readAsDataURL(this.selectedFile);
       } else {
         this.isImage = false;
@@ -169,7 +173,7 @@ export class ManageLessonComponent implements OnInit {
     }
     this.isEditingVideo = true;
     const { title, description } = this.editVideoForm.value;
-    const index = this.videos.findIndex(v => v.vId === this.currentVideo!.vId);
+    const index = this.videos.findIndex((v) => v.vId === this.currentVideo!.vId);
     if (index !== -1) {
       this.videos[index] = { ...this.videos[index], title, description };
     }
@@ -192,9 +196,9 @@ export class ManageLessonComponent implements OnInit {
   confirmDeleteVideo() {
     if (!this.videoToDelete?.vId) return;
     this.isDeletingVideo = true;
-    this.teacherService.deleteVideo(this.videoToDelete.vId).subscribe({
+    this.teacherService.deleteVideo(this.videoToDelete).subscribe({
       next: () => {
-        this.videos = this.videos.filter(v => v.vId !== this.videoToDelete!.vId);
+        this.videos = this.videos.filter((v) => v.vId !== this.videoToDelete!.vId);
         this.isDeletingVideo = false;
         this.closeDeleteVideoModal();
         setTimeout(() => {
@@ -218,6 +222,8 @@ export class ManageLessonComponent implements OnInit {
     this.toastMessage = message;
     this.toastType = type;
     this.toastVisible = true;
-    this.toastTimer = setTimeout(() => { this.toastVisible = false; }, 3500);
+    this.toastTimer = setTimeout(() => {
+      this.toastVisible = false;
+    }, 3500);
   }
 }

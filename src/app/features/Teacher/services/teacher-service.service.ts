@@ -6,7 +6,7 @@ import { IGetTeacherLessons } from '../interfaces/IGetTeacherLessons';
 import { IAddToDictionaryResponse } from '../interfaces/IAddToDictionaryResponse';
 import { IEditedLesson, IEditLessonResponse } from '../interfaces/IEditLessonResponse';
 import { ITeacherSubjectsResponse } from '../interfaces/ITeacherSubjects';
-import { ITeacherLessonContentResponse } from '../interfaces/ILessonContent';
+import { ITeacherLessonContentResponse, ITeacherVideo } from '../interfaces/ILessonContent';
 
 @Injectable({
   providedIn: 'root',
@@ -29,24 +29,37 @@ export class TeacherServiceService extends baseHttp {
   editLesson(lessonData: IEditedLesson) {
     return this.patch<IEditLessonResponse>(APP_APIs.teacherEditLesson, lessonData);
   }
-  
+
   removeLesson(subjectId: string, lessonId: string) {
-    return this.deleteWithBody<any>(
-      APP_APIs.teacherRemoveLesson,
-      { subjectId, uid: lessonId, lid: lessonId }
-    );
+    return this.deleteWithBody<any>(APP_APIs.teacherRemoveLesson, {
+      subjectId,
+      uid: lessonId,
+      lid: lessonId,
+    });
   }
 
   getLessonDetails(subjectId: string, lessonId: string) {
-    return this.get<ITeacherLessonContentResponse>(APP_APIs.teacherViewLesson(subjectId, lessonId), {});
+    return this.get<ITeacherLessonContentResponse>(
+      APP_APIs.teacherViewLesson(subjectId, lessonId),
+      {}
+    );
   }
 
   uploadVideo(formData: FormData) {
     return this.post(APP_APIs.teacherUploadVideo, formData);
   }
 
-  deleteVideo(videoId: string) {
-    return this.delete(APP_APIs.teacherRemoveVideo(videoId));
+  deleteVideo(video: ITeacherVideo) {
+    return this.deleteWithBody<any>(APP_APIs.teacherRemoveVideo, {
+      lId: video.lId,
+      subjectID: video.subjectID,
+      vId: video.vId,
+      title: video.title,
+      description: video.description,
+      uploaded_by: video.uploaded_by ?? '',
+      videoUrl: video.videoUrl ?? '',
+      releaseDate: video.releaseDate ?? new Date().toISOString(),
+    });
   }
 
   addDictionary(subjectId: string, word: string, file: File) {
@@ -56,11 +69,18 @@ export class TeacherServiceService extends baseHttp {
 
     formData.append('files', file);
 
-    return this.post<IAddToDictionaryResponse>(APP_APIs.teacherAddWordAttachment(subjectId), formData);
+    return this.post<IAddToDictionaryResponse>(
+      APP_APIs.teacherAddWordAttachment(subjectId),
+      formData
+    );
   }
 
   createExercise(formData: FormData) {
     return this.post(APP_APIs.teacherCreateExercise, formData);
+  }
+
+  deleteLevel(levelData: any) {
+    return this.deleteWithBody<any>(APP_APIs.teacherDeleteLevel, levelData);
   }
 
   getQuizzes(subjectId: string) {
@@ -79,12 +99,27 @@ export class TeacherServiceService extends baseHttp {
   }
 
   listPrerequisites(sid: string, perquisiteType: number) {
-    return this.get<any>(APP_APIs.teacherListPrerequisites, {}, {
-      headers: {
-        sid: sid,
-        perquisiteType: perquisiteType.toString(),
-      },
-    });
+    return this.get<any>(
+      APP_APIs.teacherListPrerequisites,
+      {},
+      {
+        headers: {
+          sid: sid,
+          perquisiteType: perquisiteType.toString(),
+        },
+      }
+    );
+  }
+
+  updateCv(file: File) {
+    const formData = new FormData();
+  
+    formData.append('file', file);
+  
+    return this.patch<any>(
+      APP_APIs.teacherUpdateCv,
+      formData
+    );
   }
 
   // // Converts Array to FormData
@@ -92,7 +127,6 @@ export class TeacherServiceService extends baseHttp {
   //   const formData = new FormData();
 
   //   data.forEach((entry, index) => {
-
 
   //     //  use index to tell backend this is a list: entries[0], entries[1]...
   //     formData.append(`entries[${index}].word`, entry.word);

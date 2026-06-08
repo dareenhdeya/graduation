@@ -41,6 +41,7 @@ import { ViewQuizComponent } from './features/Teacher/teacher-actions/quizzes/vi
 import { SolveQuizComponent } from './features/Student/student-actions/quizzes/solve-quiz/solve-quiz.component';
 import { StudentSubjectsComponent } from './features/Parent/parent-actions/student-subjects/student-subjects.component';
 import { SubjectReportComponent } from './features/Parent/parent-actions/subject-report/subject-report.component';
+import { ProgressComponent } from './features/Student/progress/progress.component';
 
 export const routes: Routes = [
   {
@@ -196,6 +197,7 @@ export const routes: Routes = [
             component: SolveQuizComponent,
             title: 'Solve Exercise',
           },
+          { path: 'progress', component: ProgressComponent, title: 'My Progress' },
         ],
       },
       // --- PARENT ROUTES ---

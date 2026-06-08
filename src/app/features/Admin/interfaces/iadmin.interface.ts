@@ -14,6 +14,7 @@ export interface IADMIN {
   job: string | null;
   subjectsCount: number;
   parentContactInfo: string | null;
+  cvPath?: string | null;
 }
 
 export interface ShowUsersResponse {

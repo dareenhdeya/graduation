@@ -29,13 +29,14 @@ export class StudentSubjectsComponent implements OnInit {
     this.isLoading = true;
     this.parentService.viewStudentSubjects(this.studentId).subscribe({
       next: (res) => {
-        this.subjects = Array.isArray(res.data) ? res.data : [res.data];
+        const raw = Array.isArray(res.data) ? res.data : [res.data];
+        this.subjects = raw.filter((s) => s != null);
         this.isLoading = false;
       },
       error: (err: HttpErrorResponse) => {
         this.errorMessage = err.error?.message || 'Failed to load subjects.';
         this.isLoading = false;
-      }
+      },
     });
   }
 }
