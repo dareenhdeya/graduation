@@ -1,0 +1,70 @@
+<div class="quiz-wrap" [class.state-correct]="state==='correct'">
+
+    <div class="overlay" *ngIf="state==='finished'">
+      <div class="result-card">
+        <div class="trophy">🏆</div>
+        <h2>Well Done!</h2>
+        <div class="big-score">{{ score }}<span>/{{ TOTAL_WORDS }}</span></div>
+        <p class="pct">{{ Math.round((score/TOTAL_WORDS)*100) }}%</p>
+        <button (click)="restart()">Play Again</button>
+      </div>
+    </div>
+  
+    <header>
+      <div class="progress-bar"><div class="progress-fill" [style.width.%]="progressPct"></div></div>
+      <div class="stats-row">
+        <span>Word <strong>{{wordsDone+1}}</strong>/{{TOTAL_WORDS}}</span>
+        <span>Score <strong>{{score}}</strong></span>
+      </div>
+    </header>
+  
+    <main>
+  
+      <!-- Word display with letter highlighting -->
+      <div class="word-display">
+        <span *ngFor="let ch of (currentWord || '').split(''); let i=index"
+              class="letter-tile"
+              [class.done]="i < letterIndex"
+              [class.active]="i === letterIndex"
+              [class.pending]="i > letterIndex">
+          {{ i < letterIndex ? ch : (i === letterIndex ? ch : '?') }}
+        </span>
+      </div>
+  
+      <p class="instruction">Sign the letter <strong>{{ currentTargetLetter }}</strong></p>
+  
+      <!-- Camera -->
+      <div class="camera-wrap" [class.glow]="state==='correct'">
+  
+        <!-- video must be rendered (not display:none) for drawImage to work -->
+        <!-- same as the working component -->
+        <video #video autoplay playsinline muted
+             style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;">
+            </video>
+        
+        <canvas #canvas width="640" height="480"></canvas>
+        <canvas #confettiCanvas width="640" height="480"
+          style="position:absolute;inset:0;pointer-events:none;z-index:10;"></canvas>
+  
+        <div class="pred-badge" *ngIf="prediction && prediction !== '...'">
+          <span class="pred-l">{{prediction}}</span>
+          <span class="pred-c">{{confidencePct}}%</span>
+        </div>
+  
+        <div class="streak-bar" *ngIf="correctStreak>0 && state==='signing'">
+          <div class="streak-fill" [style.width.%]="streakPct"></div>
+        </div>
+  
+        <div class="flash" *ngIf="state==='correct'">✓ Word Complete!</div>
+      </div>
+  
+      <div class="controls">
+        <button class="skip-btn" (click)="skipWord()"
+          [disabled]="state==='correct'||state==='finished'">Skip Word</button>
+      </div>
+  
+      <p class="tip" *ngIf="!lastLandmarks.length">Place your hand in the box</p>
+    </main>
+  </div>
+
+  

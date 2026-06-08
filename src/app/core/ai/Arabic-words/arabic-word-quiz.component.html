@@ -1,0 +1,82 @@
+<div class="quiz-wrap" [class.state-correct]="state==='correct'">
+
+  <!-- Finished overlay -->
+  <div class="overlay" *ngIf="state==='finished'">
+    <div class="result-card">
+      <div class="trophy">🏆</div>
+      <h2>أحسنت!</h2>
+      <div class="big-score">{{ score }}<span>/{{ TOTAL_WORDS }}</span></div>
+      <p class="pct">{{ Math.round((score/TOTAL_WORDS)*100) }}%</p>
+      <button (click)="restart()">العب مجدداً</button>
+    </div>
+  </div>
+
+  <header>
+    <div class="progress-bar">
+      <div class="progress-fill" [style.width.%]="progressPct"></div>
+    </div>
+    <div class="stats-row">
+      <span>كلمة <strong>{{wordsDone+1}}</strong>/{{TOTAL_WORDS}}</span>
+      <span>النتيجة <strong>{{score}}</strong></span>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- Arabic word display -->
+    <div class="word-display arabic-word" *ngIf="currentWord">
+      <!-- Show the full Arabic display word with active letter highlighted via overlay -->
+      <div class="arabic-display-row">
+        <span class="arabic-full-word">{{ currentWord.display }}</span>
+      </div>
+
+      <!-- Letter-by-letter progress tiles (using letter keys) -->
+      <div class="letter-tiles-row">
+        <span
+          *ngFor="let letter of currentWord.letters; let i = index"
+          class="letter-tile"
+          [class.done]="i < letterIndex"
+          [class.active]="i === letterIndex"
+          [class.pending]="i > letterIndex">
+          {{ i <= letterIndex ? (LETTER_MAP[letter] || letter) : '?' }}
+        </span>
+      </div>
+    </div>
+
+    
+
+    <!-- Camera -->
+    <div class="camera-wrap" [class.glow]="state==='correct'">
+
+      <video #video autoplay playsinline muted
+        style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;">
+      </video>
+
+      <canvas #canvas width="640" height="480"></canvas>
+      <canvas #confettiCanvas width="640" height="480"
+        style="position:absolute;inset:0;pointer-events:none;z-index:10;">
+      </canvas>
+
+      <!-- Prediction badge: shows the Arabic char returned by the API -->
+      <div class="pred-badge" *ngIf="prediction && prediction !== '...'">
+        <span class="pred-l">{{ prediction }}</span>
+        <span class="pred-c">{{ confidencePct }}%</span>
+      </div>
+
+      <div class="streak-bar" *ngIf="correctStreak > 0 && state === 'signing'">
+        <div class="streak-fill" [style.width.%]="streakPct"></div>
+      </div>
+
+      <div class="flash" *ngIf="state === 'correct'">✓ كلمة صحيحة!</div>
+    </div>
+
+    <div class="controls">
+      <button class="skip-btn" (click)="skipWord()"
+        [disabled]="state==='correct' || state==='finished'">
+        تخطي الكلمة
+      </button>
+    </div>
+
+    <p class="tip" *ngIf="!lastLandmarks.length">ضع يدك داخل الإطار</p>
+  </main>
+</div>
