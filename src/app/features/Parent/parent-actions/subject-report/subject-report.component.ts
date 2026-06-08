@@ -30,7 +30,6 @@ export class SubjectReportComponent implements OnInit {
 
   loadReport(sid: string, studentId: string) {
     this.isLoading = true;
-
     this.parentService.viewSubjectReport(sid, studentId).subscribe({
       next: (res) => {
         this.report = res.data;

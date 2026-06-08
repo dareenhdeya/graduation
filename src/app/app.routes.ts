@@ -42,10 +42,13 @@ import { SolveQuizComponent } from './features/Student/student-actions/quizzes/s
 import { StudentSubjectsComponent } from './features/Parent/parent-actions/student-subjects/student-subjects.component';
 import { SubjectReportComponent } from './features/Parent/parent-actions/subject-report/subject-report.component';
 import { ProgressComponent } from './features/Student/progress/progress.component';
+<<<<<<< HEAD
 import { SignQuizComponent } from './core/ai/English-letters/app-sign-quiz.component';
 import { ArabicQuizComponent } from './core/ai/Arabic/arabic-quiz.component';
 import { EnglishWordQuizComponent } from './core/ai/English-words/english-word-quiz.component';
 import { ArabicWordQuizComponent } from './core/ai/Arabic-words/arabic-word-quiz.component';
+=======
+>>>>>>> a0dd25f6961b04254d1877b66d2c80273e747c5b
 
 export const routes: Routes = [
   {
