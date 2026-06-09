@@ -3,13 +3,10 @@
     <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
       <div>
         <h1 class="text-3xl md:text-5xl font-black tracking-tight text-text-main mb-2">
-          Your
-          <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-400">
-            Subjects
-          </span>
+          {{ 'NAVIGATION.MY_SUBJECTS' | translate }}
         </h1>
         <p class="text-text-main/50 font-bold text-lg">
-          Choose a subject to manage its lessons and students.
+          {{ 'TEACHER.SUBJECT.TITLE' | translate }}
         </p>
       </div>
     </div>
@@ -29,7 +26,7 @@
         >
           <i class="fa-solid fa-book-open text-3xl"></i>
         </div>
-        <h3 class="font-black tracking-tight text-text-main text-xl">No subjects assigned yet</h3>
+        <h3 class="font-black tracking-tight text-text-main text-xl">{{ 'TEACHER.SUBJECT.NO_SUBJECTS' | translate }}</h3>
         <p class="text-text-main/50 mt-2 mb-2 max-w-md font-bold">
           Once you are assigned to subjects, they will appear here and you can manage them.
         </p>
@@ -71,7 +68,7 @@
               [routerLink]="['/teacher/subject', sub.subjectId]"
               class="w-full rounded-2xl border border-sky-500/20 bg-sky-500/10 text-sky-500 px-6 py-3 text-sm font-bold transition-all hover:bg-sky-500/20 shadow-sm flex items-center justify-center gap-2"
             >
-              Manage Subject <i class="fa-solid fa-arrow-right text-xs"></i>
+              {{ 'TEACHER.LESSON.MANAGE' | translate }} <i class="fa-solid fa-arrow-right text-xs"></i>
             </button>
           </div>
         }

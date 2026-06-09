@@ -6,11 +6,12 @@ import { IStudAllSubResponse, StudentAllSubject } from '../../interfaces/IStudAl
 import { StudentServiceService } from '../../services/student-service.service';
 import { IEnrollSubResponse } from '../../interfaces/IEnrollSubResponse';
 import { ToastrService } from 'ngx-toastr';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-view-all-subjects',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, TranslateModule],
   templateUrl: './view-all-subjects.component.html',
   styleUrl: './view-all-subjects.component.css',
 })

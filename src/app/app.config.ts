@@ -18,10 +18,16 @@ import { credentialsInterceptor } from './core/interceptors/credentials/credenti
 // import { serverRoutes } from './app.routes.server';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { loaderInterceptor } from './core/interceptors/Loader/loader-interceptor';
+import { provideTranslateService } from '@ngx-translate/core';
+import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     importProvidersFrom(NgxSpinnerModule),
+    provideTranslateService({
+      defaultLanguage: 'en',
+      loader: provideTranslateHttpLoader({ prefix: '/i18n/', suffix: '.json' }),
+    }),
     provideBrowserGlobalErrorListeners(),
     provideAnimations(),
     provideToastr(),

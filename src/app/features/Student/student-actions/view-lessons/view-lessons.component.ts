@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { StudentServiceService } from './../../services/student-service.service';
 import { IStudViewLesson, StudLesson } from '../../interfaces/IStudViewLesson';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-view-lessons',
   standalone: true,
-  imports: [CommonModule, RouterLink], // Add imports
+  imports: [CommonModule, RouterLink, TranslateModule], // Add imports
   templateUrl: './view-lessons.component.html',
   styleUrl: './view-lessons.component.css',
 })

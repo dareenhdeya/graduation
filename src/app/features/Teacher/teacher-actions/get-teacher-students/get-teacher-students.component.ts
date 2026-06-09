@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { TeacherServiceService } from '../../services/teacher-service.service';
 import { Student } from '../../interfaces/IGetTeacherStudents';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-get-teacher-students',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [CommonModule, RouterLink, FormsModule, TranslateModule],
   templateUrl: './get-teacher-students.component.html',
   styleUrl: './get-teacher-students.component.css'
 })

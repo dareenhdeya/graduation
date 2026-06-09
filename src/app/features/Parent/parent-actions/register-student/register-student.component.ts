@@ -4,13 +4,14 @@ import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ParentServiceService } from '../../services/parent-service.service';
 import { ToastrService } from 'ngx-toastr';
+import { TranslateModule } from '@ngx-translate/core';
 
 type GenderId = 1 | 2;
 
 @Component({
   selector: 'app-register-student',
   standalone: true,
-  imports: [ReactiveFormsModule], // RouterLink not needed if inside parent dashboard
+  imports: [ReactiveFormsModule, TranslateModule], // RouterLink not needed if inside parent dashboard
   templateUrl: './register-student.component.html',
   styleUrl: './register-student.component.css',
 })

@@ -5,11 +5,12 @@ import { IChildren, IViewChildrenResponse } from '../../interfaces/IViewChildren
 import { HttpErrorResponse } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-view-children',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, TranslateModule],
   templateUrl: './view-children.component.html',
   styleUrl: './view-children.component.css',
 })

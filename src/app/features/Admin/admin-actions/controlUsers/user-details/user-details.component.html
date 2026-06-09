@@ -1,119 +1,144 @@
 <section class="relative min-h-screen py-8 px-4 transition-colors duration-300">
   <div class="container mx-auto max-w-4xl relative z-10">
-    <a routerLink="/admin/users"
-      class="mb-6 cursor-pointer inline-flex items-center gap-2 rounded-2xl border border-border-main bg-surface px-4 py-2 text-sm font-bold text-text-main hover:border-primary/50 hover:text-primary transition-all duration-300 hover:-translate-y-0.5 shadow-sm">
+    <a
+      routerLink="/admin/users"
+      class="mb-6 cursor-pointer inline-flex items-center gap-2 rounded-2xl border border-border-main bg-surface px-4 py-2 text-sm font-bold text-text-main hover:border-primary/50 hover:text-primary transition-all duration-300 hover:-translate-y-0.5 shadow-sm"
+    >
       <i class="fa-solid fa-arrow-left"></i>
-      All Users
+      {{ 'COMMON.BACK' | translate }}
     </a>
 
     @if (loading) {
-    <div
-      class="rounded-3xl border border-border-main bg-surface p-12 text-center text-text-main/70 text-lg font-medium animate-pulse shadow-sm">
-      <i class="fa-solid fa-circle-notch fa-spin mr-3 text-primary text-xl"></i> Loading user
-      details...
-    </div>
-
-    } @else if (error) {
-    <div
-      class="rounded-3xl border border-red-500/30 bg-red-500/10 p-12 text-center text-red-500 font-semibold text-lg shadow-sm">
-      <i class="fa-solid fa-triangle-exclamation mr-2 text-xl"></i> {{ error }}
-    </div>
-
-    } @else if (user) {
-
-    <div
-      class="relative mt-2 rounded-3xl border border-border-main bg-surface shadow-sm overflow-hidden transition-all">
-      <div class="absolute -right-20 -top-20 size-64 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
-
-      <div class="p-6 sm:p-8 border-b border-border-main relative z-10">
-        <div class="flex flex-col sm:flex-row sm:items-center gap-6">
-          <div class="shrink-0">
-            @if (user.pfpURL) {
-            <img [src]="user.pfpURL" class="size-20 rounded-full object-cover border-2 border-border-main shadow-sm"
-              alt="pfp" />
-            } @else {
-            <div
-              class="size-20 rounded-full flex items-center justify-center bg-primary/10 text-primary font-black border-2 border-primary/20 text-3xl shadow-sm uppercase">
-              {{ user.fName ? user.fName.charAt(0) : '?' }}
-            </div>
-            }
-          </div>
-
-          <div class="min-w-0 flex-1">
-            <div class="flex flex-wrap items-center gap-3">
-              <h1 class="text-3xl font-black text-text-main tracking-tight truncate">
-                {{ user.fName }}
-              </h1>
-
-              <span class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-bold shadow-sm"
-                [class]="statusStyles[user.status]">
-                <span class="size-2 rounded-full bg-current opacity-80"></span>
-                {{ statusLabels[user.status] }}
-              </span>
-
-              <span
-                class="inline-flex items-center rounded-full border border-border-main bg-surface px-3 py-1.5 text-xs font-bold text-text-main/80">
-                <i class="fa-solid fa-user-tag mr-1.5 text-primary/60"></i>
-                {{ user.role || '-' }}
-              </span>
-            </div>
-
-            <div class="mt-2 text-sm font-medium text-text-main/60 truncate flex items-center gap-2">
-              <i class="fa-solid fa-envelope text-text-main/40"></i>
-              {{ user.email || '-' }}
-            </div>
-
-            <div
-              class="mt-1 text-xs font-bold text-text-main/40 uppercase tracking-wider truncate flex items-center gap-2">
-              <i class="fa-solid fa-fingerprint text-text-main/30"></i>
-              ID: {{ user.id }}
-            </div>
-          </div>
-        </div>
+      <div
+        class="rounded-3xl border border-border-main bg-surface p-12 text-center text-text-main/70 text-lg font-medium animate-pulse shadow-sm"
+      >
+        <i class="fa-solid fa-circle-notch fa-spin mr-3 text-primary text-xl"></i>
+        {{ 'COMMON.LOADING' | translate }}
       </div>
+    } @else if (error) {
+      <div
+        class="rounded-3xl border border-red-500/30 bg-red-500/10 p-12 text-center text-red-500 font-semibold text-lg shadow-sm"
+      >
+        <i class="fa-solid fa-triangle-exclamation mr-2 text-xl"></i> {{ error }}
+      </div>
+    } @else if (user) {
+      <div
+        class="relative mt-2 rounded-3xl border border-border-main bg-surface shadow-sm overflow-hidden transition-all"
+      >
+        <div
+          class="absolute -right-20 -top-20 size-64 bg-primary/5 rounded-full blur-3xl pointer-events-none"
+        ></div>
 
-      <div class="p-6 sm:p-8 relative z-10">
-        <h3 class="text-sm font-bold uppercase tracking-wider text-text-main/40 mb-4">
-          Personal Information
-        </h3>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div class="rounded-2xl border border-border-main bg-surface p-5 hover:border-primary/20 transition-colors">
-            <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">
-              Phone
+        <div class="p-6 sm:p-8 border-b border-border-main relative z-10">
+          <div class="flex flex-col sm:flex-row sm:items-center gap-6">
+            <div class="shrink-0">
+              @if (user.pfpURL) {
+                <img
+                  [src]="user.pfpURL"
+                  class="size-20 rounded-full object-cover border-2 border-border-main shadow-sm"
+                  alt="pfp"
+                />
+              } @else {
+                <div
+                  class="size-20 rounded-full flex items-center justify-center bg-primary/10 text-primary font-black border-2 border-primary/20 text-3xl shadow-sm uppercase"
+                >
+                  {{ user.fName ? user.fName.charAt(0) : '?' }}
+                </div>
+              }
             </div>
-            <div class="font-bold text-text-main text-lg">{{ user.phone || '-' }}</div>
-          </div>
 
-          <div class="rounded-2xl border border-border-main bg-surface p-5 hover:border-primary/20 transition-colors">
-            <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">
-              Birth Date
+            <div class="min-w-0 flex-1">
+              <div class="flex flex-wrap items-center gap-3">
+                <h1 class="text-3xl font-black text-text-main tracking-tight truncate">
+                  {{ user.fName }}
+                </h1>
+
+                <span
+                  class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-bold shadow-sm"
+                  [class]="statusStyles[user.status]"
+                >
+                  <span class="size-2 rounded-full bg-current opacity-80"></span>
+                  {{ statusLabels[user.status] }}
+                </span>
+
+                <span
+                  class="inline-flex items-center rounded-full border border-border-main bg-surface px-3 py-1.5 text-xs font-bold text-text-main/80"
+                >
+                  <i class="fa-solid fa-user-tag mr-1.5 text-primary/60"></i>
+                  {{ user.role || '-' }}
+                </span>
+              </div>
+
+              <div
+                class="mt-2 text-sm font-medium text-text-main/60 truncate flex items-center gap-2"
+              >
+                <i class="fa-solid fa-envelope text-text-main/40"></i>
+                {{ user.email || '-' }}
+              </div>
+
+              <div
+                class="mt-1 text-xs font-bold text-text-main/40 uppercase tracking-wider truncate flex items-center gap-2"
+              >
+                <i class="fa-solid fa-fingerprint text-text-main/30"></i>
+                ID: {{ user.id }}
+              </div>
             </div>
-            <div class="font-bold text-text-main text-lg">{{ user.birthDate || '-' }}</div>
-          </div>
-
-          <div
-            class="rounded-2xl border border-border-main bg-surface p-5 sm:col-span-2 hover:border-primary/20 transition-colors">
-            <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">
-              Address
-            </div>
-            <div class="font-bold text-text-main text-lg">{{ user.address || '-' }}</div>
-          </div>
-
-          <div class="rounded-2xl border border-border-main bg-surface p-5 hover:border-primary/20 transition-colors">
-            <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">
-              Subject
-            </div>
-            <div class="font-bold text-text-main text-lg">{{ user.teaches || '-' }}</div>
-          </div>
-
-          <div class="rounded-2xl border border-border-main bg-surface p-5 hover:border-primary/20 transition-colors">
-            <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">Job</div>
-            <div class="font-bold text-text-main text-lg">{{ user.job || '-' }}</div>
           </div>
         </div>
 
-        <!-- <div class="mt-8 pt-6 border-t border-border-main flex flex-wrap gap-3">
+        <div class="p-6 sm:p-8 relative z-10">
+          <h3 class="text-sm font-bold uppercase tracking-wider text-text-main/40 mb-4">
+            {{ 'PROFILE.TITLE' | translate }}
+          </h3>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div
+              class="rounded-2xl border border-border-main bg-surface p-5 hover:border-primary/20 transition-colors"
+            >
+              <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">
+                {{ 'AUTH.PHONE' | translate }}
+              </div>
+              <div class="font-bold text-text-main text-lg">{{ user.phone || '-' }}</div>
+            </div>
+
+            <div
+              class="rounded-2xl border border-border-main bg-surface p-5 hover:border-primary/20 transition-colors"
+            >
+              <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">
+                {{ 'COMMON.DATE' | translate }}
+              </div>
+              <div class="font-bold text-text-main text-lg">{{ user.birthDate || '-' }}</div>
+            </div>
+
+            <div
+              class="rounded-2xl border border-border-main bg-surface p-5 sm:col-span-2 hover:border-primary/20 transition-colors"
+            >
+              <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">
+                {{ 'PROFILE.BIO' | translate }}
+              </div>
+              <div class="font-bold text-text-main text-lg">{{ user.address || '-' }}</div>
+            </div>
+
+            <div
+              class="rounded-2xl border border-border-main bg-surface p-5 hover:border-primary/20 transition-colors"
+            >
+              <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">
+                {{ 'SUBJECTS.TITLE' | translate }}
+              </div>
+              <div class="font-bold text-text-main text-lg">{{ user.teaches || '-' }}</div>
+            </div>
+
+            <div
+              class="rounded-2xl border border-border-main bg-surface p-5 hover:border-primary/20 transition-colors"
+            >
+              <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">
+                Job
+              </div>
+              <div class="font-bold text-text-main text-lg">{{ user.job || '-' }}</div>
+            </div>
+          </div>
+
+          <!-- <div class="mt-8 pt-6 border-t border-border-main flex flex-wrap gap-3">
           <button
             type="button"
             class="py-2.5 px-5 inline-flex items-center gap-2 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-500 font-bold text-sm transition-all hover:bg-amber-500/20 hover:-translate-y-0.5 cursor-pointer"
@@ -131,132 +156,181 @@
           </button>
         </div> -->
 
-        <div class="mt-8 pt-6 border-t border-border-main flex flex-wrap gap-3">
-          <button type="button" [disabled]="user.status === 2"
-            class="cursor-pointer py-2.5 px-5 inline-flex items-center gap-2 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-500 font-bold text-sm transition-all hover:bg-amber-500/20 hover:-translate-y-0.5 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
-            (click)="onEndSession()">
-            <i class="fa-solid fa-power-off"></i>
-            End Session
-          </button>
+          <div class="mt-8 pt-6 border-t border-border-main flex flex-wrap gap-3">
+            <button
+              type="button"
+              [disabled]="user.status === 2"
+              class="cursor-pointer py-2.5 px-5 inline-flex items-center gap-2 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-500 font-bold text-sm transition-all hover:bg-amber-500/20 hover:-translate-y-0.5 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+              (click)="onEndSession()"
+            >
+              <i class="fa-solid fa-power-off"></i>
+              End Session
+            </button>
 
-          @if (user.status !== 3) {
-          <button type="button" [disabled]="user.status === 2"
-            class="cursor-pointer py-2.5 px-5 inline-flex items-center gap-2 rounded-xl border border-red-500/30 bg-red-500/10 text-red-500 font-bold text-sm transition-all hover:bg-red-500/20 hover:-translate-y-0.5 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
-            (click)="onBlockUser()">
-            <i class="fa-solid fa-ban"></i>
-            Block User
-          </button>
-          } @else {
-          <button type="button"
-            class="cursor-pointer py-2.5 px-5 inline-flex items-center gap-2 rounded-xl border border-green-500/30 bg-green-500/10 text-green-500 font-bold text-sm transition-all hover:bg-green-500/20 hover:-translate-y-0.5 cursor-pointer"
-            (click)="onBlockUser()">
-            <i class="fa-solid fa-unlock"></i>
-            Unblock User
-          </button>
-          }
+            @if (user.status !== 3) {
+              <button
+                type="button"
+                [disabled]="user.status === 2"
+                class="cursor-pointer py-2.5 px-5 inline-flex items-center gap-2 rounded-xl border border-red-500/30 bg-red-500/10 text-red-500 font-bold text-sm transition-all hover:bg-red-500/20 hover:-translate-y-0.5 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                (click)="onBlockUser()"
+              >
+                <i class="fa-solid fa-ban"></i>
+                {{ 'COMMON.DELETE' | translate }} User
+              </button>
+            } @else {
+              <button
+                type="button"
+                class="cursor-pointer py-2.5 px-5 inline-flex items-center gap-2 rounded-xl border border-green-500/30 bg-green-500/10 text-green-500 font-bold text-sm transition-all hover:bg-green-500/20 hover:-translate-y-0.5 cursor-pointer"
+                (click)="onBlockUser()"
+              >
+                <i class="fa-solid fa-unlock"></i>
+                Unblock User
+              </button>
+            }
 
-          @if (user.role === 'Teacher' && user.cvPath) {
-          <button type="button" (click)="showCvModal = true"
-            class="cursor-pointer py-2.5 px-5 inline-flex items-center gap-2 rounded-xl border border-primary/30 bg-primary/10 text-primary font-bold text-sm transition-all hover:bg-primary/20 hover:-translate-y-0.5">
-            <i class="fa-solid fa-file-pdf"></i>
-            View CV
-          </button>
-          }
+            @if (user.role === 'Teacher' && user.cvPath) {
+              <button
+                type="button"
+                (click)="showCvModal = true"
+                class="cursor-pointer py-2.5 px-5 inline-flex items-center gap-2 rounded-xl border border-primary/30 bg-primary/10 text-primary font-bold text-sm transition-all hover:bg-primary/20 hover:-translate-y-0.5"
+              >
+                <i class="fa-solid fa-file-pdf"></i>
+                View CV
+              </button>
+            }
 
-          <button type="button"
-            class="cursor-pointer py-2.5 px-5 inline-flex items-center gap-2 rounded-xl border border-purple-500/30 bg-purple-500/10 text-purple-500 font-bold text-sm transition-all hover:bg-purple-500/20 hover:-translate-y-0.5 cursor-pointer"
-            (click)="promptDelete()">
-            <i class="fa-solid fa-trash"></i>
-            Remove User
-          </button>
+            <button
+              type="button"
+              class="cursor-pointer py-2.5 px-5 inline-flex items-center gap-2 rounded-xl border border-purple-500/30 bg-purple-500/10 text-purple-500 font-bold text-sm transition-all hover:bg-purple-500/20 hover:-translate-y-0.5 cursor-pointer"
+              (click)="promptDelete()"
+            >
+              <i class="fa-solid fa-trash"></i>
+              {{ 'COMMON.DELETE' | translate }}
+            </button>
+          </div>
         </div>
       </div>
-    </div>
     }
   </div>
   @if (showDeleteModal && userToDelete) {
-  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-    <div class="rounded-3xl border border-border-main bg-surface p-8 shadow-2xl max-w-sm w-full mx-4">
-      <div class="mb-5 flex items-center gap-3">
-        <div class="size-12 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
-          <i class="fa-solid fa-trash text-red-500 text-lg"></i>
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+      <div
+        class="rounded-3xl border border-border-main bg-surface p-8 shadow-2xl max-w-sm w-full mx-4"
+      >
+        <div class="mb-5 flex items-center gap-3">
+          <div
+            class="size-12 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center"
+          >
+            <i class="fa-solid fa-trash text-red-500 text-lg"></i>
+          </div>
+          <div>
+            <h3 class="font-black text-text-main text-lg">{{ 'COMMON.DELETE' | translate }}</h3>
+            <p class="text-text-main/50 text-sm">{{ 'COMMON.CONFIRM' | translate }}</p>
+          </div>
         </div>
-        <div>
-          <h3 class="font-black text-text-main text-lg">Remove User</h3>
-          <p class="text-text-main/50 text-sm">This action cannot be undone</p>
-        </div>
-      </div>
 
-      @if (userToDelete.role === 'Parent') {
-      <p class="text-text-main/70 text-sm mb-6">
-        This user is a <span class="font-bold text-text-main">Parent</span>. Do you want to delete
-        only the parent account or also remove all linked children?
-      </p>
-      <div class="flex flex-col gap-3">
-        <button type="button"
-          class="cursor-pointer w-full py-3 rounded-2xl border border-purple-500/30 bg-purple-500/10 text-purple-500 font-bold hover:bg-purple-500/20 transition-all"
-          (click)="confirmDelete(false)">
-          <i class="fa-solid fa-user mr-2"></i> Delete Parent Only
-        </button>
-        <button type="button"
-          class="cursor-pointer w-full py-3 rounded-2xl border border-red-500/30 bg-red-500/10 text-red-500 font-bold hover:bg-red-500/20 transition-all"
-          (click)="confirmDelete(true)">
-          <i class="fa-solid fa-users mr-2"></i> Delete Parent & All Children
-        </button>
-        <button type="button"
-          class="cursor-pointer w-full py-3 rounded-2xl border border-border-main text-text-main/60 font-bold hover:bg-primary/5 transition-all"
-          (click)="showDeleteModal = false; userToDelete = null">
-          Cancel
-        </button>
+        @if (userToDelete.role === 'Parent') {
+          <p class="text-text-main/70 text-sm mb-6">
+            This user is a <span class="font-bold text-text-main">Parent</span>. Do you want to
+            delete only the parent account or also remove all linked children?
+          </p>
+          <div class="flex flex-col gap-3">
+            <button
+              type="button"
+              class="cursor-pointer w-full py-3 rounded-2xl border border-purple-500/30 bg-purple-500/10 text-purple-500 font-bold hover:bg-purple-500/20 transition-all"
+              (click)="confirmDelete(false)"
+            >
+              <i class="fa-solid fa-user mr-2"></i> Delete Parent Only
+            </button>
+            <button
+              type="button"
+              class="cursor-pointer w-full py-3 rounded-2xl border border-red-500/30 bg-red-500/10 text-red-500 font-bold hover:bg-red-500/20 transition-all"
+              (click)="confirmDelete(true)"
+            >
+              <i class="fa-solid fa-users mr-2"></i> Delete Parent & All Children
+            </button>
+            <button
+              type="button"
+              class="cursor-pointer w-full py-3 rounded-2xl border border-border-main text-text-main/60 font-bold hover:bg-primary/5 transition-all"
+              (click)="showDeleteModal = false; userToDelete = null"
+            >
+              {{ 'COMMON.CANCEL' | translate }}
+            </button>
+          </div>
+        } @else {
+          <p class="text-text-main/70 text-sm mb-6">
+            Are you sure you want to remove
+            <span class="font-bold text-text-main">{{ userToDelete.fName }}</span
+            >? This action cannot be undone.
+          </p>
+          <div class="flex flex-col gap-3">
+            <button
+              type="button"
+              class="cursor-pointer w-full py-3 rounded-2xl border border-red-500/30 bg-red-500/10 text-red-500 font-bold hover:bg-red-500/20 transition-all"
+              (click)="confirmDelete(false)"
+            >
+              <i class="fa-solid fa-trash mr-2"></i> Yes, Remove User
+            </button>
+            <button
+              type="button"
+              class="cursor-pointer w-full py-3 rounded-2xl border border-border-main text-text-main/60 font-bold hover:bg-primary/5 transition-all"
+              (click)="showDeleteModal = false; userToDelete = null"
+            >
+              {{ 'COMMON.CANCEL' | translate }}
+            </button>
+          </div>
+        }
       </div>
-      } @else {
-      <p class="text-text-main/70 text-sm mb-6">
-        Are you sure you want to remove
-        <span class="font-bold text-text-main">{{ userToDelete.fName }}</span>? This action cannot be undone.
-      </p>
-      <div class="flex flex-col gap-3">
-        <button type="button"
-          class="cursor-pointer w-full py-3 rounded-2xl border border-red-500/30 bg-red-500/10 text-red-500 font-bold hover:bg-red-500/20 transition-all"
-          (click)="confirmDelete(false)">
-          <i class="fa-solid fa-trash mr-2"></i> Yes, Remove User
-        </button>
-        <button type="button"
-          class="cursor-pointer w-full py-3 rounded-2xl border border-border-main text-text-main/60 font-bold hover:bg-primary/5 transition-all"
-          (click)="showDeleteModal = false; userToDelete = null">
-          Cancel
-        </button>
-      </div>
-      }
     </div>
-  </div>
   }
 
   @if (showCvModal && user?.cvPath) {
-  <div class="fixed inset-0 z-[70] flex items-center justify-center p-4" (click)="showCvModal = false">
-    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
     <div
-      class="relative z-10 w-full max-w-4xl h-[85vh] flex flex-col rounded-3xl border border-border-main bg-surface shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200"
-      (click)="$event.stopPropagation()">
-      <div class="flex items-center justify-between px-6 py-4 border-b border-border-main shrink-0">
-        <div class="flex items-center gap-3">
-          <div class="size-9 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
-            <i class="fa-solid fa-file-pdf text-primary"></i>
+      class="fixed inset-0 z-[70] flex items-center justify-center p-4"
+      (click)="showCvModal = false"
+    >
+      <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+      <div
+        class="relative z-10 w-full max-w-4xl h-[85vh] flex flex-col rounded-3xl border border-border-main bg-surface shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200"
+        (click)="$event.stopPropagation()"
+      >
+        <div
+          class="flex items-center justify-between px-6 py-4 border-b border-border-main shrink-0"
+        >
+          <div class="flex items-center gap-3">
+            <div
+              class="size-9 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center"
+            >
+              <i class="fa-solid fa-file-pdf text-primary"></i>
+            </div>
+            <span class="font-black text-text-main text-base tracking-tight"
+              >CV Preview — {{ user!.fName }}</span
+            >
           </div>
-          <span class="font-black text-text-main text-base tracking-tight">CV Preview — {{ user!.fName }}</span>
+          <div class="flex items-center gap-2">
+            <a
+              [href]="user!.cvPath"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-1.5 rounded-xl border border-border-main bg-surface px-3 py-2 text-xs font-bold text-text-main/70 hover:text-primary hover:border-primary/40 transition-all shadow-sm"
+            >
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> Open in new tab
+            </a>
+            <button
+              type="button"
+              (click)="showCvModal = false"
+              class="size-9 grid place-items-center rounded-xl border border-border-main bg-surface text-text-main/50 hover:text-text-main hover:bg-border-main/50 transition-all cursor-pointer"
+            >
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
         </div>
-        <div class="flex items-center gap-2">
-          <a [href]="user!.cvPath" target="_blank" rel="noopener noreferrer"
-            class="inline-flex items-center gap-1.5 rounded-xl border border-border-main bg-surface px-3 py-2 text-xs font-bold text-text-main/70 hover:text-primary hover:border-primary/40 transition-all shadow-sm">
-            <i class="fa-solid fa-arrow-up-right-from-square"></i> Open in new tab
-          </a>
-          <button type="button" (click)="showCvModal = false"
-            class="size-9 grid place-items-center rounded-xl border border-border-main bg-surface text-text-main/50 hover:text-text-main hover:bg-border-main/50 transition-all cursor-pointer">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-        </div>
+        <iframe
+          [src]="user!.cvPath! | safeUrl"
+          class="flex-1 w-full border-none"
+          title="CV Preview"
+        ></iframe>
       </div>
-      <iframe [src]="user!.cvPath! | safeUrl" class="flex-1 w-full border-none" title="CV Preview"></iframe>
     </div>
-  </div>
   }
 </section>

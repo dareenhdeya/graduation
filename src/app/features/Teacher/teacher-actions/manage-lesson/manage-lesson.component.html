@@ -78,7 +78,7 @@
               ]"
               class="inline-flex items-center gap-2 h-11 px-5 rounded-2xl border border-primary/20 bg-primary/10 text-primary font-bold text-sm shadow-sm hover:bg-primary/20 hover:scale-[1.03] active:scale-[0.97] transition-all"
             >
-              <i class="fa-solid fa-eye"></i> View Exercise
+              <i class="fa-solid fa-eye"></i> {{ 'COMMON.VIEW' | translate }}
             </a>
             <a
               [routerLink]="[
@@ -92,7 +92,7 @@
               ]"
               class="inline-flex items-center gap-2 h-11 px-5 rounded-2xl border border-yellow-500/20 bg-yellow-500/10 text-yellow-500 font-bold text-sm shadow-sm hover:bg-yellow-500/20 hover:scale-[1.03] active:scale-[0.97] transition-all"
             >
-              <i class="fa-solid fa-pen"></i> Edit Exercise
+              <i class="fa-solid fa-pen"></i> {{ 'TEACHER.QUIZ.EDIT' | translate }}
             </a>
           </div>
         } @else {
@@ -100,7 +100,7 @@
             [routerLink]="['/teacher/subject', subjectId, 'lesson', lessonId, 'exercise']"
             class="inline-flex items-center gap-2 h-11 px-5 rounded-2xl bg-gradient-to-r from-violet-500 to-primary text-white font-bold text-sm shadow-lg hover:shadow-primary/30 hover:scale-[1.03] active:scale-[0.97] transition-all shrink-0"
           >
-            <i class="fa-solid fa-circle-question"></i> Add Exercise
+            <i class="fa-solid fa-circle-question"></i> {{ 'TEACHER.QUIZ.CREATE_EXERCISE' | translate }}
           </a>
         }
       </div>
@@ -164,13 +164,13 @@
                           (click)="openEditVideoModal(video)"
                           class="cursor-pointer px-3 py-1 rounded-2xl text-xs font-bold border border-yellow-500/20 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20 transition-all shadow-sm"
                         >
-                          Edit
+                          {{ 'COMMON.EDIT' | translate }}
                         </button>
                         <button
                           (click)="openDeleteVideoModal(video)"
                           class="cursor-pointer px-3 py-1 rounded-2xl text-xs font-bold border border-red-500/20 bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-all shadow-sm"
                         >
-                          Delete
+                          {{ 'COMMON.DELETE' | translate }}
                         </button>
                       </div>
                     </div>
@@ -191,7 +191,7 @@
             >
               <i class="fa-solid fa-cloud-arrow-up text-xl"></i>
             </div>
-            <h2 class="text-2xl font-black tracking-tight text-text-main">Upload Video</h2>
+            <h2 class="text-2xl font-black tracking-tight text-text-main">{{ 'COMMON.UPLOAD' | translate }}</h2>
             <p class="text-text-main/50 text-sm mt-1 font-bold">Add a new video to this lesson.</p>
           </div>
 
@@ -199,7 +199,7 @@
             <div>
               <label
                 class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1"
-                >Video Title</label
+                >{{ 'COMMON.TITLE' | translate }}</label
               >
               <input
                 formControlName="title"
@@ -217,7 +217,7 @@
             <div>
               <label
                 class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1"
-                >Description</label
+                >{{ 'COMMON.DESCRIPTION' | translate }}</label
               >
               <textarea
                 formControlName="description"
@@ -308,7 +308,7 @@
                   @if (isUploading) {
                     <i class="fas fa-spinner fa-spin"></i> Uploading...
                   } @else {
-                    <i class="fa-solid fa-paper-plane"></i> Upload Video
+                    <i class="fa-solid fa-paper-plane"></i> {{ 'COMMON.UPLOAD' | translate }}
                   }
                 </span>
               </button>
@@ -328,7 +328,7 @@
       <div
         class="relative w-full max-w-lg rounded-3xl border border-border-main bg-surface p-8 shadow-2xl animate-in fade-in zoom-in duration-200"
       >
-        <h2 class="text-2xl font-black tracking-tight text-text-main mb-6">Edit Video</h2>
+        <h2 class="text-2xl font-black tracking-tight text-text-main mb-6">{{ 'COMMON.EDIT' | translate }}</h2>
         <form [formGroup]="editVideoForm" (ngSubmit)="saveVideoEdit()">
           <div class="mb-4">
             <label
@@ -372,7 +372,7 @@
               (click)="closeEditVideoModal()"
               class="flex-1 py-3 rounded-2xl border border-border-main bg-surface text-text-main font-bold hover:bg-background transition shadow-sm"
             >
-              Cancel
+              {{ 'COMMON.CANCEL' | translate }}
             </button>
             <button
               type="submit"
@@ -406,7 +406,7 @@
           >
             <i class="fa-solid fa-triangle-exclamation"></i>
           </div>
-          <h2 class="text-xl font-black tracking-tight text-text-main">Delete Video?</h2>
+          <h2 class="text-xl font-black tracking-tight text-text-main">{{ 'COMMON.DELETE' | translate }}?</h2>
           <p class="text-text-main/50 font-bold text-sm mt-2">
             "<span class="text-text-main">{{ videoToDelete?.title }}</span
             >" will be permanently deleted.
@@ -418,7 +418,7 @@
             (click)="closeDeleteVideoModal()"
             class="flex-1 py-3 rounded-2xl border border-border-main bg-surface text-text-main font-bold hover:bg-background transition shadow-sm"
           >
-            Cancel
+            {{ 'COMMON.CANCEL' | translate }}
           </button>
           <button
             type="button"
@@ -429,7 +429,7 @@
             @if (isDeletingVideo) {
               <i class="fa-solid fa-spinner fa-spin mr-2"></i> Deleting...
             } @else {
-              Delete
+              {{ 'COMMON.DELETE' | translate }}
             }
           </button>
         </div>

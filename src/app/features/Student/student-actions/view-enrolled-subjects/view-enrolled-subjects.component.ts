@@ -2,10 +2,11 @@ import { Component, inject, OnInit } from '@angular/core';
 import { StudentServiceService } from '../../services/student-service.service';
 import { EnrolledSubject, IViewEnrolledSub } from '../../interfaces/IViewEnrolledSub';
 import { RouterLink } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-view-enrolled-subjects',
-  imports: [RouterLink],
+  imports: [RouterLink, TranslateModule],
   templateUrl: './view-enrolled-subjects.component.html',
   styleUrl: './view-enrolled-subjects.component.css',
 })

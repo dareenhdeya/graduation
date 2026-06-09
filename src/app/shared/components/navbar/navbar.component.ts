@@ -3,10 +3,12 @@ import { AuthService } from './../../../core/auth/services/auth.service';
 import { Component, inject } from '@angular/core';
 import { ThemeService } from '../../../core/services/theme.service';
 import { CommonModule } from '@angular/common';
+import { LangSwitcherComponent } from '../lang-switcher/lang-switcher.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterLink , CommonModule],
+  imports: [RouterLink, CommonModule, LangSwitcherComponent, TranslateModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
 })

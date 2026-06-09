@@ -26,7 +26,7 @@
 
             <button type="button" (click)="openAvatarPicker()"
               class="cursor-pointer absolute -bottom-1 right-2 rounded-full bg-primary text-white flex items-center justify-center text-md border-2 border-surface shadow-lg shadow-primary/20 z-10 hover:bg-primary/90 hover:-translate-y-0.5 transition-all size-10"
-              title="Change picture">
+              [title]="'AUTH.CHOOSE_AVATAR' | translate">
               <i class="fa-solid fa-pen"></i>
             </button>
           </div>
@@ -34,7 +34,7 @@
 
         <div class="text-center">
           <h1 class="text-3xl md:text-4xl font-black tracking-tight text-text-main mb-2">
-            Create Account
+            {{ 'AUTH.SIGNUP_TITLE' | translate }}
           </h1>
         </div>
 
@@ -49,7 +49,7 @@
           <div class="overflow-y-auto pr-2 custom-scroll flex-1 min-h-0 space-y-5">
             <div>
               <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Role</label>
+                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">{{ 'AUTH.ROLE' | translate }}</label>
                 <select formControlName="role"
                   class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all">
                   @for (r of roles; track r.id) {
@@ -62,43 +62,43 @@
             </div>
 
             <div>
-              <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Gender</label>
+              <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">{{ 'AUTH.GENDER' | translate }}</label>
               <select formControlName="Gender" [class.border-red-500]="isInvalid('Gender')"
                 class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all">
                 <option class="bg-background text-text-main" value="" disabled>
-                  Select gender
+                  {{ 'AUTH.GENDER_SELECT' | translate }}
                 </option>
-                <option class="bg-background text-text-main" [value]="1">Male</option>
-                <option class="bg-background text-text-main" [value]="2">Female</option>
+                <option class="bg-background text-text-main" [value]="1">{{ 'AUTH.GENDER_MALE' | translate }}</option>
+                <option class="bg-background text-text-main" [value]="2">{{ 'AUTH.GENDER_FEMALE' | translate }}</option>
               </select>
 
               @if (isInvalid('Gender')) {
               @if (signUpForm.get('Gender')?.hasError('required')) {
               <p
                 class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                Gender is required.
+                {{ 'VALIDATION.REQUIRED' | translate }}
               </p>
               }
               }
             </div>
 
             <div>
-              <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Email</label>
+              <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">{{ 'AUTH.EMAIL' | translate }}</label>
               <input formControlName="email" [class.border-red-500]="isInvalid('email')" type="email"
                 class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-text-main/30"
-                placeholder="name@example.com" />
+                [placeholder]="'AUTH.PLACEHOLDER_EMAIL' | translate" />
 
               @if (isInvalid('email')) {
               @if (signUpForm.get('email')?.hasError('required')) {
               <p
                 class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                Email is required.
+                {{ 'VALIDATION.REQUIRED' | translate }}
               </p>
               }
               @if (signUpForm.get('email')?.hasError('email')) {
               <p
                 class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                Enter valid email.
+                {{ 'VALIDATION.EMAIL_INVALID' | translate }}
               </p>
               }
               }
@@ -106,7 +106,7 @@
 
             <div>
               <label
-                class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Password</label>
+                class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">{{ 'AUTH.PASSWORD' | translate }}</label>
 
               <div class="relative">
                 <input formControlName="password" [class.border-red-500]="isInvalid('password')"
@@ -115,7 +115,7 @@
 
                 <button type="button" (click)="showPass = !showPass"
                   class="absolute right-4 top-1/2 -translate-y-1/2 text-text-main/40 hover:text-primary transition-colors cursor-pointer"
-                  aria-label="Toggle password visibility">
+                  [attr.aria-label]="'AUTH.TOGGLE_PASSWORD' | translate">
                   @if (showPass) {
                   <i class="fas fa-eye-slash"></i>
                   } @else {
@@ -131,14 +131,13 @@
               @if (signUpForm.get('password')?.hasError('required')) {
               <p
                 class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                Password is required.
+                {{ 'VALIDATION.REQUIRED' | translate }}
               </p>
               }
               @if (signUpForm.get('password')?.hasError('pattern')) {
               <p
                 class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                Password must be at least 8 characters and include an uppercase letter, a
-                lowercase letter, a number, and a special character.
+                {{ 'VALIDATION.PASSWORD_MIN' | translate }}
               </p>
               }
               }
@@ -146,57 +145,55 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">First
-                  Name</label>
+                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">{{ 'AUTH.FIRST_NAME' | translate }}</label>
                 <input formControlName="FName" [class.border-red-500]="isInvalid('FName')"
                   class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-text-main/30"
-                  placeholder="First name" />
+                  [placeholder]="'AUTH.PLACEHOLDER_FIRST_NAME' | translate" />
 
                 @if (isInvalid('FName')) {
                 @if (signUpForm.get('FName')?.hasError('required')) {
                 <p
                   class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                  First name is required.
+                  {{ 'VALIDATION.REQUIRED' | translate }}
                 </p>
                 }
                 @if (signUpForm.get('FName')?.hasError('minlength')) {
                 <p
                   class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                  Minimum 2 characters.
+                  {{ 'VALIDATION.PASSWORD_MIN' | translate }}
                 </p>
                 }
                 @if (signUpForm.get('FName')?.hasError('pattern')) {
                 <p
                   class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                  Letters only.
+                  {{ 'VALIDATION.EMAIL_INVALID' | translate }}
                 </p>
                 }
                 }
               </div>
 
               <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Last
-                  Name</label>
+                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">{{ 'AUTH.LAST_NAME' | translate }}</label>
                 <input formControlName="LName" [class.border-red-500]="isInvalid('LName')"
                   class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-text-main/30"
-                  placeholder="Last name" />
+                  [placeholder]="'AUTH.PLACEHOLDER_LAST_NAME' | translate" />
                 @if (isInvalid('LName')) {
                 @if (signUpForm.get('LName')?.hasError('required')) {
                 <p
                   class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                  Last name is required.
+                  {{ 'VALIDATION.REQUIRED' | translate }}
                 </p>
                 }
                 @if (signUpForm.get('LName')?.hasError('minlength')) {
                 <p
                   class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                  Minimum 2 characters.
+                  {{ 'VALIDATION.PASSWORD_MIN' | translate }}
                 </p>
                 }
                 @if (signUpForm.get('LName')?.hasError('pattern')) {
                 <p
                   class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                  Letters only.
+                  {{ 'VALIDATION.EMAIL_INVALID' | translate }}
                 </p>
                 }
                 }
@@ -206,40 +203,38 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <!-- @if (+signUpForm.get('role')?.value !== 1) { -->
               <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Phone
-                  Number</label>
+                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">{{ 'AUTH.PHONE' | translate }}</label>
                 <input formControlName="phoneNumber" [class.border-red-500]="isInvalid('phoneNumber')"
                   class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-text-main/30"
-                  placeholder="01xxxxxxxxx" />
+                  [placeholder]="'AUTH.PLACEHOLDER_PHONE' | translate" />
 
                 @if (isInvalid('phoneNumber')) {
                 @if (signUpForm.get('phoneNumber')?.hasError('required')) {
                 <p
                   class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                  Phone number is required.
+                  {{ 'VALIDATION.REQUIRED' | translate }}
                 </p>
                 }
                 @if (signUpForm.get('phoneNumber')?.hasError('pattern')) {
                 <p
                   class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                  Invalid phone format.
+                  {{ 'VALIDATION.PHONE_INVALID' | translate }}
                 </p>
                 }
                 }
               </div>
               <!-- } @else { -->
               <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Birth
-                  Date</label>
+                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">{{ 'AUTH.BIRTH_DATE' | translate }}</label>
                 <input type="date" formControlName="BirthDate" [class.border-red-500]="isInvalid('BirthDate')"
                   class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all"
-                  placeholder="Birth date" />
+                  [placeholder]="'AUTH.PLACEHOLDER_BIRTH_DATE' | translate" />
 
                 @if (isInvalid('BirthDate')) {
                 @if (signUpForm.get('BirthDate')?.hasError('required')) {
                 <p
                   class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                  Birthdate is required.
+                  {{ 'VALIDATION.REQUIRED' | translate }}
                 </p>
                 }
                 }
@@ -248,7 +243,7 @@
               @if (+signUpForm.get('role')?.value! === 1) {
               <div>
                 <label
-                  class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Disability</label>
+                  class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">{{ 'AUTH.DISABILITY' | translate }}</label>
                 <select formControlName="Disability"
                   class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all">
                   @for (d of Disability; track d.id) {
@@ -263,22 +258,22 @@
 
               <div>
                 <label
-                  class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Address</label>
+                  class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">{{ 'AUTH.ADDRESS' | translate }}</label>
                 <input formControlName="Address" [class.border-red-500]="isInvalid('Address')"
                   class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-text-main/30"
-                  placeholder="Address" />
+                  [placeholder]="'AUTH.PLACEHOLDER_ADDRESS' | translate" />
 
                 @if (isInvalid('Address')) {
                 @if (signUpForm.get('Address')?.hasError('required')) {
                 <p
                   class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                  Address is required.
+                  {{ 'VALIDATION.REQUIRED' | translate }}
                 </p>
                 }
                 @if (signUpForm.get('Address')?.hasError('minlength')) {
                 <p
                   class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                  Minimum 10 characters.
+                  {{ 'VALIDATION.PASSWORD_MIN' | translate }}
                 </p>
                 }
                 }
@@ -287,22 +282,22 @@
 
             @if (+signUpForm.get('role')?.value! === 2) {
             <div>
-              <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Job</label>
+              <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">{{ 'AUTH.JOB' | translate }}</label>
               <input formControlName="Job" [class.border-red-500]="isInvalid('Job')"
                 class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-text-main/30"
-                placeholder="Your job" />
+                [placeholder]="'AUTH.PLACEHOLDER_JOB' | translate" />
 
               @if (isInvalid('Job')) {
               @if (signUpForm.get('Job')?.hasError('required')) {
               <p
                 class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                Job is required.
+                {{ 'VALIDATION.REQUIRED' | translate }}
               </p>
               }
               @if (signUpForm.get('Job')?.hasError('minlength')) {
               <p
                 class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                Minimum 2 characters.
+                {{ 'VALIDATION.PASSWORD_MIN' | translate }}
               </p>
               }
               }
@@ -311,8 +306,7 @@
 
             @if (+signUpForm.get('role')?.value! === 3) {
             <div>
-              <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">CV /
-                Resume</label>
+              <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">{{ 'AUTH.CV_RESUME' | translate }}</label>
               <label
                 class="flex items-center gap-4 w-full rounded-2xl border border-dashed border-border-main bg-background px-4 py-3.5 cursor-pointer hover:border-primary/60 transition-all group"
                 [class.border-red-500]="isInvalid('cv')">
@@ -320,14 +314,14 @@
                 <i
                   class="fa-solid fa-file-arrow-up text-xl text-primary/60 group-hover:text-primary transition-colors"></i>
                 <span class="text-sm font-medium text-text-main/60 truncate">
-                  {{ cvFileName || 'Upload CV (PDF, DOC, DOCX)' }}
+                  {{ cvFileName || ('AUTH.UPLOAD_CV' | translate) }}
                 </span>
               </label>
 
               @if (isInvalid('cv')) {
               <p
                 class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                <i class="fa-solid fa-circle-exclamation"></i> CV is required for teachers.
+                <i class="fa-solid fa-circle-exclamation"></i> {{ 'VALIDATION.REQUIRED' | translate }}
               </p>
               }
             </div>
@@ -341,7 +335,7 @@
             <button type="submit" [disabled]="isLoading"
               class="w-full rounded-2xl bg-primary py-4 text-sm font-bold text-white hover:bg-primary/90 transition-all hover:-translate-y-0.5 shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed">
               <span class="flex items-center justify-center gap-2">
-                Sign Up
+                {{ 'AUTH.SIGNUP_BTN' | translate }}
                 @if (isLoading) {
                 <i class="fas fa-spinner fa-spin"></i>
                 }
@@ -349,9 +343,9 @@
             </button>
 
             <p class="text-sm font-medium text-text-main/50 text-center mt-4">
-              Already have an account?
+              {{ 'AUTH.HAVE_ACCOUNT' | translate }}
               <a routerLink="/login"
-                class="text-primary font-bold hover:text-primary/80 transition-colors cursor-pointer">Login</a>
+                class="text-primary font-bold hover:text-primary/80 transition-colors cursor-pointer">{{ 'AUTH.LOGIN_LINK_LABEL' | translate }}</a>
             </p>
           </div>
         </form>
@@ -363,7 +357,7 @@
   <div class="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
     <div class="w-full max-w-3xl rounded-3xl bg-surface border border-border-main p-5 backdrop-blur-2xl">
       <div class="flex items-center justify-between mb-4">
-        <h3 class="text-lg font-semibold text-text-main">Choose an avatar</h3>
+        <h3 class="text-lg font-semibold text-text-main">{{ 'AUTH.CHOOSE_AVATAR' | translate }}</h3>
         <button type="button" (click)="closeAvatarPicker()"
           class="cursor-pointer text-text-main/70 hover:text-text-main">
           <i class="fa-solid fa-xmark text-xl"></i>
@@ -376,18 +370,18 @@
 
         <button type="button" (click)="fileInput.click()"
           class="cursor-pointer size-14 rounded-full border border-border-main bg-background hover:border-primary/60 hover:bg-black/5 transition flex items-center justify-center text-text-main"
-          title="Upload from device">
+          [title]="'AUTH.UPLOAD_FROM_DEVICE' | translate">
           <i class="fa-solid fa-upload text-lg"></i>
         </button>
 
-        <p class="text-sm text-text-main/60">Upload from device</p>
+        <p class="text-sm text-text-main/60">{{ 'AUTH.UPLOAD_FROM_DEVICE' | translate }}</p>
       </div>
 
       <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-3">
         @for (a of avatars; track a.id) {
         <button type="button" (click)="selectAvatar(a.src)"
           class="cursor-pointer rounded-full overflow-hidden border border-border-main hover:border-primary/60 transition"
-          title="Select">
+          [title]="'AUTH.CHOOSE_AVATAR' | translate">
           <img [src]="a.src" class="w-full aspect-square object-cover" />
         </button>
         }
@@ -396,7 +390,7 @@
       <div class="flex justify-end gap-2 mt-6">
         <button type="button" (click)="closeAvatarPicker()"
           class="rounded-2xl cursor-pointer bg-background border border-border-main px-4 py-2 text-text-main hover:bg-black/5 transition">
-          Cancel
+          {{ 'COMMON.CANCEL' | translate }}
         </button>
       </div>
     </div>

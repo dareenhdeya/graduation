@@ -4,10 +4,11 @@ import { Router, RouterLink } from '@angular/router';
 import { IAdminSubject } from '../../../interfaces/IAdminSubject.interface';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-subject-crud',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, TranslateModule],
   templateUrl: './subject-crud.component.html',
   styleUrl: './subject-crud.component.css',
 })

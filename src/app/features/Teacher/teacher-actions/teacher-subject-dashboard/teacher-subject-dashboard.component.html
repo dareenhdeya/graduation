@@ -2,10 +2,7 @@
   <div class="container mx-auto max-w-6xl relative z-10">
     <div class="mb-12 text-center md:text-left">
       <h1 class="text-4xl md:text-5xl font-black text-text-main tracking-tight mb-2">
-        Subject
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-400">
-          Dashboard
-        </span>
+        {{ 'TEACHER.DASHBOARD.TITLE' | translate }}
       </h1>
       <p class="text-text-main/50 font-bold text-lg">
         Manage lessons, students, and vocabulary for this subject.
@@ -25,13 +22,13 @@
             <i class="fa-solid fa-chalkboard-user"></i>
           </div>
 
-          <h3 class="font-bold text-text-main text-xl mb-2">My Lessons</h3>
+          <h3 class="font-bold text-text-main text-xl mb-2">{{ 'NAVIGATION.LESSONS' | translate }}</h3>
           <p class="text-text-main/50 font-bold text-sm">
             View, edit, and manage all your uploaded video lessons.
           </p>
 
           <div class="mt-6 flex items-center gap-2 text-sky-500 font-bold text-sm group-hover:gap-3 transition-all">
-            <span>View All</span>
+            <span>{{ 'COMMON.VIEW' | translate }}</span>
             <i class="fa-solid fa-arrow-right"></i>
           </div>
         </div>
@@ -49,7 +46,7 @@
             <i class="fa-solid fa-plus"></i>
           </div>
 
-          <h3 class="font-bold text-text-main text-xl mb-2">Create Lesson</h3>
+          <h3 class="font-bold text-text-main text-xl mb-2">{{ 'TEACHER.LESSON.CREATE' | translate }}</h3>
           <p class="text-text-main/50 font-bold text-sm">
             Upload new content, videos, or activities for your students.
           </p>
@@ -73,7 +70,7 @@
             <i class="fa-solid fa-book-bookmark"></i>
           </div>
 
-          <h3 class="font-bold text-text-main text-xl mb-2">Dictionary</h3>
+          <h3 class="font-bold text-text-main text-xl mb-2">{{ 'TEACHER.DICTIONARY.TITLE' | translate }}</h3>
           <p class="text-text-main/50 font-bold text-sm">
             Add new vocabulary words and attachments to the subject.
           </p>
@@ -97,13 +94,13 @@
             <i class="fa-solid fa-users"></i>
           </div>
 
-          <h3 class="font-bold text-text-main text-xl mb-2">My Students</h3>
+          <h3 class="font-bold text-text-main text-xl mb-2">{{ 'NAVIGATION.STUDENTS' | translate }}</h3>
           <p class="text-text-main/50 font-bold text-sm">
             Track progress, view profiles, and manage the class roster.
           </p>
 
           <div class="mt-6 flex items-center gap-2 text-purple-500 font-bold text-sm group-hover:gap-3 transition-all">
-            <span>View List</span>
+            <span>{{ 'COMMON.VIEW' | translate }}</span>
             <i class="fa-solid fa-arrow-right"></i>
           </div>
         </div>
@@ -122,13 +119,13 @@
             <i class="fa-solid fa-circle-question"></i>
           </div>
 
-          <h3 class="font-bold text-text-main text-xl mb-2">Quizzes</h3>
+          <h3 class="font-bold text-text-main text-xl mb-2">{{ 'TEACHER.QUIZ.TITLE' | translate }}</h3>
           <p class="text-text-main/50 font-bold text-sm">
             Create quizzes and exercises for your students to complete.
           </p>
 
           <div class="mt-6 flex items-center gap-2 text-violet-500 font-bold text-sm group-hover:gap-3 transition-all">
-            <span>Create Quiz</span>
+            <span>{{ 'TEACHER.QUIZ.CREATE' | translate }}</span>
             <i class="fa-solid fa-arrow-right"></i>
           </div>
         </div>

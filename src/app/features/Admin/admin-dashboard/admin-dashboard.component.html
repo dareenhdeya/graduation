@@ -4,23 +4,23 @@
     <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between mb-12">
       <div>
         <h1 class="text-4xl md:text-5xl font-black text-text-main tracking-tight mb-2">
-          Admin
-          <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-amber-500">Overview</span>
+          {{ 'NAVIGATION.DASHBOARD' | translate }}
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-amber-500">{{ 'COMMON.ACTIONS' | translate }}</span>
         </h1>
-        <p class="text-text-main/50 text-lg">System statistics and quick actions.</p>
+        <p class="text-text-main/50 text-lg">{{ 'TEACHER.DASHBOARD.QUICK_ACTIONS' | translate }}</p>
       </div>
 
       <a
         routerLink="/admin/users"
         class="rounded-2xl border border-border-main bg-surface px-6 py-3 text-sm font-bold text-text-main hover:border-primary/50 hover:text-primary transition-all duration-300 hover:-translate-y-1 shadow-sm hover:shadow-[0_0_5px_var(--brand-primary)]"
       >
-        <i class="fa-solid fa-users mr-2"></i>Manage Users
+        <i class="fa-solid fa-users mr-2"></i>{{ 'COMMON.ACTIONS' | translate }}
       </a>
     </div>
 
     @if (loading) {
     <div class="rounded-3xl border border-border-main bg-surface p-12 text-center text-text-main/70 text-lg font-medium animate-pulse shadow-sm">
-      <i class="fa-solid fa-circle-notch fa-spin mr-3 text-primary text-xl"></i> Loading dashboard...
+      <i class="fa-solid fa-circle-notch fa-spin mr-3 text-primary text-xl"></i> {{ 'COMMON.LOADING' | translate }}
     </div>
     
     } @else if (error) {
@@ -34,7 +34,7 @@
       <div class="relative overflow-hidden rounded-3xl border border-border-main cursor-pointer hover:shadow-md shadow bg-surface/20 p-6 transition-all duration-300 hover:border-primary/30 hover:-translate-y-1">
         <div class="absolute -right-6 -top-6 size-24 bg-primary/10 rounded-full blur-xl transition duration-300 group-hover:bg-primary/20"></div>
         <div class="relative z-10">
-          <div class="text-text-main/50 text-xs font-bold uppercase tracking-wider mb-1">Total Users</div>
+          <div class="text-text-main/50 text-xs font-bold uppercase tracking-wider mb-1">{{ 'NAV.SIGN_UP' | translate }}</div>
           <div class="mt-2 text-4xl font-black text-text-main">{{ stats.users }}</div>
         </div>
       </div>
@@ -42,10 +42,10 @@
       <div class="relative overflow-hidden rounded-3xl border border-border-main cursor-pointer hover:shadow-md shadow bg-surface/20 p-6 transition-all duration-300 hover:border-amber-500/30 hover:-translate-y-1">
         <div class="absolute -right-6 -top-6 size-24 bg-amber-500/10 rounded-full blur-xl"></div>
         <div class="relative z-10">
-          <div class="text-text-main/50 text-xs font-bold uppercase tracking-wider mb-1">Teachers</div>
+          <div class="text-text-main/50 text-xs font-bold uppercase tracking-wider mb-1">{{ 'AUTH.ROLE_TEACHER' | translate }}</div>
           <div class="mt-2 text-4xl font-black text-text-main">{{ stats.teachers }}</div>
           <div class="mt-3 text-sm text-text-main/60 font-medium">
-            Pending: <span class="text-amber-500 font-bold ml-1">{{ stats.pendingTeachers }}</span>
+            {{ 'COMMON.STATUS' | translate }}: <span class="text-amber-500 font-bold ml-1">{{ stats.pendingTeachers }}</span>
           </div>
         </div>
       </div>
@@ -53,7 +53,7 @@
       <div class="relative overflow-hidden rounded-3xl border border-border-main cursor-pointer hover:shadow-md shadow bg-surface/20 p-6 transition-all duration-300 hover:border-green-500/30 hover:-translate-y-1">
         <div class="absolute -right-6 -top-6 size-24 bg-green-500/10 rounded-full blur-xl"></div>
         <div class="relative z-10">
-          <div class="text-text-main/50 text-xs font-bold uppercase tracking-wider mb-1">Students</div>
+          <div class="text-text-main/50 text-xs font-bold uppercase tracking-wider mb-1">{{ 'AUTH.ROLE_STUDENT' | translate }}</div>
           <div class="mt-2 text-4xl font-black text-text-main">{{ stats.students }}</div>
         </div>
       </div>
@@ -61,7 +61,7 @@
       <div class="relative overflow-hidden rounded-3xl border border-border-main cursor-pointer hover:shadow-md shadow bg-surface/20 p-6 transition-all duration-300 hover:border-blue-500/30 hover:-translate-y-1">
         <div class="absolute -right-6 -top-6 size-24 bg-blue-500/10 rounded-full blur-xl"></div>
         <div class="relative z-10">
-          <div class="text-text-main/50 text-xs font-bold uppercase tracking-wider mb-1">Parents</div>
+          <div class="text-text-main/50 text-xs font-bold uppercase tracking-wider mb-1">{{ 'NAVIGATION.STUDENTS' | translate }}</div>
           <div class="mt-2 text-4xl font-black text-text-main">{{ stats.parents }}</div>
         </div>
       </div>
@@ -69,7 +69,7 @@
       <div class="relative overflow-hidden rounded-3xl border border-border-main cursor-pointer hover:shadow-md shadow bg-surface/20 p-6 sm:col-span-2 transition-all duration-300 hover:border-red-500/30 hover:-translate-y-1">
         <div class="absolute -right-10 -top-10 size-32 bg-red-500/10 rounded-full blur-2xl"></div>
         <div class="relative z-10">
-          <div class="text-text-main/50 text-xs font-bold uppercase tracking-wider mb-1">Blocked Users</div>
+          <div class="text-text-main/50 text-xs font-bold uppercase tracking-wider mb-1">{{ 'COMMON.INACTIVE' | translate }}</div>
           <div class="mt-2 text-4xl font-black text-red-500">{{ stats.blockedUsers }}</div>
         </div>
       </div>
@@ -77,7 +77,7 @@
       <div class="relative overflow-hidden rounded-3xl border border-border-main cursor-pointer hover:shadow-md shadow bg-surface/20 p-6 sm:col-span-2 transition-all duration-300 hover:border-fuchsia-500/30 hover:-translate-y-1">
         <div class="absolute -right-10 -top-10 size-32 bg-fuchsia-500/10 rounded-full blur-2xl"></div>
         <div class="relative z-10">
-          <div class="text-text-main/50 text-xs font-bold uppercase tracking-wider mb-1">Subjects</div>
+          <div class="text-text-main/50 text-xs font-bold uppercase tracking-wider mb-1">{{ 'NAVIGATION.SUBJECTS' | translate }}</div>
           <div class="mt-2 text-4xl font-black text-text-main">{{ stats.subjects }}</div>
         </div>
       </div>

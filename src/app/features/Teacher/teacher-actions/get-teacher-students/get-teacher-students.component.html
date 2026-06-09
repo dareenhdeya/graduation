@@ -5,7 +5,7 @@
         <h1 class="text-3xl md:text-4xl font-black tracking-tight text-text-main">
           My
           <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400"
-            >Students</span
+            >{{ 'NAVIGATION.STUDENTS' | translate }}</span
           >
         </h1>
         <p class="text-text-main/50 font-bold text-sm mt-1">
@@ -19,7 +19,7 @@
         ></i>
         <input
           type="text"
-          placeholder="Search students..."
+          [placeholder]="'COMMON.SEARCH' | translate"
           [(ngModel)]="searchTerm"
           class="w-full rounded-2xl border border-border-main bg-background py-3.5 pl-10 pr-4 text-sm font-semibold text-text-main focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all shadow-sm placeholder:text-text-main/30"
         />
@@ -47,7 +47,7 @@
         >
           <i class="fa-solid fa-users-slash text-3xl"></i>
         </div>
-        <h3 class="text-xl font-black tracking-tight text-text-main">No Students Yet</h3>
+        <h3 class="text-xl font-black tracking-tight text-text-main">{{ 'TEACHER.DASHBOARD.TOTAL_STUDENTS' | translate }}</h3>
         <p class="text-text-main/50 font-bold max-w-xs mx-auto mt-2">
           Your classroom is empty. Students who join will appear here.
         </p>
@@ -61,7 +61,7 @@
         >
           <i class="fa-solid fa-magnifying-glass text-3xl"></i>
         </div>
-        <h3 class="text-xl font-black tracking-tight text-text-main">No Results Found</h3>
+        <h3 class="text-xl font-black tracking-tight text-text-main">{{ 'COMMON.RESULTS' | translate }}</h3>
         <p class="text-text-main/50 font-bold max-w-xs mx-auto mt-2">
           No students match "{{ searchTerm }}". Try a different name or email.
         </p>
@@ -117,7 +117,7 @@
               <button
                 class="flex items-center justify-center gap-2 py-2 rounded-2xl border border-sky-500/20 bg-sky-500/10 text-sky-500 hover:bg-sky-500/20 transition-all text-xs font-bold shadow-sm"
               >
-                <i class="fa-solid fa-chart-line"></i> Progress
+                <i class="fa-solid fa-chart-line"></i> {{ 'NAV.PROGRESS' | translate }}
               </button>
               <button
                 class="flex items-center justify-center gap-2 py-2 rounded-2xl border border-purple-500/20 bg-purple-500/10 text-purple-500 hover:bg-purple-500/20 transition-all text-xs font-bold shadow-sm"

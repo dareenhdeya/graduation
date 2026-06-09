@@ -8,7 +8,7 @@
         <i class="fa-solid fa-arrow-left"></i>
       </a>
       <div>
-        <h1 class="text-2xl font-black tracking-tight text-text-main">Course Content</h1>
+        <h1 class="text-2xl font-black tracking-tight text-text-main">{{ 'NAVIGATION.LESSONS' | translate }}</h1>
         <p class="text-text-main/50 text-sm font-bold">
           <span class="text-sky-500">{{ lessons.length }} Lessons</span> available
         </p>
@@ -101,7 +101,7 @@
         >
           <i class="fa-solid fa-box-open text-4xl"></i>
         </div>
-        <h2 class="text-2xl font-black tracking-tight text-text-main">No lessons yet</h2>
+        <h2 class="text-2xl font-black tracking-tight text-text-main">{{ 'TEACHER.LESSON.NO_LESSONS' | translate }}</h2>
         <p class="text-text-main/50 mt-2 font-bold">
           The teacher hasn't uploaded any content for this subject.
         </p>
@@ -109,7 +109,7 @@
           routerLink="/student/all-subjects"
           class="mt-6 rounded-2xl border border-sky-500/20 bg-sky-500/10 text-sky-500 px-6 py-3 font-bold transition-all hover:bg-sky-500/20 shadow-sm cursor-pointer"
         >
-          Go Back
+          {{ 'COMMON.BACK' | translate }}
         </a>
       </div>
     }

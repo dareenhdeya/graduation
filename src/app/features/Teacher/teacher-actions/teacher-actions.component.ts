@@ -3,11 +3,12 @@ import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { TeacherServiceService } from '../services/teacher-service.service';
 import { TeacherSubject } from '../interfaces/ITeacherSubjects';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-teacher-actions',
   standalone: true,
-  imports: [RouterLink, CommonModule],
+  imports: [RouterLink, CommonModule, TranslateModule],
   templateUrl: './teacher-actions.component.html',
   styleUrl: './teacher-actions.component.css',
 })

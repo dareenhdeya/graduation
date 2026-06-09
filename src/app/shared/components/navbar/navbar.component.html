@@ -31,7 +31,7 @@
               >
                 <i class="fa-solid fa-house text-text-main/70"></i>
               </span>
-              Home
+              {{ 'NAV.HOME' | translate }}
             </a>
 
             <a
@@ -42,7 +42,7 @@
               >
                 <i class="fa-solid fa-trophy text-text-main/70"></i>
               </span>
-              Progress
+              {{ 'NAV.PROGRESS' | translate }}
             </a>
           </nav>
 
@@ -59,6 +59,8 @@
               }
             </button>
 
+            <app-lang-switcher />
+
             <button
               type="button"
               (click)="goToProfile()"
@@ -73,7 +75,7 @@
                   <span class="text-sm font-black text-white">{{ firstLetter }}</span>
                 }
               </span>
-              <span class="hidden sm:block text-sm font-semibold text-text-main/85">Profile</span>
+              <span class="hidden sm:block text-sm font-semibold text-text-main/85">{{ 'NAV.PROFILE' | translate }}</span>
             </button>
 
             <button
@@ -112,7 +114,7 @@
           class="rounded-[28px] border border-border-main bg-white/90 dark:bg-[#070A13]/92 backdrop-blur-xl shadow-[0_-20px_120px_-70px_rgba(0,0,0,.5)] dark:shadow-[0_-20px_120px_-70px_rgba(0,0,0,.95)] overflow-hidden transition-colors"
         >
           <div class="px-5 py-4 flex items-center justify-between border-b border-border-main">
-            <div class="text-text-main font-bold">Menu</div>
+            <div class="text-text-main font-bold">{{ 'NAVIGATION.SETTINGS' | translate }}</div>
             <button
               type="button"
               class="size-10 rounded-2xl border border-border-main bg-text-main/5 hover:bg-text-main/10 transition text-text-main/75"
@@ -129,7 +131,7 @@
               class="flex items-center justify-between rounded-2xl border border-border-main bg-text-main/5 hover:bg-text-main/10 transition px-4 py-3 text-text-main/85"
             >
               <span class="inline-flex items-center gap-2">
-                <i class="fa-solid fa-house text-text-main/60"></i> Home
+                <i class="fa-solid fa-house text-text-main/60"></i> {{ 'NAV.HOME' | translate }}
               </span>
               <i class="fa-solid fa-chevron-right text-text-main/30 text-xs"></i>
             </a>
@@ -139,7 +141,7 @@
               class="flex items-center justify-between rounded-2xl border border-border-main bg-text-main/5 hover:bg-text-main/10 transition px-4 py-3 text-text-main/85 cursor-pointer"
             >
               <span class="inline-flex items-center gap-2">
-                <i class="fa-solid fa-trophy text-text-main/60"></i> Progress
+                <i class="fa-solid fa-trophy text-text-main/60"></i> {{ 'NAV.PROGRESS' | translate }}
               </span>
               <i class="fa-solid fa-chevron-right text-text-main/30 text-xs"></i>
             </a>
@@ -150,7 +152,7 @@
               class="cursor-pointer w-full flex items-center justify-between rounded-2xl border border-red-500/20 bg-red-500/10 hover:bg-red-500/20 transition px-4 py-3 text-red-600 dark:text-red-400 font-medium"
             >
               <span class="inline-flex items-center gap-2">
-                <i class="fa-solid fa-arrow-right-from-bracket"></i> Log out
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> {{ 'AUTH.LOGOUT' | translate }}
               </span>
               <i class="fa-solid fa-chevron-right text-red-500/50 text-xs"></i>
             </button>

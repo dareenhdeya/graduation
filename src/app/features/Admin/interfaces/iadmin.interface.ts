@@ -1,4 +1,5 @@
 export interface IADMIN {
+cvPath: any;
   id: string;
   fName: string | null;
   lName: string | null;
@@ -14,7 +15,7 @@ export interface IADMIN {
   job: string | null;
   subjectsCount: number;
   parentContactInfo: string | null;
-  cvPath?: string | null;
+  // cvPath?: string | null;
 }
 
 export interface ShowUsersResponse {

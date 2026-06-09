@@ -3,6 +3,7 @@ import { Footer } from './shared/components/footer/footer';
 import { RouterOutlet } from '@angular/router';
 import { ThemeService } from './core/services/theme.service';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+import { LanguageService } from './core/services/language.service';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,7 @@ import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 export class App implements OnInit {
   protected readonly title = signal('frontend');
   private themeService = inject(ThemeService);
-
+  private languageService = inject(LanguageService);
   private loader = inject(NgxSpinnerService);
   loadingVideos = [
     '/images/loader/fen&jake.webm',
@@ -25,6 +26,7 @@ export class App implements OnInit {
   ]
   currentVideo = this.loadingVideos[0];
   ngOnInit(): void {
+    this.languageService.initLanguage();
     this.loader.spinnerObservable.subscribe((status) => {
       if (status?.show) {
         this.pickRandomVideo();

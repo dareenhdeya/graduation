@@ -88,7 +88,7 @@
               </h3>
               <div class="flex items-center gap-2 mt-1">
                 <span class="size-2 rounded-full bg-green-500"></span>
-                <p class="text-sm text-white/50">Active Student</p>
+                <p class="text-sm text-white/50">{{ 'COMMON.STATUS' | translate }}</p>
               </div>
             </div>
           </div>
@@ -133,13 +133,13 @@
               [routerLink]="['/parent/child-profile/', child.id]"
               class="cursor-pointer py-3 rounded-xl bg-sky-600/10 text-sky-400 font-bold text-sm hover:bg-sky-600 hover:text-white transition border border-sky-600/20 shadow-lg shadow-sky-900/10 hover:shadow-sky-600/20"
             >
-              View Profile
+              {{ 'COMMON.VIEW' | translate }}
             </button>
             <button
               [routerLink]="['/parent/student-subjects/', child.id]"
               class="cursor-pointer py-3 rounded-xl bg-white/5 text-white/70 font-bold text-sm hover:bg-white/10 hover:text-white transition border border-white/10"
             >
-              Progress
+              {{ 'NAV.PROGRESS' | translate }}
             </button>
             <button
               (click)="deleteChild(child)"
@@ -164,13 +164,13 @@
         >
           <i class="fa-solid fa-child-reaching text-4xl"></i>
         </div>
-        <h3 class="text-xl font-bold text-white mb-2">No Children Found</h3>
+        <h3 class="text-xl font-bold text-white mb-2">{{ 'PARENT.NO_CHILDREN' | translate }}</h3>
         <p class="text-white/50 mb-6">You haven't registered any children yet.</p>
         <button
           routerLink="/parent/register-student"
           class="cursor-pointer px-6 py-3 rounded-xl bg-sky-600 text-white font-semibold hover:bg-sky-500 transition shadow-lg shadow-sky-900/20"
         >
-          Register a Child
+          {{ 'AUTH.SIGNUP_BTN' | translate }}
         </button>
       </div>
       }
@@ -192,7 +192,7 @@
         </div>
       </div>
 
-      <h3 class="text-xl font-black text-white text-center mb-2">Remove Child</h3>
+      <h3 class="text-xl font-black text-white text-center mb-2">{{ 'COMMON.DELETE' | translate }}</h3>
       <p class="text-white/50 text-center text-sm mb-8">
         Are you sure you want to remove
         <span class="text-white font-bold">{{ childToDelete.fName }}</span
@@ -204,7 +204,7 @@
           (click)="cancelDelete()"
           class="cursor-pointer py-3 rounded-xl bg-white/5 text-white/70 font-bold text-sm hover:bg-white/10 hover:text-white transition border border-white/10"
         >
-          Cancel
+          {{ 'COMMON.CANCEL' | translate }}
         </button>
         <button
           (click)="confirmDelete()"

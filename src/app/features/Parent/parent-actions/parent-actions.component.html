@@ -9,12 +9,9 @@
   <div class="container mx-auto max-w-6xl relative z-10">
     <div class="mb-12 text-center md:text-left">
       <h1 class="text-4xl md:text-5xl font-black text-white tracking-tight mb-2">
-        Parent
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-400">
-          Dashboard
-        </span>
+        {{ 'NAVIGATION.DASHBOARD' | translate }}
       </h1>
-      <p class="text-white/50 text-lg">Manage your children's accounts and view their progress.</p>
+      <p class="text-white/50 text-lg">{{ 'STUDENT.DASHBOARD.CONTINUE_LEARNING' | translate }}</p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -33,7 +30,7 @@
             <i class="fa-solid fa-users-line"></i>
           </div>
 
-          <h3 class="text-2xl font-bold text-white mb-2">My Children</h3>
+          <h3 class="text-2xl font-bold text-white mb-2">{{ 'NAVIGATION.STUDENTS' | translate }}</h3>
           <p class="text-white/50 text-sm">
             View profiles, check activity, and manage settings for your kids.
           </p>
@@ -41,7 +38,7 @@
           <div
             class="mt-6 flex items-center gap-2 text-sky-400 font-semibold text-sm group-hover:gap-3 transition-all"
           >
-            <span>View All</span>
+            <span>{{ 'COMMON.VIEW' | translate }}</span>
             <i class="fa-solid fa-arrow-right"></i>
           </div>
         </div>
@@ -62,7 +59,7 @@
             <i class="fa-solid fa-user-plus"></i>
           </div>
 
-          <h3 class="text-2xl font-bold text-white mb-2">Register Child</h3>
+          <h3 class="text-2xl font-bold text-white mb-2">{{ 'AUTH.SIGNUP_BTN' | translate }}</h3>
           <p class="text-white/50 text-sm">
             Create a new student account and link them to your profile.
           </p>
@@ -70,7 +67,7 @@
           <div
             class="mt-6 flex items-center gap-2 text-green-400 font-semibold text-sm group-hover:gap-3 transition-all"
           >
-            <span>Add New</span>
+            <span>{{ 'COMMON.ADD' | translate }}</span>
             <i class="fa-solid fa-arrow-right"></i>
           </div>
         </div>

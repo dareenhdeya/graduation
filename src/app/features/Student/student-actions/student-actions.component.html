@@ -2,12 +2,9 @@
   <div class="container mx-auto max-w-6xl relative z-10">
     <div class="mb-12 text-center md:text-left">
       <h1 class="text-4xl md:text-5xl font-black text-text-main tracking-tight mb-2">
-        Student
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-400"
-          >Hub</span
-        >
+        {{ 'STUDENT.DASHBOARD.TITLE' | translate }}
       </h1>
-      <p class="text-text-main/50 text-lg">Track your progress and find new passions.</p>
+      <p class="text-text-main/50 text-lg">{{ 'STUDENT.DASHBOARD.MY_PROGRESS' | translate }}</p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -26,7 +23,9 @@
             <i class="fa-solid fa-graduation-cap"></i>
           </div>
 
-          <h3 class="text-2xl font-bold text-text-main mb-2">My Subjects</h3>
+          <h3 class="text-2xl font-bold text-text-main mb-2">
+            {{ 'NAVIGATION.MY_SUBJECTS' | translate }}
+          </h3>
           <p class="text-text-main/50 text-sm">
             Access the courses you are currently studying and view your lessons.
           </p>
@@ -34,7 +33,7 @@
           <div
             class="mt-6 flex items-center gap-2 text-sky-500 font-bold text-sm group-hover:gap-3 transition-all"
           >
-            <span>Go to Classroom</span>
+            <span>{{ 'COMMON.VIEW' | translate }}</span>
             <i class="fa-solid fa-arrow-right"></i>
           </div>
         </div>
@@ -55,7 +54,9 @@
             <i class="fa-solid fa-compass"></i>
           </div>
 
-          <h3 class="text-2xl font-bold text-text-main mb-2">Explore Catalog</h3>
+          <h3 class="text-2xl font-bold text-text-main mb-2">
+            {{ 'SUBJECTS.ALL_SUBJECTS' | translate }}
+          </h3>
           <p class="text-text-main/50 text-sm">
             Browse all available subjects, check details, and enroll in new classes.
           </p>
@@ -63,7 +64,7 @@
           <div
             class="mt-6 flex items-center gap-2 text-purple-500 font-bold text-sm group-hover:gap-3 transition-all"
           >
-            <span>Find New Courses</span>
+            <span>{{ 'SUBJECTS.ENROLL' | translate }}</span>
             <i class="fa-solid fa-arrow-right"></i>
           </div>
         </div>
@@ -71,3 +72,4 @@
     </div>
   </div>
 </section>
+<app-letters></app-letters>

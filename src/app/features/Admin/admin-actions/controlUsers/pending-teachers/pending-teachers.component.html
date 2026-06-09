@@ -3,7 +3,7 @@
     <a routerLink="/admin/dashboard"
       class="mb-6 cursor-pointer inline-flex items-center gap-2 rounded-2xl border border-border-main bg-surface px-4 py-2 text-sm font-bold text-text-main hover:border-primary hover:text-amber-500 transition-all duration-300 hover:-translate-y-0.5 shadow-sm">
       <i class="fa-solid fa-arrow-left"></i>
-      Back to Dashboard
+      {{ 'NAVIGATION.BACK_TO_DASHBOARD' | translate }}
     </a>
 
     <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between mb-8">
@@ -28,7 +28,7 @@
     </div>
 
     <div class="rounded-3xl border border-border-main bg-surface p-5 sm:p-6 mb-8 shadow-sm transition-all">
-      <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Search</label>
+      <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">{{ 'COMMON.SEARCH' | translate }}</label>
       <div class="relative">
         <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-text-main/40"></i>
         <input [formControl]="search"
@@ -40,8 +40,7 @@
     @if (loading) {
     <div
       class="rounded-3xl border border-border-main bg-surface p-12 text-center text-text-main/70 text-lg font-medium animate-pulse shadow-sm">
-      <i class="fa-solid fa-circle-notch fa-spin mr-3 text-amber-500 text-xl"></i> Loading pending
-      teachers...
+      <i class="fa-solid fa-circle-notch fa-spin mr-3 text-amber-500 text-xl"></i> {{ 'COMMON.LOADING' | translate }}
     </div>
     } @else if (error) {
     <div
@@ -54,10 +53,10 @@
         <table class="min-w-full text-sm">
           <thead class="bg-surface text-text-main/60 border-b border-border-main">
             <tr>
-              <th class="text-left font-bold uppercase tracking-wider px-6 py-5">User</th>
-              <th class="text-left font-bold uppercase tracking-wider px-6 py-5">Email</th>
-              <th class="text-left font-bold uppercase tracking-wider px-6 py-5">Status</th>
-              <th class="text-right font-bold uppercase tracking-wider px-6 py-5">Actions</th>
+              <th class="text-left font-bold uppercase tracking-wider px-6 py-5">{{ 'COMMON.NAME' | translate }}</th>
+              <th class="text-left font-bold uppercase tracking-wider px-6 py-5">{{ 'AUTH.EMAIL' | translate }}</th>
+              <th class="text-left font-bold uppercase tracking-wider px-6 py-5">{{ 'COMMON.STATUS' | translate }}</th>
+              <th class="text-right font-bold uppercase tracking-wider px-6 py-5">{{ 'COMMON.ACTIONS' | translate }}</th>
             </tr>
           </thead>
 

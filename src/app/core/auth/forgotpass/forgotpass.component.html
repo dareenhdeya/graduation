@@ -56,39 +56,39 @@
           @if (currentStep === 1) {
             <div class="text-center">
               <h2 class="text-3xl md:text-4xl font-black tracking-tight text-text-main mb-2">
-                Forgot Password
+                {{ 'AUTH.FORGOT_PASSWORD_TITLE' | translate }}
               </h2>
               <p class="text-sm font-medium text-text-main/50 text-center mb-8">
-                Enter your email or username to receive an OTP.
+                {{ 'AUTH.FORGOT_PASSWORD_SUBTITLE' | translate }}
               </p>
             </div>
 
             <form [formGroup]="emailForm" (ngSubmit)="submitEmail()" class="mt-7 space-y-5">
               <div>
                 <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1"
-                  >Email or Username</label
+                  >{{ 'AUTH.EMAIL_OR_USERNAME' | translate }}</label
                 >
                 <input
                   formControlName="emailOrUserName"
                   type="text"
-                  placeholder="name@email.com or username"
+                  [placeholder]="'AUTH.PLACEHOLDER_EMAIL_USERNAME' | translate"
                   class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-text-main/30"
                 />
                 @if (
                   emailForm.get('emailOrUserName')?.touched &&
                   emailForm.get('emailOrUserName')?.getError('required')
                 ) {
-                  <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"><i class="fas fa-exclamation-circle mr-1"></i> Email/Username is required</p>
+                  <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"><i class="fas fa-exclamation-circle mr-1"></i> {{ 'VALIDATION.REQUIRED' | translate }}</p>
                 }
                 @if (emailForm.get('emailOrUserName')?.hasError('emailOrUserName')) {
-                  <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"><i class="fas fa-exclamation-circle mr-1"></i> Enter valid email.</p>
+                  <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"><i class="fas fa-exclamation-circle mr-1"></i> {{ 'VALIDATION.EMAIL_INVALID' | translate }}</p>
                 }
               </div>
 
               <div class="flex items-center justify-between py-1">
                 <p class="text-sm font-medium text-text-main/50 text-center">
-                  Back to
-                  <a routerLink="/login" class="text-primary font-bold hover:text-primary/80 transition-colors cursor-pointer">login</a>
+                  {{ 'AUTH.BACK_TO_LOGIN' | translate }}
+                  <a routerLink="/login" class="text-primary font-bold hover:text-primary/80 transition-colors cursor-pointer">{{ 'AUTH.LOGIN_LINK' | translate }}</a>
                 </p>
               </div>
 
@@ -98,7 +98,7 @@
                 class="w-full rounded-2xl bg-primary py-4 text-sm font-bold text-white hover:bg-primary/90 transition-all hover:-translate-y-0.5 shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <span class="flex items-center justify-center gap-2">
-                  Send OTP
+                  {{ 'AUTH.SEND_OTP_BTN' | translate }}
                   @if (loading) {
                     <span
                       class="h-5 w-5 rounded-full border-2 border-white/40 border-t-white animate-spin"
@@ -111,25 +111,24 @@
 
           @if (currentStep === 2) {
             <div class="text-center">
-              <h2 class="text-3xl md:text-4xl font-black tracking-tight text-text-main mb-2">Verify OTP</h2>
+              <h2 class="text-3xl md:text-4xl font-black tracking-tight text-text-main mb-2">{{ 'AUTH.VERIFY_OTP_TITLE' | translate }}</h2>
               <p class="text-sm font-medium text-text-main/50 text-center mb-8">
-                We sent an OTP to <span class="text-text-main font-medium">{{ savedUser }}</span
-                >.
+                {{ 'AUTH.VERIFY_OTP_SUBTITLE' | translate }} <span class="text-text-main font-medium">{{ savedUser }}</span>.
               </p>
             </div>
 
             <form [formGroup]="otpForm" (ngSubmit)="submitOtp()" class="mt-7 space-y-5">
               <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">OTP</label>
+                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">{{ 'AUTH.OTP' | translate }}</label>
                 <input
                   formControlName="otp"
                   type="text"
                   inputmode="numeric"
-                  placeholder="Enter OTP"
+                  [placeholder]="'AUTH.PLACEHOLDER_OTP' | translate"
                   class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all tracking-[0.3em] placeholder:text-text-main/30"
                 />
                 @if (otpForm.get('otp')?.touched && otpForm.get('otp')?.getError('required')) {
-                  <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"><i class="fas fa-exclamation-circle mr-1"></i> OTP is required</p>
+                  <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"><i class="fas fa-exclamation-circle mr-1"></i> {{ 'VALIDATION.REQUIRED' | translate }}</p>
                 }
               </div>
 
@@ -140,7 +139,7 @@
                   [disabled]="loading"
                   class="flex-1 rounded-2xl border border-border-main bg-background hover:bg-black/5 text-text-main font-semibold transition py-4 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Back
+                  {{ 'AUTH.BACK_BTN' | translate }}
                 </button>
 
                 <button
@@ -149,7 +148,7 @@
                   class="flex-1 w-full rounded-2xl bg-primary py-4 text-sm font-bold text-white hover:bg-primary/90 transition-all hover:-translate-y-0.5 shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <span class="flex items-center justify-center gap-2">
-                    Verify
+                    {{ 'AUTH.VERIFY_BTN' | translate }}
                     @if (loading) {
                       <span
                         class="h-5 w-5 rounded-full border-2 border-white/40 border-t-white animate-spin"
@@ -164,14 +163,14 @@
           @if (currentStep === 3) {
             <div class="text-center">
               <h2 class="text-3xl md:text-4xl font-black tracking-tight text-text-main mb-2">
-                Reset Password
+                {{ 'AUTH.RESET_PASSWORD_TITLE' | translate }}
               </h2>
-              <p class="text-sm font-medium text-text-main/50 text-center mb-8">Create a new password for your account.</p>
+              <p class="text-sm font-medium text-text-main/50 text-center mb-8">{{ 'AUTH.RESET_PASSWORD_SUBTITLE' | translate }}</p>
             </div>
 
             <form [formGroup]="resetForm" (ngSubmit)="submitReset()" class="mt-7 space-y-5">
               <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">New Password</label>
+                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">{{ 'AUTH.NEW_PASSWORD' | translate }}</label>
                 <div class="relative">
                   <input
                     [type]="showNewPass ? 'text' : 'password'"
@@ -179,7 +178,7 @@
                     [class.border-red-400]="
                       resetForm.get('newPassword')?.touched && resetForm.get('newPassword')?.invalid
                     "
-                    placeholder="Enter new password"
+                    [placeholder]="'AUTH.PLACEHOLDER_NEW_PASSWORD' | translate"
                     class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 pr-12 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-text-main/30"
                   />
                   <button
@@ -199,11 +198,11 @@
                 @if (nPass?.touched && nPass?.invalid) {
                   <div class="mt-2 space-y-1 ml-1">
                     @if (nPass?.errors?.['required']) {
-                      <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"><i class="fas fa-exclamation-circle mr-1"></i> Password is required</p>
+                      <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"><i class="fas fa-exclamation-circle mr-1"></i> {{ 'VALIDATION.REQUIRED' | translate }}</p>
                     }
                     @if (nPass?.errors?.['pattern']) {
                       <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                        <i class="fas fa-exclamation-circle mr-1"></i> Must include: Upper, lower, number, and special character (@$!%*?&).
+                        <i class="fas fa-exclamation-circle mr-1"></i> {{ 'VALIDATION.PASSWORD_MIN' | translate }}
                       </p>
                     }
                   </div>
@@ -211,7 +210,7 @@
               </div>
 
               <div class="mt-4">
-                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Confirm Password</label>
+                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">{{ 'AUTH.CONFIRM_PASSWORD' | translate }}</label>
                 <div class="relative">
                   <input
                     [type]="showConfirmPass ? 'text' : 'password'"
@@ -219,7 +218,7 @@
                     [class.border-red-400]="
                       resetForm.hasError('mismatch') && resetForm.get('confirmPassword')?.touched
                     "
-                    placeholder="Confirm new password"
+                    [placeholder]="'AUTH.PLACEHOLDER_CONFIRM_PASSWORD' | translate"
                     class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 pr-12 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-text-main/30"
                   />
                   <button
@@ -238,13 +237,13 @@
                 @if (resetForm.get('confirmPassword')?.touched) {
                   <div class="mt-2 space-y-1 ml-1">
                     @if (resetForm.get('confirmPassword')?.hasError('required')) {
-                      <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"><i class="fas fa-exclamation-circle mr-1"></i> Confirming password is required</p>
+                      <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"><i class="fas fa-exclamation-circle mr-1"></i> {{ 'VALIDATION.REQUIRED' | translate }}</p>
                     }
                     @if (
                       resetForm.hasError('mismatch') &&
                       !resetForm.get('confirmPassword')?.hasError('required')
                     ) {
-                      <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"><i class="fas fa-exclamation-circle mr-1"></i> Passwords do not match</p>
+                      <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"><i class="fas fa-exclamation-circle mr-1"></i> {{ 'VALIDATION.PASSWORD_MATCH' | translate }}</p>
                     }
                   </div>
                 }
@@ -257,7 +256,7 @@
                   [disabled]="loading"
                   class="flex-1 rounded-2xl border border-border-main bg-background hover:bg-black/5 text-text-main font-semibold transition py-4 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Back
+                  {{ 'AUTH.BACK_BTN' | translate }}
                 </button>
 
                 <button
@@ -266,7 +265,7 @@
                   class="flex-1 w-full rounded-2xl bg-primary py-4 text-sm font-bold text-white hover:bg-primary/90 transition-all hover:-translate-y-0.5 shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <span class="flex items-center justify-center gap-2">
-                    Reset Password
+                    {{ 'AUTH.RESET_BTN' | translate }}
                     @if (loading) {
                       <span
                         class="h-5 w-5 rounded-full border-2 border-white/40 border-t-white animate-spin"

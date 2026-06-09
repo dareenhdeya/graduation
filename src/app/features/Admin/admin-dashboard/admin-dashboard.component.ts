@@ -4,6 +4,7 @@ import { catchError, forkJoin, of } from 'rxjs';
 import { AdminServiceService } from '../services/admin-service.service';
 import { IADMIN } from '../interfaces/iadmin.interface';
 import { AdminActionsComponent } from '../admin-actions/admin-actions.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 type AdminStats = {
   users: number;
@@ -16,7 +17,7 @@ type AdminStats = {
 };
 @Component({
   selector: 'app-admin-dashboard',
-  imports: [RouterLink, AdminActionsComponent],
+  imports: [RouterLink, AdminActionsComponent, TranslateModule],
   templateUrl: './admin-dashboard.component.html',
   styleUrl: './admin-dashboard.component.css',
 })
