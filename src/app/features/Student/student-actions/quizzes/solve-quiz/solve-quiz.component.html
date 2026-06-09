@@ -163,16 +163,20 @@
                       {{ eIdx + 1 }}
                     </div>
                     <h3 class="text-xl md:text-2xl font-black text-text-main">
-                      {{
-                        exControl.value.exerciseType == 2 ? 'Matching Exercise' : 'Multiple Choice'
-                      }}
+                      @if (exControl.value.exerciseType == 1) { Multiple Choice }
+                      @else if (exControl.value.exerciseType == 2) { Matching Exercise }
+                      @else { Sign Language Quiz }
                     </h3>
                   </div>
                   <span
                     class="px-4 py-1.5 rounded-full bg-text-main/5 text-text-main/60 font-bold text-sm border border-border-main"
                   >
+                @if (exControl.value.exerciseType !== 3) {
+                  <span class="px-4 py-1.5 rounded-full bg-text-main/5 text-text-main/60 font-bold text-sm border border-border-main">
                     {{ getExerciseQuestions(eIdx).length }} Questions
                   </span>
+                }                 
+               </span>
                 </div>
 
                 <div formArrayName="questions">
@@ -267,7 +271,25 @@
                         </div>
                       }
                     </div>
-                  } @else {
+                  } 
+                  @else if (exControl.value.exerciseType == 3) {
+                    <!-- AI SIGN QUIZ -->
+                    <div class="flex flex-col items-center justify-center py-10 gap-6">
+                      <div class="text-center">
+                        <i class="fa-solid fa-hand-sparkles text-5xl text-primary mb-4"></i>
+                        <p class="text-text-main/60 font-semibold text-sm">
+                          This exercise uses sign language recognition.
+                        </p>
+                      </div>
+                      <button
+                        (click)="goToAiQuiz(eIdx)"
+                        class="cursor-pointer px-8 py-4 rounded-2xl bg-gradient-to-r from-violet-500 to-primary font-bold text-white shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-3 text-lg"
+                      >
+                        <i class="fa-solid fa-camera"></i>
+                        Start Sign Quiz
+                      </button>
+                    </div>
+                  }@else {
                     <!-- ═══ MATCHING — DRAW-A-LINE ═══ -->
                     <div class="space-y-6">
                       <!-- Instruction bar -->

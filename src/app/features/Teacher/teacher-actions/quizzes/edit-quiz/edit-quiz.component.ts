@@ -6,12 +6,12 @@ import { TeacherServiceService } from '../../../services/teacher-service.service
 import { ToastrService } from 'ngx-toastr';
 
 type AnswerType = 'text' | 'image';
-type ExerciseType = 'MCQ' | 'Matching';
+type ExerciseType = 'MCQ' | 'Matching' | 'AI';
 
 // Mirrors backend enum: None = 0, Lesson = 1, Quiz = 2
 export enum PerquisiteType {
-  None = 0,
-  Lesson = 1,
+    None = 0,
+    Lesson = 1,
 }
 
 @Component({
@@ -36,6 +36,13 @@ export class EditQuizComponent implements OnInit {
     submitError = '';
 
     difficulties = ['Easy', 'Medium', 'Hard'];
+
+    /** ─── AI Configs ─── */
+    isAISupported = false;
+    englishAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+    arabicAlphabet = 'أبتثجحخدذرزسشصضطظعغفقكلمنهوي'.split('');
+    activeAlphabetTabs: Map<number, 'english' | 'arabic'> = new Map();
+    aiLettersMaps: Map<number, Map<string, number>> = new Map();
 
     // ── Prerequisite ──────────────────────────────────────
     isLoadingPrerequisites = false;
@@ -98,6 +105,58 @@ export class EditQuizComponent implements OnInit {
         return this.exercises.at(eIndex).get('type')?.value as ExerciseType;
     }
 
+    // ── AI Methods ──
+
+    getAiLettersMap(eIndex: number): Map<string, number> 
+    {
+        // ensure exercise exists before accessing map
+        if (!this.aiLettersMaps.has(eIndex)) {
+            this.aiLettersMaps.set(eIndex, new Map());
+        }
+        return this.aiLettersMaps.get(eIndex)!;
+    }
+
+    getAiLettersEntries(eIndex: number): { letter: string; rounds: number }[] {
+        return Array.from(this.getAiLettersMap(eIndex).entries()).map(([letter, rounds]) => ({ letter, rounds }));
+    }
+
+    getAiTotalRounds(eIndex: number): number {
+        let total = 0;
+        this.getAiLettersMap(eIndex).forEach(v => total += v);
+        return total;
+    }
+
+    getActiveAlphabetTab(eIndex: number): 'english' | 'arabic' {
+        return this.activeAlphabetTabs.get(eIndex) ?? 'english';
+    }
+
+    setActiveAlphabetTab(eIndex: number, tab: 'english' | 'arabic'): void {
+        this.activeAlphabetTabs.set(eIndex, tab);
+    }
+
+    toggleLetter(eIndex: number, letter: string): void {
+        const map = this.getAiLettersMap(eIndex);
+        if (map.has(letter)) {
+            map.delete(letter);
+        } else {
+            map.set(letter, 1);
+        }
+    }
+
+    isLetterSelected(eIndex: number, letter: string): boolean {
+        return this.getAiLettersMap(eIndex).has(letter);
+    }
+
+    setLetterRounds(eIndex: number, letter: string, rounds: number): void {
+        if (rounds < 1) rounds = 1;
+        if (rounds > 20) rounds = 20;
+        this.getAiLettersMap(eIndex).set(letter, rounds);
+    }
+
+    removeLetter(eIndex: number, letter: string): void {
+        this.getAiLettersMap(eIndex).delete(letter);
+    }
+
     // ── Key helpers ────────────────────────────────────────
 
     private qImgKey(eIdx: number, qIdx: number): string { return `${eIdx}-${qIdx}`; }
@@ -139,7 +198,22 @@ export class EditQuizComponent implements OnInit {
         this.subjectId = this.route.snapshot.paramMap.get('sid');
         this.lessonId = this.route.snapshot.paramMap.get('lid');
         this.quizId = this.route.snapshot.paramMap.get('qid');
-        
+
+        if (this.subjectId) {
+            this.teacherService.getSubjects().subscribe({
+                next: (res) => {
+                    const sid = this.subjectId?.toLowerCase();
+                    const subject: any = res?.result?.find((s: any) => s.subjectId?.toLowerCase() === sid || s.id?.toLowerCase() === sid);
+                    if (subject) {
+                        this.isAISupported = subject.aI_supported === true ||
+                            subject.AI_supported === true ||
+                            subject.aI_Supported === true ||
+                            subject.ai_supported === true;
+                    }
+                }
+            });
+        }
+
         if (this.quizId && this.subjectId) {
             this.teacherService.viewQuiz(this.subjectId, this.quizId, this.lessonId).subscribe({
                 next: (res) => {
@@ -161,7 +235,7 @@ export class EditQuizComponent implements OnInit {
         let name = data.name || data.Name || data.title || data.Title || data.levelName || '';
         if (!name || name.trim() === '') name = 'Untitled Quiz';
         const passingPercentage = data.passingPercentage ?? data.PassingPercentage ?? data.passingGrade ?? data.PassingGrade ?? 60;
-        
+
         let diffStr = 'Medium';
         const diffInt = data.levelDifficulty ?? data.difficulty ?? data.Difficulty;
         if (diffInt === 0) diffStr = 'Easy';
@@ -195,13 +269,14 @@ export class EditQuizComponent implements OnInit {
         }
 
         const exercises = data.Exercise || data.exercise || data.exercises || data.items || [];
-        
+
         // Remove default exercise
         while (this.exercises.length) this.exercises.removeAt(0);
 
         exercises.forEach((ex: any, eIdx: number) => {
             const exTypeInt = ex.type ?? ex.Type ?? ex.exerciseType;
-            const exTypeStr: ExerciseType = (exTypeInt === 1 || exTypeInt === '1' || exTypeInt === 'MCQ') ? 'MCQ' : ((exTypeInt === 2 || exTypeInt === '2' || exTypeInt === 'Matching') ? 'Matching' : 'MCQ');
+            const exTypeStr: ExerciseType = (exTypeInt === 3 || exTypeInt === '3' || exTypeInt === 'AI') ? 'AI'
+                : (exTypeInt === 2 || exTypeInt === '2' || exTypeInt === 'Matching') ? 'Matching' : 'MCQ';
             let exName = ex.name || ex.Name || ex.title || ex.Title || '';
             if (!exName || exName.trim() === '') exName = 'Untitled Exercise';
             const exId = ex.id || ex.Id || null;
@@ -214,14 +289,26 @@ export class EditQuizComponent implements OnInit {
             });
             this.exercises.push(exGroup);
 
+            // ── AI: populate letter map ──
+            if (exTypeStr === 'AI') {
+                const aiLetters = ex.aI_letters || ex.ai_letters || ex.AI_letters || ex.aiLetters || {};
+                const map = this.getAiLettersMap(eIdx);
+                if (Array.isArray(aiLetters)) {
+                    aiLetters.forEach((item: any) => map.set(item.key ?? item.Key, item.value ?? item.Value ?? 1));
+                } else {
+                    Object.entries(aiLetters).forEach(([k, v]) => map.set(k, v as number));
+                }
+                return; // no questions to populate for AI
+            }
+
             const questionsList = ex.questions || ex.Questions || [];
             questionsList.forEach((q: any, qIdx: number) => {
                 let promptText = q.prompt_text || q.prompt || '';
                 if (!promptText || promptText.trim() === '') promptText = 'Untitled Question';
-                
+
                 const score = q.score || 10;
                 const qId = q.qid || q.Qid || q.id || q.Id || null;
-                
+
                 const qGroup = this.fb.group({
                     id: [qId],
                     prompt_text: [promptText],
@@ -237,60 +324,60 @@ export class EditQuizComponent implements OnInit {
                 if (qImgUrl) {
                     this.existingQuestionImgPaths.set(this.qImgKey(eIdx, qIdx), qImgUrl);
                 }
-                
+
                 if (exTypeStr === 'MCQ') {
-                     const mcqAnswers = q.answers || q.Answers || [];
-                     
-                     mcqAnswers.forEach((ans: any, aIdx: number) => {
-                         const answerVal = ans.answer || ans.Answer || '';
-                         const isCorrect = ans.isCorrect || ans.IsCorrect || false;
-                         const aGroup = this.fb.group({
-                             id: [ans.id || ans.Id || null],
-                             answer: [answerVal],
-                             isCorrect: [isCorrect]
-                         });
-                         this.answers(eIdx, qIdx).push(aGroup);
-                         const ansImgUrl = ans.imgPath || ans.ImgPath || null;
-                         // Image answer: answer text is empty AND backend stored an imgPath
-                         const isImageAnswer = !answerVal.trim() && !!ansImgUrl;
-                         if (isImageAnswer) {
-                             const aKey = this.aImgKey(eIdx, qIdx, aIdx);
-                             this.existingAnswerImgPaths.set(aKey, ansImgUrl);
-                             this.answerTypes.set(aKey, 'image');
-                         } else {
-                             this.answerTypes.set(this.aImgKey(eIdx, qIdx, aIdx), 'text');
-                         }
-                     });
-                     if (mcqAnswers.length === 0) {
-                         this.addAnswer(eIdx, qIdx);
-                         this.addAnswer(eIdx, qIdx);
-                     }
+                    const mcqAnswers = q.answers || q.Answers || [];
+
+                    mcqAnswers.forEach((ans: any, aIdx: number) => {
+                        const answerVal = ans.answer || ans.Answer || '';
+                        const isCorrect = ans.isCorrect || ans.IsCorrect || false;
+                        const aGroup = this.fb.group({
+                            id: [ans.id || ans.Id || null],
+                            answer: [answerVal],
+                            isCorrect: [isCorrect]
+                        });
+                        this.answers(eIdx, qIdx).push(aGroup);
+                        const ansImgUrl = ans.imgPath || ans.ImgPath || null;
+                        // Image answer: answer text is empty AND backend stored an imgPath
+                        const isImageAnswer = !answerVal.trim() && !!ansImgUrl;
+                        if (isImageAnswer) {
+                            const aKey = this.aImgKey(eIdx, qIdx, aIdx);
+                            this.existingAnswerImgPaths.set(aKey, ansImgUrl);
+                            this.answerTypes.set(aKey, 'image');
+                        } else {
+                            this.answerTypes.set(this.aImgKey(eIdx, qIdx, aIdx), 'text');
+                        }
+                    });
+                    if (mcqAnswers.length === 0) {
+                        this.addAnswer(eIdx, qIdx);
+                        this.addAnswer(eIdx, qIdx);
+                    }
                 } else {
-                     this.matchAnswerTypes.set(this.matchKey(eIdx, qIdx), 'text');
-                     let mAnswer = '';
-                     let mAnswerId = null;
-                     if (q.answer || q.Answer) {
-                       const mAnsObj = q.answer || q.Answer;
-                       mAnswer = mAnsObj.answer || mAnsObj.Answer || (typeof mAnsObj === 'string' ? mAnsObj : '');
-                       mAnswerId = mAnsObj.id || mAnsObj.Id || null;
-                       // Store existing match answer image URL if present
-                       const mImgUrl = mAnsObj.imgPath || mAnsObj.ImgPath || null;
-                       if (mImgUrl) {
-                           this.existingMatchImgPaths.set(this.matchKey(eIdx, qIdx), mImgUrl);
-                           this.matchAnswerTypes.set(this.matchKey(eIdx, qIdx), 'image');
-                       }
-                     }
-                     const mGroup = this.questions(eIdx).at(qIdx) as FormGroup;
-                     if (!mGroup.contains('matchAnswer')) {
-                         mGroup.addControl('matchAnswer', this.fb.control(mAnswer));
-                     } else {
-                         mGroup.get('matchAnswer')?.setValue(mAnswer);
-                     }
-                     if (!mGroup.contains('matchAnswerId')) {
-                         mGroup.addControl('matchAnswerId', this.fb.control(mAnswerId));
-                     } else {
-                         mGroup.get('matchAnswerId')?.setValue(mAnswerId);
-                     }
+                    this.matchAnswerTypes.set(this.matchKey(eIdx, qIdx), 'text');
+                    let mAnswer = '';
+                    let mAnswerId = null;
+                    if (q.answer || q.Answer) {
+                        const mAnsObj = q.answer || q.Answer;
+                        mAnswer = mAnsObj.answer || mAnsObj.Answer || (typeof mAnsObj === 'string' ? mAnsObj : '');
+                        mAnswerId = mAnsObj.id || mAnsObj.Id || null;
+                        // Store existing match answer image URL if present
+                        const mImgUrl = mAnsObj.imgPath || mAnsObj.ImgPath || null;
+                        if (mImgUrl) {
+                            this.existingMatchImgPaths.set(this.matchKey(eIdx, qIdx), mImgUrl);
+                            this.matchAnswerTypes.set(this.matchKey(eIdx, qIdx), 'image');
+                        }
+                    }
+                    const mGroup = this.questions(eIdx).at(qIdx) as FormGroup;
+                    if (!mGroup.contains('matchAnswer')) {
+                        mGroup.addControl('matchAnswer', this.fb.control(mAnswer));
+                    } else {
+                        mGroup.get('matchAnswer')?.setValue(mAnswer);
+                    }
+                    if (!mGroup.contains('matchAnswerId')) {
+                        mGroup.addControl('matchAnswerId', this.fb.control(mAnswerId));
+                    } else {
+                        mGroup.get('matchAnswerId')?.setValue(mAnswerId);
+                    }
                 }
             });
         });
@@ -371,7 +458,8 @@ export class EditQuizComponent implements OnInit {
 
         // Restore exercise-level fields
         const exTypeInt = exData.type ?? exData.Type ?? exData.exerciseType;
-        const exTypeStr: ExerciseType = (exTypeInt === 1 || exTypeInt === '1' || exTypeInt === 'MCQ') ? 'MCQ' : 'Matching';
+        const exTypeStr: ExerciseType = (exTypeInt === 3 || exTypeInt === '3' || exTypeInt === 'AI') ? 'AI'
+            : (exTypeInt === 2 || exTypeInt === '2' || exTypeInt === 'Matching') ? 'Matching' : 'MCQ';
         this.exercises.at(eIndex).get('name')?.setValue(exData.name || exData.Name || '');
         this.exercises.at(eIndex).get('type')?.setValue(exTypeStr);
 
@@ -417,7 +505,11 @@ export class EditQuizComponent implements OnInit {
         // Reset questions when switching type
         const qs = this.questions(eIndex);
         while (qs.length) qs.removeAt(0);
-        this.addQuestion(eIndex);
+        this.aiLettersMaps.delete(eIndex);
+        this.activeAlphabetTabs.delete(eIndex);
+        if (type !== 'AI') {
+            this.addQuestion(eIndex);
+        }
     }
 
     // ── Question management ────────────────────────────────
@@ -613,11 +705,11 @@ export class EditQuizComponent implements OnInit {
 
         if (this.levelForm.invalid) {
             this.levelForm.markAllAsTouched();
-            
+
             const errs: string[] = [];
             if (this.levelForm.get('name')?.invalid) errs.push('Level Title');
             if (this.levelForm.get('passingGradePercentage')?.invalid) errs.push('Passing Grade');
-            
+
             for (let e = 0; e < this.exercises.length; e++) {
                 const exGrp = this.exercises.at(e);
                 if (exGrp.get('name')?.invalid) errs.push(`Exercise ${e + 1} Name`);
@@ -628,7 +720,7 @@ export class EditQuizComponent implements OnInit {
                     if (qGrp.get('score')?.invalid) errs.push(`Exercise ${e + 1} Question ${q + 1} Score`);
                 }
             }
-            
+
             this.submitError = 'Invalid fields: ' + errs.join(', ') + '. Please fix them.';
             this.toastr.warning(this.submitError, 'Warning');
             return;
@@ -637,6 +729,13 @@ export class EditQuizComponent implements OnInit {
         // Validate each exercise's questions
         for (let e = 0; e < this.exercises.length; e++) {
             const type = this.getExerciseType(e);
+            if (type === 'AI') {
+                if (this.getAiLettersMap(e).size === 0) {
+                    this.submitError = `Exercise ${e + 1}: Select at least one letter for the AI Sign Language test.`;
+                    return;
+                }
+                continue;
+            }
             const qCount = this.questions(e).length;
 
             for (let q = 0; q < qCount; q++) {
@@ -683,8 +782,18 @@ export class EditQuizComponent implements OnInit {
         this.exercises.value.forEach((ex: any, eIndex: number) => {
             if (ex.id) formData.append(`ExerciseDTOs[${eIndex}].Id`, ex.id);
             formData.append(`ExerciseDTOs[${eIndex}].Name`, ex.name);
-            const typeVal = ex.type === 'MCQ' ? '1' : '2';
+            const typeVal = ex.type === 'AI' ? '3' : ex.type === 'Matching' ? '2' : '1';
             formData.append(`ExerciseDTOs[${eIndex}].Type`, typeVal);
+
+            if (ex.type === 'AI') {
+                let idx = 0;
+                this.getAiLettersMap(eIndex).forEach((rounds, letter) => {
+                    formData.append(`ExerciseDTOs[${eIndex}].AI_letters[${idx}].Key`, letter);
+                    formData.append(`ExerciseDTOs[${eIndex}].AI_letters[${idx}].Value`, String(rounds));
+                    idx++;
+                });
+                return;
+            }
 
             ex.questions.forEach((q: any, qIndex: number) => {
                 if (q.id) formData.append(`ExerciseDTOs[${eIndex}].questions[${qIndex}].Qid`, q.id);
@@ -733,10 +842,10 @@ export class EditQuizComponent implements OnInit {
                 this.isSubmitting = false;
                 this.submitSuccess = true;
                 setTimeout(() => {
-                   if (this.subjectId) {
-                      if (this.lessonId) this.router.navigate(['/teacher/subject', this.subjectId, 'lesson', this.lessonId, 'manage']);
-                      else this.router.navigate(['/teacher/subject', this.subjectId, 'quizzes']);
-                   }
+                    if (this.subjectId) {
+                        if (this.lessonId) this.router.navigate(['/teacher/subject', this.subjectId, 'lesson', this.lessonId, 'manage']);
+                        else this.router.navigate(['/teacher/subject', this.subjectId, 'quizzes']);
+                    }
                 }, 1500);
             },
             error: (err: any) => {

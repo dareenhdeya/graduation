@@ -542,4 +542,17 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
   getExerciseAnswers(eIdx: number): any[] {
     return this.getExercisesList(this.quizData())[eIdx]?.answers || [];
   }
+
+  goToAiQuiz(eIdx: number) {
+    const exercises = this.getExercisesList(this.quizData());
+    const ex = exercises[eIdx];
+    const aiLetters = ex?.aI_letters ?? ex?.ai_letters ?? {};
+    const subjectName = (this.quizData()?.subjectName ?? '').toLowerCase();
+
+    const route = subjectName === 'arabic' ? '/arabic-quiz' : '/quiz';
+
+    this.router.navigate([route], {
+      state: { aiLetters },
+    });
+  }
 }
