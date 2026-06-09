@@ -28,7 +28,11 @@
 
       <p class="pct">{{ Math.round((score / TOTAL_ROUNDS) * 100) }}%</p>
 
-      <button (click)="restart()">Play Again</button>
+      @if (returnUrl) {
+        <button (click)="returnToQuiz()">Return to Quiz</button>
+      } @else {
+        <button (click)="restart()">Play Again</button>
+      }
     </div>
   </div>
 

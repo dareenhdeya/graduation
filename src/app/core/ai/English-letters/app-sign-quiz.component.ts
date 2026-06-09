@@ -389,8 +389,9 @@
 //   readonly Math = Math;
 // }
 //===============================================================================
-import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Hands, Results, HAND_CONNECTIONS } from '@mediapipe/hands';
 import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils';
@@ -409,15 +410,20 @@ export class SignQuizComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('canvas') canvas!: ElementRef<HTMLCanvasElement>;
   @ViewChild('confettiCanvas') confettiCanvas!: ElementRef<HTMLCanvasElement>;
 
+  @Input() aiLetters?: Record<string, number>;
+  @Output() scoreSubmitted = new EventEmitter<number>();
+
+  returnUrl?: string;
+  exerciseIndex?: number;
+
   readonly Math = Math;
-  readonly TOTAL_ROUNDS = 5;
+  totalRounds = 5;
   readonly CORRECT_HOLD_MS = 1000;
   readonly CONFIDENCE_THRESHOLD = 0.6;
   readonly FRAMES_TO_CONFIRM = 6;
   readonly STABILITY_THRESHOLD = 0.7;
 
-  //no letter repeatition
-  private usedLetters: Set<string> = new Set();
+  private exerciseQueue: string[] = [];
   alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
   currentLetter = '';
@@ -439,15 +445,26 @@ export class SignQuizComponent implements OnInit, AfterViewInit, OnDestroy {
   private lastSentTime = 0;
   private lastResults?: Results;
 
-  constructor(private http: HttpClient, private celebration: CelebrationService) {}
+  constructor(
+    private http: HttpClient,
+    private celebration: CelebrationService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
-    this.pickLetter();
+    const state = history.state ?? {};
+    this.aiLetters = state.aiLetters ?? this.aiLetters;
+    this.returnUrl = state.returnUrl;
+    this.exerciseIndex = state.exerciseIndex;
+    this.buildQueue();
   }
-  // ───────────────── Lifecycle ─────────────────
+
   ngAfterViewInit() {
     this.initMediaPipe();
     this.initCamera();
+    if (this.exerciseQueue.length > 0) {
+      this.pickLetter();
+    }
   }
 
   ngOnDestroy() {
@@ -456,14 +473,29 @@ export class SignQuizComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   // ───────────────── Quiz logic ─────────────────
-  private pickLetter() {
-    //reset
-    if (this.usedLetters.size >= this.alphabet.length) {
-      this.usedLetters.clear();
+  private buildQueue() {
+    this.exerciseQueue = [];
+    if (!this.aiLetters) return;
+
+    for (const [letter, rounds] of Object.entries(this.aiLetters)) {
+      const upper = letter.toUpperCase();
+      if (this.alphabet.includes(upper)) {
+        for (let i = 0; i < (rounds as number); i++) {
+          this.exerciseQueue.push(upper);
+        }
+      }
     }
-    const pool = this.alphabet.filter((l) => !this.usedLetters.has(l));
-    this.currentLetter = pool[Math.floor(Math.random() * pool.length)];
-    this.usedLetters.add(this.currentLetter);
+    this.totalRounds = this.exerciseQueue.length || 5;
+  }
+
+  pickLetter() {
+    if (this.exerciseQueue.length === 0) {
+      this.state = 'finished';
+      this.emitScore();
+      return;
+    }
+
+    this.currentLetter = this.exerciseQueue.shift()!;
     this.correctStreak = 0;
     this.prevLandmarks = [];
     this.prediction = '';
@@ -640,14 +672,6 @@ export class SignQuizComponent implements OnInit, AfterViewInit, OnDestroy {
           }
 
           this.prediction = res.letter;
-          console.log(
-            'Target:',
-            this.currentLetter,
-            'Pred:',
-            res.letter,
-            'Streak:',
-            this.correctStreak
-          );
           if (res.letter === this.currentLetter) {
             this.correctStreak++;
             if (this.correctStreak >= this.FRAMES_TO_CONFIRM) this.handleCorrect();
@@ -663,50 +687,42 @@ export class SignQuizComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // ───────────────── Correct ─────────────────
   private handleCorrect() {
-    console.log('BEFORE =>', this.round, '/', this.TOTAL_ROUNDS);
     if (this.state === 'correct' || this.state === 'finished') return;
 
     this.state = 'correct';
     this.score++;
     this.round++;
-    console.log('AFTER =>', this.round, '/', this.TOTAL_ROUNDS);
-    console.log('round=', this.round);
-    console.log('state=', this.state);
     this.celebration.playClap();
     this.celebration.launchConfetti(this.confettiCanvas.nativeElement);
 
     setTimeout(() => {
-      console.log('CHECK =>', this.round, '/', this.TOTAL_ROUNDS);
-
-      if (this.round >= this.TOTAL_ROUNDS) {
-        console.log('FINISHED');
+      if (this.round >= this.totalRounds) {
         this.state = 'finished';
-        this.saveResult();
+        this.emitScore();
       } else {
         this.pickLetter();
       }
     }, this.CORRECT_HOLD_MS);
   }
 
-  private saveResult() {
-    this.http
-      .post('http://localhost:7168/api/Quiz', {
-        quizType: 'asl-letters-quiz',
-        score: this.score,
-        total: this.TOTAL_ROUNDS,
-        percentage: Math.round((this.score / this.TOTAL_ROUNDS) * 100),
-        completedAt: new Date().toISOString(),
-      })
-      .subscribe();
+  private emitScore() {
+    this.scoreSubmitted.emit(this.score);
+  }
+
+  returnToQuiz() {
+    if (!this.returnUrl) return;
+    this.router.navigateByUrl(this.returnUrl, {
+      state: { aiScore: this.score, exerciseIndex: this.exerciseIndex },
+    });
   }
 
   // ───────────────── Controls ─────────────────
   skipLetter() {
     if (this.state === 'finished') return;
     this.round++;
-    if (this.round >= this.TOTAL_ROUNDS) {
+    if (this.round >= this.totalRounds) {
       this.state = 'finished';
-      this.saveResult();
+      this.emitScore();
     } else this.pickLetter();
   }
 
@@ -714,12 +730,19 @@ export class SignQuizComponent implements OnInit, AfterViewInit, OnDestroy {
     this.score = 0;
     this.round = 0;
     this.correctStreak = 0;
-    this.usedLetters.clear();
+    this.prediction = '';
+    this.state = 'waiting';
+    this.buildQueue();
     this.pickLetter();
   }
+
+  get TOTAL_ROUNDS() {
+    return this.totalRounds;
+  }
+
   get progressPercent() {
     if (this.state === 'finished') return 100;
-    return Math.round(((this.round + 1) / this.TOTAL_ROUNDS) * 100);
+    return Math.round(((this.round + 1) / this.totalRounds) * 100);
   }
   get confidencePercent() {
     return Math.round(this.confidence * 100);

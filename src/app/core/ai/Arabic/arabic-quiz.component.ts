@@ -1,5 +1,6 @@
-import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Hands, Results, HAND_CONNECTIONS } from '@mediapipe/hands';
 import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils';
@@ -24,8 +25,14 @@ export class ArabicQuizComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('canvas') canvas!: ElementRef<HTMLCanvasElement>;
   @ViewChild('confettiCanvas') confettiCanvas!: ElementRef<HTMLCanvasElement>;
 
+  @Input() aiLetters?: Record<string, number>; // e.g., { 'ا': 2, 'ب': 3 }
+  @Output() scoreSubmitted = new EventEmitter<number>();
+
+  returnUrl?: string;
+  exerciseIndex?: number;
+
   readonly Math = Math;
-  readonly TOTAL_ROUNDS = 5;
+  totalRounds = 5;
   readonly FRAMES_TO_CONFIRM = 8;
   readonly SESSION = 'ar-' + Math.random().toString(36).slice(2);
 
@@ -61,8 +68,12 @@ export class ArabicQuizComponent implements OnInit, AfterViewInit, OnDestroy {
     { name: 'ta_marbuta', arabic: 'ة' },
   ];
 
-  // no reaptition
-  private usedLetters: Set<string> = new Set();
+  // Filtered letters based on exercise configuration
+  // private allowedLetters: ArabicLetter[] = [];
+  private exerciseQueue: ArabicLetter[] = [];
+
+  // // no repetition
+  // private usedLetters: Set<string> = new Set();
 
   currentLetter!: ArabicLetter;
   score = 0;
@@ -79,13 +90,26 @@ export class ArabicQuizComponent implements OnInit, AfterViewInit, OnDestroy {
   private animFrame = 0;
   private lastResults?: Results;
 
-  constructor(private http: HttpClient, private celebration: CelebrationService) {}
+  constructor(
+    private http: HttpClient,
+    private celebration: CelebrationService,
+    private router: Router
+  ) {}
+
   ngOnInit() {
-    this.pickLetter();
+    const state = history.state ?? {};
+    this.aiLetters = state.aiLetters ?? this.aiLetters;
+    this.returnUrl = state.returnUrl;
+    this.exerciseIndex = state.exerciseIndex;
+    this.buildQueue();
   }
+
   ngAfterViewInit() {
     this.initHands();
     this.initCamera();
+    if (this.exerciseQueue.length > 0) {
+      this.pickLetter();
+    }
   }
 
   ngOnDestroy() {
@@ -186,7 +210,7 @@ export class ArabicQuizComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private processLandmarks(results: Results) {
-    if (this.state === 'finished') return;
+    if (this.state === 'finished' || this.state === 'correct') return;
 
     if (!results.multiHandLandmarks?.length) {
       this.correctStreak = 0;
@@ -288,60 +312,145 @@ export class ArabicQuizComponent implements OnInit, AfterViewInit, OnDestroy {
     this.celebration.launchConfetti(this.confettiCanvas.nativeElement);
 
     setTimeout(() => {
-      if (this.round >= this.TOTAL_ROUNDS) {
+      if (this.round >= this.totalRounds) {
         this.state = 'finished';
-        this.saveResult();
+        this.emitScore();
       } else {
         this.pickLetter();
       }
     }, 1800);
   }
 
-  private saveResult() {
-    this.http
-      .post('http://localhost:7168/api/Quiz', {
-        quizType: 'arabic-letters',
-        score: this.score,
-        total: this.TOTAL_ROUNDS,
-        percentage: Math.round((this.score / this.TOTAL_ROUNDS) * 100),
-        completedAt: new Date().toISOString(),
-      })
-      .subscribe();
+  private emitScore() {
+    this.scoreSubmitted.emit(this.score);
+  }
+
+  returnToQuiz() {
+    if (!this.returnUrl) return;
+    this.router.navigateByUrl(this.returnUrl, {
+      state: { aiScore: this.score, exerciseIndex: this.exerciseIndex },
+    });
   }
 
   pickLetter() {
-    // reset
-    if (this.usedLetters.size >= this.LETTERS.length) {
-      this.usedLetters.clear();
+
+    if (this.exerciseQueue.length === 0) {
+
+        this.state = 'finished';
+
+        this.emitScore();
+
+        return;
     }
-    const pool = this.LETTERS.filter((l) => !this.usedLetters.has(l.name));
-    this.currentLetter = pool[Math.floor(Math.random() * pool.length)];
-    this.usedLetters.add(this.currentLetter.name);
+
+    this.currentLetter = { ...this.exerciseQueue.shift()! };
+
     this.correctStreak = 0;
+
     this.prediction = '';
+
     this.state = 'waiting';
   }
 
   skipLetter() {
     if (this.state === 'finished') return;
     this.round++;
-    if (this.round >= this.TOTAL_ROUNDS) {
+    if (this.round >= this.totalRounds) {
       this.state = 'finished';
-      this.saveResult();
+      this.emitScore();
     } else this.pickLetter();
   }
 
-  restart() {
-    this.score = 0;
-    this.round = 0;
-    this.correctStreak = 0;
-    this.usedLetters.clear();
-    this.pickLetter();
+ restart() {
+  this.score = 0;
+  this.round = 0;
+  this.correctStreak = 0;
+  this.prediction = '';
+  this.state = 'waiting';
+
+  this.buildQueue();   // 🔥 IMPORTANT
+  this.pickLetter();
+  }
+
+
+
+  private normalizeAiLetters(raw: any): Record<string, number> {
+    const src = raw ?? {};
+    if (Array.isArray(src)) {
+      return Object.fromEntries(
+        src.map((item: any) => [
+          item.key ?? item.Key,
+          Number(item.value ?? item.Value ?? 1),
+        ])
+      );
+    }
+
+    const result: Record<string, number> = {};
+    for (const [key, value] of Object.entries(src)) {
+      if (value != null && typeof value === 'object') {
+        const item = value as { key?: string; Key?: string; value?: number; Value?: number };
+        const letter = item.key ?? item.Key ?? key;
+        result[letter] = Number(item.value ?? item.Value ?? 1);
+      } else {
+        result[key] = Number(value);
+      }
+    }
+    return result;
+  }
+
+  /** Map teacher/UI variants (e.g. أ) to quiz letter forms (e.g. ا). */
+  private resolveLetter(key: string): ArabicLetter | undefined {
+    const aliases: Record<string, string> = {
+      'أ': 'ا',
+      'إ': 'ا',
+      'آ': 'ا',
+    };
+    const arabic = aliases[key] ?? key;
+
+    return this.LETTERS.find(
+      (l) => l.arabic === arabic || l.arabic === key || l.name === key
+    );
+  }
+
+  private buildQueue() {
+    this.exerciseQueue = [];
+
+    if (!this.aiLetters) return;
+
+    const letters = this.normalizeAiLetters(this.aiLetters);
+
+    for (const [letter, rounds] of Object.entries(letters)) {
+      const found = this.resolveLetter(letter);
+      const count = Math.max(0, Number(rounds) || 0);
+
+      if (found && count > 0) {
+        for (let i = 0; i < count; i++) {
+          this.exerciseQueue.push(found);
+        }
+      }
+    }
+
+    this.shuffleQueue();
+    this.totalRounds = this.exerciseQueue.length || 5;
+  }
+
+  private shuffleQueue() {
+    for (let i = this.exerciseQueue.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [this.exerciseQueue[i], this.exerciseQueue[j]] = [
+        this.exerciseQueue[j],
+        this.exerciseQueue[i],
+      ];
+    }
+  }
+
+  get TOTAL_ROUNDS() {
+    return this.totalRounds;
   }
 
   get progressPercent() {
     if (this.state === 'finished') return 100;
-    return Math.round(((this.round + 1) / this.TOTAL_ROUNDS) * 100);
+    return Math.round(((this.round + 1) / this.totalRounds) * 100);
   }
   get confidencePercent() {
     return Math.round(this.confidence * 100);
