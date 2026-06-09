@@ -224,6 +224,9 @@
       "TIME_LIMIT": "الوقت المحدد (دقائق)",
       "MAX_ATTEMPTS": "الحد الأقصى للمحاولات",
       "UNLIMITED_ATTEMPTS": "غير محدود"
+    },
+    "DICTIONARY": {
+      "TITLE": "قاموس لغة الإشارة"
     }
   },
 
@@ -259,7 +262,8 @@
       "COMPLETED_QUIZZES": "الاختبارات المكتملة",
       "AVERAGE_SCORE": "متوسط الدرجات",
       "CONTINUE_LEARNING": "متابعة التعلم",
-      "MY_PROGRESS": "تقدمي"
+      "MY_PROGRESS": "تقدمي",
+      "NO_ENROLLMENTS": "لم تسجّل في أي مادة بعد."
     },
     "QUIZ": {
       "TAKE_QUIZ": "أداء الاختبار",
@@ -366,7 +370,48 @@
     "PASSWORD_NEW": "كلمة المرور الجديدة",
     "PASSWORD_CONFIRM": "تأكيد كلمة المرور الجديدة",
     "PROFILE_UPDATED": "تم تحديث الملف الشخصي بنجاح!",
-    "PASSWORD_CHANGED": "تم تغيير كلمة المرور بنجاح!"
+    "PASSWORD_CHANGED": "تم تغيير كلمة المرور بنجاح!",
+    "LOADING": "جاري تحميل الملف الشخصي...",
+    "PASSWORD_BTN": "كلمة المرور",
+    "EDIT_BTN": "تعديل",
+    "VIEW_CV": "عرض السيرة الذاتية",
+    "UPDATE_CV": "تحديث السيرة الذاتية",
+    "CV_PREVIEW": "معاينة السيرة الذاتية",
+    "OPEN_NEW_TAB": "فتح في تبويب جديد",
+    "DETAILS": "التفاصيل",
+    "ACCOUNT_INFO": "معلومات الحساب",
+    "ADDRESS": "العنوان",
+    "BIRTH_DATE": "تاريخ الميلاد",
+    "WORK_STUDY": "العمل / الدراسة",
+    "ROLE_RELATED": "معلومات الدور",
+    "SUBJECT": "المادة",
+    "REGISTERED_COURSES": "المواد المسجّلة",
+    "VIEW_ALL": "عرض الكل",
+    "JOB": "الوظيفة",
+    "EDIT_SUBTITLE": "تحديث بياناتك الشخصية.",
+    "INVALID_FIRST_NAME": "الاسم الأول غير صحيح.",
+    "INVALID_LAST_NAME": "اسم العائلة غير صحيح.",
+    "PLACEHOLDER_EMAIL": "email@example.com",
+    "PHONE_FORMAT_ERROR": "يجب أن يتكون رقم الهاتف من 11 رقماً ويبدأ بـ 0.",
+    "PLACEHOLDER_ADDRESS": "أدخل عنوانك الكامل...",
+    "ADDRESS_TOO_SHORT": "العنوان قصير جداً (الحد الأدنى 10 أحرف).",
+    "PLACEHOLDER_JOB": "مثال: مهندس",
+    "JOB_TOO_SHORT": "عنوان الوظيفة قصير جداً (على الأقل حرفان).",
+    "SAVING": "جاري الحفظ...",
+    "CHOOSE_AVATAR": "اختر صورة رمزية",
+    "AVATAR_SUBTITLE": "اختر شخصية أو ارفع صورتك الخاصة.",
+    "UPLOAD_CUSTOM": "رفع صورة مخصصة",
+    "UPLOAD_LIMIT": "PNG، JPG حتى 2MB",
+    "SECURITY": "الأمان",
+    "SECURITY_SUBTITLE": "قم بتحديث كلمة مرورك بأمان.",
+    "MIN_CHARS": "الحد الأدنى 8 أحرف",
+    "PASS_MUST_CONTAIN": "يجب أن تحتوي كلمة المرور على:",
+    "PASS_UPPER_LOWER": "حروف كبيرة وصغيرة",
+    "PASS_NUMBER": "رقم واحد على الأقل",
+    "PASS_SPECIAL": "رمز خاص (@$!%*?)",
+    "UPDATING": "جاري التحديث...",
+    "UPDATE_PASSWORD": "تحديث كلمة المرور",
+    "PLACEHOLDER_NEW_PASS": "أنشئ كلمة مرور قوية"
   },
 
   "SETTINGS": {
@@ -430,5 +475,9 @@
     "COPIED": "تم النسخ إلى الحافظة!",
     "ENROLLED": "تم التسجيل بنجاح!",
     "QUIZ_SUBMITTED": "تم إرسال الاختبار بنجاح!"
+  },
+
+  "PARENT": {
+    "NO_CHILDREN": "لا يوجد أطفال مرتبطون بهذا الحساب."
   }
 }

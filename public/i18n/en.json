@@ -224,6 +224,9 @@
       "TIME_LIMIT": "Time Limit (minutes)",
       "MAX_ATTEMPTS": "Max Attempts",
       "UNLIMITED_ATTEMPTS": "Unlimited"
+    },
+    "DICTIONARY": {
+      "TITLE": "Sign Language Dictionary"
     }
   },
 
@@ -259,7 +262,8 @@
       "COMPLETED_QUIZZES": "Completed Quizzes",
       "AVERAGE_SCORE": "Average Score",
       "CONTINUE_LEARNING": "Continue Learning",
-      "MY_PROGRESS": "My Progress"
+      "MY_PROGRESS": "My Progress",
+      "NO_ENROLLMENTS": "You haven't enrolled in any subjects yet."
     },
     "QUIZ": {
       "TAKE_QUIZ": "Take Quiz",
@@ -366,7 +370,48 @@
     "PASSWORD_NEW": "New Password",
     "PASSWORD_CONFIRM": "Confirm New Password",
     "PROFILE_UPDATED": "Profile updated successfully!",
-    "PASSWORD_CHANGED": "Password changed successfully!"
+    "PASSWORD_CHANGED": "Password changed successfully!",
+    "LOADING": "Loading profile...",
+    "PASSWORD_BTN": "Password",
+    "EDIT_BTN": "Edit",
+    "VIEW_CV": "View CV",
+    "UPDATE_CV": "Update CV",
+    "CV_PREVIEW": "CV Preview",
+    "OPEN_NEW_TAB": "Open in new tab",
+    "DETAILS": "Details",
+    "ACCOUNT_INFO": "Account Info",
+    "ADDRESS": "Address",
+    "BIRTH_DATE": "Birth Date",
+    "WORK_STUDY": "Work / Study",
+    "ROLE_RELATED": "Role-related",
+    "SUBJECT": "Subject",
+    "REGISTERED_COURSES": "Registered Courses",
+    "VIEW_ALL": "View All",
+    "JOB": "Job",
+    "EDIT_SUBTITLE": "Update your personal information.",
+    "INVALID_FIRST_NAME": "Invalid first name.",
+    "INVALID_LAST_NAME": "Invalid last name.",
+    "PLACEHOLDER_EMAIL": "email@example.com",
+    "PHONE_FORMAT_ERROR": "Phone must be 11 digits starting with 0.",
+    "PLACEHOLDER_ADDRESS": "Enter your full home address...",
+    "ADDRESS_TOO_SHORT": "Address is too short (min 10 chars).",
+    "PLACEHOLDER_JOB": "e.g. Engineer",
+    "JOB_TOO_SHORT": "Job title must be at least 2 characters long.",
+    "SAVING": "Saving...",
+    "CHOOSE_AVATAR": "Choose an Avatar",
+    "AVATAR_SUBTITLE": "Select a character or upload your own.",
+    "UPLOAD_CUSTOM": "Upload Custom Image",
+    "UPLOAD_LIMIT": "PNG, JPG up to 2MB",
+    "SECURITY": "Security",
+    "SECURITY_SUBTITLE": "Update your password securely.",
+    "MIN_CHARS": "Minimum 8 characters required",
+    "PASS_MUST_CONTAIN": "Password must contain:",
+    "PASS_UPPER_LOWER": "Upper & Lowercase",
+    "PASS_NUMBER": "At least one Number",
+    "PASS_SPECIAL": "Special character (@$!%*?)",
+    "UPDATING": "Updating...",
+    "UPDATE_PASSWORD": "Update Password",
+    "PLACEHOLDER_NEW_PASS": "Create a strong password"
   },
 
   "SETTINGS": {
@@ -430,5 +475,9 @@
     "COPIED": "Copied to clipboard!",
     "ENROLLED": "Enrolled successfully!",
     "QUIZ_SUBMITTED": "Quiz submitted successfully!"
+  },
+
+  "PARENT": {
+    "NO_CHILDREN": "No linked children found."
   }
 }

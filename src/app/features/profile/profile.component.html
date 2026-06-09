@@ -1,14 +1,14 @@
 <section class="min-h-screen text-text-main px-4 py-10 transition-colors duration-300">
   <div class="mx-auto max-w-6xl">
     <h1 class="mb-8 text-4xl md:text-5xl font-black tracking-tight">
-      My <span class="text-primary">Profile</span>
+      {{ 'PROFILE.TITLE' | translate }}
     </h1>
 
     @if (loadingProfile) {
     <div
       class="rounded-3xl border border-border-main bg-surface p-12 text-center text-text-main/70 text-lg font-medium animate-pulse shadow-sm"
     >
-      <i class="fa-solid fa-circle-notch fa-spin mr-3 text-primary text-xl"></i> Loading profile...
+      <i class="fa-solid fa-circle-notch fa-spin mr-3 text-primary text-xl"></i> {{ 'PROFILE.LOADING' | translate }}
     </div>
     } @else if (error) {
     <div
@@ -88,14 +88,14 @@
               (click)="changepass()"
               class="col-span-2 rounded-xl border border-border-main bg-surface px-4 py-3 text-sm font-bold text-text-main/80 hover:text-primary hover:border-primary/40 transition-all shadow-sm cursor-pointer"
             >
-              <i class="fa-solid fa-lock mr-2 text-text-main/40"></i>Password
+              <i class="fa-solid fa-lock mr-2 text-text-main/40"></i>{{ 'PROFILE.PASSWORD_BTN' | translate }}
             </button>
 
             <button
               (click)="openEdit()"
               class="col-span-1 rounded-xl bg-primary px-4 py-3 text-sm font-bold text-white hover:bg-primary/90 transition-all shadow-sm cursor-pointer hover:-translate-y-0.5"
             >
-              <i class="fa-solid fa-pen mr-1.5"></i>Edit
+              <i class="fa-solid fa-pen mr-1.5"></i>{{ 'PROFILE.EDIT_BTN' | translate }}
             </button>
           </div>
 
@@ -115,7 +115,7 @@
               class="flex items-center justify-center gap-2 rounded-xl border border-border-main bg-surface px-4 py-3 text-sm font-bold text-text-main/80 hover:text-primary hover:border-primary/40 transition-all shadow-sm cursor-pointer"
             >
               <i class="fa-solid fa-file-pdf text-primary/70"></i>
-              View CV
+              {{ 'PROFILE.VIEW_CV' | translate }}
             </button>
             }
 
@@ -125,7 +125,7 @@
               class="flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-bold text-white hover:bg-primary/90 transition-all shadow-sm cursor-pointer"
             >
               <i class="fa-solid fa-upload"></i>
-              Update CV
+              {{ 'PROFILE.UPDATE_CV' | translate }}
             </button>
           </div>
 
@@ -157,7 +157,7 @@
                   >
                     <i class="fa-solid fa-file-pdf text-primary"></i>
                   </div>
-                  <span class="font-black text-text-main text-base tracking-tight">CV Preview</span>
+                  <span class="font-black text-text-main text-base tracking-tight">{{ 'PROFILE.CV_PREVIEW' | translate }}</span>
                 </div>
                 <div class="flex items-center gap-2">
                   <a
@@ -166,7 +166,7 @@
                     rel="noopener noreferrer"
                     class="inline-flex items-center gap-1.5 rounded-xl border border-border-main bg-surface px-3 py-2 text-xs font-bold text-text-main/70 hover:text-primary hover:border-primary/40 transition-all shadow-sm"
                   >
-                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Open in new tab
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> {{ 'PROFILE.OPEN_NEW_TAB' | translate }}
                   </a>
                   <button
                     type="button"
@@ -191,9 +191,9 @@
       <main class="lg:col-span-8 space-y-6">
         <div class="rounded-3xl border border-border-main bg-surface p-6 sm:p-8 shadow-sm">
           <div class="flex items-center justify-between mb-6">
-            <div class="font-black text-xl text-text-main tracking-tight">Details</div>
+            <div class="font-black text-xl text-text-main tracking-tight">{{ 'PROFILE.DETAILS' | translate }}</div>
             <span class="text-xs font-bold uppercase tracking-wider text-text-main/40"
-              >Account info</span
+              >{{ 'PROFILE.ACCOUNT_INFO' | translate }}</span
             >
           </div>
 
@@ -202,7 +202,7 @@
               class="rounded-2xl border border-border-main bg-surface p-5 hover:border-primary/20 transition-colors"
             >
               <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">
-                Phone
+                {{ 'PROFILE.PHONE' | translate }}
               </div>
               <div class="font-bold text-text-main text-lg">{{ p.phone || '-' }}</div>
             </div>
@@ -211,7 +211,7 @@
               class="rounded-2xl border border-border-main bg-surface p-5 hover:border-primary/20 transition-colors"
             >
               <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">
-                Birth Date
+                {{ 'PROFILE.BIRTH_DATE' | translate }}
               </div>
               <div class="font-bold text-text-main text-lg">{{ p.birthDate || '-' }}</div>
             </div>
@@ -220,7 +220,7 @@
               class="rounded-2xl border border-border-main bg-surface p-5 sm:col-span-2 hover:border-primary/20 transition-colors"
             >
               <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">
-                Address
+                {{ 'PROFILE.ADDRESS' | translate }}
               </div>
               <div class="font-bold text-text-main text-lg break-words">{{ p.address || '-' }}</div>
             </div>
@@ -229,9 +229,9 @@
 
         <div class="rounded-3xl border border-border-main bg-surface p-6 sm:p-8 shadow-sm">
           <div class="flex items-center justify-between mb-6">
-            <div class="font-black text-xl text-text-main tracking-tight">Work / Study</div>
+            <div class="font-black text-xl text-text-main tracking-tight">{{ 'PROFILE.WORK_STUDY' | translate }}</div>
             <span class="text-xs font-bold uppercase tracking-wider text-text-main/40"
-              >Role-related</span
+              >{{ 'PROFILE.ROLE_RELATED' | translate }}</span
             >
           </div>
 
@@ -241,7 +241,7 @@
               class="group relative rounded-2xl border border-border-main bg-surface p-5 transition-colors hover:border-primary/20"
             >
               <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2">
-                Subject
+                {{ 'PROFILE.SUBJECT' | translate }}
               </div>
 
               @if(p.role === 'Student') {
@@ -252,7 +252,7 @@
                   }}</span>
                   <span
                     class="text-[10px] font-bold uppercase tracking-wider text-text-main/40 leading-none"
-                    >Registered<br />Courses</span
+                    >{{ 'PROFILE.REGISTERED_COURSES' | translate }}</span
                   >
                 </div>
 
@@ -260,7 +260,7 @@
                   routerLink="/student/my-subjects"
                   class="group/btn flex items-center gap-2 rounded-xl bg-primary/10 border border-primary/20 px-4 py-2 text-xs font-bold text-primary transition-all hover:bg-primary/20 hover:-translate-y-0.5 active:scale-95"
                 >
-                  View All
+                  {{ 'PROFILE.VIEW_ALL' | translate }}
                   <i
                     class="fa-solid fa-arrow-right transition-transform group-hover/btn:translate-x-1"
                   ></i>
@@ -276,7 +276,7 @@
               class="rounded-2xl border border-border-main bg-surface p-5 hover:border-primary/20 transition-colors"
             >
               <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">
-                Job
+                {{ 'PROFILE.JOB' | translate }}
               </div>
               <div class="font-bold text-text-main text-lg">{{ p.job || '-' }}</div>
             </div>
@@ -316,9 +316,9 @@
               <i class="fa-solid fa-user-pen text-primary text-lg"></i>
             </div>
             <div>
-              <div class="text-xl font-black tracking-tight text-text-main">Edit Profile</div>
+              <div class="text-xl font-black tracking-tight text-text-main">{{ 'PROFILE.EDIT_PROFILE' | translate }}</div>
               <div class="text-sm font-medium text-text-main/60 mt-1">
-                Update your personal information.
+                {{ 'PROFILE.EDIT_SUBTITLE' | translate }}
               </div>
             </div>
           </div>
@@ -368,7 +368,7 @@
         <div class="rounded-2xl border border-border-main bg-surface p-5 shadow-inner">
           <label
             class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-3 pl-1"
-            >Name</label
+            >{{ 'COMMON.NAME' | translate }}</label
           >
           <div class="grid grid-cols-2 gap-4">
             <div>
@@ -376,11 +376,11 @@
                 formControlName="fName"
                 [class.border-red-500]="f.fName.touched && f.fName.errors"
                 class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm"
-                placeholder="First Name"
+                [placeholder]="'PROFILE.FIRST_NAME' | translate"
               />
               @if (f.fName.touched && f.fName.errors) {
               <p class="text-[10px] font-bold text-red-500 mt-2 pl-1">
-                <i class="fa-solid fa-circle-exclamation mr-1"></i> Invalid first name.
+                <i class="fa-solid fa-circle-exclamation mr-1"></i> {{ 'PROFILE.INVALID_FIRST_NAME' | translate }}
               </p>
               }
             </div>
@@ -389,11 +389,11 @@
                 formControlName="lName"
                 [class.border-red-500]="f.lName.touched && f.lName.errors"
                 class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm"
-                placeholder="Last Name"
+                [placeholder]="'PROFILE.LAST_NAME' | translate"
               />
               @if (f.lName.touched && f.lName.errors) {
               <p class="text-[10px] font-bold text-red-500 mt-2 pl-1">
-                <i class="fa-solid fa-circle-exclamation mr-1"></i> Invalid last name.
+                <i class="fa-solid fa-circle-exclamation mr-1"></i> {{ 'PROFILE.INVALID_LAST_NAME' | translate }}
               </p>
               }
             </div>
@@ -403,19 +403,19 @@
         <div class="rounded-2xl border border-border-main bg-surface p-5 shadow-inner">
           <label
             class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-3 pl-1"
-            >Email</label
+            >{{ 'PROFILE.EMAIL' | translate }}</label
           >
           <input
             formControlName="email"
             [class.border-red-500]="f.email.touched && f.email.errors"
             class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm"
-            placeholder="email@example.com"
+            [placeholder]="'PROFILE.PLACEHOLDER_EMAIL' | translate"
           />
           @if (f.email.touched && f.email.errors) {
           <div class="text-[10px] font-bold text-red-500 mt-2 pl-1">
             @if (f.email.errors['email']) {
             <span
-              ><i class="fa-solid fa-circle-exclamation mr-1"></i> Please enter a valid email.</span
+            ><i class="fa-solid fa-circle-exclamation mr-1"></i> {{ 'VALIDATION.EMAIL_INVALID' | translate }}</span
             >
             }
           </div>
@@ -425,20 +425,19 @@
         <div class="rounded-2xl border border-border-main bg-surface p-5 shadow-inner">
           <label
             class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-3 pl-1"
-            >Phone</label
+            >{{ 'PROFILE.PHONE' | translate }}</label
           >
           <input
             formControlName="phone"
             [class.border-red-500]="f.phone.touched && f.phone.errors"
             class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm placeholder:text-text-main/30 placeholder:font-medium"
-            placeholder="01#########"
+            [placeholder]="'AUTH.PLACEHOLDER_PHONE' | translate"
           />
           @if (f.phone.touched && f.phone.errors) {
           <div class="text-[10px] font-bold text-red-500 mt-2 pl-1">
             @if (f.phone.errors['pattern']) {
             <span
-              ><i class="fa-solid fa-circle-exclamation mr-1"></i> Phone must be 11 digits starting
-              with 0.</span
+              ><i class="fa-solid fa-circle-exclamation mr-1"></i> {{ 'PROFILE.PHONE_FORMAT_ERROR' | translate }}</span
             >
             }
           </div>
@@ -448,13 +447,13 @@
         <div class="rounded-2xl border border-border-main bg-surface p-5 shadow-inner">
           <label
             class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-3 pl-1"
-            >Address</label
+            >{{ 'PROFILE.ADDRESS' | translate }}</label
           >
           <input
             formControlName="address"
             [class.border-red-500]="f['address'].touched && f['address'].errors"
             class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm placeholder:text-text-main/30 placeholder:font-medium"
-            placeholder="Enter your full home address..."
+            [placeholder]="'PROFILE.PLACEHOLDER_ADDRESS' | translate"
           />
           @if (f['address'].touched && f['address'].errors) {
           <div
@@ -462,8 +461,7 @@
           >
             @if (f['address'].errors?.['minlength']) {
             <span
-              ><i class="fa-solid fa-circle-exclamation mr-1"></i> Address is too short (min 10
-              chars).</span
+              ><i class="fa-solid fa-circle-exclamation mr-1"></i> {{ 'PROFILE.ADDRESS_TOO_SHORT' | translate }}</span
             >
             }
           </div>
@@ -474,20 +472,19 @@
         <div class="rounded-2xl border border-border-main bg-surface p-5 shadow-inner">
           <label
             class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-3 pl-1"
-            >Job</label
+            >{{ 'PROFILE.JOB' | translate }}</label
           >
           <input
             formControlName="job"
             [class.border-red-500]="f['job'].touched && f['job'].errors"
             class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm placeholder:text-text-main/30 placeholder:font-medium"
-            placeholder="e.g. Engineer"
+            [placeholder]="'PROFILE.PLACEHOLDER_JOB' | translate"
           />
           @if (f['job'].touched && f['job'].errors) {
           <div class="text-[10px] font-bold text-red-500 mt-2 pl-1">
             @if (f['job'].errors?.['minlength']) {
             <span
-              ><i class="fa-solid fa-circle-exclamation mr-1"></i> Job title must be at least 2
-              characters long.</span
+              ><i class="fa-solid fa-circle-exclamation mr-1"></i> {{ 'PROFILE.JOB_TOO_SHORT' | translate }}</span
             >
             }
           </div>
@@ -506,7 +503,7 @@
         class="p-6 sm:px-8 sm:py-5 border-t border-border-main bg-surface flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between z-10"
       >
         <div class="text-sm font-bold text-text-main/50">
-          @if (loadingEdit) { <i class="fa-solid fa-spinner fa-spin mr-2"></i>Saving... }
+          @if (loadingEdit) { <i class="fa-solid fa-spinner fa-spin mr-2"></i>{{ 'PROFILE.SAVING' | translate }} }
         </div>
 
         <div class="flex items-center gap-3">
@@ -515,7 +512,7 @@
             class="rounded-xl cursor-pointer border border-border-main bg-surface px-5 py-2.5 text-sm font-bold text-text-main/70 hover:text-text-main hover:border-text-main/30 transition-all shadow-sm w-full sm:w-auto text-center"
             (click)="showEditModal = false"
           >
-            Cancel
+            {{ 'COMMON.CANCEL' | translate }}
           </button>
 
           <button
@@ -523,7 +520,7 @@
             [disabled]="loadingEdit || editForm.invalid"
             class="rounded-xl cursor-pointer px-6 py-2.5 text-sm font-bold transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed bg-primary hover:bg-primary/90 text-white shadow-primary/20 enabled:hover:-translate-y-0.5 w-full sm:w-auto text-center"
           >
-            Save Changes
+            {{ 'PROFILE.SAVE_CHANGES' | translate }}
           </button>
         </div>
       </div>
@@ -539,9 +536,9 @@
       >
         <div class="flex items-center justify-between mb-8">
           <div>
-            <h3 class="text-2xl font-black text-text-main tracking-tight">Choose an Avatar</h3>
+            <h3 class="text-2xl font-black text-text-main tracking-tight">{{ 'PROFILE.CHOOSE_AVATAR' | translate }}</h3>
             <p class="text-sm font-medium text-text-main/50 mt-1">
-              Select a character or upload your own.
+              {{ 'PROFILE.AVATAR_SUBTITLE' | translate }}
             </p>
           </div>
           <button
@@ -573,9 +570,9 @@
             ></i>
           </button>
           <div>
-            <div class="text-base font-bold text-text-main">Upload Custom Image</div>
+            <div class="text-base font-bold text-text-main">{{ 'PROFILE.UPLOAD_CUSTOM' | translate }}</div>
             <div class="text-xs font-bold uppercase tracking-wider text-text-main/40 mt-1">
-              PNG, JPG up to 2MB
+              {{ 'PROFILE.UPLOAD_LIMIT' | translate }}
             </div>
           </div>
         </div>
@@ -603,7 +600,7 @@
             (click)="closeAvatarPicker()"
             class="cursor-pointer rounded-xl border border-border-main bg-surface px-6 py-2.5 text-sm font-bold text-text-main/70 hover:text-text-main transition-all shadow-sm"
           >
-            Close
+            {{ 'COMMON.CLOSE' | translate }}
           </button>
         </div>
       </div>
@@ -637,9 +634,9 @@
             <i class="fa-solid fa-lock text-amber-500 text-lg"></i>
           </div>
           <div>
-            <div class="text-xl font-black tracking-tight text-text-main">Security</div>
+            <div class="text-xl font-black tracking-tight text-text-main">{{ 'PROFILE.SECURITY' | translate }}</div>
             <div class="text-sm font-medium text-text-main/60 mt-1">
-              Update your password securely.
+              {{ 'PROFILE.SECURITY_SUBTITLE' | translate }}
             </div>
           </div>
         </div>
@@ -656,7 +653,7 @@
         <div class="rounded-2xl border border-border-main bg-surface p-5 shadow-inner">
           <label
             class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-3 pl-1"
-            >Current Password</label
+            >{{ 'PROFILE.PASSWORD_CURRENT' | translate }}</label
           >
           <div class="relative">
             <input
@@ -680,7 +677,7 @@
           @if (changePassForm.get('oldPassword')?.touched &&
           changePassForm.get('oldPassword')?.errors?.['required']) {
           <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1">
-            <i class="fa-solid fa-circle-exclamation"></i> Current password is required
+            <i class="fa-solid fa-circle-exclamation"></i> {{ 'VALIDATION.REQUIRED' | translate }}
           </p>
           }
         </div>
@@ -688,7 +685,7 @@
         <div class="rounded-2xl border border-border-main bg-surface p-5 shadow-inner">
           <label
             class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-3 pl-1"
-            >New Password</label
+            >{{ 'PROFILE.PASSWORD_NEW' | translate }}</label
           >
           <div class="relative">
             <input
@@ -699,7 +696,7 @@
                 changePassForm.get('newPassword')?.invalid
               "
               class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 pr-12 text-sm font-semibold text-text-main outline-none transition-all focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 shadow-sm placeholder:text-text-main/30"
-              placeholder="Create a strong password"
+              [placeholder]="'PROFILE.PLACEHOLDER_NEW_PASS' | translate"
             />
             <button
               type="button"
@@ -715,31 +712,30 @@
           <div class="mt-3 space-y-2 px-1 animate-in fade-in slide-in-from-top-1">
             @if (newPass?.errors?.['required']) {
             <p class="text-[10px] font-bold text-red-500 flex items-center gap-1">
-              <i class="fa-solid fa-circle-exclamation"></i> New password is required
+              <i class="fa-solid fa-circle-exclamation"></i> {{ 'VALIDATION.REQUIRED' | translate }}
             </p>
             } @if (newPass?.errors?.['minlength']) {
             <p class="text-[10px] font-bold text-amber-500 flex items-center gap-1">
-              <i class="fa-solid fa-circle-info"></i> Minimum 8 characters required
+              <i class="fa-solid fa-circle-info"></i> {{ 'PROFILE.MIN_CHARS' | translate }}
             </p>
             } @if (newPass?.errors?.['pattern']) {
             <div
               class="rounded-xl bg-surface border border-border-main p-3 space-y-2 mt-2 shadow-sm"
             >
               <p class="text-[10px] text-text-main font-bold uppercase tracking-wider mb-1">
-                Password must contain:
+                {{ 'PROFILE.PASS_MUST_CONTAIN' | translate }}
               </p>
               <ul class="grid grid-cols-2 gap-x-2 gap-y-1.5">
                 <li class="text-[10px] font-medium text-text-main/60 flex items-center gap-1.5">
-                  <i class="fa-solid fa-check text-[8px] text-amber-500"></i> Upper & Lowercase
+                  <i class="fa-solid fa-check text-[8px] text-amber-500"></i> {{ 'PROFILE.PASS_UPPER_LOWER' | translate }}
                 </li>
                 <li class="text-[10px] font-medium text-text-main/60 flex items-center gap-1.5">
-                  <i class="fa-solid fa-check text-[8px] text-amber-500"></i> At least one Number
+                  <i class="fa-solid fa-check text-[8px] text-amber-500"></i> {{ 'PROFILE.PASS_NUMBER' | translate }}
                 </li>
                 <li
                   class="text-[10px] font-medium text-text-main/60 flex items-center gap-1.5 col-span-2"
                 >
-                  <i class="fa-solid fa-check text-[8px] text-amber-500"></i> Special character
-                  (@$!%*?)
+                  <i class="fa-solid fa-check text-[8px] text-amber-500"></i> {{ 'PROFILE.PASS_SPECIAL' | translate }}
                 </li>
               </ul>
             </div>
@@ -766,15 +762,15 @@
           class="rounded-xl cursor-pointer border border-border-main bg-surface px-5 py-2.5 text-sm font-bold text-text-main/70 hover:text-text-main hover:border-text-main/30 transition-all shadow-sm"
           (click)="showChangePassModal = false"
         >
-          Cancel
+          {{ 'COMMON.CANCEL' | translate }}
         </button>
         <button
           type="submit"
           [disabled]="loadingChangePass || changePassForm.invalid"
           class="rounded-xl cursor-pointer px-6 py-2.5 text-sm font-bold transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed bg-amber-500 hover:bg-amber-600 text-white shadow-amber-500/20 enabled:hover:-translate-y-0.5"
         >
-          @if(loadingChangePass){ <i class="fa-solid fa-spinner fa-spin mr-2"></i>Updating... }
-          @else { Update Password }
+          @if(loadingChangePass){ <i class="fa-solid fa-spinner fa-spin mr-2"></i>{{ 'PROFILE.UPDATING' | translate }} }
+          @else { {{ 'PROFILE.UPDATE_PASSWORD' | translate }} }
         </button>
       </div>
     </form>
