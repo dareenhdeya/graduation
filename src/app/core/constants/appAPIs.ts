@@ -53,7 +53,11 @@ export const APP_APIs = {
   teacherListPrerequisites: `${environment.apiUrl}Teacher/list-Perquisites`,
   teacherDeleteLevel: `${environment.apiUrl}Teacher/Delete-Level`,
   teacherUpdateCv: `${environment.apiUrl}Teacher/Update-CV`,
-  
+  teacherGetStudentProgress: (sid: string, stdID: string) => 
+    `${environment.apiUrl}Teacher/Get-Student-Progress/${sid}/${stdID}`,
+  teacherGetAllStudentsProgress: (sid: string) =>
+    `${environment.apiUrl}Teacher/Get-students-progress/${sid}`,
+
   //* Student
   studentGetAllSubjects: `${environment.apiUrl}Student/View-Subjects`,
   studentGetSubjectDetails: (id: string) => `${environment.apiUrl}Student/View-Subject/${id}`,

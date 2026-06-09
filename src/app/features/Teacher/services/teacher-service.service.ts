@@ -122,6 +122,14 @@ export class TeacherServiceService extends baseHttp {
     );
   }
 
+  getStudentProgress(subjectId: string, studentId: string) {
+    return this.get<any>(APP_APIs.teacherGetStudentProgress(subjectId, studentId), {});
+  }
+
+  getAllStudentsProgress(subjectId: string) {
+    return this.get<any>(APP_APIs.teacherGetAllStudentsProgress(subjectId), {});
+  }
+
   // // Converts Array to FormData
   // private handleDictionaryForm(data: IWordAttachment[]): FormData {
   //   const formData = new FormData();
