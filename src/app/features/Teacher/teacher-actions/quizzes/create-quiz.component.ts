@@ -6,7 +6,7 @@ import { TeacherServiceService } from '../../services/teacher-service.service';
 import { ToastrService } from 'ngx-toastr';
 
 type AnswerType = 'text' | 'image';
-type ExerciseType = 'MCQ' | 'Matching';
+type ExerciseType = 'MCQ' | 'Matching' | 'AI';
 
 // Mirrors backend enum: None = 0, Lesson = 1, Quiz = 2
 export enum PerquisiteType {
@@ -37,7 +37,14 @@ export class CreateQuizComponent implements OnInit {
 
     difficulties = ['Easy', 'Medium', 'Hard'];
 
-    // ── Prerequisite ──────────────────────────────────────
+    /** ─── AI Configs ─── */
+    isAISupported = false;
+    englishAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+    arabicAlphabet = 'أبتثجحخدذرزسشصضطظعغفقكلمنهوي'.split('');
+    activeAlphabetTabs: Map<number, 'english' | 'arabic'> = new Map();
+    aiLettersMaps: Map<number, Map<string, number>> = new Map();
+
+    // ── Prerequisite ──
     isLoadingPrerequisites = false;
     prerequisiteOptions: { id: string; title: string }[] = [];
 
@@ -46,9 +53,7 @@ export class CreateQuizComponent implements OnInit {
         { value: PerquisiteType.Lesson, label: 'Lesson' },
     ];
 
-    // ── Image maps: keys are 'eIdx-qIdx' for question images,
-    //               'eIdx-qIdx-aIdx' for MCQ answer images,
-    //               'eIdx-qIdx-match' for Matching answer images
+    // ── Image maps ──
     questionImages: Map<string, File> = new Map();
     answerImages: Map<string, File> = new Map();
     matchAnswerImages: Map<string, File> = new Map();
@@ -72,7 +77,7 @@ export class CreateQuizComponent implements OnInit {
         exercises: this.fb.array([]),
     });
 
-    // ── Accessors ──────────────────────────────────────────
+    // ── Accessors ──
 
     get exercises(): FormArray {
         return this.levelForm.get('exercises') as FormArray;
@@ -90,15 +95,88 @@ export class CreateQuizComponent implements OnInit {
         return this.exercises.at(eIndex).get('type')?.value as ExerciseType;
     }
 
-    // ── Key helpers ────────────────────────────────────────
+    // ── Key helpers ──
 
     private qImgKey(eIdx: number, qIdx: number): string { return `${eIdx}-${qIdx}`; }
     private aImgKey(eIdx: number, qIdx: number, aIdx: number): string { return `${eIdx}-${qIdx}-${aIdx}`; }
     private matchKey(eIdx: number, qIdx: number): string { return `${eIdx}-${qIdx}-match`; }
 
-    // ── Lifecycle ──────────────────────────────────────────
+    // ── Lifecycle ──
 
-    // ── Prerequisite helpers ─────────────────────────────
+    ngOnInit(): void {
+        this.subjectId = this.route.snapshot.paramMap.get('sid');
+        this.lessonId = this.route.snapshot.paramMap.get('lid');
+
+        if (this.subjectId) {
+            this.teacherService.getSubjects().subscribe({
+                next: (res) => {
+                    const sid = this.subjectId?.toLowerCase();
+                    const subject: any = res?.result?.find((s: any) => s.subjectId?.toLowerCase() === sid || s.id?.toLowerCase() === sid);
+                    console.log('Found Subject:', subject);
+                    if (subject) {
+                        this.isAISupported = subject.aI_supported === true ||
+                            subject.AI_supported === true ||
+                            subject.aI_Supported === true ||
+                            subject.ai_supported === true;
+                    }
+                }
+            });
+        }
+
+        this.addExercise();
+    }
+
+    // ── AI Methods ──
+
+    getAiLettersMap(eIndex: number): Map<string, number> {
+        if (!this.aiLettersMaps.has(eIndex)) {
+            this.aiLettersMaps.set(eIndex, new Map());
+        }
+        return this.aiLettersMaps.get(eIndex)!;
+    }
+
+    getAiLettersEntries(eIndex: number): { letter: string; rounds: number }[] {
+        return Array.from(this.getAiLettersMap(eIndex).entries()).map(([letter, rounds]) => ({ letter, rounds }));
+    }
+
+    getAiTotalRounds(eIndex: number): number {
+        let total = 0;
+        this.getAiLettersMap(eIndex).forEach(v => total += v);
+        return total;
+    }
+
+    getActiveAlphabetTab(eIndex: number): 'english' | 'arabic' {
+        return this.activeAlphabetTabs.get(eIndex) ?? 'english';
+    }
+
+    setActiveAlphabetTab(eIndex: number, tab: 'english' | 'arabic'): void {
+        this.activeAlphabetTabs.set(eIndex, tab);
+    }
+
+    toggleLetter(eIndex: number, letter: string): void {
+        const map = this.getAiLettersMap(eIndex);
+        if (map.has(letter)) {
+            map.delete(letter);
+        } else {
+            map.set(letter, 1);
+        }
+    }
+
+    isLetterSelected(eIndex: number, letter: string): boolean {
+        return this.getAiLettersMap(eIndex).has(letter);
+    }
+
+    setLetterRounds(eIndex: number, letter: string, rounds: number): void {
+        if (rounds < 1) rounds = 1;
+        if (rounds > 20) rounds = 20;
+        this.getAiLettersMap(eIndex).set(letter, rounds);
+    }
+
+    removeLetter(eIndex: number, letter: string): void {
+        this.getAiLettersMap(eIndex).delete(letter);
+    }
+
+    // ── Prerequisite helpers ──
 
     get selectedPrereqType(): number {
         return this.levelForm.get('perquisiteType')?.value ?? PerquisiteType.None;
@@ -120,20 +198,13 @@ export class CreateQuizComponent implements OnInit {
                     this.isLoadingPrerequisites = false;
                 },
                 error: (err) => {
-                    console.error('Error loading prerequisites', err);
                     this.isLoadingPrerequisites = false;
                 },
             });
         }
     }
 
-    ngOnInit(): void {
-        this.subjectId = this.route.snapshot.paramMap.get('sid');
-        this.lessonId = this.route.snapshot.paramMap.get('lid');
-        this.addExercise();
-    }
-
-    // ── Exercise management ────────────────────────────────
+    // ── Exercise management ──
 
     addExercise(): void {
         const group = this.fb.group({
@@ -147,7 +218,6 @@ export class CreateQuizComponent implements OnInit {
     }
 
     removeExercise(eIndex: number): void {
-        // Clean up image maps for this exercise
         for (const key of [...this.questionImages.keys(), ...this.answerImages.keys(), ...this.matchAnswerImages.keys(), ...this.matchAnswerTypes.keys(), ...this.answerTypes.keys()]) {
             if (key.startsWith(`${eIndex}-`)) {
                 this.questionImages.delete(key);
@@ -160,12 +230,15 @@ export class CreateQuizComponent implements OnInit {
                 this.answerTypes.delete(key);
             }
         }
+        this.aiLettersMaps.delete(eIndex);
+        this.activeAlphabetTabs.delete(eIndex);
         this.exercises.removeAt(eIndex);
     }
 
-    /** Clear all text/image content from an exercise while keeping its structure. */
     clearExercise(eIndex: number): void {
         this.exercises.at(eIndex).get('name')?.setValue('');
+        this.aiLettersMaps.delete(eIndex);
+
         const qs = this.questions(eIndex);
         for (let q = 0; q < qs.length; q++) {
             qs.at(q).get('prompt_text')?.setValue('');
@@ -187,46 +260,44 @@ export class CreateQuizComponent implements OnInit {
         }
     }
 
-    /** Reset an exercise back to a fresh default state (1 question, 2 answers). */
     resetExercise(eIndex: number): void {
-        // Clean up all maps for this exercise
         for (const map of [this.questionImages, this.answerImages, this.matchAnswerImages, this.questionPreviews, this.answerPreviews, this.matchAnswerPreviews, this.matchAnswerTypes, this.answerTypes] as Map<string, any>[]) {
             for (const key of [...map.keys()]) {
                 if (key.startsWith(`${eIndex}-`)) map.delete(key);
             }
         }
-        // Remove all existing questions
+        this.aiLettersMaps.delete(eIndex);
+        this.activeAlphabetTabs.delete(eIndex);
+
         const qs = this.questions(eIndex);
         while (qs.length) qs.removeAt(0);
-        // Reset exercise-level fields to defaults
         this.exercises.at(eIndex).get('name')?.setValue('');
         this.exercises.at(eIndex).get('type')?.setValue('MCQ');
-        // Add one fresh question
         this.addQuestion(eIndex);
     }
 
     setExerciseType(eIndex: number, type: ExerciseType): void {
         this.exercises.at(eIndex).get('type')?.setValue(type);
-        // Reset questions when switching type
         const qs = this.questions(eIndex);
         while (qs.length) qs.removeAt(0);
-        this.addQuestion(eIndex);
+
+        if (type !== 'AI') {
+            this.addQuestion(eIndex);
+        }
     }
 
-    // ── Question management ────────────────────────────────
+    // ── Question management ──
 
     addQuestion(eIndex: number): void {
         const questionGroup = this.fb.group({
             prompt_text: [''],
             score: [10, [Validators.required, Validators.min(1)]],
-            matchAnswer: [''],        // used only for Matching type
+            matchAnswer: [''],
             answers: this.fb.array([]),
         });
         this.questions(eIndex).push(questionGroup);
         const qIndex = this.questions(eIndex).length - 1;
-        // Default to 'text' for matching answer
         this.matchAnswerTypes.set(this.matchKey(eIndex, qIndex), 'text');
-        // Add initial MCQ choices
         this.addAnswer(eIndex, qIndex);
         this.addAnswer(eIndex, qIndex);
     }
@@ -244,7 +315,7 @@ export class CreateQuizComponent implements OnInit {
         this.questions(eIndex).removeAt(qIndex);
     }
 
-    // ── MCQ Answer management ──────────────────────────────
+    // ── MCQ Answer management ──
 
     addAnswer(eIndex: number, qIndex: number): void {
         const answerGroup = this.fb.group({
@@ -273,8 +344,6 @@ export class CreateQuizComponent implements OnInit {
         return this.answers(eIndex, qIndex).controls.some(c => c.get('isCorrect')?.value === true);
     }
 
-    // ── MCQ Answer type ────────────────────────────────────
-
     getMcqAnswerType(eIndex: number, qIndex: number, aIndex: number): AnswerType {
         return this.answerTypes.get(this.aImgKey(eIndex, qIndex, aIndex)) ?? 'text';
     }
@@ -289,7 +358,7 @@ export class CreateQuizComponent implements OnInit {
         }
     }
 
-    // ── Matching Answer type ───────────────────────────────
+    // ── Matching Answer type ──
 
     getMatchAnswerType(eIndex: number, qIndex: number): AnswerType {
         return this.matchAnswerTypes.get(this.matchKey(eIndex, qIndex)) ?? 'text';
@@ -302,7 +371,7 @@ export class CreateQuizComponent implements OnInit {
         }
     }
 
-    // ── File pickers ───────────────────────────────────────
+    // ── File pickers ──
 
     onQuestionImageSelect(event: Event, eIndex: number, qIndex: number): void {
         const input = event.target as HTMLInputElement;
@@ -337,31 +406,11 @@ export class CreateQuizComponent implements OnInit {
         reader.readAsDataURL(file);
     }
 
-    getQuestionPreview(eIndex: number, qIndex: number): string {
-        return this.questionPreviews.get(this.qImgKey(eIndex, qIndex)) ?? '';
-    }
+    getQuestionPreview(eIndex: number, qIndex: number): string { return this.questionPreviews.get(this.qImgKey(eIndex, qIndex)) ?? ''; }
+    getMcqAnswerPreview(eIndex: number, qIndex: number, aIndex: number): string { return this.answerPreviews.get(this.aImgKey(eIndex, qIndex, aIndex)) ?? ''; }
+    getMatchAnswerPreview(eIndex: number, qIndex: number): string { return this.matchAnswerPreviews.get(this.matchKey(eIndex, qIndex)) ?? ''; }
 
-    getMcqAnswerPreview(eIndex: number, qIndex: number, aIndex: number): string {
-        return this.answerPreviews.get(this.aImgKey(eIndex, qIndex, aIndex)) ?? '';
-    }
-
-    getMatchAnswerPreview(eIndex: number, qIndex: number): string {
-        return this.matchAnswerPreviews.get(this.matchKey(eIndex, qIndex)) ?? '';
-    }
-
-    getQuestionImageName(eIndex: number, qIndex: number): string {
-        return this.questionImages.get(this.qImgKey(eIndex, qIndex))?.name ?? '';
-    }
-
-    getMcqAnswerImageName(eIndex: number, qIndex: number, aIndex: number): string {
-        return this.answerImages.get(this.aImgKey(eIndex, qIndex, aIndex))?.name ?? '';
-    }
-
-    getMatchAnswerImageName(eIndex: number, qIndex: number): string {
-        return this.matchAnswerImages.get(this.matchKey(eIndex, qIndex))?.name ?? '';
-    }
-
-    // ── Validation helpers ─────────────────────────────────
+    // ── Validation helpers ──
 
     mcqAnswerHasContent(eIndex: number, qIndex: number, aIndex: number): boolean {
         const type = this.getMcqAnswerType(eIndex, qIndex, aIndex);
@@ -389,10 +438,12 @@ export class CreateQuizComponent implements OnInit {
         return this.matchAnswerImages.has(this.matchKey(eIndex, qIndex));
     }
 
-    // ── Submit ─────────────────────────────────────────────
+    // ── Submit ──
 
     onSubmit(): void {
         this.submitError = '';
+
+        if (!this.subjectId) return;
 
         if (this.levelForm.invalid) {
             this.toastr.warning('Please fill in all required fields.', 'Warning');
@@ -400,43 +451,44 @@ export class CreateQuizComponent implements OnInit {
             return;
         }
 
-        // Validate each exercise's questions
         for (let e = 0; e < this.exercises.length; e++) {
             const type = this.getExerciseType(e);
-            const qCount = this.questions(e).length;
-
-            for (let q = 0; q < qCount; q++) {
-                if (type === 'MCQ') {
-                    if (!this.hasCorrectAnswer(e, q)) {
-                        this.submitError = `Exercise ${e + 1}, Question ${q + 1}: mark at least one answer as correct.`;
-                        return;
-                    }
-                    if (!this.allMcqAnswersHaveContent(e, q)) {
-                        this.submitError = `Exercise ${e + 1}, Question ${q + 1}: all answer choices need content.`;
-                        return;
-                    }
-                } else {
-                    if (!this.matchAnswerHasContent(e, q)) {
-                        this.submitError = `Exercise ${e + 1}, Question ${q + 1}: provide a correct answer for matching.`;
-                        return;
+            if (type === 'AI') {
+                if (this.getAiLettersMap(e).size === 0) {
+                    this.submitError = `Exercise ${e + 1}: Select at least one letter for the AI Sign Language test.`;
+                    return;
+                }
+            } else {
+                for (let q = 0; q < this.questions(e).length; q++) {
+                    if (type === 'MCQ') {
+                        if (!this.hasCorrectAnswer(e, q)) {
+                            this.submitError = `Exercise ${e + 1}, Question ${q + 1}: mark at least one answer as correct.`;
+                            return;
+                        }
+                        if (!this.allMcqAnswersHaveContent(e, q)) {
+                            this.submitError = `Exercise ${e + 1}, Question ${q + 1}: all answer choices need content.`;
+                            return;
+                        }
+                    } else if (type === 'Matching') {
+                        if (!this.matchAnswerHasContent(e, q)) {
+                            this.submitError = `Exercise ${e + 1}, Question ${q + 1}: provide a correct answer for matching.`;
+                            return;
+                        }
                     }
                 }
             }
         }
 
-        if (!this.subjectId) return;
-
         this.isSubmitting = true;
         this.submitSuccess = false;
 
         const formData = new FormData();
-        formData.append('Sid', this.subjectId);
+        formData.append('Sid', this.subjectId!);
         if (this.lessonId) formData.append('Lid', this.lessonId);
         formData.append('Name', this.levelForm.get('name')?.value);
         formData.append('PassingGradePercentage', String(this.levelForm.get('passingGradePercentage')?.value));
         formData.append('levelDifficulty', this.levelForm.get('levelDifficulty')?.value);
 
-        // Prerequisite
         const prereqType: number = this.selectedPrereqType;
         const prereqId: string | null = this.levelForm.get('perquisiteId')?.value;
         formData.append('PerquisiteType', prereqType.toString());
@@ -446,54 +498,56 @@ export class CreateQuizComponent implements OnInit {
 
         this.exercises.value.forEach((ex: any, eIndex: number) => {
             formData.append(`ExerciseDTOs[${eIndex}].Name`, ex.name);
-            const typeVal = ex.type === 'MCQ' ? '1' : '2';
+            const typeVal = ex.type === 'MCQ' ? '1' : ex.type === 'Matching' ? '2' : '3';
             formData.append(`ExerciseDTOs[${eIndex}].Type`, typeVal);
 
-            ex.questions.forEach((q: any, qIndex: number) => {
-                formData.append(`ExerciseDTOs[${eIndex}].questions[${qIndex}].prompt_text`, q.prompt_text);
-                formData.append(`ExerciseDTOs[${eIndex}].questions[${qIndex}].score`, String(q.score));
+            if (ex.type === 'AI') {
+                let idx = 0;
+                this.getAiLettersMap(eIndex).forEach((rounds, letter) => {
+                    formData.append(`ExerciseDTOs[${eIndex}].AI_letters[${idx}].Key`, letter);
+                    formData.append(`ExerciseDTOs[${eIndex}].AI_letters[${idx}].Value`, String(rounds));
+                    idx++;
+                });
+            } else {
+                ex.questions.forEach((q: any, qIndex: number) => {
+                    formData.append(`ExerciseDTOs[${eIndex}].questions[${qIndex}].prompt_text`, q.prompt_text);
+                    formData.append(`ExerciseDTOs[${eIndex}].questions[${qIndex}].score`, String(q.score));
 
-                const qImg = this.questionImages.get(this.qImgKey(eIndex, qIndex));
-                if (qImg) formData.append(`ExerciseDTOs[${eIndex}].questions[${qIndex}].prompt_image`, qImg, qImg.name);
+                    const qImg = this.questionImages.get(this.qImgKey(eIndex, qIndex));
+                    if (qImg) formData.append(`ExerciseDTOs[${eIndex}].questions[${qIndex}].prompt_image`, qImg, qImg.name);
 
-                if (ex.type === 'MCQ') {
-                    q.answers.forEach((a: any, aIndex: number) => {
-                        const key = this.aImgKey(eIndex, qIndex, aIndex);
-                        const ansType = this.answerTypes.get(key) ?? 'text';
-                        if (ansType === 'text') {
-                            formData.append(`ExerciseDTOs[${eIndex}].questions[${qIndex}].Answers[${aIndex}].answer`, a.answer ?? '');
+                    if (ex.type === 'MCQ') {
+                        q.answers.forEach((a: any, aIndex: number) => {
+                            const key = this.aImgKey(eIndex, qIndex, aIndex);
+                            const ansType = this.answerTypes.get(key) ?? 'text';
+                            if (ansType === 'text') {
+                                formData.append(`ExerciseDTOs[${eIndex}].questions[${qIndex}].Answers[${aIndex}].answer`, a.answer ?? '');
+                            } else {
+                                const aImg = this.answerImages.get(key);
+                                if (aImg) formData.append(`ExerciseDTOs[${eIndex}].questions[${qIndex}].Answers[${aIndex}].IMG`, aImg, aImg.name);
+                                formData.append(`ExerciseDTOs[${eIndex}].questions[${qIndex}].Answers[${aIndex}].answer`, '');
+                            }
+                            formData.append(`ExerciseDTOs[${eIndex}].questions[${qIndex}].Answers[${aIndex}].isCorrect`, String(a.isCorrect));
+                        });
+                    } else if (ex.type === 'Matching') {
+                        const mKey = this.matchKey(eIndex, qIndex);
+                        const mType = this.matchAnswerTypes.get(mKey) ?? 'text';
+                        if (mType === 'text') {
+                            const mText: string = this.questions(eIndex).at(qIndex).get('matchAnswer')?.value ?? '';
+                            formData.append(`ExerciseDTOs[${eIndex}].questions[${qIndex}].Answer.answer`, mText);
                         } else {
-                            const aImg = this.answerImages.get(key);
-                            if (aImg) formData.append(`ExerciseDTOs[${eIndex}].questions[${qIndex}].Answers[${aIndex}].IMG`, aImg, aImg.name);
-                            formData.append(`ExerciseDTOs[${eIndex}].questions[${qIndex}].Answers[${aIndex}].answer`, '');
+                            const mImg = this.matchAnswerImages.get(mKey);
+                            if (mImg) formData.append(`ExerciseDTOs[${eIndex}].questions[${qIndex}].Answer.IMG`, mImg, mImg.name);
+                            formData.append(`ExerciseDTOs[${eIndex}].questions[${qIndex}].Answer.answer`, '');
                         }
-                        formData.append(`ExerciseDTOs[${eIndex}].questions[${qIndex}].Answers[${aIndex}].isCorrect`, String(a.isCorrect));
-                    });
-                } else {
-                    // Matching: single Answer field
-                    const mKey = this.matchKey(eIndex, qIndex);
-                    const mType = this.matchAnswerTypes.get(mKey) ?? 'text';
-                    if (mType === 'text') {
-                        const mText: string = this.questions(eIndex).at(qIndex).get('matchAnswer')?.value ?? '';
-                        formData.append(`ExerciseDTOs[${eIndex}].questions[${qIndex}].Answer.answer`, mText);
-                    } else {
-                        const mImg = this.matchAnswerImages.get(mKey);
-                        if (mImg) formData.append(`ExerciseDTOs[${eIndex}].questions[${qIndex}].Answer.IMG`, mImg, mImg.name);
-                        formData.append(`ExerciseDTOs[${eIndex}].questions[${qIndex}].Answer.answer`, '');
                     }
-                }
-            });
+                });
+            }
         });
-
-        // DEBUG: log all FormData entries
-        console.log('--- FormData entries ---');
-        formData.forEach((value, key) => console.log(key, value));
 
         this.teacherService.createExercise(formData).subscribe({
             next: () => {
-                setTimeout(() => {
-                    this.toastr.success('Quiz created successfully.', 'Success');
-                }, 850);
+                setTimeout(() => this.toastr.success('Level created successfully.', 'Success'), 850);
                 this.isSubmitting = false;
                 this.submitSuccess = true;
                 this.levelForm.reset({ name: '', passingGradePercentage: 60, levelDifficulty: 'Easy', perquisiteType: PerquisiteType.None, perquisiteId: null });
@@ -506,14 +560,13 @@ export class CreateQuizComponent implements OnInit {
                 this.matchAnswerPreviews.clear();
                 this.answerTypes.clear();
                 this.matchAnswerTypes.clear();
+                this.aiLettersMaps.clear();
+                this.activeAlphabetTabs.clear();
                 this.addExercise();
             },
             error: (err) => {
                 console.error(err);
                 this.submitError = err?.error?.message ?? 'Failed to create exercise. Please try again.';
-                setTimeout(() => {
-                    this.toastr.error(this.submitError, 'Error');
-                }, 850);
                 this.isSubmitting = false;
             },
         });
@@ -524,14 +577,5 @@ export class CreateQuizComponent implements OnInit {
             return ['/teacher/subject', this.subjectId!, 'lesson', this.lessonId, 'manage'];
         }
         return ['/teacher/subject', this.subjectId!];
-    }
-
-    // ── Helper for template: add matchAnswer control lazily ─
-
-    ensureMatchAnswerControl(eIndex: number, qIndex: number): void {
-        const qGroup = this.questions(eIndex).at(qIndex) as FormGroup;
-        if (!qGroup.contains('matchAnswer')) {
-            qGroup.addControl('matchAnswer', this.fb.control(''));
-        }
     }
 }

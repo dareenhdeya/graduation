@@ -110,6 +110,11 @@ export class ViewQuizComponent implements OnInit {
     return [];
   }
 
+  getAiLettersArray(aiLetters: any): { letter: string; rounds: number }[] {
+    if (!aiLetters) return [];
+    return Object.entries(aiLetters).map(([letter, rounds]) => ({ letter, rounds: rounds as number }));
+  }
+
 
 
 openDeleteModal() {

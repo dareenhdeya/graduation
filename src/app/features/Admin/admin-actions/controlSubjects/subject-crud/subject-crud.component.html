@@ -226,6 +226,44 @@
               <input type="checkbox" class="hidden" [formControl]="deafMute" />
             </div>
 
+            <div class="pt-5">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                  <div
+                    class="size-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0"
+                  >
+                    <i class="fa-solid fa-robot text-emerald-500 text-lg"></i>
+                  </div>
+                  <div>
+                    <div class="font-bold text-text-main">AI Supported</div>
+                    <div class="text-xs font-medium text-text-main/50 mt-1">
+                      Enable AI sign language exercises for this subject.
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  class="relative h-8 w-14 cursor-pointer rounded-full border border-border-main transition-colors duration-300 focus:outline-none focus:ring-4 focus:ring-emerald-500/20 shrink-0"
+                  [class]="
+                    aiSupported.value ? 'bg-emerald-500/20 border-emerald-500/30' : 'bg-surface'
+                  "
+                  (click)="aiSupported.setValue(!aiSupported.value)"
+                  [attr.aria-pressed]="aiSupported.value"
+                >
+                  <span
+                    class="absolute top-1 left-1 size-5 rounded-full transition-transform duration-300 shadow-sm"
+                    [class]="
+                      aiSupported.value
+                        ? 'translate-x-6 bg-emerald-500'
+                        : 'translate-x-0 bg-text-main/30'
+                    "
+                  ></span>
+                </button>
+                <input type="checkbox" class="hidden" [formControl]="aiSupported" />
+              </div>
+            </div>
+
             @if (addError) {
             <div
               class="mt-4 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-xs font-bold text-red-500 flex items-center gap-2 shadow-sm"
@@ -329,6 +367,14 @@
             ></span>
             {{ s.deaf_mute ? 'Accessible' : 'Standard' }}
           </span>
+          @if (s.aI_supported) {
+          <span
+            class="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 text-emerald-500 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider shadow-sm"
+          >
+            <i class="fa-solid fa-robot text-[8px]"></i>
+            AI
+          </span>
+          }
         </div>
 
         <!-- <div class="mt-8 mb-4 h-px w-full bg-border-main"></div>

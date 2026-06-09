@@ -1,17 +1,15 @@
 <section class="relative min-h-screen py-10 px-4">
   <div
-    class="pointer-events-none absolute -top-64 -left-72 h-[520px] w-[820px] rounded-[999px] bg-sky-500/10 blur-[130px]"
-  ></div>
+    class="pointer-events-none absolute -top-64 -left-72 h-[520px] w-[820px] rounded-[999px] bg-sky-500/10 blur-[130px]">
+  </div>
   <div
-    class="pointer-events-none absolute -bottom-72 -right-60 h-[720px] w-[720px] rounded-full bg-violet-500/10 blur-[140px]"
-  ></div>
+    class="pointer-events-none absolute -bottom-72 -right-60 h-[720px] w-[720px] rounded-full bg-violet-500/10 blur-[140px]">
+  </div>
   <div class="container mx-auto max-w-4xl relative z-10">
     <!-- Header -->
     <div class="mb-10 flex items-center gap-4">
-      <a
-        [routerLink]="backUrl()"
-        class="inline-flex items-center justify-center size-10 rounded-2xl border border-border-main bg-surface text-text-main hover:bg-surface hover:border-primary/40 transition-all shadow-sm"
-      >
+      <a [routerLink]="backUrl()"
+        class="inline-flex items-center justify-center size-10 rounded-2xl border border-border-main bg-surface text-text-main hover:bg-surface hover:border-primary/40 transition-all shadow-sm">
         <i class="fa-solid fa-arrow-left text-sm"></i>
       </a>
       <div>
@@ -29,33 +27,29 @@
 
     <!-- Success Banner -->
     @if (submitSuccess) {
-      <div
-        class="mb-6 flex items-center gap-3 rounded-2xl border border-green-500/30 bg-green-500/10 px-5 py-4 text-green-400 font-bold shadow-sm"
-      >
-        <i class="fa-solid fa-circle-check text-lg"></i>
-        <span>Exercise level edited successfully!</span>
-      </div>
+    <div
+      class="mb-6 flex items-center gap-3 rounded-2xl border border-green-500/30 bg-green-500/10 px-5 py-4 text-green-400 font-bold shadow-sm">
+      <i class="fa-solid fa-circle-check text-lg"></i>
+      <span>Exercise level edited successfully!</span>
+    </div>
     }
 
     <!-- Error Banner -->
     @if (submitError) {
-      <div
-        class="mb-6 flex items-center gap-3 rounded-2xl border border-red-500/30 bg-red-500/10 px-5 py-4 text-red-400 font-bold shadow-sm"
-      >
-        <i class="fa-solid fa-circle-exclamation text-lg"></i>
-        <span>{{ submitError }}</span>
-      </div>
+    <div
+      class="mb-6 flex items-center gap-3 rounded-2xl border border-red-500/30 bg-red-500/10 px-5 py-4 text-red-400 font-bold shadow-sm">
+      <i class="fa-solid fa-circle-exclamation text-lg"></i>
+      <span>{{ submitError }}</span>
+    </div>
     }
 
     <form [formGroup]="levelForm" (ngSubmit)="onSubmit()" class="space-y-8">
       <!-- Level Details Card -->
       <div
-        class="rounded-[32px] border border-white/10 bg-white/[0.04] backdrop-blur-2xl shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8)] p-6 md:p-8 space-y-6"
-      >
+        class="rounded-[32px] border border-white/10 bg-white/[0.04] backdrop-blur-2xl shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8)] p-6 md:p-8 space-y-6">
         <div class="flex items-center gap-3 mb-2">
           <div
-            class="size-10 rounded-2xl bg-violet-500/10 text-violet-400 flex items-center justify-center border border-violet-500/20"
-          >
+            class="size-10 rounded-2xl bg-violet-500/10 text-violet-400 flex items-center justify-center border border-violet-500/20">
             <i class="fa-solid fa-layer-group"></i>
           </div>
           <h2 class="font-black text-xl text-text-main tracking-tight">Level Details</h2>
@@ -63,55 +57,39 @@
 
         <!-- Name -->
         <div>
-          <label
-            class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1"
-            >Level Title</label
-          >
-          <input
-            formControlName="name"
-            type="text"
+          <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Level
+            Title</label>
+          <input formControlName="name" type="text"
             class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm placeholder:text-text-main/30"
-            placeholder="e.g., Unit 1 – Comprehension Level"
-          />
+            placeholder="e.g., Unit 1 – Comprehension Level" />
           @if (levelForm.get('name')?.touched && levelForm.get('name')?.invalid) {
-            <p class="text-red-500 text-xs font-bold mt-1 pl-1">
-              Title is required (min 3 characters).
-            </p>
+          <p class="text-red-500 text-xs font-bold mt-1 pl-1">
+            Title is required (min 3 characters).
+          </p>
           }
         </div>
 
         <!-- Passing Grade & Difficulty -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
-            <label
-              class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1"
-              >Passing Grade (%)</label
-            >
-            <input
-              formControlName="passingGradePercentage"
-              type="number"
-              min="1"
-              max="100"
-              class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm"
-            />
+            <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Passing Grade
+              (%)</label>
+            <input formControlName="passingGradePercentage" type="number" min="1" max="100"
+              class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm" />
             @if (
-              levelForm.get('passingGradePercentage')?.touched &&
-              levelForm.get('passingGradePercentage')?.invalid
+            levelForm.get('passingGradePercentage')?.touched &&
+            levelForm.get('passingGradePercentage')?.invalid
             ) {
-              <p class="text-red-500 text-xs font-bold mt-1 pl-1">Must be between 1 and 100.</p>
+            <p class="text-red-500 text-xs font-bold mt-1 pl-1">Must be between 1 and 100.</p>
             }
           </div>
           <div>
             <label
-              class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1"
-              >Difficulty</label
-            >
-            <select
-              formControlName="levelDifficulty"
-              class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm cursor-pointer"
-            >
+              class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Difficulty</label>
+            <select formControlName="levelDifficulty"
+              class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm cursor-pointer">
               @for (d of difficulties; track d) {
-                <option [value]="d">{{ d }}</option>
+              <option [value]="d">{{ d }}</option>
               }
             </select>
           </div>
@@ -119,532 +97,504 @@
 
         <!-- Prerequisite Type -->
         <div>
-          <label
-            class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1"
-            >Prerequisite Type</label
-          >
+          <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Prerequisite
+            Type</label>
           <div class="relative">
-            <select
-              formControlName="perquisiteType"
-              (change)="onPrereqTypeChange()"
-              class="w-full appearance-none rounded-2xl border border-border-main bg-background px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm cursor-pointer pr-10"
-            >
+            <select formControlName="perquisiteType" (change)="onPrereqTypeChange()"
+              class="w-full appearance-none rounded-2xl border border-border-main bg-background px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm cursor-pointer pr-10">
               @for (type of perquisiteTypes; track type.value) {
-                <option [value]="type.value">{{ type.label }}</option>
+              <option [value]="type.value">{{ type.label }}</option>
               }
             </select>
             <i
-              class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-text-main/40 pointer-events-none text-xs"
-            ></i>
+              class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-text-main/40 pointer-events-none text-xs"></i>
           </div>
         </div>
 
         <!-- Prerequisite Item (shown only when type != None) -->
         @if (selectedPrereqType !== 0) {
-          <div>
-            <label
-              class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1"
-            >
-              Select Lesson Prerequisite
-            </label>
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">
+            Select Lesson Prerequisite
+          </label>
 
-            @if (isLoadingPrerequisites) {
-              <div
-                class="flex items-center gap-2 text-sm text-text-main/50 font-semibold py-3.5 px-4 rounded-2xl border border-border-main bg-background"
-              >
-                <i class="fas fa-spinner fa-spin"></i>
-                <span>Loading lessons...</span>
-              </div>
-            } @else {
-              <div class="relative">
-                <select
-                  formControlName="perquisiteId"
-                  class="w-full appearance-none rounded-2xl border border-border-main bg-background px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm cursor-pointer pr-10"
-                  [class.border-red-400]="
-                    levelForm.get('perquisiteId')?.touched && !levelForm.get('perquisiteId')?.value
-                  "
-                >
-                  <option [value]="null">-- Select a lesson --</option>
-                  @for (option of prerequisiteOptions; track option.id) {
-                    <option [value]="option.id">{{ option.title }}</option>
-                  }
-                </select>
-                <i
-                  class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-text-main/40 pointer-events-none text-xs"
-                ></i>
-              </div>
-
-              @if (prerequisiteOptions.length === 0 && !isLoadingPrerequisites) {
-                <p class="text-text-main/40 text-xs font-semibold mt-1 pl-1">
-                  No lessons available.
-                </p>
-              }
-
-              @if (
-                levelForm.get('perquisiteId')?.touched && !levelForm.get('perquisiteId')?.value
-              ) {
-                <p class="text-red-500 text-xs font-bold mt-1 pl-1">
-                  Please select a prerequisite item.
-                </p>
-              }
-            }
+          @if (isLoadingPrerequisites) {
+          <div
+            class="flex items-center gap-2 text-sm text-text-main/50 font-semibold py-3.5 px-4 rounded-2xl border border-border-main bg-background">
+            <i class="fas fa-spinner fa-spin"></i>
+            <span>Loading lessons...</span>
           </div>
+          } @else {
+          <div class="relative">
+            <select formControlName="perquisiteId"
+              class="w-full appearance-none rounded-2xl border border-border-main bg-background px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm cursor-pointer pr-10"
+              [class.border-red-400]="
+                    levelForm.get('perquisiteId')?.touched && !levelForm.get('perquisiteId')?.value
+                  ">
+              <option [value]="null">-- Select a lesson --</option>
+              @for (option of prerequisiteOptions; track option.id) {
+              <option [value]="option.id">{{ option.title }}</option>
+              }
+            </select>
+            <i
+              class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-text-main/40 pointer-events-none text-xs"></i>
+          </div>
+
+          @if (prerequisiteOptions.length === 0 && !isLoadingPrerequisites) {
+          <p class="text-text-main/40 text-xs font-semibold mt-1 pl-1">
+            No lessons available.
+          </p>
+          }
+
+          @if (
+          levelForm.get('perquisiteId')?.touched && !levelForm.get('perquisiteId')?.value
+          ) {
+          <p class="text-red-500 text-xs font-bold mt-1 pl-1">
+            Please select a prerequisite item.
+          </p>
+          }
+          }
+        </div>
         }
       </div>
 
       <!-- ══ Exercises ══ -->
       <div formArrayName="exercises" class="space-y-8">
         @for (ex of exercises.controls; track ex; let eIndex = $index) {
-          <div
-            [formGroupName]="eIndex"
-            class="rounded-[28px] border border-white/10 bg-surface backdrop-blur-xl p-6 md:p-8 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)] space-y-6 hover:border-white/20 transition-all"
-          >
-            <!-- Exercise Header -->
-            <div class="flex items-center justify-between gap-4 flex-wrap">
-              <div class="flex items-center gap-3">
-                <div
-                  class="size-10 rounded-2xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20 font-black text-base shrink-0"
-                >
-                  {{ eIndex + 1 }}
-                </div>
-                <h2 class="font-black text-text-main text-xl tracking-tight">
-                  Exercise {{ eIndex + 1 }}
-                </h2>
+        <div [formGroupName]="eIndex"
+          class="rounded-[28px] border border-white/10 bg-surface backdrop-blur-xl p-6 md:p-8 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)] space-y-6 hover:border-white/20 transition-all"
+          [class.border-emerald-500]="getExerciseType(eIndex) === 'AI'">
+          <!-- Exercise Header -->
+          <div class="flex items-center justify-between gap-4 flex-wrap">
+            <div class="flex items-center gap-3">
+              <div class="size-10 rounded-2xl flex items-center justify-center border font-black text-base shrink-0"
+                [class]="getExerciseType(eIndex) === 'AI' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : 'bg-primary/10 text-primary border-primary/20'">
+                {{ eIndex + 1 }}
               </div>
-              <!-- Action buttons -->
-              <div class="flex items-center gap-2 flex-wrap">
-                <button
-                  type="button"
-                  (click)="clearExercise(eIndex)"
-                  class="h-9 px-4 rounded-2xl border border-amber-500/20 bg-amber-500/10 text-amber-400 font-bold text-xs hover:bg-amber-500/20 transition-all shadow-sm"
-                  title="Clear all content but keep structure"
-                >
-                  <i class="fa-solid fa-eraser mr-1"></i> Clear
-                </button>
-                <button
-                  type="button"
-                  (click)="resetExercise(eIndex)"
-                  class="h-9 px-4 rounded-2xl border border-sky-500/20 bg-sky-500/10 text-sky-400 font-bold text-xs hover:bg-sky-500/20 transition-all shadow-sm"
-                  title="Restore to original loaded values"
-                >
-                  <i class="fa-solid fa-rotate-left mr-1"></i> Reset
-                </button>
-                @if (exercises.length > 1) {
-                  <button
-                    type="button"
-                    (click)="removeExercise(eIndex)"
-                    class="h-9 px-4 rounded-2xl border border-red-500/20 bg-red-500/10 text-red-400 font-bold text-xs hover:bg-red-500/20 transition-all shadow-sm"
-                  >
-                    <i class="fa-solid fa-trash-can mr-1"></i> Remove
-                  </button>
-                }
-              </div>
+              <h2 class="font-black text-text-main text-xl tracking-tight">
+                Exercise {{ eIndex + 1 }} {{ getExerciseType(eIndex) === 'AI' ? '(AI Sign Language)' : '' }}
+              </h2>
             </div>
-
-            <!-- Exercise Name -->
-            <div>
-              <label
-                class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1"
-                >Exercise Name</label
-              >
-              <input
-                formControlName="name"
-                type="text"
-                class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm placeholder:text-text-main/30"
-                placeholder="e.g., Vocabulary MCQ"
-              />
-              @if (ex.get('name')?.touched && ex.get('name')?.invalid) {
-                <p class="text-red-500 text-xs font-bold mt-1 pl-1">
-                  Exercise name is required (min 3 characters).
-                </p>
+            <!-- Action buttons -->
+            <div class="flex items-center gap-2 flex-wrap">
+              <button type="button" (click)="clearExercise(eIndex)"
+                class="h-9 px-4 rounded-2xl border border-amber-500/20 bg-amber-500/10 text-amber-400 font-bold text-xs hover:bg-amber-500/20 transition-all shadow-sm"
+                title="Clear all content but keep structure">
+                <i class="fa-solid fa-eraser mr-1"></i> Clear
+              </button>
+              <button type="button" (click)="resetExercise(eIndex)"
+                class="h-9 px-4 rounded-2xl border border-sky-500/20 bg-sky-500/10 text-sky-400 font-bold text-xs hover:bg-sky-500/20 transition-all shadow-sm"
+                title="Restore to original loaded values">
+                <i class="fa-solid fa-rotate-left mr-1"></i> Reset
+              </button>
+              @if (exercises.length > 1) {
+              <button type="button" (click)="removeExercise(eIndex)"
+                class="h-9 px-4 rounded-2xl border border-red-500/20 bg-red-500/10 text-red-400 font-bold text-xs hover:bg-red-500/20 transition-all shadow-sm">
+                <i class="fa-solid fa-trash-can mr-1"></i> Remove
+              </button>
               }
             </div>
-
-            <!-- Exercise Type Toggle -->
-            <div>
-              <label
-                class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-3 pl-1"
-                >Exercise Type</label
-              >
-              <div
-                class="inline-flex rounded-2xl border border-border-main bg-background overflow-hidden text-sm font-bold shadow-sm"
-              >
-                <button
-                  type="button"
-                  (click)="setExerciseType(eIndex, 'MCQ')"
-                  class="px-5 py-2.5 flex items-center gap-2 transition-all"
-                  [class.bg-primary]="getExerciseType(eIndex) === 'MCQ'"
-                  [class.text-white]="getExerciseType(eIndex) === 'MCQ'"
-                  [class.text-text-main]="getExerciseType(eIndex) !== 'MCQ'"
-                >
-                  <i class="fa-solid fa-list-check"></i> MCQ
-                </button>
-                <button
-                  type="button"
-                  (click)="setExerciseType(eIndex, 'Matching')"
-                  class="px-5 py-2.5 flex items-center gap-2 border-l border-border-main transition-all"
-                  [class.bg-primary]="getExerciseType(eIndex) === 'Matching'"
-                  [class.text-white]="getExerciseType(eIndex) === 'Matching'"
-                  [class.text-text-main]="getExerciseType(eIndex) !== 'Matching'"
-                >
-                  <i class="fa-solid fa-shuffle"></i> Matching
-                </button>
-              </div>
-              <p class="text-text-main/40 text-xs font-bold mt-2 pl-1">
-                @if (getExerciseType(eIndex) === 'MCQ') {
-                  Multiple-choice: each question has several answer choices and one correct answer.
-                } @else {
-                  Matching: each question has a single prompt paired with its correct answer.
-                }
-              </p>
-            </div>
-
-            <!-- ── Questions ── -->
-            <div formArrayName="questions" class="space-y-5">
-              <div class="flex items-center justify-between">
-                <label class="text-xs font-bold uppercase tracking-wider text-text-main/50"
-                  >Questions</label
-                >
-                <button
-                  type="button"
-                  (click)="addQuestion(eIndex)"
-                  class="h-8 px-3 rounded-xl border border-primary/20 bg-primary/10 text-primary font-bold text-xs hover:bg-primary/20 transition-all shadow-sm"
-                >
-                  <i class="fa-solid fa-plus mr-1"></i> Add Question
-                </button>
-              </div>
-
-              @for (q of questions(eIndex).controls; track q; let qIndex = $index) {
-                <div
-                  [formGroupName]="qIndex"
-                  class="rounded-2xl border border-border-main bg-surface p-5 space-y-4 hover:border-white/20 transition-all"
-                >
-                  <!-- Question Header -->
-                  <div class="flex items-center justify-between gap-3">
-                    <div class="flex items-center gap-2">
-                      <div
-                        class="size-8 rounded-xl bg-violet-500/10 text-violet-400 flex items-center justify-center border border-violet-500/20 font-black text-sm shrink-0"
-                      >
-                        {{ qIndex + 1 }}
-                      </div>
-                      <span class="font-black text-text-main text-base"
-                        >Question {{ qIndex + 1 }}</span
-                      >
-                    </div>
-                    @if (questions(eIndex).length > 1) {
-                      <button
-                        type="button"
-                        (click)="removeQuestion(eIndex, qIndex)"
-                        class="h-8 px-3 rounded-xl border border-red-500/20 bg-red-500/10 text-red-400 font-bold text-xs hover:bg-red-500/20 transition-all"
-                      >
-                        <i class="fa-solid fa-trash-can mr-1"></i> Remove
-                      </button>
-                    }
-                  </div>
-
-                  <!-- Score -->
-                  <div class="flex items-center gap-4">
-                    <label
-                      class="text-xs font-bold uppercase tracking-wider text-text-main/50 shrink-0"
-                      >Score</label
-                    >
-                    <input
-                      formControlName="score"
-                      type="number"
-                      min="1"
-                      class="w-24 rounded-2xl border border-border-main bg-surface px-3 py-2 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm text-center"
-                    />
-                    <span class="text-xs text-text-main/40 font-bold">points</span>
-                  </div>
-
-                  <!-- Prompt Text -->
-                  <div>
-                    <label
-                      class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1"
-                      >Question Text <span class="normal-case font-normal text-text-main/30">(optional)</span></label
-                    >
-                    <textarea
-                      formControlName="prompt_text"
-                      rows="2"
-                      class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm resize-none placeholder:text-text-main/30"
-                      placeholder="e.g., What is the main idea of the passage?"
-                    ></textarea>
-                  </div>
-
-                  <!-- Optional Question Image -->
-                  <div>
-                    <label
-                      class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1"
-                    >
-                      Question Image
-                      <span class="normal-case font-normal text-text-main/30">(optional)</span>
-                    </label>
-                    @if (getQuestionPreview(eIndex, qIndex)) {
-                      <div class="relative w-fit">
-                        <img [src]="getQuestionPreview(eIndex, qIndex)" alt="Question preview"
-                          class="h-32 rounded-2xl object-cover border border-border-main shadow-sm" />
-                        <label class="absolute bottom-2 right-2 cursor-pointer size-8 rounded-xl bg-background/80 backdrop-blur border border-border-main flex items-center justify-center text-primary hover:bg-background transition-all" title="Change image">
-                          <i class="fa-solid fa-pen text-xs"></i>
-                          <input type="file" accept="image/*" class="hidden"
-                            (change)="onQuestionImageSelect($event, eIndex, qIndex)" />
-                        </label>
-                      </div>
-                    } @else {
-                      <label
-                        class="flex items-center gap-3 cursor-pointer w-fit px-4 py-2.5 rounded-2xl border border-dashed border-border-main hover:border-primary/50 bg-surface hover:bg-background transition-all text-sm font-bold text-text-main/60 hover:text-primary"
-                      >
-                        <i class="fa-solid fa-image"></i>
-                        <span>Choose image…</span>
-                        <input type="file" accept="image/*" class="hidden"
-                          (change)="onQuestionImageSelect($event, eIndex, qIndex)" />
-                      </label>
-                    }
-                  </div>
-
-                  <!-- ── MCQ: Answer Choices ── -->
-                  @if (getExerciseType(eIndex) === 'MCQ') {
-                    <div formArrayName="answers" class="space-y-3">
-                      <div class="flex items-center justify-between">
-                        <label class="text-xs font-bold uppercase tracking-wider text-text-main/50"
-                          >Answer Choices</label
-                        >
-                        <button
-                          type="button"
-                          (click)="addAnswer(eIndex, qIndex)"
-                          class="h-7 px-3 rounded-xl border border-primary/20 bg-primary/10 text-primary font-bold text-xs hover:bg-primary/20 transition-all shadow-sm"
-                        >
-                          <i class="fa-solid fa-plus mr-1"></i> Add Choice
-                        </button>
-                      </div>
-
-                      @for (a of answers(eIndex, qIndex).controls; track a; let aIndex = $index) {
-                        <div
-                          [formGroupName]="aIndex"
-                          class="rounded-2xl border transition-all"
-                          [class.border-green-500/40]="a.get('isCorrect')?.value"
-                          [class.bg-green-500/5]="a.get('isCorrect')?.value"
-                          [class.border-border-main]="!a.get('isCorrect')?.value"
-                          [class.bg-surface]="!a.get('isCorrect')?.value"
-                        >
-                          <div class="flex items-center gap-3 px-4 py-3">
-                            <!-- ✓ Correct Toggle -->
-                            <button
-                              type="button"
-                              (click)="toggleCorrect(eIndex, qIndex, aIndex)"
-                              class="shrink-0 size-8 rounded-xl flex items-center justify-center border transition-all font-bold text-sm"
-                              [class.border-green-500]="a.get('isCorrect')?.value"
-                              [class.bg-green-500]="a.get('isCorrect')?.value"
-                              [class.text-white]="a.get('isCorrect')?.value"
-                              [class.border-border-main]="!a.get('isCorrect')?.value"
-                              [class.bg-transparent]="!a.get('isCorrect')?.value"
-                              [class.text-text-main]="!a.get('isCorrect')?.value"
-                              title="Mark as correct answer"
-                            >
-                              <i class="fa-solid fa-check text-xs"></i>
-                            </button>
-
-                            <!-- Text / Image type toggle -->
-                            <div
-                              class="flex items-center rounded-xl border border-border-main bg-background overflow-hidden shrink-0 text-xs font-bold"
-                            >
-                              <button
-                                type="button"
-                                (click)="setMcqAnswerType(eIndex, qIndex, aIndex, 'text')"
-                                class="h-7 px-3 transition-all"
-                                [class.bg-primary]="
-                                  getMcqAnswerType(eIndex, qIndex, aIndex) === 'text'
-                                "
-                                [class.text-white]="
-                                  getMcqAnswerType(eIndex, qIndex, aIndex) === 'text'
-                                "
-                                [class.text-text-main]="
-                                  getMcqAnswerType(eIndex, qIndex, aIndex) !== 'text'
-                                "
-                              >
-                                <i class="fa-solid fa-font mr-1"></i>Text
-                              </button>
-                              <button
-                                type="button"
-                                (click)="setMcqAnswerType(eIndex, qIndex, aIndex, 'image')"
-                                class="h-7 px-3 border-l border-border-main transition-all"
-                                [class.bg-primary]="
-                                  getMcqAnswerType(eIndex, qIndex, aIndex) === 'image'
-                                "
-                                [class.text-white]="
-                                  getMcqAnswerType(eIndex, qIndex, aIndex) === 'image'
-                                "
-                                [class.text-text-main]="
-                                  getMcqAnswerType(eIndex, qIndex, aIndex) !== 'image'
-                                "
-                              >
-                                <i class="fa-solid fa-image mr-1"></i>Image
-                              </button>
-                            </div>
-
-                            <!-- Text input -->
-                            @if (getMcqAnswerType(eIndex, qIndex, aIndex) === 'text') {
-                              <input
-                                formControlName="answer"
-                                type="text"
-                                class="flex-1 min-w-0 rounded-xl border border-transparent bg-transparent text-sm font-semibold text-text-main outline-none placeholder:text-text-main/30"
-                                [placeholder]="'Choice ' + (aIndex + 1)"
-                              />
-                            }
-
-                            <!-- Image picker -->
-                            @if (getMcqAnswerType(eIndex, qIndex, aIndex) === 'image') {
-                              @if (getMcqAnswerPreview(eIndex, qIndex, aIndex)) {
-                                <div class="flex-1 relative flex items-center gap-2 min-w-0">
-                                  <img [src]="getMcqAnswerPreview(eIndex, qIndex, aIndex)" alt="Answer preview"
-                                    class="h-12 w-16 rounded-xl object-cover border border-border-main shadow-sm shrink-0" />
-                                  <label class="cursor-pointer size-7 rounded-lg bg-background border border-border-main flex items-center justify-center text-primary hover:bg-surface transition-all shrink-0" title="Change">
-                                    <i class="fa-solid fa-pen text-xs"></i>
-                                    <input type="file" accept="image/*" class="hidden"
-                                      (change)="onMcqAnswerImageSelect($event, eIndex, qIndex, aIndex)" />
-                                  </label>
-                                </div>
-                              } @else {
-                                <label
-                                  class="flex-1 flex items-center gap-2 cursor-pointer px-3 py-1 rounded-xl border border-dashed border-border-main hover:border-primary/50 bg-surface hover:bg-background transition-all text-xs font-bold text-text-main/60 hover:text-primary min-w-0"
-                                >
-                                  <i class="fa-solid fa-upload shrink-0"></i>
-                                  <span class="truncate">Upload image…</span>
-                                  <input type="file" accept="image/*" class="hidden"
-                                    (change)="onMcqAnswerImageSelect($event, eIndex, qIndex, aIndex)" />
-                                </label>
-                              }
-                            }
-
-                            <!-- Remove answer -->
-                            @if (answers(eIndex, qIndex).length > 2) {
-                              <button
-                                type="button"
-                                (click)="removeAnswer(eIndex, qIndex, aIndex)"
-                                class="shrink-0 size-8 rounded-xl border border-red-500/20 bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-all flex items-center justify-center text-xs"
-                              >
-                                <i class="fa-solid fa-xmark"></i>
-                              </button>
-                            }
-                          </div>
-                        </div>
-                      }
-                    </div>
-                  }
-
-                  <!-- ── Matching: Single Correct Answer ── -->
-                  @if (getExerciseType(eIndex) === 'Matching') {
-                    <div class="space-y-3">
-                      <label
-                        class="block text-xs font-bold uppercase tracking-wider text-text-main/50"
-                        >Correct Answer</label
-                      >
-
-                      <div
-                        class="flex items-center gap-3 rounded-2xl border border-green-500/30 bg-green-500/5 px-4 py-3"
-                      >
-                        <!-- Text / Image type toggle -->
-                        <div
-                          class="flex items-center rounded-xl border border-border-main bg-background overflow-hidden shrink-0 text-xs font-bold"
-                        >
-                          <button
-                            type="button"
-                            (click)="setMatchAnswerType(eIndex, qIndex, 'text')"
-                            class="h-7 px-3 transition-all"
-                            [class.bg-primary]="getMatchAnswerType(eIndex, qIndex) === 'text'"
-                            [class.text-white]="getMatchAnswerType(eIndex, qIndex) === 'text'"
-                            [class.text-text-main]="getMatchAnswerType(eIndex, qIndex) !== 'text'"
-                          >
-                            <i class="fa-solid fa-font mr-1"></i>Text
-                          </button>
-                          <button
-                            type="button"
-                            (click)="setMatchAnswerType(eIndex, qIndex, 'image')"
-                            class="h-7 px-3 border-l border-border-main transition-all"
-                            [class.bg-primary]="getMatchAnswerType(eIndex, qIndex) === 'image'"
-                            [class.text-white]="getMatchAnswerType(eIndex, qIndex) === 'image'"
-                            [class.text-text-main]="getMatchAnswerType(eIndex, qIndex) !== 'image'"
-                          >
-                            <i class="fa-solid fa-image mr-1"></i>Image
-                          </button>
-                        </div>
-
-                        <!-- Text input -->
-                        @if (getMatchAnswerType(eIndex, qIndex) === 'text') {
-                          <input
-                            type="text"
-                            formControlName="matchAnswer"
-                            class="flex-1 min-w-0 rounded-xl border border-transparent bg-transparent text-sm font-semibold text-text-main outline-none placeholder:text-text-main/30"
-                            placeholder="Enter the correct answer…"
-                          />
-                        }
-
-                        <!-- Image upload -->
-                        @if (getMatchAnswerType(eIndex, qIndex) === 'image') {
-                          @if (getMatchAnswerPreview(eIndex, qIndex)) {
-                            <div class="flex-1 relative flex items-center gap-2 min-w-0">
-                              <img [src]="getMatchAnswerPreview(eIndex, qIndex)" alt="Answer preview"
-                                class="h-12 w-16 rounded-xl object-cover border border-border-main shadow-sm shrink-0" />
-                              <label class="cursor-pointer size-7 rounded-lg bg-background border border-border-main flex items-center justify-center text-primary hover:bg-surface transition-all shrink-0" title="Change">
-                                <i class="fa-solid fa-pen text-xs"></i>
-                                <input type="file" accept="image/*" class="hidden"
-                                  (change)="onMatchAnswerImageSelect($event, eIndex, qIndex)" />
-                              </label>
-                            </div>
-                          } @else {
-                            <label
-                              class="flex-1 flex items-center gap-2 cursor-pointer px-3 py-1 rounded-xl border border-dashed border-border-main hover:border-primary/50 bg-surface hover:bg-background transition-all text-xs font-bold text-text-main/60 hover:text-primary min-w-0"
-                            >
-                              <i class="fa-solid fa-upload shrink-0"></i>
-                              <span class="truncate">Upload image…</span>
-                              <input type="file" accept="image/*" class="hidden"
-                                (change)="onMatchAnswerImageSelect($event, eIndex, qIndex)" />
-                            </label>
-                          }
-                        }
-                      </div>
-                    </div>
-                  }
-                </div>
-              }
-            </div>
-            <!-- end questions -->
           </div>
+
+          <!-- Exercise Name -->
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Exercise
+              Name</label>
+            <input formControlName="name" type="text"
+              class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm placeholder:text-text-main/30"
+              placeholder="e.g., Vocabulary MCQ" />
+            @if (ex.get('name')?.touched && ex.get('name')?.invalid) {
+            <p class="text-red-500 text-xs font-bold mt-1 pl-1">
+              Exercise name is required (min 3 characters).
+            </p>
+            }
+          </div>
+
+          <!-- Exercise Type Toggle -->
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-3 pl-1">Exercise
+              Type</label>
+            <div
+              class="inline-flex rounded-2xl border border-border-main bg-background overflow-hidden text-sm font-bold shadow-sm">
+              <button type="button" (click)="setExerciseType(eIndex, 'MCQ')"
+                class="px-5 py-2.5 flex items-center gap-2 transition-all"
+                [class.bg-primary]="getExerciseType(eIndex) === 'MCQ'"
+                [class.text-white]="getExerciseType(eIndex) === 'MCQ'"
+                [class.text-text-main]="getExerciseType(eIndex) !== 'MCQ'">
+                <i class="fa-solid fa-list-check"></i> MCQ
+              </button>
+              <button type="button" (click)="setExerciseType(eIndex, 'Matching')"
+                class="px-5 py-2.5 flex items-center gap-2 border-l border-border-main transition-all"
+                [class.bg-primary]="getExerciseType(eIndex) === 'Matching'"
+                [class.text-white]="getExerciseType(eIndex) === 'Matching'"
+                [class.text-text-main]="getExerciseType(eIndex) !== 'Matching'">
+                <i class="fa-solid fa-shuffle"></i> Matching
+              </button>
+              @if (isAISupported) {
+              <button type="button" (click)="setExerciseType(eIndex, 'AI')"
+                class="px-5 py-2.5 flex items-center gap-2 border-l border-border-main transition-all"
+                [class.bg-emerald-500]="getExerciseType(eIndex) === 'AI'"
+                [class.text-white]="getExerciseType(eIndex) === 'AI'"
+                [class]="getExerciseType(eIndex) !== 'AI' ? 'text-emerald-500 hover:bg-emerald-500/10' : ''">
+                <i class="fa-solid fa-robot"></i> AI Practice
+              </button>
+              }
+            </div>
+            <p class="text-text-main/40 text-xs font-bold mt-2 pl-1">
+              @if (getExerciseType(eIndex) === 'MCQ') {
+              Multiple-choice: each question has several answer choices and one correct answer.
+              } @else if (getExerciseType(eIndex) === 'Matching') {
+              Matching: each question has a single prompt paired with its correct answer.
+              } @else if (getExerciseType(eIndex) === 'AI') {
+              AI Practice: students record themselves signing letters assigned by you via webcam.
+              }
+            </p>
+          </div>
+
+          <!-- ── Questions Block (MCQ/Matching) ── -->
+          @if (getExerciseType(eIndex) !== 'AI') {
+          <div formArrayName="questions" class="space-y-5">
+            <div class="flex items-center justify-between">
+              <label class="text-xs font-bold uppercase tracking-wider text-text-main/50">Questions</label>
+              <button type="button" (click)="addQuestion(eIndex)"
+                class="h-8 px-3 rounded-xl border border-primary/20 bg-primary/10 text-primary font-bold text-xs hover:bg-primary/20 transition-all shadow-sm">
+                <i class="fa-solid fa-plus mr-1"></i> Add Question
+              </button>
+            </div>
+
+            @for (q of questions(eIndex).controls; track q; let qIndex = $index) {
+            <div [formGroupName]="qIndex"
+              class="rounded-2xl border border-border-main bg-surface p-5 space-y-4 hover:border-white/20 transition-all">
+              <!-- Question Header -->
+              <div class="flex items-center justify-between gap-3">
+                <div class="flex items-center gap-2">
+                  <div
+                    class="size-8 rounded-xl bg-violet-500/10 text-violet-400 flex items-center justify-center border border-violet-500/20 font-black text-sm shrink-0">
+                    {{ qIndex + 1 }}
+                  </div>
+                  <span class="font-black text-text-main text-base">Question {{ qIndex + 1 }}</span>
+                </div>
+                @if (questions(eIndex).length > 1) {
+                <button type="button" (click)="removeQuestion(eIndex, qIndex)"
+                  class="h-8 px-3 rounded-xl border border-red-500/20 bg-red-500/10 text-red-400 font-bold text-xs hover:bg-red-500/20 transition-all">
+                  <i class="fa-solid fa-trash-can mr-1"></i> Remove
+                </button>
+                }
+              </div>
+
+              <!-- Score -->
+              <div class="flex items-center gap-4">
+                <label class="text-xs font-bold uppercase tracking-wider text-text-main/50 shrink-0">Score</label>
+                <input formControlName="score" type="number" min="1"
+                  class="w-24 rounded-2xl border border-border-main bg-surface px-3 py-2 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm text-center" />
+                <span class="text-xs text-text-main/40 font-bold">points</span>
+              </div>
+
+              <!-- Prompt Text -->
+              <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Question
+                  Text <span class="normal-case font-normal text-text-main/30">(optional)</span></label>
+                <textarea formControlName="prompt_text" rows="2"
+                  class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm resize-none placeholder:text-text-main/30"
+                  placeholder="e.g., What is the main idea of the passage?"></textarea>
+              </div>
+
+              <!-- Optional Question Image -->
+              <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">
+                  Question Image
+                  <span class="normal-case font-normal text-text-main/30">(optional)</span>
+                </label>
+                @if (getQuestionPreview(eIndex, qIndex)) {
+                <div class="relative w-fit">
+                  <img [src]="getQuestionPreview(eIndex, qIndex)" alt="Question preview"
+                    class="h-32 rounded-2xl object-cover border border-border-main shadow-sm" />
+                  <label
+                    class="absolute bottom-2 right-2 cursor-pointer size-8 rounded-xl bg-background/80 backdrop-blur border border-border-main flex items-center justify-center text-primary hover:bg-background transition-all"
+                    title="Change image">
+                    <i class="fa-solid fa-pen text-xs"></i>
+                    <input type="file" accept="image/*" class="hidden"
+                      (change)="onQuestionImageSelect($event, eIndex, qIndex)" />
+                  </label>
+                </div>
+                } @else {
+                <label
+                  class="flex items-center gap-3 cursor-pointer w-fit px-4 py-2.5 rounded-2xl border border-dashed border-border-main hover:border-primary/50 bg-surface hover:bg-background transition-all text-sm font-bold text-text-main/60 hover:text-primary">
+                  <i class="fa-solid fa-image"></i>
+                  <span>Choose image…</span>
+                  <input type="file" accept="image/*" class="hidden"
+                    (change)="onQuestionImageSelect($event, eIndex, qIndex)" />
+                </label>
+                }
+              </div>
+
+              <!-- ── MCQ: Answer Choices ── -->
+              @if (getExerciseType(eIndex) === 'MCQ') {
+              <div formArrayName="answers" class="space-y-3">
+                <div class="flex items-center justify-between">
+                  <label class="text-xs font-bold uppercase tracking-wider text-text-main/50">Answer Choices</label>
+                  <button type="button" (click)="addAnswer(eIndex, qIndex)"
+                    class="h-7 px-3 rounded-xl border border-primary/20 bg-primary/10 text-primary font-bold text-xs hover:bg-primary/20 transition-all shadow-sm">
+                    <i class="fa-solid fa-plus mr-1"></i> Add Choice
+                  </button>
+                </div>
+
+                @for (a of answers(eIndex, qIndex).controls; track a; let aIndex = $index) {
+                <div [formGroupName]="aIndex" class="rounded-2xl border transition-all"
+                  [class.border-green-500/40]="a.get('isCorrect')?.value"
+                  [class.bg-green-500/5]="a.get('isCorrect')?.value"
+                  [class.border-border-main]="!a.get('isCorrect')?.value"
+                  [class.bg-surface]="!a.get('isCorrect')?.value">
+                  <div class="flex items-center gap-3 px-4 py-3">
+                    <!-- ✓ Correct Toggle -->
+                    <button type="button" (click)="toggleCorrect(eIndex, qIndex, aIndex)"
+                      class="shrink-0 size-8 rounded-xl flex items-center justify-center border transition-all font-bold text-sm"
+                      [class.border-green-500]="a.get('isCorrect')?.value"
+                      [class.bg-green-500]="a.get('isCorrect')?.value" [class.text-white]="a.get('isCorrect')?.value"
+                      [class.border-border-main]="!a.get('isCorrect')?.value"
+                      [class.bg-transparent]="!a.get('isCorrect')?.value"
+                      [class.text-text-main]="!a.get('isCorrect')?.value" title="Mark as correct answer">
+                      <i class="fa-solid fa-check text-xs"></i>
+                    </button>
+
+                    <!-- Text / Image type toggle -->
+                    <div
+                      class="flex items-center rounded-xl border border-border-main bg-background overflow-hidden shrink-0 text-xs font-bold">
+                      <button type="button" (click)="setMcqAnswerType(eIndex, qIndex, aIndex, 'text')"
+                        class="h-7 px-3 transition-all" [class.bg-primary]="
+                                  getMcqAnswerType(eIndex, qIndex, aIndex) === 'text'
+                                " [class.text-white]="
+                                  getMcqAnswerType(eIndex, qIndex, aIndex) === 'text'
+                                " [class.text-text-main]="
+                                  getMcqAnswerType(eIndex, qIndex, aIndex) !== 'text'
+                                ">
+                        <i class="fa-solid fa-font mr-1"></i>Text
+                      </button>
+                      <button type="button" (click)="setMcqAnswerType(eIndex, qIndex, aIndex, 'image')"
+                        class="h-7 px-3 border-l border-border-main transition-all" [class.bg-primary]="
+                                  getMcqAnswerType(eIndex, qIndex, aIndex) === 'image'
+                                " [class.text-white]="
+                                  getMcqAnswerType(eIndex, qIndex, aIndex) === 'image'
+                                " [class.text-text-main]="
+                                  getMcqAnswerType(eIndex, qIndex, aIndex) !== 'image'
+                                ">
+                        <i class="fa-solid fa-image mr-1"></i>Image
+                      </button>
+                    </div>
+
+                    <!-- Text input -->
+                    @if (getMcqAnswerType(eIndex, qIndex, aIndex) === 'text') {
+                    <input formControlName="answer" type="text"
+                      class="flex-1 min-w-0 rounded-xl border border-transparent bg-transparent text-sm font-semibold text-text-main outline-none placeholder:text-text-main/30"
+                      [placeholder]="'Choice ' + (aIndex + 1)" />
+                    }
+
+                    <!-- Image picker -->
+                    @if (getMcqAnswerType(eIndex, qIndex, aIndex) === 'image') {
+                    @if (getMcqAnswerPreview(eIndex, qIndex, aIndex)) {
+                    <div class="flex-1 relative flex items-center gap-2 min-w-0">
+                      <img [src]="getMcqAnswerPreview(eIndex, qIndex, aIndex)" alt="Answer preview"
+                        class="h-12 w-16 rounded-xl object-cover border border-border-main shadow-sm shrink-0" />
+                      <label
+                        class="cursor-pointer size-7 rounded-lg bg-background border border-border-main flex items-center justify-center text-primary hover:bg-surface transition-all shrink-0"
+                        title="Change">
+                        <i class="fa-solid fa-pen text-xs"></i>
+                        <input type="file" accept="image/*" class="hidden"
+                          (change)="onMcqAnswerImageSelect($event, eIndex, qIndex, aIndex)" />
+                      </label>
+                    </div>
+                    } @else {
+                    <label
+                      class="flex-1 flex items-center gap-2 cursor-pointer px-3 py-1 rounded-xl border border-dashed border-border-main hover:border-primary/50 bg-surface hover:bg-background transition-all text-xs font-bold text-text-main/60 hover:text-primary min-w-0">
+                      <i class="fa-solid fa-upload shrink-0"></i>
+                      <span class="truncate">Upload image…</span>
+                      <input type="file" accept="image/*" class="hidden"
+                        (change)="onMcqAnswerImageSelect($event, eIndex, qIndex, aIndex)" />
+                    </label>
+                    }
+                    }
+
+                    <!-- Remove answer -->
+                    @if (answers(eIndex, qIndex).length > 2) {
+                    <button type="button" (click)="removeAnswer(eIndex, qIndex, aIndex)"
+                      class="shrink-0 size-8 rounded-xl border border-red-500/20 bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-all flex items-center justify-center text-xs">
+                      <i class="fa-solid fa-xmark"></i>
+                    </button>
+                    }
+                  </div>
+                </div>
+                }
+              </div>
+              }
+
+              <!-- ── Matching: Single Correct Answer ── -->
+              @if (getExerciseType(eIndex) === 'Matching') {
+              <div class="space-y-3">
+                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50">Correct Answer</label>
+
+                <div class="flex items-center gap-3 rounded-2xl border border-green-500/30 bg-green-500/5 px-4 py-3">
+                  <!-- Text / Image type toggle -->
+                  <div
+                    class="flex items-center rounded-xl border border-border-main bg-background overflow-hidden shrink-0 text-xs font-bold">
+                    <button type="button" (click)="setMatchAnswerType(eIndex, qIndex, 'text')"
+                      class="h-7 px-3 transition-all" [class.bg-primary]="getMatchAnswerType(eIndex, qIndex) === 'text'"
+                      [class.text-white]="getMatchAnswerType(eIndex, qIndex) === 'text'"
+                      [class.text-text-main]="getMatchAnswerType(eIndex, qIndex) !== 'text'">
+                      <i class="fa-solid fa-font mr-1"></i>Text
+                    </button>
+                    <button type="button" (click)="setMatchAnswerType(eIndex, qIndex, 'image')"
+                      class="h-7 px-3 border-l border-border-main transition-all"
+                      [class.bg-primary]="getMatchAnswerType(eIndex, qIndex) === 'image'"
+                      [class.text-white]="getMatchAnswerType(eIndex, qIndex) === 'image'"
+                      [class.text-text-main]="getMatchAnswerType(eIndex, qIndex) !== 'image'">
+                      <i class="fa-solid fa-image mr-1"></i>Image
+                    </button>
+                  </div>
+
+                  <!-- Text input -->
+                  @if (getMatchAnswerType(eIndex, qIndex) === 'text') {
+                  <input type="text" formControlName="matchAnswer"
+                    class="flex-1 min-w-0 rounded-xl border border-transparent bg-transparent text-sm font-semibold text-text-main outline-none placeholder:text-text-main/30"
+                    placeholder="Enter the correct answer…" />
+                  }
+
+                  <!-- Image upload -->
+                  @if (getMatchAnswerType(eIndex, qIndex) === 'image') {
+                  @if (getMatchAnswerPreview(eIndex, qIndex)) {
+                  <div class="flex-1 relative flex items-center gap-2 min-w-0">
+                    <img [src]="getMatchAnswerPreview(eIndex, qIndex)" alt="Answer preview"
+                      class="h-12 w-16 rounded-xl object-cover border border-border-main shadow-sm shrink-0" />
+                    <label
+                      class="cursor-pointer size-7 rounded-lg bg-background border border-border-main flex items-center justify-center text-primary hover:bg-surface transition-all shrink-0"
+                      title="Change">
+                      <i class="fa-solid fa-pen text-xs"></i>
+                      <input type="file" accept="image/*" class="hidden"
+                        (change)="onMatchAnswerImageSelect($event, eIndex, qIndex)" />
+                    </label>
+                  </div>
+                  } @else {
+                  <label
+                    class="flex-1 flex items-center gap-2 cursor-pointer px-3 py-1 rounded-xl border border-dashed border-border-main hover:border-primary/50 bg-surface hover:bg-background transition-all text-xs font-bold text-text-main/60 hover:text-primary min-w-0">
+                    <i class="fa-solid fa-upload shrink-0"></i>
+                    <span class="truncate">Upload image…</span>
+                    <input type="file" accept="image/*" class="hidden"
+                      (change)="onMatchAnswerImageSelect($event, eIndex, qIndex)" />
+                  </label>
+                  }
+                  }
+                </div>
+              </div>
+              }
+            </div>
+            }
+          </div>
+          <!-- end questions -->
+          }
+
+          <!-- ── AI Letters Block ── -->
+          @if (getExerciseType(eIndex) === 'AI') {
+          <div class="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-6 space-y-6">
+            <!-- Alphabet Tab Switcher -->
+            <div class="flex items-center gap-2 p-1.5 rounded-2xl border border-border-main bg-background w-fit">
+              <button type="button" (click)="setActiveAlphabetTab(eIndex, 'english')"
+                [class]="getActiveAlphabetTab(eIndex) === 'english' ? 'bg-emerald-500/10 text-emerald-500 font-bold' : 'text-text-main/60 font-medium hover:text-text-main'"
+                class="cursor-pointer rounded-xl px-4 py-2 text-sm transition-all">
+                English (A-Z)
+              </button>
+              <button type="button" (click)="setActiveAlphabetTab(eIndex, 'arabic')"
+                [class]="getActiveAlphabetTab(eIndex) === 'arabic' ? 'bg-emerald-500/10 text-emerald-500 font-bold' : 'text-text-main/60 font-medium hover:text-text-main'"
+                class="cursor-pointer rounded-xl px-4 py-2 text-sm transition-all">
+                Arabic (أ-ي)
+              </button>
+            </div>
+
+            <!-- Letters Grid -->
+            <div class="flex flex-wrap gap-2">
+              @for (letter of (getActiveAlphabetTab(eIndex) === 'english' ? englishAlphabet : arabicAlphabet); track
+              letter) {
+              <button type="button" (click)="toggleLetter(eIndex, letter)"
+                class="size-11 rounded-xl border text-sm font-black transition-all cursor-pointer flex items-center justify-center"
+                [class]="isLetterSelected(eIndex, letter)
+                          ? 'bg-emerald-500 text-white border-emerald-500 shadow-lg shadow-emerald-500/30 scale-110'
+                          : 'bg-background border-border-main text-text-main/70 hover:border-emerald-500/50 hover:text-emerald-500'">
+                {{ letter }}
+              </button>
+              }
+            </div>
+
+            <!-- Selected Letters with Rounds -->
+            @if (getAiLettersEntries(eIndex).length > 0) {
+            <div class="space-y-3 pt-2">
+              <div class="flex items-center justify-between">
+                <label class="text-xs font-bold uppercase tracking-wider text-text-main/50">Selected Letters &
+                  Rounds</label>
+                <span class="text-xs font-black text-emerald-500">
+                  Total: {{ getAiTotalRounds(eIndex) }} {{ getAiTotalRounds(eIndex) === 1 ? 'round' : 'rounds' }}
+                </span>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                @for (entry of getAiLettersEntries(eIndex); track entry.letter) {
+                <div
+                  class="flex items-center gap-3 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3">
+                  <span
+                    class="size-9 rounded-xl bg-emerald-500 text-white font-black text-sm flex items-center justify-center shrink-0">
+                    {{ entry.letter }}
+                  </span>
+                  <div class="flex items-center gap-2 flex-1 min-w-0">
+                    <button type="button" (click)="setLetterRounds(eIndex, entry.letter, entry.rounds - 1)"
+                      class="size-7 rounded-lg border border-border-main bg-background text-text-main/60 hover:text-text-main text-xs font-bold cursor-pointer flex items-center justify-center transition-all">
+                      −
+                    </button>
+                    <input type="number" [value]="entry.rounds" min="1" max="20"
+                      (change)="setLetterRounds(eIndex, entry.letter, +$any($event.target).value)"
+                      class="w-12 text-center rounded-lg border border-border-main bg-background px-1 py-1 text-sm font-bold text-text-main outline-none focus:border-emerald-500" />
+                    <button type="button" (click)="setLetterRounds(eIndex, entry.letter, entry.rounds + 1)"
+                      class="size-7 rounded-lg border border-border-main bg-background text-text-main/60 hover:text-text-main text-xs font-bold cursor-pointer flex items-center justify-center transition-all">
+                      +
+                    </button>
+                  </div>
+                  <button type="button" (click)="removeLetter(eIndex, entry.letter)"
+                    class="size-7 rounded-lg border border-red-500/20 bg-red-500/10 text-red-400 hover:bg-red-500/20 text-xs cursor-pointer flex items-center justify-center transition-all">
+                    <i class="fa-solid fa-xmark"></i>
+                  </button>
+                </div>
+                }
+              </div>
+            </div>
+            }
+          </div>
+          }
+        </div>
         }
       </div>
       <!-- end exercises -->
 
       <!-- Add Exercise Button -->
-      <button
-        type="button"
-        (click)="addExercise()"
-        class="w-full h-14 rounded-3xl border-2 border-dashed border-white/10 bg-white/[0.02] font-bold text-white/50 hover:text-sky-400 hover:border-sky-500/40 transition-all text-sm flex items-center justify-center gap-2 group"
-      >
+      <button type="button" (click)="addExercise()"
+        class="w-full h-14 rounded-3xl border-2 border-dashed border-white/10 bg-white/[0.02] font-bold text-white/50 hover:text-sky-400 hover:border-sky-500/40 transition-all text-sm flex items-center justify-center gap-2 group">
         <i class="fa-solid fa-plus group-hover:scale-125 transition-transform"></i>
         Add Exercise
       </button>
 
       <!-- Error Banner (Bottom) -->
       @if (submitError) {
-        <div
-          class="flex items-center gap-3 rounded-2xl border border-red-500/30 bg-red-500/10 px-5 py-4 text-red-400 font-bold shadow-sm"
-        >
-          <i class="fa-solid fa-circle-exclamation text-lg"></i>
-          <span>{{ submitError }}</span>
-        </div>
+      <div
+        class="flex items-center gap-3 rounded-2xl border border-red-500/30 bg-red-500/10 px-5 py-4 text-red-400 font-bold shadow-sm">
+        <i class="fa-solid fa-circle-exclamation text-lg"></i>
+        <span>{{ submitError }}</span>
+      </div>
       }
 
       <!-- Submit -->
       <div class="pt-2 pb-6">
-        <button
-          type="submit"
-          [disabled]="isSubmitting"
-          class="w-full h-14 rounded-2xl bg-gradient-to-r from-sky-500 to-violet-500 font-bold text-white shadow-xl shadow-violet-500/20 hover:from-sky-400 hover:to-violet-400 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed text-base tracking-wide"
-        >
+        <button type="submit" [disabled]="isSubmitting"
+          class="w-full h-14 rounded-2xl bg-gradient-to-r from-sky-500 to-violet-500 font-bold text-white shadow-xl shadow-violet-500/20 hover:from-sky-400 hover:to-violet-400 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed text-base tracking-wide">
           <span class="flex items-center justify-center gap-2">
             @if (isSubmitting) {
-              <i class="fas fa-spinner fa-spin"></i> Saving Changes…
+            <i class="fas fa-spinner fa-spin"></i> Saving Changes…
             } @else {
-              <i class="fa-solid fa-save"></i> Save Changes
+            <i class="fa-solid fa-save"></i> Save Changes
             }
           </span>
         </button>

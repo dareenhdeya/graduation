@@ -27,6 +27,7 @@ export class SubjectCrudComponent implements OnInit {
 
   subjectName = new FormControl('', { nonNullable: true });
   deafMute = new FormControl(false, { nonNullable: true });
+  aiSupported = new FormControl(false, { nonNullable: true });
   adding = false;
   addError = '';
   openAdd = false;
@@ -92,7 +93,7 @@ export class SubjectCrudComponent implements OnInit {
     this.adding = true;
     this.addError = '';
 
-    this.admin.addSubject({ subjectName: name, deaf_mute: this.deafMute.value }).subscribe({
+    this.admin.addSubject({ subjectName: name, deaf_mute: this.deafMute.value, aI_supported: this.aiSupported.value }).subscribe({
       next: () => {
         setTimeout(() => {
           this.toastr.success('Subject added successfully.', 'Success');
@@ -100,6 +101,7 @@ export class SubjectCrudComponent implements OnInit {
         this.openAdd = false;
         this.subjectName.setValue('');
         this.deafMute.setValue(false);
+        this.aiSupported.setValue(false);
         this.loadSubjects();
         this.adding = false;
       },

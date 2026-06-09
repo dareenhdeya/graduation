@@ -152,7 +152,35 @@
               </span>
             </div>
 
-            <!-- Questions List -->
+            <!-- AI Letters (for AI exercises) -->
+            @if (exercise?.type === 3 || exercise?.type === 'AI') {
+            <div class="p-5 bg-surface/50">
+              <h4 class="text-sm font-bold text-text-main/60 uppercase tracking-wider mb-3">
+                <i class="fa-solid fa-robot text-emerald-500 mr-2"></i>Selected Letters & Rounds
+              </h4>
+              
+              @if (!exercise?.aI_letters || getAiLettersArray(exercise?.aI_letters).length === 0) {
+              <p class="text-sm font-bold text-text-main/40 italic">No letters selected.</p>
+              } @else {
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                @for (entry of getAiLettersArray(exercise?.aI_letters); track entry.letter) {
+                <div class="flex items-center gap-3 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3">
+                  <span class="size-9 rounded-xl bg-emerald-500 text-white font-black text-sm flex items-center justify-center shrink-0">
+                    {{ entry.letter }}
+                  </span>
+                  <div class="flex items-center gap-2 flex-1">
+                    <span class="text-sm font-semibold text-text-main">{{ entry.rounds }}</span>
+                    <span class="text-xs text-text-main/60">{{ entry.rounds === 1 ? 'round' : 'rounds' }}</span>
+                  </div>
+                </div>
+                }
+              </div>
+              }
+            </div>
+            }
+
+            <!-- Questions List (for MCQ/Matching) -->
+            @if (exercise?.type !== 3 && exercise?.type !== 'AI') {
             <div class="p-5 bg-surface/50">
               <h4 class="text-sm font-bold text-text-main/60 uppercase tracking-wider mb-3">
                 Questions ({{ exercise?.questions?.length || 0 }})
@@ -247,6 +275,7 @@
               </ul>
               }
             </div>
+            }
           </div>
           }
         </div>
