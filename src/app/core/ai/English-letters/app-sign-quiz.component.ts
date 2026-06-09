@@ -1,4 +1,4 @@
-// // 
+// //
 // import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 
 // @Component({
@@ -14,7 +14,7 @@
 //   currentIndex = 0;
 //   currentLetter = this.alphabet[this.currentIndex];
 //   result = "Ready?";
-  
+
 //   // This stores the results locally in case you want to show a list later
 //   history: any[] = [];
 
@@ -39,7 +39,7 @@
 //       // Draw Green Target Box
 //       ctx.strokeStyle = "#00FF00";
 //       ctx.lineWidth = 5;
-//       ctx.strokeRect(220, 140, 200, 200); 
+//       ctx.strokeRect(220, 140, 200, 200);
 
 //       requestAnimationFrame(render);
 //     };
@@ -75,7 +75,7 @@
 //     .then(res => res.json())
 //     .then(data => {
 //       const isCorrect = (data.letter === this.currentLetter);
-      
+
 //       // RESTORED: Now it shows both the status and the actual AI detection
 //       if (isCorrect) {
 //         this.result = `Correct! ✅ AI saw: ${data.letter}`;
@@ -389,62 +389,58 @@
 //   readonly Math = Math;
 // }
 //===============================================================================
-import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy, OnInit} from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Hands, Results, HAND_CONNECTIONS } from '@mediapipe/hands';
 import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils';
 import { CelebrationService } from '../celebration.service';
 type QuizState = 'waiting' | 'correct' | 'wrong' | 'finished';
- 
+
 @Component({
   selector: 'app-sign-quiz',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './sign-quiz.component.html',
-  styleUrls: ['./app-sign.component.css']
+  styleUrls: ['./app-sign.component.css'],
 })
-export class SignQuizComponent implements OnInit,AfterViewInit, OnDestroy {
-
-  @ViewChild('video')          video!:          ElementRef<HTMLVideoElement>;
-  @ViewChild('canvas')         canvas!:         ElementRef<HTMLCanvasElement>;
+export class SignQuizComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('video') video!: ElementRef<HTMLVideoElement>;
+  @ViewChild('canvas') canvas!: ElementRef<HTMLCanvasElement>;
   @ViewChild('confettiCanvas') confettiCanvas!: ElementRef<HTMLCanvasElement>;
 
-  readonly Math                = Math;
-  readonly TOTAL_ROUNDS        = 5;
-  readonly CORRECT_HOLD_MS     = 1000;
+  readonly Math = Math;
+  readonly TOTAL_ROUNDS = 5;
+  readonly CORRECT_HOLD_MS = 1000;
   readonly CONFIDENCE_THRESHOLD = 0.6;
-  readonly FRAMES_TO_CONFIRM   = 6;
+  readonly FRAMES_TO_CONFIRM = 6;
   readonly STABILITY_THRESHOLD = 0.7;
-  
+
   //no letter repeatition
   private usedLetters: Set<string> = new Set();
   alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
-  currentLetter  = '';
-  score          = 0;
-  round          = 0;
+  currentLetter = '';
+  score = 0;
+  round = 0;
   state: QuizState = 'waiting';
-  prediction     = '';
-  confidence     = 0;
-  feedback       = '';
-  correctStreak  = 0;
+  prediction = '';
+  confidence = 0;
+  feedback = '';
+  correctStreak = 0;
 
   lastLandmarks: number[] = [];
   prevLandmarks: number[] = [];
 
-  private hands!:           Hands;
-  private stream!:          MediaStream;
-  private animFrame         = 0;
+  private hands!: Hands;
+  private stream!: MediaStream;
+  private animFrame = 0;
   private sendingPrediction = false;
-  private lastSentTime      = 0;
-  private lastResults?:     Results;
+  private lastSentTime = 0;
+  private lastResults?: Results;
 
-  constructor(
-    private http:        HttpClient,
-    private celebration: CelebrationService
-  ) {}
-   
+  constructor(private http: HttpClient, private celebration: CelebrationService) {}
+
   ngOnInit() {
     this.pickLetter();
   }
@@ -456,7 +452,7 @@ export class SignQuizComponent implements OnInit,AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     cancelAnimationFrame(this.animFrame);
-    this.stream?.getTracks().forEach(t => t.stop());
+    this.stream?.getTracks().forEach((t) => t.stop());
   }
 
   // ───────────────── Quiz logic ─────────────────
@@ -465,13 +461,13 @@ export class SignQuizComponent implements OnInit,AfterViewInit, OnDestroy {
     if (this.usedLetters.size >= this.alphabet.length) {
       this.usedLetters.clear();
     }
-    const pool = this.alphabet.filter(l => !this.usedLetters.has(l));
+    const pool = this.alphabet.filter((l) => !this.usedLetters.has(l));
     this.currentLetter = pool[Math.floor(Math.random() * pool.length)];
     this.usedLetters.add(this.currentLetter);
     this.correctStreak = 0;
     this.prevLandmarks = [];
-    this.prediction    = '';
-    this.state         = 'waiting';
+    this.prediction = '';
+    this.state = 'waiting';
   }
 
   // ───────────────── Stability check ─────────────────
@@ -487,13 +483,13 @@ export class SignQuizComponent implements OnInit,AfterViewInit, OnDestroy {
   // ───────────────── MediaPipe ─────────────────
   private initMediaPipe() {
     this.hands = new Hands({
-      locateFile: f => `https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4/${f}`
+      locateFile: (f) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4/${f}`,
     });
     this.hands.setOptions({
-      maxNumHands:            1,
-      modelComplexity:        1,
+      maxNumHands: 1,
+      modelComplexity: 1,
       minDetectionConfidence: 0.6,
-      minTrackingConfidence:  0.5
+      minTrackingConfidence: 0.5,
     });
     this.hands.onResults((results: Results) => {
       this.lastResults = results;
@@ -503,15 +499,21 @@ export class SignQuizComponent implements OnInit,AfterViewInit, OnDestroy {
 
   // ───────────────── Camera ─────────────────
   private initCamera() {
-    navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480 } })
-      .then(stream => {
+    navigator.mediaDevices
+      .getUserMedia({ video: { width: 640, height: 480 } })
+      .then((stream) => {
         this.stream = stream;
-        const v     = this.video.nativeElement;
+        const v = this.video.nativeElement;
         v.srcObject = stream;
-        v.muted     = true;
-        v.onloadedmetadata = () => { v.play(); this.startLoop(); };
+        v.muted = true;
+        v.onloadedmetadata = () => {
+          v.play();
+          this.startLoop();
+        };
       })
-      .catch(() => { this.feedback = 'Camera access denied.'; });
+      .catch(() => {
+        this.feedback = 'Camera access denied.';
+      });
   }
 
   private startLoop() {
@@ -527,8 +529,8 @@ export class SignQuizComponent implements OnInit,AfterViewInit, OnDestroy {
   // ───────────────── Draw ─────────────────
   private draw() {
     const canvas = this.canvas.nativeElement;
-    const ctx    = canvas.getContext('2d')!;
-    const v      = this.video.nativeElement;
+    const ctx = canvas.getContext('2d')!;
+    const v = this.video.nativeElement;
 
     ctx.save();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -538,33 +540,40 @@ export class SignQuizComponent implements OnInit,AfterViewInit, OnDestroy {
 
     if (this.lastResults?.multiHandLandmarks?.length) {
       for (const lm of this.lastResults.multiHandLandmarks) {
-        const flipped = lm.map(p => ({ x: 1 - p.x, y: p.y, z: p.z }));
+        const flipped = lm.map((p) => ({ x: 1 - p.x, y: p.y, z: p.z }));
         drawConnectors(ctx, flipped, HAND_CONNECTIONS, {
-          color:     this.state === 'correct' ? '#00ff88' : '#7c6ef7',
-          lineWidth: 2
+          color: this.state === 'correct' ? '#00ff88' : '#7c6ef7',
+          lineWidth: 2,
         });
         drawLandmarks(ctx, flipped, {
-          color:     this.state === 'correct' ? '#00ff88' : '#fff',
-          lineWidth: 1
+          color: this.state === 'correct' ? '#00ff88' : '#fff',
+          lineWidth: 1,
         });
       }
     }
 
     const ok = this.state === 'correct';
     ctx.strokeStyle = ok ? '#00ff88' : 'rgba(255,255,255,0.5)';
-    ctx.lineWidth   = 2;
+    ctx.lineWidth = 2;
     ctx.setLineDash([8, 5]);
     ctx.strokeRect(200, 100, 240, 280);
     ctx.setLineDash([]);
 
-    const corners = [[200,100],[440,100],[200,380],[440,380]] as [number,number][];
+    const corners = [
+      [200, 100],
+      [440, 100],
+      [200, 380],
+      [440, 380],
+    ] as [number, number][];
     ctx.strokeStyle = ok ? '#00ff88' : '#7c6ef7';
-    ctx.lineWidth   = 5;
+    ctx.lineWidth = 5;
     for (const [cx, cy] of corners) {
       const dx = cx === 200 ? 1 : -1;
       const dy = cy === 100 ? 1 : -1;
       ctx.beginPath();
-      ctx.moveTo(cx + dx * 20, cy); ctx.lineTo(cx, cy); ctx.lineTo(cx, cy + dy * 20);
+      ctx.moveTo(cx + dx * 20, cy);
+      ctx.lineTo(cx, cy);
+      ctx.lineTo(cx, cy + dy * 20);
       ctx.stroke();
     }
   }
@@ -580,16 +589,13 @@ export class SignQuizComponent implements OnInit,AfterViewInit, OnDestroy {
       return;
     }
 
-    const lm    = results.multiHandLandmarks[0];
-    const baseX = lm[0].x, baseY = lm[0].y;
+    const lm = results.multiHandLandmarks[0];
+    const baseX = lm[0].x,
+      baseY = lm[0].y;
     const pts: number[] = [];
 
     for (const p of lm) {
-      pts.push(
-        +(p.x - baseX).toFixed(6),
-        +(p.y - baseY).toFixed(6),
-        +p.z.toFixed(6)
-      );
+      pts.push(+(p.x - baseX).toFixed(6), +(p.y - baseY).toFixed(6), +p.z.toFixed(6));
     }
 
     if (pts.length === 63) {
@@ -606,53 +612,60 @@ export class SignQuizComponent implements OnInit,AfterViewInit, OnDestroy {
   // ───────────────── Prediction ─────────────────
   private sendPrediction() {
     const now = Date.now();
-    if (now - this.lastSentTime < 150)    return;
-    if (this.sendingPrediction)           return;
+    if (now - this.lastSentTime < 150) return;
+    if (this.sendingPrediction) return;
     if (this.lastLandmarks.length !== 63) return;
-    if (this.state === 'finished')        return;
-    
-    this.lastSentTime      = now;
+    if (this.state === 'finished') return;
+
+    this.lastSentTime = now;
     this.sendingPrediction = true;
 
-    this.http.post<any>('http://127.0.0.1:8000/predict', {
-      landmarks: this.lastLandmarks
-    }).subscribe({
-      next: res => {
-        if (this.state === 'finished') {
+    this.http
+      .post<any>('http://127.0.0.1:8000/predict', {
+        landmarks: this.lastLandmarks,
+      })
+      .subscribe({
+        next: (res) => {
+          if (this.state === 'finished') {
+            this.sendingPrediction = false;
+            return;
+          }
           this.sendingPrediction = false;
-          return;
-        }
-        this.sendingPrediction = false;
-        this.confidence        = res.confidence;
+          this.confidence = res.confidence;
 
-        if (res.confidence < this.CONFIDENCE_THRESHOLD) {
-          this.prediction    = '...';
-          this.correctStreak = 0;
-          return;
-        }
+          if (res.confidence < this.CONFIDENCE_THRESHOLD) {
+            this.prediction = '...';
+            this.correctStreak = 0;
+            return;
+          }
 
-        this.prediction = res.letter;
-        console.log(
-          'Target:', this.currentLetter,
-          'Pred:', res.letter,
-          'Streak:', this.correctStreak
-        );
-        if (res.letter === this.currentLetter) {
-          this.correctStreak++;
-          if (this.correctStreak >= this.FRAMES_TO_CONFIRM) this.handleCorrect();
-        } else {
-          this.correctStreak = 0;
-        }
-      },
-      error: () => { this.sendingPrediction = false; }
-    });
+          this.prediction = res.letter;
+          console.log(
+            'Target:',
+            this.currentLetter,
+            'Pred:',
+            res.letter,
+            'Streak:',
+            this.correctStreak
+          );
+          if (res.letter === this.currentLetter) {
+            this.correctStreak++;
+            if (this.correctStreak >= this.FRAMES_TO_CONFIRM) this.handleCorrect();
+          } else {
+            this.correctStreak = 0;
+          }
+        },
+        error: () => {
+          this.sendingPrediction = false;
+        },
+      });
   }
 
   // ───────────────── Correct ─────────────────
   private handleCorrect() {
     console.log('BEFORE =>', this.round, '/', this.TOTAL_ROUNDS);
     if (this.state === 'correct' || this.state === 'finished') return;
-  
+
     this.state = 'correct';
     this.score++;
     this.round++;
@@ -661,10 +674,10 @@ export class SignQuizComponent implements OnInit,AfterViewInit, OnDestroy {
     console.log('state=', this.state);
     this.celebration.playClap();
     this.celebration.launchConfetti(this.confettiCanvas.nativeElement);
-  
+
     setTimeout(() => {
       console.log('CHECK =>', this.round, '/', this.TOTAL_ROUNDS);
-    
+
       if (this.round >= this.TOTAL_ROUNDS) {
         console.log('FINISHED');
         this.state = 'finished';
@@ -676,32 +689,42 @@ export class SignQuizComponent implements OnInit,AfterViewInit, OnDestroy {
   }
 
   private saveResult() {
-    this.http.post('http://localhost:7168/api/Quiz', {
-      quizType:   'asl-letters-quiz',
-      score:       this.score,
-      total:       this.TOTAL_ROUNDS,
-      percentage:  Math.round((this.score / this.TOTAL_ROUNDS) * 100),
-      completedAt: new Date().toISOString()
-    }).subscribe();
+    this.http
+      .post('http://localhost:7168/api/Quiz', {
+        quizType: 'asl-letters-quiz',
+        score: this.score,
+        total: this.TOTAL_ROUNDS,
+        percentage: Math.round((this.score / this.TOTAL_ROUNDS) * 100),
+        completedAt: new Date().toISOString(),
+      })
+      .subscribe();
   }
 
   // ───────────────── Controls ─────────────────
   skipLetter() {
     if (this.state === 'finished') return;
     this.round++;
-    if (this.round >= this.TOTAL_ROUNDS) { this.state = 'finished'; this.saveResult(); }
-    else this.pickLetter();
+    if (this.round >= this.TOTAL_ROUNDS) {
+      this.state = 'finished';
+      this.saveResult();
+    } else this.pickLetter();
   }
 
   restart() {
-    this.score         = 0;
-    this.round         = 0;
+    this.score = 0;
+    this.round = 0;
     this.correctStreak = 0;
     this.usedLetters.clear();
     this.pickLetter();
   }
-
-  get progressPercent()   { return Math.round((this.round / this.TOTAL_ROUNDS) * 100); }
-  get confidencePercent() { return Math.round(this.confidence * 100); }
-  get streakPercent()     { return Math.round((this.correctStreak / this.FRAMES_TO_CONFIRM) * 100); }
+  get progressPercent() {
+    if (this.state === 'finished') return 100;
+    return Math.round(((this.round + 1) / this.TOTAL_ROUNDS) * 100);
+  }
+  get confidencePercent() {
+    return Math.round(this.confidence * 100);
+  }
+  get streakPercent() {
+    return Math.round((this.correctStreak / this.FRAMES_TO_CONFIRM) * 100);
+  }
 }
