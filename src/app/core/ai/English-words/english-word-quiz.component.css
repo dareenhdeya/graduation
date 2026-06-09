@@ -4,7 +4,6 @@
   display: block;
 }
 
-/* ═══ TOKENS ═══════════════════════════════════════════ */
 :host {
   --accent: var(--brand-primary, #7c6ef7);
   --green: #00ff88;
@@ -51,7 +50,6 @@
   --overlay-bg: rgba(240, 238, 255, 0.94);
 }
 
-/* ═══ ROOT ══════════════════════════════════════════════ */
 .quiz-wrap {
   height: calc(100dvh - 100px);
   overflow: hidden;
@@ -77,7 +75,6 @@
   transition: background 0.3s;
 }
 
-/* ═══ OVERLAY ═══════════════════════════════════════════ */
 .overlay {
   position: fixed;
   inset: 0;
@@ -139,7 +136,6 @@
   transform: translateY(-1px);
 }
 
-/* ═══ HEADER ════════════════════════════════════════════ */
 header {
   width: 100%;
   max-width: 760px;
@@ -172,7 +168,6 @@ header {
   color: var(--text-1);
 }
 
-/* ═══ MAIN ══════════════════════════════════════════════ */
 main {
   width: 100%;
   max-width: 760px;
@@ -187,7 +182,6 @@ main {
   margin-top: 8px;
 }
 
-/* ═══ WORD DISPLAY (letter tiles) ═══════════════════════ */
 .word-display {
   display: flex;
   gap: 6px;
@@ -227,7 +221,6 @@ main {
   border-color: var(--tile-pend-b);
 }
 
-/* ═══ INSTRUCTION ═══════════════════════════════════════ */
 .instruction {
   font-size: 15px;
   color: var(--text-2);
@@ -239,7 +232,6 @@ main {
   font-size: 20px;
 }
 
-/* ═══ CAMERA ════════════════════════════════════════════ */
 .camera-wrap {
   position: relative;
   width: 100%;
@@ -266,7 +258,6 @@ canvas {
   object-fit: cover;
 }
 
-/* ═══ PREDICTION BADGE ══════════════════════════════════ */
 .pred-badge {
   position: absolute;
   top: 10px;
@@ -297,7 +288,6 @@ canvas {
   font-weight: 700;
 }
 
-/* ═══ STREAK / FLASH ════════════════════════════════════ */
 .streak-bar {
   position: absolute;
   bottom: 0;
@@ -337,7 +327,6 @@ canvas {
   }
 }
 
-/* ═══ CONTROLS / TIP ════════════════════════════════════ */
 .controls {
   display: flex;
   gap: 8px;
