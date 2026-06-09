@@ -1,12 +1,12 @@
-<section class="relative min-h-screen pb-10 px-4">
+<section class="relative min-h-screen py-10 px-4">
   <div class="container mx-auto max-w-4xl relative z-10">
-    <button
+    <!-- <button
       [routerLink]="['/teacher/subject', subjectId, 'students']"
       class="flex items-center gap-2 text-white/50 hover:text-white text-sm mb-8 transition group"
     >
       <i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition"></i>
       Back to students
-    </button>
+    </button> -->
 
     <div class="mb-8">
       <h1 class="text-4xl font-black text-white tracking-tight mb-2">
@@ -25,9 +25,7 @@
       <i class="fa-solid fa-user-graduate"></i>
       {{ studentName }}
     </div>
-    }
-
-    @if (isLoading) {
+    } @if (isLoading) {
     <div class="grid grid-cols-3 gap-4 mb-8">
       @for (i of [1,2,3]; track i) {
       <div class="rounded-2xl bg-white/5 h-24 animate-pulse"></div>
@@ -63,59 +61,84 @@
       </div>
     </div>
 
+    <div class="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-6 mb-6">
+      <div class="text-white/50 text-xs font-bold uppercase tracking-wider mb-3">
+        Score vs Best Score
+      </div>
+      <div class="flex flex-wrap gap-x-4 gap-y-1 mb-4">
+        <span class="flex items-center gap-1.5 text-xs font-semibold text-white/50">
+          <span class="inline-block w-2.5 h-2.5 rounded-sm" style="background: #7f77dd"></span> Last
+          attempt
+        </span>
+        <span class="flex items-center gap-1.5 text-xs font-semibold text-white/50">
+          <span class="inline-block w-2.5 h-2.5 rounded-sm" style="background: #5dcaa5"></span> Best
+          score
+        </span>
+      </div>
+      <div style="position: relative; width: 100%; height: 220px">
+        <canvas
+          id="spBarChart"
+          role="img"
+          aria-label="Grouped bar chart comparing last attempt and best score per level"
+          >No data.</canvas
+        >
+      </div>
+    </div>
+
     <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-6">
       <div
         class="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-6 lg:col-span-3"
       >
         <div class="text-white/50 text-xs font-bold uppercase tracking-wider mb-3">
-          Score vs Best Score
+          Attempts per Level
         </div>
-        <div class="flex flex-wrap gap-x-4 gap-y-1 mb-4">
-          <span class="flex items-center gap-1.5 text-xs font-semibold text-white/50">
-            <span class="inline-block w-2.5 h-2.5 rounded-sm" style="background: #38bdf8"></span>
-            Score
-          </span>
-          <span class="flex items-center gap-1.5 text-xs font-semibold text-white/50">
-            <span class="inline-block w-2.5 h-2.5 rounded-sm" style="background: #34d399"></span>
-            Best Score
-          </span>
-        </div>
-        <div style="position: relative; width: 100%; height: 220px">
+        <div style="position: relative; width: 100%; height: 200px">
           <canvas
-            id="spBarChart"
+            id="spAttemptsChart"
             role="img"
-            aria-label="Bar chart comparing score and best score per level"
+            aria-label="Horizontal bar chart showing attempts used per level"
             >No data.</canvas
           >
         </div>
       </div>
 
       <div
-        class="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-6 lg:col-span-2"
+        class="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-6 lg:col-span-2 flex flex-col items-center justify-center"
       >
-        <div class="text-white/50 text-xs font-bold uppercase tracking-wider mb-1">
-          Passed vs Failed
+        <div class="text-white/50 text-xs font-bold uppercase tracking-wider mb-4 self-start">
+          Overall Performance
         </div>
-        <div class="flex flex-col gap-2 mb-4">
-          <span class="flex items-center justify-between text-xs font-semibold text-white/50">
-            <span class="flex items-center gap-1.5">
-              <span class="inline-block w-2.5 h-2.5 rounded-sm" style="background: #34d399"></span>
-              Passed
-            </span>
-            <span class="text-emerald-400 font-bold">{{ passedCount }}</span>
-          </span>
-          <span class="flex items-center justify-between text-xs font-semibold text-white/50">
-            <span class="flex items-center gap-1.5">
-              <span class="inline-block w-2.5 h-2.5 rounded-sm" style="background: #f87171"></span>
-              Failed
-            </span>
-            <span class="text-red-400 font-bold">{{ failedCount }}</span>
-          </span>
-        </div>
-        <div style="position: relative; width: 100%; height: 200px">
-          <canvas id="spDonutChart" role="img" aria-label="Doughnut chart showing passed vs failed"
-            >No data.</canvas
+        <svg width="160" height="100" viewBox="0 0 160 100" aria-hidden="true">
+          <path
+            d="M 16 88 A 64 64 0 0 1 144 88"
+            fill="none"
+            stroke="rgba(255,255,255,0.08)"
+            stroke-width="14"
+            stroke-linecap="round"
+          />
+          <path
+            d="M 16 88 A 64 64 0 0 1 144 88"
+            fill="none"
+            stroke="#7F77DD"
+            stroke-width="14"
+            stroke-linecap="round"
+            stroke-dasharray="201"
+            [attr.stroke-dashoffset]="201 - (avgHighest / 100) * 201"
+          />
+        </svg>
+        <p class="text-4xl font-black text-white -mt-2">{{ avgHighest }}%</p>
+        <p class="text-white/40 text-xs mt-1">avg best score</p>
+        <div class="flex gap-3 mt-4">
+          <span
+            class="px-3 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20"
           >
+            {{ passedCount }} passed
+          </span>
+          <span
+            class="px-3 py-1 rounded-full text-xs font-bold bg-red-500/10 text-red-400 border border-red-500/20"
+          >
+            {{ failedCount }} failed
+          </span>
         </div>
       </div>
     </div>
@@ -124,11 +147,15 @@
       <div class="text-white/50 text-xs font-bold uppercase tracking-wider mb-1">
         Score Trend Over Time
       </div>
-      <div class="flex items-center gap-2 mb-4">
-        <span class="inline-block w-2.5 h-2.5 rounded-sm" style="background: #a78bfa"></span>
-        <span class="text-xs font-semibold text-white/50"
-          >Score per submission (sorted by date)</span
-        >
+      <div class="flex flex-wrap gap-x-4 gap-y-1 mb-4">
+        <span class="flex items-center gap-1.5 text-xs font-semibold text-white/50">
+          <span class="inline-block w-2.5 h-2.5 rounded-full" style="background: #5dcaa5"></span> ≥
+          60% pass
+        </span>
+        <span class="flex items-center gap-1.5 text-xs font-semibold text-white/50">
+          <span class="inline-block w-2.5 h-2.5 rounded-full" style="background: #e24b4a"></span>
+          &lt; 60% fail
+        </span>
       </div>
       <div style="position: relative; width: 100%; height: 220px">
         <canvas

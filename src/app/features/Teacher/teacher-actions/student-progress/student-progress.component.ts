@@ -3,7 +3,10 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TeacherServiceService } from '../../services/teacher-service.service';
 import { Chart, registerables } from 'chart.js';
-import { IStudentProgressItem, StudentProgressResponse } from '../../interfaces/IStudentProgress.interface';
+import {
+  IStudentProgressItem,
+  StudentProgressResponse,
+} from '../../interfaces/IStudentProgress.interface';
 
 Chart.register(...registerables);
 
@@ -25,7 +28,7 @@ export class StudentProgressComponent implements OnInit, OnDestroy {
 
   private barChart?: Chart;
   private lineChart?: Chart;
-  private donutChart?: Chart;
+  private attemptsChart?: Chart;
 
   get avgPercentage(): number {
     if (!this.progressData.length) return 0;
@@ -63,7 +66,7 @@ export class StudentProgressComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.barChart?.destroy();
     this.lineChart?.destroy();
-    this.donutChart?.destroy();
+    this.attemptsChart?.destroy();
   }
 
   loadProgress() {
@@ -104,8 +107,8 @@ export class StudentProgressComponent implements OnInit, OnDestroy {
   private initCharts(): void {
     if (!this.progressData.length) return;
     this.initBarChart();
+    this.initAttemptsChart();
     this.initLineChart();
-    this.initDonutChart();
   }
 
   private initBarChart(): void {
@@ -121,17 +124,17 @@ export class StudentProgressComponent implements OnInit, OnDestroy {
         labels: this.progressData.map((s) => s.levelName),
         datasets: [
           {
-            label: 'Score',
+            label: 'Last attempt',
             data: this.progressData.map((s) => s.percentage),
-            backgroundColor: 'rgba(56,189,248,0.75)',
+            backgroundColor: 'rgba(127,119,221,0.85)',
             borderWidth: 0,
             borderRadius: 6,
             borderSkipped: false,
           },
           {
-            label: 'Best Score',
+            label: 'Best score',
             data: this.progressData.map((s) => s.highestPercentage),
-            backgroundColor: 'rgba(52,211,153,0.75)',
+            backgroundColor: 'rgba(93,202,165,0.85)',
             borderWidth: 0,
             borderRadius: 6,
             borderSkipped: false,
@@ -166,6 +169,55 @@ export class StudentProgressComponent implements OnInit, OnDestroy {
     });
   }
 
+  private initAttemptsChart(): void {
+    const canvas = document.getElementById('spAttemptsChart') as HTMLCanvasElement;
+    if (!canvas) return;
+    this.attemptsChart?.destroy();
+    const dark = this.isDark();
+    const c = this.colors(dark);
+    const maxAttempts = Math.max(...this.progressData.map((s) => s.attemptsUsed), 1);
+
+    this.attemptsChart = new Chart(canvas, {
+      type: 'bar',
+      data: {
+        labels: this.progressData.map((s) => s.levelName),
+        datasets: [
+          {
+            label: 'Attempts',
+            data: this.progressData.map((s) => s.attemptsUsed),
+            backgroundColor: 'rgba(186,117,23,0.8)',
+            borderWidth: 0,
+            borderRadius: 6,
+            borderSkipped: false,
+          },
+        ],
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: (ctx) => ` ${ctx.parsed.x} attempts` }, ...c.tooltip },
+        },
+        scales: {
+          x: {
+            min: 0,
+            max: maxAttempts + 1,
+            grid: { color: c.grid },
+            ticks: { color: c.tick, font: { size: 11 }, stepSize: 1 },
+            border: { display: false },
+          },
+          y: {
+            grid: { display: false },
+            ticks: { color: c.tick, font: { size: 11 } },
+            border: { display: false },
+          },
+        },
+      },
+    });
+  }
+
   private initLineChart(): void {
     const canvas = document.getElementById('spLineChart') as HTMLCanvasElement;
     if (!canvas) return;
@@ -186,17 +238,15 @@ export class StudentProgressComponent implements OnInit, OnDestroy {
           {
             label: 'Score %',
             data: sorted.map((s) => s.percentage),
-            borderColor: '#a78bfa',
-            backgroundColor: 'rgba(167,139,250,0.12)',
-            pointBackgroundColor: sorted.map((s) =>
-              s.percentage >= 80 ? '#34d399' : s.percentage >= 60 ? '#facc15' : '#f87171'
-            ),
+            borderColor: '#7F77DD',
+            backgroundColor: 'rgba(127,119,221,0.07)',
+            pointBackgroundColor: sorted.map((s) => (s.percentage >= 60 ? '#5DCAA5' : '#E24B4A')),
             pointBorderColor: 'transparent',
-            pointRadius: 6,
-            pointHoverRadius: 8,
-            borderWidth: 2.5,
+            pointRadius: 7,
+            pointHoverRadius: 9,
+            borderWidth: 2,
             fill: true,
-            tension: 0.4,
+            tension: 0.35,
           },
         ],
       },
@@ -225,48 +275,6 @@ export class StudentProgressComponent implements OnInit, OnDestroy {
     });
   }
 
-  private initDonutChart(): void {
-    const canvas = document.getElementById('spDonutChart') as HTMLCanvasElement;
-    if (!canvas) return;
-    this.donutChart?.destroy();
-    const dark = this.isDark();
-    const c = this.colors(dark);
-
-    this.donutChart = new Chart(canvas, {
-      type: 'doughnut',
-      data: {
-        labels: ['Passed', 'Failed'],
-        datasets: [
-          {
-            data: [this.passedCount, this.failedCount],
-            backgroundColor: ['rgba(52,211,153,0.85)', 'rgba(248,113,113,0.85)'],
-            borderColor: ['#34d399', '#f87171'],
-            borderWidth: 0,
-            hoverOffset: 8,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        cutout: '70%',
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            callbacks: {
-              label: (ctx) => {
-                const total = (ctx.dataset.data as number[]).reduce((a, b) => a + b, 0);
-                const pct = total > 0 ? Math.round((ctx.parsed / total) * 100) : 0;
-                return ` ${ctx.label}: ${ctx.parsed} (${pct}%)`;
-              },
-            },
-            ...c.tooltip,
-          },
-        },
-      },
-    });
-  }
-
   getPercentageColor(value: number): string {
     if (value >= 80) return 'text-green-400';
     if (value >= 60) return 'text-yellow-400';
@@ -277,15 +285,5 @@ export class StudentProgressComponent implements OnInit, OnDestroy {
     if (value >= 80) return 'from-green-500 to-emerald-400';
     if (value >= 60) return 'from-yellow-500 to-amber-400';
     return 'from-red-500 to-rose-400';
-  }
-
-  formatDate(dateStr: string): string {
-    return new Date(dateStr).toLocaleDateString('en-GB', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
   }
 }

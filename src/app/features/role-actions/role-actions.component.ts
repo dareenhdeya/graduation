@@ -5,6 +5,7 @@ import { TeacherActionsComponent } from '../Teacher/teacher-actions/teacher-acti
 import { StudentActionsComponent } from '../Student/student-actions/student-actions.component';
 import { AuthService } from '../../core/auth/services/auth.service';
 import { AsyncPipe } from '@angular/common';
+import { AdminDashboardComponent } from '../Admin/admin-dashboard/admin-dashboard.component';
 
 @Component({
   selector: 'app-role-actions',
@@ -14,6 +15,7 @@ import { AsyncPipe } from '@angular/common';
     ParentActionsComponent,
     TeacherActionsComponent,
     StudentActionsComponent,
+    AdminDashboardComponent,
   ],
   templateUrl: './role-actions.component.html',
   styleUrl: './role-actions.component.css',

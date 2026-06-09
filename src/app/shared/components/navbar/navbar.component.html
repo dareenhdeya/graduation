@@ -33,8 +33,9 @@
               </span>
               Home
             </a>
-
+            @if (role !== 'Admin') {
             <a
+              [routerLink]="getProgressRoute()"
               class="group inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-text-main/80 hover:text-text-main transition cursor-pointer"
             >
               <span
@@ -44,6 +45,7 @@
               </span>
               Progress
             </a>
+            }
           </nav>
 
           <div class="flex items-center gap-2">
@@ -133,8 +135,9 @@
             </span>
             <i class="fa-solid fa-chevron-right text-text-main/30 text-xs"></i>
           </a>
-
+          @if (role !== 'Admin') {
           <a
+            [routerLink]="getProgressRoute()"
             (click)="isMenuOpen = false"
             class="flex items-center justify-between rounded-2xl border border-border-main bg-text-main/5 hover:bg-text-main/10 transition px-4 py-3 text-text-main/85 cursor-pointer"
           >
@@ -143,7 +146,7 @@
             </span>
             <i class="fa-solid fa-chevron-right text-text-main/30 text-xs"></i>
           </a>
-
+          }
           <button
             type="button"
             (click)="logOut(); isMenuOpen = false"
