@@ -5,352 +5,285 @@
   display: block;
 }
 
-/* ═══ TOKENS ═══════════════════════════════════════════ */
-:host {
-  --accent: var(--brand-primary, #7c6ef7);
-  --green: #00ff88;
-  --green-rgb: 0, 255, 136;
-}
-
-:host-context(html.dark) {
-  --bg: #0f0e1a;
-  --bg-card: #1a1828;
-  --bg-tile: rgba(255, 255, 255, 0.05);
-  --bg-badge: rgba(26, 24, 40, 0.95);
-  --border: rgba(255, 255, 255, 0.08);
-  --border-acc: rgba(124, 110, 247, 0.35);
-  --text-1: #f0eeff;
-  --text-2: #888;
-  --text-3: #555;
-  --text-pending: #555;
-  --glow-1: rgba(124, 110, 247, 0.15);
-  --glow-2: rgba(0, 255, 136, 0.07);
-  --streak-bg: rgba(255, 255, 255, 0.08);
-  --tile-active: rgba(124, 110, 247, 0.2);
-  --tile-done: rgba(0, 255, 136, 0.15);
-  --tile-pend-b: rgba(255, 255, 255, 0.08);
-  --overlay-bg: rgba(15, 14, 26, 0.93);
-}
-
-:host-context(html:not(.dark)) {
-  --bg: #f0eeff;
-  --bg-card: #ffffff;
-  --bg-tile: rgba(124, 110, 247, 0.06);
-  --bg-badge: rgba(255, 255, 255, 0.97);
-  --border: rgba(0, 0, 0, 0.09);
-  --border-acc: rgba(124, 110, 247, 0.35);
-  --text-1: #1a103c;
-  --text-2: #6b5f8a;
-  --text-3: #a89fc0;
-  --text-pending: #b0a8d0;
-  --glow-1: rgba(124, 110, 247, 0.1);
-  --glow-2: rgba(16, 185, 129, 0.06);
-  --streak-bg: rgba(0, 0, 0, 0.08);
-  --tile-active: rgba(124, 110, 247, 0.12);
-  --tile-done: rgba(16, 185, 129, 0.12);
-  --tile-pend-b: rgba(0, 0, 0, 0.09);
-  --overlay-bg: rgba(240, 238, 255, 0.94);
-}
-
-/* ═══ ROOT — no scroll ever ════════════════════════════ */
 .quiz-wrap {
-  /* navbar is ~80px; subtract it so we don't overflow */
-  height: calc(100dvh - 100px);
-  overflow: hidden;
-  /* background: var(--bg); */
-  color: var(--text-1);
+  min-height: 100vh;
+  /* background: #0f0e1a;
+  color: #f0eeff; */
   font-family: 'Nunito', sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 12px 16px 12px;
+  padding: 0 16px 32px;
   position: relative;
-  box-sizing: border-box;
-  transition: background 0.3s, color 0.3s;
+  overflow: hidden;
 }
 
 .quiz-wrap::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 60% 40% at 20% 15%, var(--glow-1) 0%, transparent 65%),
-    radial-gradient(ellipse 50% 50% at 80% 80%, var(--glow-2) 0%, transparent 65%);
+  background: radial-gradient(
+      ellipse 60% 40% at 20% 15%,
+      rgba(124, 110, 247, 0.15) 0%,
+      transparent 65%
+    ),
+    radial-gradient(ellipse 50% 50% at 80% 80%, rgba(0, 255, 136, 0.07) 0%, transparent 65%);
   pointer-events: none;
 }
 
-/* ═══ OVERLAY ═══════════════════════════════════════════ */
+/* ── Overlay ────────────────────────────────────────────────── */
 .overlay {
   position: fixed;
   inset: 0;
-  background: var(--overlay-bg);
+  background: rgba(15, 14, 26, 0.93);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 100;
-  backdrop-filter: blur(6px);
 }
 .result-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-acc);
-  border-radius: 20px;
-  padding: 36px 44px;
+  background: #1a1828;
+  border: 1px solid rgba(124, 110, 247, 0.3);
+  border-radius: 24px;
+  padding: 48px;
   text-align: center;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
 }
-.ornament {
-  font-size: 32px;
-  color: var(--accent);
-  margin-bottom: 6px;
+.trophy {
+  font-size: 56px;
 }
-.result-title {
-  font-size: 24px;
+.result-card h2 {
+  font-size: 28px;
   font-weight: 900;
-  color: var(--text-1);
-  margin: 6px 0;
+  color: #f0eeff;
+  margin: 8px 0;
   font-family: 'Cairo', sans-serif;
 }
-.result-subtitle {
-  font-size: 13px;
-  color: var(--text-2);
-  margin: 0 0 18px;
-}
-.result-score {
-  font-size: 68px;
+.big-score {
+  font-size: 80px;
   font-weight: 900;
-  color: var(--accent);
+  color: #7c6ef7;
   line-height: 1;
 }
-.result-score span {
-  font-size: 30px;
-  color: var(--text-3);
+.big-score span {
+  font-size: 36px;
+  color: #555;
 }
-.result-pct {
-  font-size: 16px;
-  color: var(--text-2);
-  margin: 6px 0 24px;
+.pct {
+  font-size: 18px;
+  color: #888;
+  margin: 8px 0 32px;
 }
-.btn-restart {
-  background: var(--accent);
+.result-card button {
+  background: #7c6ef7;
   color: #fff;
   border: none;
-  padding: 11px 32px;
-  font-size: 16px;
+  padding: 14px 40px;
+  font-size: 18px;
   font-weight: 800;
   border-radius: 50px;
   cursor: pointer;
   font-family: 'Cairo', sans-serif;
-  transition: filter 0.2s, transform 0.15s;
-}
-.btn-restart:hover {
-  filter: brightness(1.1);
-  transform: translateY(-1px);
 }
 
-/* ═══ HEADER ════════════════════════════════════════════ */
-.quiz-header {
+/* ── Header ─────────────────────────────────────────────────── */
+header {
   width: 100%;
-  max-width: 760px;
-  padding-top: 12px;
-  flex-shrink: 0;
+  max-width: 680px;
+  padding-top: 24px;
   position: relative;
   z-index: 1;
 }
 .progress-bar {
-  height: 5px;
-  background: var(--border);
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 3px;
   overflow: hidden;
-  margin-bottom: 6px;
+  margin-bottom: 12px;
 }
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--accent), var(--green));
+  background: linear-gradient(90deg, #7c6ef7, #00ff88);
   border-radius: 3px;
   transition: width 0.4s;
 }
 .stats-row {
   display: flex;
   justify-content: space-between;
-  font-size: 13px;
-  color: var(--text-2);
+  font-size: 15px;
+  color: #777;
   font-family: 'Cairo', sans-serif;
   direction: rtl;
 }
 .stats-row strong {
-  color: var(--text-1);
+  color: #f0eeff;
 }
 
-/* ═══ MAIN ══════════════════════════════════════════════ */
-.quiz-main {
+/* ── Main ───────────────────────────────────────────────────── */
+main {
   width: 100%;
-  max-width: 760px;
-  flex: 1 1 0;
-  min-height: 0;
+  max-width: 680px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 16px;
   position: relative;
   z-index: 1;
-  margin-top: 8px;
+  margin-top: 20px;
 }
 
-/* ═══ LETTER TILE — small & compact ════════════════════ */
-.target-section {
+/* ── Arabic word display ────────────────────────────────────── */
+.word-display {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  flex-shrink: 0;
-}
-.target-label {
-  font-size: 11px;
-  color: var(--text-2);
-  font-family: 'Cairo', sans-serif;
-  margin: 0;
-}
-.target-name {
-  font-size: 11px;
-  color: var(--text-3);
-  font-family: 'Cairo', sans-serif;
-  margin: 0;
+  gap: 12px;
 }
 
+.arabic-display-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-direction: row-reverse;
+}
+
+.arabic-full-word {
+  font-family: 'Cairo', sans-serif;
+  font-size: 52px;
+  font-weight: 900;
+  color: #f0eeff;
+  letter-spacing: 2px;
+  direction: rtl;
+}
+
+/* Letter tiles row — RTL so first letter is rightmost */
 .letter-tiles-row {
   display: flex;
   flex-direction: row-reverse;
-  gap: 6px;
+  gap: 10px;
   flex-wrap: wrap;
   justify-content: center;
 }
 
 .letter-tile {
-  min-width: 72px;
-  height: 76px; /* ← was 96px */
+  min-width: 56px;
+  height: 64px;
   padding: 0 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 44px; /* ← was 52px */
-  font-weight: 900;
+  font-size: 15px;
+  font-weight: 800;
   font-family: 'Cairo', sans-serif;
-  border-radius: 12px;
-  border: 2px solid transparent;
+  border-radius: 14px;
+  border: 3px solid transparent;
   transition: all 0.25s;
   white-space: nowrap;
 }
 .letter-tile.done {
-  background: var(--tile-done);
-  color: var(--green);
-  border-color: rgba(var(--green-rgb), 0.45);
+  background: rgba(0, 255, 136, 0.15);
+  color: #00ff88;
+  border-color: rgba(0, 255, 136, 0.4);
 }
 .letter-tile.active {
-  background: var(--tile-active);
-  color: var(--accent);
-  border-color: var(--accent);
-  transform: scale(1.05);
-  box-shadow: 0 0 20px rgba(124, 110, 247, 0.25);
+  background: rgba(124, 110, 247, 0.2);
+  color: #a89df7;
+  border-color: #7c6ef7;
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(124, 110, 247, 0.3);
 }
 .letter-tile.pending {
-  background: var(--bg-tile);
-  color: var(--text-pending);
-  border-color: var(--tile-pend-b);
+  background: rgba(255, 255, 255, 0.05);
+  color: #555;
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
-/* ═══ CAMERA — wide & short ════════════════════════════ */
+/* ── Instruction ────────────────────────────────────────────── */
+.instruction {
+  font-size: 20px;
+  color: #aaa;
+  margin: 0;
+  font-family: 'Cairo', sans-serif;
+  direction: rtl;
+}
+.instruction strong {
+  color: #f0eeff;
+  font-size: 28px;
+}
+
+/* ── Camera ─────────────────────────────────────────────────── */
 .camera-wrap {
   position: relative;
   width: 100%;
-  max-width: 760px;
-  flex: 1 1 0;
-  min-height: 0;
-  /* wide 16:9-ish — fills width, stays short */
-  /* max-height: min(45vh, 340px); */
-  max-height: min(75vh, 600px);
-  border-radius: 18px;
+  max-width: 560px;
+  border-radius: 20px;
   overflow: hidden;
-  border: 2px solid var(--border);
-  background: var(--bg-card);
+  border: 2px solid rgba(255, 255, 255, 0.08);
   transition: border-color 0.3s, box-shadow 0.3s;
 }
-.camera-wrap.glow-correct {
-  border-color: rgba(var(--green-rgb), 0.55);
-  box-shadow: 0 0 40px rgba(var(--green-rgb), 0.18);
+.camera-wrap.glow {
+  border-color: rgba(0, 255, 136, 0.5);
+  box-shadow: 0 0 40px rgba(0, 255, 136, 0.2);
 }
-
 canvas {
   width: 100%;
-  height: 100%;
   display: block;
-  object-fit: cover;
 }
 
-/* ═══ BADGE ═════════════════════════════════════════════ */
-.prediction-badge {
+.pred-badge {
   position: absolute;
-  top: 10px;
-  left: 10px;
-  background: var(--bg-badge);
-  border: 1px solid var(--border-acc);
-  border-radius: 14px;
-  min-width: 80px;
-  height: 58px;
-  padding: 6px 12px;
+  top: 12px;
+  left: 12px;
+  background: rgba(15, 14, 26, 0.85);
+  border: 1px solid rgba(124, 110, 247, 0.4);
+  border-radius: 10px;
+  padding: 8px 14px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  backdrop-filter: blur(10px);
-  z-index: 20;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  align-items: baseline;
+  gap: 8px;
+  backdrop-filter: blur(6px);
 }
-.pred-letter {
-  font-size: 36px;
+.pred-l {
+  font-size: 32px;
   font-weight: 900;
-  color: var(--accent);
+  color: #7c6ef7;
   font-family: 'Cairo', sans-serif;
-  line-height: 1;
 }
-.pred-conf {
-  font-size: 18px;
-  color: var(--text-2);
-  font-weight: 700;
+.pred-c {
+  font-size: 13px;
+  color: #888;
 }
 
-/* ═══ STREAK / FLASH ════════════════════════════════════ */
 .streak-bar {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 4px;
-  background: var(--streak-bg);
-  z-index: 5;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
 }
 .streak-fill {
   height: 100%;
-  background: var(--green);
+  background: #00ff88;
   transition: width 0.1s linear;
 }
 
-.feedback-flash {
+.flash {
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 40px;
+  font-size: 42px;
   font-weight: 900;
-  color: var(--green);
-  background: rgba(var(--green-rgb), 0.08);
+  color: #00ff88;
+  background: rgba(0, 255, 136, 0.08);
   animation: flashIn 0.2s ease;
   font-family: 'Cairo', sans-serif;
-  z-index: 15;
 }
 @keyframes flashIn {
   from {
     opacity: 0;
-    transform: scale(0.88);
+    transform: scale(0.9);
   }
   to {
     opacity: 1;
@@ -358,39 +291,35 @@ canvas {
   }
 }
 
-/* ═══ CONTROLS / TIP ════════════════════════════════════ */
+/* ── Controls ───────────────────────────────────────────────── */
 .controls {
   display: flex;
-  gap: 8px;
-  flex-shrink: 0;
+  gap: 12px;
 }
-
-.btn-skip {
+.skip-btn {
   background: transparent;
-  border: 1px solid var(--border);
-  color: var(--text-2);
-  padding: 8px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #777;
+  padding: 10px 28px;
   border-radius: 50px;
   font-family: 'Cairo', sans-serif;
-  font-size: 13px;
+  font-size: 15px;
   cursor: pointer;
-  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  transition: border-color 0.2s, color 0.2s;
 }
-.btn-skip:hover:not(:disabled) {
-  border-color: var(--accent);
-  color: var(--accent);
-  background: rgba(124, 110, 247, 0.06);
+.skip-btn:hover:not(:disabled) {
+  border-color: rgba(124, 110, 247, 0.5);
+  color: #a89df7;
 }
-.btn-skip:disabled {
+.skip-btn:disabled {
   opacity: 0.3;
   cursor: not-allowed;
 }
 
 .tip {
-  font-size: 11px;
-  color: var(--text-3);
+  font-size: 13px;
+  color: #555;
   margin: 0;
   font-family: 'Cairo', sans-serif;
   direction: rtl;
-  flex-shrink: 0;
 }

@@ -41,3 +41,12 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+
+
+# large files
+AI/*.pkl
+*.pkl
+__pycache__/
+node_modules/
+dist/
