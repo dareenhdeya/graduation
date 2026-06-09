@@ -46,6 +46,7 @@ import { SignQuizComponent } from './core/ai/English-letters/app-sign-quiz.compo
 import { ArabicQuizComponent } from './core/ai/Arabic/arabic-quiz.component';
 import { EnglishWordQuizComponent } from './core/ai/English-words/english-word-quiz.component';
 import { ArabicWordQuizComponent } from './core/ai/Arabic-words/arabic-word-quiz.component';
+import { StudentProgressComponent } from './features/Teacher/teacher-actions/student-progress/student-progress.component';
 
 export const routes: Routes = [
   {
@@ -162,6 +163,11 @@ export const routes: Routes = [
             path: 'subject/:sid/lesson/:lid/exercise/edit/:qid',
             component: EditQuizComponent,
             title: 'Edit Exercise',
+          },
+          {
+            path: 'subject/:sid/student/:stdID/progress',
+            component: StudentProgressComponent,
+            title: 'Student Progress',
           },
         ],
       },
