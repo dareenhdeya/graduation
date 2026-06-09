@@ -15,86 +15,88 @@
     </p>
   </div>    -->
 
-  <div class="quiz-wrap" [class.state-correct]="state === 'correct'">
+<div class="quiz-wrap" [class.state-correct]="state === 'correct'">
+  <div class="overlay" *ngIf="state === 'finished'">
+    <div class="result-card">
+      <div class="trophy">🏆</div>
 
-    <!-- ── Finished overlay ── -->
-    <div class="overlay" *ngIf="state==='finished'">
-      <div class="result-card">
-        <div class="trophy">🏆</div>
-    
-        <h2>Well Done!</h2>
-    
-        <div class="big-score">
-          {{ score }}<span>/{{ TOTAL_ROUNDS }}</span>
-        </div>
-    
-        <p class="pct">
-          {{ Math.round((score/TOTAL_ROUNDS)*100) }}%
-        </p>
-    
-        <button (click)="restart()">
-          Play Again
-        </button>
+      <h2>Well Done!</h2>
+
+      <div class="big-score">
+        {{ score }}<span>/{{ TOTAL_ROUNDS }}</span>
+      </div>
+
+      <p class="pct">{{ Math.round((score / TOTAL_ROUNDS) * 100) }}%</p>
+
+      <button (click)="restart()">Play Again</button>
+    </div>
+  </div>
+
+  <header class="quiz-header">
+    <div class="progress-bar">
+      <div class="progress-fill" [style.width.%]="progressPercent"></div>
+    </div>
+    <div class="stats-row">
+      <span
+        >Round <strong>{{ round + 1 }}</strong> / {{ TOTAL_ROUNDS }}</span
+      >
+      <span
+        >Score <strong>{{ score }}</strong></span
+      >
+    </div>
+  </header>
+
+  <main class="quiz-main">
+    <div class="target-section">
+      <p class="target-label">Show the sign for</p>
+      <div class="letter-tiles-row">
+        <span
+          class="letter-tile"
+          [class.done]="state === 'correct'"
+          [class.active]="state === 'waiting'"
+        >
+          {{ currentLetter }}
+        </span>
       </div>
     </div>
-  
-    <!-- ── Header ── -->
-    <header class="quiz-header">
-      <div class="progress-bar">
-        <div class="progress-fill" [style.width.%]="progressPercent"></div>
+
+    <div class="camera-wrap" [class.glow-correct]="state === 'correct'">
+      <video
+        #video
+        autoplay
+        playsinline
+        muted
+        style="position: absolute; width: 100%; height: 100%; opacity: 0; z-index: -1"
+      ></video>
+      <canvas #canvas width="640" height="480"></canvas>
+      <canvas
+        #confettiCanvas
+        width="640"
+        height="480"
+        style="position: absolute; inset: 0; pointer-events: none; z-index: 10"
+      ></canvas>
+
+      <div class="prediction-badge">
+        <span class="pred-letter">{{ prediction }}</span>
+        <span class="pred-conf">{{ confidencePercent }}%</span>
       </div>
-      <div class="stats-row">
-        <span>Round <strong>{{ round + 1 }}</strong> / {{ TOTAL_ROUNDS }}</span>
-        <span>Score <strong>{{ score }}</strong></span>
+
+      <div class="streak-bar" *ngIf="correctStreak > 0 && state !== 'correct'">
+        <div class="streak-fill" [style.width.%]="streakPercent"></div>
       </div>
-    </header>
-  
-    <!-- ── Main ── -->
-    <main class="quiz-main">
-  
-      <!-- Target letter -->
-      <div class="target-section">
-        <p class="target-label">Show the sign for</p>
-        <div class="letter-tiles-row">
-          <span class="letter-tile"
-            [class.done]="state === 'correct'"
-            [class.active]="state === 'waiting'">
-            {{ currentLetter }}
-          </span>
-        </div>
-      </div>
-  
-      <!-- Camera -->
-      <div class="camera-wrap" [class.glow-correct]="state === 'correct'">
-        <video #video autoplay playsinline muted
-          style="position:absolute;width:100%;height:100%;opacity:0;z-index:-1;"></video>
-        <canvas #canvas width="640" height="480"></canvas>
-        <canvas #confettiCanvas width="640" height="480"
-          style="position:absolute;inset:0;pointer-events:none;z-index:10;"></canvas>
-  
-        <!-- Prediction badge — always visible -->
-        <div class="prediction-badge">
-          <span class="pred-letter">{{ prediction }}</span>
-          <span class="pred-conf">{{ confidencePercent }}%</span>
-        </div>
-  
-        <!-- Streak bar -->
-        <div class="streak-bar" *ngIf="correctStreak > 0 && state !== 'correct'">
-          <div class="streak-fill" [style.width.%]="streakPercent"></div>
-        </div>
-  
-        <!-- Feedback flash -->
-        <div class="feedback-flash" *ngIf="state === 'correct'">✓ Correct!</div>
-      </div>
-      <!-- Controls -->
-      <div class="controls">
-        <button class="btn-skip" (click)="skipLetter()"
-          [disabled]="state === 'correct' || state === 'finished'">
-          Skip
-        </button>
-      </div>
-  
-      <p class="tip" *ngIf="!lastLandmarks.length">Place your hand in front of the camera</p>
-  
-    </main>
-  </div>
+
+      <div class="feedback-flash" *ngIf="state === 'correct'">✓ Correct!</div>
+    </div>
+    <div class="controls">
+      <button
+        class="btn-skip"
+        (click)="skipLetter()"
+        [disabled]="state === 'correct' || state === 'finished'"
+      >
+        Skip
+      </button>
+    </div>
+
+    <p class="tip" *ngIf="!lastLandmarks.length">Place your hand in front of the camera</p>
+  </main>
+</div>

@@ -1,5 +1,4 @@
 <div class="quiz-wrap" [class.state-correct]="state === 'correct'">
-  <!-- Finished overlay -->
   <div class="overlay" *ngIf="state === 'finished'">
     <div class="result-card">
       <div class="trophy">🏆</div>
@@ -28,14 +27,11 @@
   </header>
 
   <main>
-    <!-- Arabic word display -->
     <div class="word-display arabic-word" *ngIf="currentWord">
-      <!-- Show the full Arabic display word with active letter highlighted via overlay -->
       <div class="arabic-display-row">
         <span class="arabic-full-word">{{ currentWord.display }}</span>
       </div>
 
-      <!-- Letter-by-letter progress tiles (using letter keys) -->
       <div class="letter-tiles-row">
         <span
           *ngFor="let letter of currentWord.letters; let i = index"
@@ -49,7 +45,6 @@
       </div>
     </div>
 
-    <!-- Camera -->
     <div class="camera-wrap" [class.glow]="state === 'correct'">
       <video
         #video
@@ -68,7 +63,6 @@
       >
       </canvas>
 
-      <!-- Prediction badge: shows the Arabic char returned by the API -->
       <div class="pred-badge" *ngIf="prediction && prediction !== '...'">
         <span class="pred-l">{{ prediction }}</span>
         <span class="pred-c">{{ confidencePct }}%</span>

@@ -5,7 +5,6 @@
   display: block;
 }
 
-/* ═══ TOKENS ═══════════════════════════════════════════ */
 :host {
   --accent: var(--brand-primary, #7c6ef7);
   --green: #00ff88;
@@ -52,8 +51,6 @@
   --overlay-bg: rgba(240, 238, 255, 0.94);
 }
 
-/* ═══ ROOT — no scroll ever ════════════════════════════ */
-
 .quiz-wrap {
   height: calc(100dvh - 100px);
   overflow: hidden;
@@ -78,7 +75,6 @@
   pointer-events: none;
   transition: background 0.3s;
 }
-/* ═══ OVERLAY ═══════════════════════════════════════════ */
 .overlay {
   position: fixed;
   inset: 0;
@@ -146,7 +142,6 @@
   transform: translateY(-1px);
 }
 
-/* ═══ HEADER ════════════════════════════════════════════ */
 .quiz-header {
   width: 100%;
   max-width: 760px;
@@ -180,7 +175,6 @@
   color: var(--text-1);
 }
 
-/* ═══ MAIN ══════════════════════════════════════════════ */
 .quiz-main {
   width: 100%;
   max-width: 760px;
@@ -195,7 +189,6 @@
   margin-top: 8px;
 }
 
-/* ═══ LETTER TILE — small & compact ════════════════════ */
 .target-section {
   display: flex;
   flex-direction: column;
@@ -226,12 +219,12 @@
 
 .letter-tile {
   min-width: 72px;
-  height: 76px; /* ← was 96px */
+  height: 76px;
   padding: 0 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 44px; /* ← was 52px */
+  font-size: 44px;
   font-weight: 900;
   font-family: 'Cairo', sans-serif;
   border-radius: 12px;
@@ -257,7 +250,6 @@
   border-color: var(--tile-pend-b);
 }
 
-/* ═══ CAMERA — wide & short ════════════════════════════ */
 .camera-wrap {
   position: relative;
   width: 100%;
@@ -285,7 +277,6 @@ canvas {
   object-fit: cover;
 }
 
-/* ═══ BADGE ═════════════════════════════════════════════ */
 .prediction-badge {
   position: absolute;
   top: 10px;
@@ -317,7 +308,6 @@ canvas {
   font-weight: 700;
 }
 
-/* ═══ STREAK / FLASH ════════════════════════════════════ */
 .streak-bar {
   position: absolute;
   bottom: 0;
@@ -358,7 +348,6 @@ canvas {
   }
 }
 
-/* ═══ CONTROLS / TIP ════════════════════════════════════ */
 .controls {
   display: flex;
   gap: 8px;
