@@ -53,12 +53,10 @@
 }
 
 /* ═══ ROOT — no scroll ever ════════════════════════════ */
+
 .quiz-wrap {
-  /* navbar is ~80px; subtract it so we don't overflow */
   height: calc(100dvh - 100px);
   overflow: hidden;
-  /* background: var(--bg); */
-  color: var(--text-1);
   font-family: 'Nunito', sans-serif;
   display: flex;
   flex-direction: column;
@@ -69,15 +67,17 @@
   transition: background 0.3s, color 0.3s;
 }
 
-.quiz-wrap::before {
+.quiz-wrap::after {
   content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse 60% 40% at 20% 15%, var(--glow-1) 0%, transparent 65%),
-    radial-gradient(ellipse 50% 50% at 80% 80%, var(--glow-2) 0%, transparent 65%);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  z-index: -1;
   pointer-events: none;
+  transition: background 0.3s;
 }
-
 /* ═══ OVERLAY ═══════════════════════════════════════════ */
 .overlay {
   position: fixed;

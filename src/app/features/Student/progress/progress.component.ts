@@ -1,14 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { StudentServiceService } from '../services/student-service.service';
 import { Submission } from '../interfaces/IStudSubmissions.interface';
 import { Chart, registerables } from 'chart.js';
+import { ThemeService } from '../../../core/services/theme.service';
 
 Chart.register(...registerables);
 
 @Component({
   selector: 'app-progress',
-  imports: [CommonModule],
+  imports: [CommonModule, DecimalPipe],
   templateUrl: './progress.component.html',
   styleUrl: './progress.component.css',
 })
@@ -25,7 +26,7 @@ export class ProgressComponent implements OnInit, OnDestroy {
   private barScoreChart?: Chart;
   private pieChart?: Chart;
 
-  constructor(private studentService: StudentServiceService) {}
+  constructor(private studentService: StudentServiceService, private themeService: ThemeService) {}
 
   ngOnInit() {
     this.studentService.viewSubmissions().subscribe({
@@ -40,6 +41,12 @@ export class ProgressComponent implements OnInit, OnDestroy {
         this.error = 'Failed to load progress data.';
         this.isLoading = false;
       },
+    });
+
+    this.themeService.isDarkMode$.subscribe(() => {
+      if (!this.isLoading && this.submissions.length > 0) {
+        setTimeout(() => this.initCharts(), 50);
+      }
     });
   }
 

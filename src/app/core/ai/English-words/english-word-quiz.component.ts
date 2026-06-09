@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
-import { HttpClient , HttpClientModule} from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { Hands, Results, HAND_CONNECTIONS } from '@mediapipe/hands';
 import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils';
@@ -12,43 +12,42 @@ type WordState = 'signing' | 'correct' | 'finished';
   standalone: true,
   imports: [CommonModule, HttpClientModule],
   templateUrl: './english-word-quiz.component.html',
-  styleUrls: ['./english-word-quiz.component.css']
+  styleUrls: ['./english-word-quiz.component.css'],
 })
 export class EnglishWordQuizComponent implements AfterViewInit, OnDestroy {
-
-  @ViewChild('video')          video!:          ElementRef<HTMLVideoElement>;
-  @ViewChild('canvas')         canvas!:         ElementRef<HTMLCanvasElement>;
+  @ViewChild('video') video!: ElementRef<HTMLVideoElement>;
+  @ViewChild('canvas') canvas!: ElementRef<HTMLCanvasElement>;
   @ViewChild('confettiCanvas') confettiCanvas!: ElementRef<HTMLCanvasElement>;
 
   readonly Math = Math;
-  readonly API  = 'http://127.0.0.1:8000';
+  readonly API = 'http://127.0.0.1:8000';
   readonly SESSION = 'en-' + Math.random().toString(36).slice(2);
-  readonly TOTAL_WORDS   = 5;
+  readonly TOTAL_WORDS = 5;
   readonly FRAMES_NEEDED = 8;
 
   // no repeatition
   private usedWords: Set<string> = new Set();
 
-  words:         string[]  = [];
-  currentWord:   string    = '';
-  letterIndex:   number    = 0;
-  score:         number    = 0;
-  wordsDone:     number    = 0;
-  state:         WordState = 'signing';
-  prediction:    string    = '';
-  confidence:    number    = 0;
-  correctStreak: number    = 0;
-  lastLandmarks: number[]  = [];
+  words: string[] = [];
+  currentWord: string = '';
+  letterIndex: number = 0;
+  score: number = 0;
+  wordsDone: number = 0;
+  state: WordState = 'signing';
+  prediction: string = '';
+  confidence: number = 0;
+  correctStreak: number = 0;
+  lastLandmarks: number[] = [];
 
-  private sending   = false;
-  private hands!:   Hands;
-  private stream!:  MediaStream;
+  private sending = false;
+  private hands!: Hands;
+  private stream!: MediaStream;
   private animFrame = 0;
 
   constructor(private http: HttpClient, private celebration: CelebrationService) {}
 
   ngAfterViewInit() {
-    this.http.get<any>(`${this.API}/words/english`).subscribe(res => {
+    this.http.get<any>(`${this.API}/words/english`).subscribe((res) => {
       this.words = res.words;
       this.pickWord();
     });
@@ -57,7 +56,7 @@ export class EnglishWordQuizComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     cancelAnimationFrame(this.animFrame);
-    this.stream?.getTracks().forEach(t => t.stop());
+    this.stream?.getTracks().forEach((t) => t.stop());
   }
 
   private pickWord() {
@@ -65,29 +64,38 @@ export class EnglishWordQuizComponent implements AfterViewInit, OnDestroy {
     if (this.usedWords.size >= this.words.length) {
       this.usedWords.clear();
     }
-    const pool = this.words.filter(w => !this.usedWords.has(w));
-    this.currentWord   = pool[Math.floor(Math.random() * pool.length)];
+    const pool = this.words.filter((w) => !this.usedWords.has(w));
+    this.currentWord = pool[Math.floor(Math.random() * pool.length)];
     this.usedWords.add(this.currentWord);
-    this.letterIndex   = 0;
+    this.letterIndex = 0;
     this.correctStreak = 0;
-    this.prediction    = '';
-    this.state         = 'signing';
+    this.prediction = '';
+    this.state = 'signing';
   }
 
-  get currentTargetLetter() { return this.currentWord[this.letterIndex] ?? ''; }
-  get progressPct()   { return Math.round((this.wordsDone / this.TOTAL_WORDS) * 100); }
-  get streakPct()     { return Math.round((this.correctStreak / this.FRAMES_NEEDED) * 100); }
-  get confidencePct() { return Math.round(this.confidence * 100); }
+  get currentTargetLetter() {
+    return this.currentWord[this.letterIndex] ?? '';
+  }
+  get progressPct() {
+    if (this.state === 'finished') return 100;
+    return Math.round(((this.wordsDone + 1) / this.TOTAL_WORDS) * 100);
+  }
+  get streakPct() {
+    return Math.round((this.correctStreak / this.FRAMES_NEEDED) * 100);
+  }
+  get confidencePct() {
+    return Math.round(this.confidence * 100);
+  }
 
   private initMediaPipe() {
     this.hands = new Hands({
-      locateFile: f => `https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4/${f}`
+      locateFile: (f) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4/${f}`,
     });
     this.hands.setOptions({
       maxNumHands: 1,
       modelComplexity: 1,
       minDetectionConfidence: 0.6,
-      minTrackingConfidence: 0.5
+      minTrackingConfidence: 0.5,
     });
 
     this.hands.onResults((r: Results) => {
@@ -103,25 +111,28 @@ export class EnglishWordQuizComponent implements AfterViewInit, OnDestroy {
 
   private initCamera() {
     if (this.stream) {
-      this.stream.getTracks().forEach(t => t.stop());
+      this.stream.getTracks().forEach((t) => t.stop());
     }
 
-    navigator.mediaDevices.getUserMedia({
-      video: { width: 640, height: 480, facingMode: 'user' }
-    })
-    .then(stream => {
-      this.stream = stream;
-      const v = this.video.nativeElement;
-      v.srcObject = stream;
-      v.muted = true;
-      v.onloadedmetadata = () => {
-        v.play().then(() => {
-          console.log('▶️ playing, dims:', v.videoWidth, v.videoHeight);
-          this.startLoop();
-        }).catch(e => console.error('play failed:', e));
-      };
-    })
-    .catch(err => console.error('❌ Camera error:', err.name, err.message));
+    navigator.mediaDevices
+      .getUserMedia({
+        video: { width: 640, height: 480, facingMode: 'user' },
+      })
+      .then((stream) => {
+        this.stream = stream;
+        const v = this.video.nativeElement;
+        v.srcObject = stream;
+        v.muted = true;
+        v.onloadedmetadata = () => {
+          v.play()
+            .then(() => {
+              console.log('▶️ playing, dims:', v.videoWidth, v.videoHeight);
+              this.startLoop();
+            })
+            .catch((e) => console.error('play failed:', e));
+        };
+      })
+      .catch((err) => console.error('❌ Camera error:', err.name, err.message));
   }
 
   private startLoop() {
@@ -152,13 +163,15 @@ export class EnglishWordQuizComponent implements AfterViewInit, OnDestroy {
     }
 
     const lm = results.multiHandLandmarks[0];
-    const wx = lm[0].x, wy = lm[0].y;
+    const wx = lm[0].x,
+      wy = lm[0].y;
     const pts: number[] = [];
-    for (const p of lm) pts.push(
-      parseFloat((p.x - wx).toFixed(6)),
-      parseFloat((p.y - wy).toFixed(6)),
-      parseFloat(p.z.toFixed(6))
-    );
+    for (const p of lm)
+      pts.push(
+        parseFloat((p.x - wx).toFixed(6)),
+        parseFloat((p.y - wy).toFixed(6)),
+        parseFloat(p.z.toFixed(6))
+      );
 
     if (pts.length === 63) {
       this.lastLandmarks = pts;
@@ -169,25 +182,32 @@ export class EnglishWordQuizComponent implements AfterViewInit, OnDestroy {
   private sendPrediction() {
     if (this.sending || this.lastLandmarks.length !== 63 || this.state !== 'signing') return;
     this.sending = true;
-    this.http.post<any>(`${this.API}/words/english/predict`, {
-      landmarks: this.lastLandmarks,
-      session_id: this.SESSION
-    }).subscribe({
-      next: res => {
-        this.sending = false;
-        this.prediction = res.letter;
-        this.confidence = res.confidence;
-        if (res.letter === '...') { this.correctStreak = 0; return; }
+    this.http
+      .post<any>(`${this.API}/words/english/predict`, {
+        landmarks: this.lastLandmarks,
+        session_id: this.SESSION,
+      })
+      .subscribe({
+        next: (res) => {
+          this.sending = false;
+          this.prediction = res.letter;
+          this.confidence = res.confidence;
+          if (res.letter === '...') {
+            this.correctStreak = 0;
+            return;
+          }
 
-        if (res.letter === this.currentTargetLetter) {
-          this.correctStreak++;
-          if (this.correctStreak >= this.FRAMES_NEEDED) this.handleLetterCorrect();
-        } else {
-          this.correctStreak = 0;
-        }
-      },
-      error: () => { this.sending = false; }
-    });
+          if (res.letter === this.currentTargetLetter) {
+            this.correctStreak++;
+            if (this.correctStreak >= this.FRAMES_NEEDED) this.handleLetterCorrect();
+          } else {
+            this.correctStreak = 0;
+          }
+        },
+        error: () => {
+          this.sending = false;
+        },
+      });
   }
 
   private handleLetterCorrect() {
@@ -213,22 +233,24 @@ export class EnglishWordQuizComponent implements AfterViewInit, OnDestroy {
   }
 
   private saveResult() {
-    this.http.post('http://localhost:7168/api/Quiz', {
-      quizType:    'english-words',
-      score:       this.score,
-      total:       this.TOTAL_WORDS,
-      percentage:  Math.round((this.score / this.TOTAL_WORDS) * 100),
-      completedAt: new Date().toISOString()
-    }).subscribe({
-      next: () => console.log('✅ Result saved'),
-      error: e  => console.warn('⚠️ Backend not running on :7168', e)
-    });
+    this.http
+      .post('http://localhost:7168/api/Quiz', {
+        quizType: 'english-words',
+        score: this.score,
+        total: this.TOTAL_WORDS,
+        percentage: Math.round((this.score / this.TOTAL_WORDS) * 100),
+        completedAt: new Date().toISOString(),
+      })
+      .subscribe({
+        next: () => console.log('✅ Result saved'),
+        error: (e) => console.warn('⚠️ Backend not running on :7168', e),
+      });
   }
 
   private drawCanvas(results: Results) {
     const canvas = this.canvas.nativeElement;
-    const ctx    = canvas.getContext('2d')!;
-    const v      = this.video.nativeElement;
+    const ctx = canvas.getContext('2d')!;
+    const v = this.video.nativeElement;
 
     ctx.save();
     ctx.scale(-1, 1);
@@ -237,15 +259,15 @@ export class EnglishWordQuizComponent implements AfterViewInit, OnDestroy {
 
     if (results.multiHandLandmarks) {
       for (const landmarks of results.multiHandLandmarks) {
-        const mirrored = landmarks.map(p => ({ ...p, x: 1 - p.x }));
+        const mirrored = landmarks.map((p) => ({ ...p, x: 1 - p.x }));
 
         drawConnectors(ctx, mirrored, HAND_CONNECTIONS, {
           color: this.state === 'correct' ? '#00ff88' : '#7c6ef7',
-          lineWidth: 2
+          lineWidth: 2,
         });
         drawLandmarks(ctx, mirrored, {
           color: this.state === 'correct' ? '#00ff88' : '#fff',
-          lineWidth: 1
+          lineWidth: 1,
         });
       }
     }
@@ -257,23 +279,37 @@ export class EnglishWordQuizComponent implements AfterViewInit, OnDestroy {
     ctx.strokeRect(200, 100, 240, 280);
     ctx.setLineDash([]);
 
-    const corners = [[200,100],[440,100],[200,380],[440,380]] as [number,number][];
+    const corners = [
+      [200, 100],
+      [440, 100],
+      [200, 380],
+      [440, 380],
+    ] as [number, number][];
     ctx.strokeStyle = ok ? '#00ff88' : '#7c6ef7';
     ctx.lineWidth = 5;
     for (const [cx, cy] of corners) {
       const dx = cx === 200 ? 1 : -1;
       const dy = cy === 100 ? 1 : -1;
       ctx.beginPath();
-      ctx.moveTo(cx + dx * 20, cy); ctx.lineTo(cx, cy); ctx.lineTo(cx, cy + dy * 20);
+      ctx.moveTo(cx + dx * 20, cy);
+      ctx.lineTo(cx, cy);
+      ctx.lineTo(cx, cy + dy * 20);
       ctx.stroke();
     }
   }
 
   skipWord() {
     this.wordsDone++;
-    if (this.wordsDone >= this.TOTAL_WORDS) { this.state = 'finished'; this.saveResult(); }
-    else this.pickWord();
+    if (this.wordsDone >= this.TOTAL_WORDS) {
+      this.state = 'finished';
+      this.saveResult();
+    } else this.pickWord();
   }
 
-  restart() { this.score = 0; this.wordsDone = 0; this.usedWords.clear(); this.pickWord(); }
+  restart() {
+    this.score = 0;
+    this.wordsDone = 0;
+    this.usedWords.clear();
+    this.pickWord();
+  }
 }

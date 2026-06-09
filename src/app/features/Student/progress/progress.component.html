@@ -41,7 +41,7 @@
       </div>
       <div class="rounded-2xl border border-border-main bg-surface p-5 text-center">
         <p class="text-3xl font-black text-emerald-400">
-          {{ submissions[0]?.highestPercentage ?? 0 }}%
+          {{ submissions[0]?.highestPercentage ?? 0 | number : '1.0-2' }}%
         </p>
         <p class="text-text-main/40 text-sm mt-1">Best Score</p>
       </div>
@@ -199,11 +199,11 @@
               <p class="text-text-main/40 text-xs mb-1">Score / Best</p>
               <p>
                 <span [ngClass]="getScoreColor(sub.percentage)" class="font-bold"
-                  >{{ sub.percentage }}%</span
+                  >{{ sub.percentage | number : '1.0-2' }}%</span
                 >
                 <span class="text-text-main/30 mx-1">/</span>
                 <span [ngClass]="getScoreColor(sub.highestPercentage)" class="font-bold"
-                  >{{ sub.highestPercentage }}%</span
+                  >{{ sub.highestPercentage | number : '1.0-2' }}%</span
                 >
               </p>
             </div>

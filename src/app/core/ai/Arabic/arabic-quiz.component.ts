@@ -340,7 +340,8 @@ export class ArabicQuizComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   get progressPercent() {
-    return Math.round((this.round / this.TOTAL_ROUNDS) * 100);
+    if (this.state === 'finished') return 100;
+    return Math.round(((this.round + 1) / this.TOTAL_ROUNDS) * 100);
   }
   get confidencePercent() {
     return Math.round(this.confidence * 100);
