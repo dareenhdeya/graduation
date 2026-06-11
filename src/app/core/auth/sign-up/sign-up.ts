@@ -23,6 +23,9 @@ export class SignUp implements OnInit {
 
   isLoading = false;
   showPass: boolean = false;
+  roleDropdownOpen = false;
+  genderDropdownOpen = false;
+  disabilityDropdownOpen = false;
   errMsg = '';
   fileErrMsg = '';
 
@@ -83,6 +86,25 @@ export class SignUp implements OnInit {
     if (this.filePreviewUrl) return this.filePreviewUrl;
     return null;
   }
+  getRoleLabel(): string {
+    const roleId = Number(this.signUpForm.get('role')?.value);
+    return this.roles.find((r) => r.id === roleId)?.label || 'Select Role';
+  }
+
+  getGenderLabel(): string {
+    const gender = Number(this.signUpForm.get('Gender')?.value);
+
+    if (gender === 1) return 'Male';
+    if (gender === 2) return 'Female';
+
+    return 'Select Gender';
+  }
+
+  getDisabilityLabel(): string {
+    const disabilityId = Number(this.signUpForm.get('Disability')?.value);
+
+    return this.Disability.find((d) => d.id === disabilityId)?.label || 'Select Disability';
+  }
 
   selectAvatar(src: string) {
     this.selectedAvatarSrc = src;
@@ -109,15 +131,23 @@ export class SignUp implements OnInit {
       '',
       [
         Validators.required,
-        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()_+\-])[A-Za-z\d@$!%*?&#^()_+\-]{8,}$/),
+        Validators.pattern(
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()_+\-])[A-Za-z\d@$!%*?&#^()_+\-]{8,}$/
+        ),
       ],
     ],
-    role: [1 as any, [Validators.required]],
+    role: [1 as RoleId, [Validators.required]],
 
-    Gender: ['', [Validators.required]],
+    Gender: [1 as GenderId, [Validators.required]],
 
-    FName: ['', [Validators.required, Validators.minLength(2), Validators.pattern('^[a-zA-Zء-ي]+$')]],
-    LName: ['', [Validators.required, Validators.minLength(2), Validators.pattern('^[a-zA-Zء-ي]+$')]],
+    FName: [
+      '',
+      [Validators.required, Validators.minLength(2), Validators.pattern('^[a-zA-Zء-ي]+$')],
+    ],
+    LName: [
+      '',
+      [Validators.required, Validators.minLength(2), Validators.pattern('^[a-zA-Zء-ي]+$')],
+    ],
     phoneNumber: ['', [Validators.required, Validators.pattern('^0[0-9]{10}$')]],
     Address: ['', [Validators.required, Validators.minLength(10)]],
     BirthDate: ['', [Validators.required]],

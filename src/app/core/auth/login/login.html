@@ -1,4 +1,6 @@
-<section class="relative min-h-[calc(100vh)] overflow-hidden bg-background transition-colors duration-300">
+<section
+  class="relative min-h-[calc(100vh)] overflow-hidden bg-background transition-colors duration-300"
+>
   <div
     class="pointer-events-none absolute -top-64 -left-72 h-[520px] w-[820px] rounded-[999px] bg-primary/10 blur-[130px]"
   ></div>
@@ -8,24 +10,40 @@
 
   <div class="relative z-10 min-h-screen flex items-center justify-center px-4">
     <div class="w-full max-w-2xl">
-      <div class="rounded-3xl border border-border-main bg-surface p-6 sm:p-8 shadow-xl relative overflow-hidden z-10">
+      <div
+        class="rounded-3xl border border-border-main bg-surface/90 backdrop-blur-xl p-6 sm:p-8 shadow-xl relative overflow-hidden z-10"
+      >
         <div class="text-center">
-          <h1 class="text-3xl md:text-4xl font-black tracking-tight text-text-main text-center mb-2">Login Now</h1>
-          <p class="text-sm font-medium text-text-main/50 text-center mb-8">Welcome back. Enter your credentials to access your account.</p>
+          <h1 class="text-3xl md:text-4xl font-black tracking-tight text-text-main mb-3">
+            Login Now
+          </h1>
+
+          <p class="text-sm md:text-base text-text-main/60 max-w-md mx-auto">
+            Welcome back. Enter your credentials to access your account.
+          </p>
         </div>
 
         @if (errMsg) {
-          <div class="rounded-2xl border border-red-500/30 bg-red-500/10 p-4 text-sm font-bold text-red-500 shadow-sm flex items-center gap-2 mb-6">
-            @if (errMsg.includes('pending')) {
-              <p><i class="fas fa-clock mr-2 text-yellow-500"></i> <span class="text-yellow-500">Waiting for admin approval</span></p>
-            } @else if (errMsg.includes('credentials')) {
-              <p><i class="fas fa-exclamation-circle mr-2"></i> Invalid email or password</p>
-            } @else if (errMsg.includes('deactivated')) {
-              <p><i class="fas fa-ban mr-2"></i> Account is deactivated</p>
-            } @else {
-              <p><i class="fas fa-exclamation-circle mr-2"></i> {{ errMsg }}</p>
-            }
-          </div>
+        <div
+          [class]="
+            errMsg.includes('pending')
+              ? 'my-6 flex items-start gap-3 rounded-2xl border border-yellow-500/20 bg-yellow-500/5 px-4 py-3 text-sm font-medium text-yellow-500 shadow-sm'
+              : 'my-6 flex items-start gap-3 rounded-2xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm font-medium text-red-500 shadow-sm'
+          "
+        >
+          @if (errMsg.includes('pending')) {
+          <p>
+            <i class="fas fa-clock mr-2 text-yellow-500"></i>
+            <span class="text-yellow-500">Waiting for admin approval</span>
+          </p>
+          } @else if (errMsg.includes('credentials')) {
+          <p><i class="fas fa-exclamation-circle mr-2"></i> Invalid email or password</p>
+          } @else if (errMsg.includes('deactivated')) {
+          <p><i class="fas fa-ban mr-2"></i> Account is deactivated</p>
+          } @else {
+          <p><i class="fas fa-exclamation-circle mr-2"></i> {{ errMsg }}</p>
+          }
+        </div>
         }
 
         <form [formGroup]="loginForm" (ngSubmit)="submitLogin()" class="mt-7 space-y-5">
@@ -33,53 +51,85 @@
           loginForm.get('password');
 
           <div>
-            <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Email</label>
+            <label
+              class="block text-xs font-semibold uppercase tracking-[0.15em] text-text-main/80 mb-2 pl-1"
+              >Email</label
+            >
             <input
               formControlName="usernameorEmail"
+              [class.border-red-500]="isInvalid('usernameorEmail')"
               type="email"
-              class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all placeholder:text-text-main/30 focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm"
+              class="w-full rounded-2xl border border-border-main bg-background/60 px-4 py-3.5 text-sm font-medium text-text-main outline-none transition-all duration-200 placeholder:text-placeholder placeholder:font-medium focus:border-primary focus:ring-4 focus:ring-primary/10 focus:bg-surface shadow-sm"
               placeholder="name@email.com"
             />
 
-            @if (emailCont?.touched && emailCont?.errors) {
-               @if (emailCont?.getError('required')) {
-            <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"><i class="fas fa-exclamation-circle"></i> Email is required.</p>
-            }
-           @if (emailCont?.get('email')?.hasError('email')) {
-              <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"><i class="fas fa-exclamation-circle"></i> Enter valid email.</p>
-              }
-          }
+            @if (emailCont?.touched && emailCont?.errors) { @if (emailCont?.getError('required')) {
+            <p
+              class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+            >
+              <i class="fas fa-circle-exclamation mt-0.5"></i>
+              <span>Email is required.</span>
+            </p>
+            } @if (emailCont?.hasError('email')) {
+            <p
+              class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+            >
+              <i class="fas fa-circle-exclamation mt-0.5"></i>
+              <span>Enter valid email.</span>
+            </p>
+            } }
           </div>
 
           <div>
-            <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Password</label>
+            <label
+              class="block text-xs font-semibold uppercase tracking-[0.15em] text-text-main/80 mb-2 pl-1"
+              >Password</label
+            >
 
             <div class="relative">
               <input
                 formControlName="password"
+                [class.border-red-500]="isInvalid('password')"
                 [type]="showPass ? 'text' : 'password'"
-                class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all placeholder:text-text-main/30 focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm pr-12"
+                class="w-full rounded-2xl border border-border-main bg-background/60 px-4 py-3.5 pr-12 text-sm font-medium text-text-main outline-none transition-all duration-200 placeholder:text-placeholder placeholder:font-medium focus:border-primary focus:ring-4 focus:ring-primary/10 focus:bg-surface shadow-sm"
               />
 
               <button
                 type="button"
                 (click)="showPass = !showPass"
-                class="absolute right-4 top-1/2 -translate-y-1/2 text-text-main/40 hover:text-primary transition-colors cursor-pointer"
+                class="absolute right-4 top-1/2 -translate-y-1/2 text-text-main/50 hover:text-primary transition-all duration-200 cursor-pointer"
                 aria-label="Toggle password visibility"
               >
-                @if (showPass) { <i class="fas fa-eye-slash"></i> } @else { <i class="fas fa-eye"></i> }
+                @if (showPass) { <i class="fas fa-eye-slash"></i> } @else {
+                <i class="fas fa-eye"></i> }
               </button>
             </div>
 
             @if (passCont?.touched && passCont?.errors) { @if (passCont?.getError('required')) {
-            <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"><i class="fas fa-exclamation-circle"></i> Password is required.</p>
+            <p
+              class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+            >
+              <i class="fas fa-circle-exclamation mt-0.5"></i>
+              <span>Password is required.</span>
+            </p>
             } @else if (passCont?.getError('pattern')) {
-            <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1"><i class="fas fa-exclamation-circle"></i> Password must be at least 8 characters long, contain upper and lower case letters, a number, and a special character</p>
+            <p
+              class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+            >
+              <i class="fas fa-circle-exclamation mt-0.5"></i>
+              <span
+                >Password must be at least 8 characters long, contain upper and lower case letters,
+                a number, and a special character</span
+              >
+            </p>
             } }
           </div>
 
           <div class="flex items-center justify-between pt-1">
-            <a class="text-primary font-bold hover:text-primary/80 transition-colors cursor-pointer text-sm" routerLink="/forgotpass">
+            <a
+              class="text-primary font-semibold hover:text-primary/80 transition-colors cursor-pointer text-sm"
+              routerLink="/forgotpass"
+            >
               Forgot password?
             </a>
           </div>
@@ -94,9 +144,13 @@
             </span>
           </button>
 
-          <p class="text-sm font-medium text-text-main/50 text-center mt-4">
+          <p class="text-sm text-text-main/60 text-center mt-5">
             Don't have an account?
-            <a routerLink="/register" class="text-primary font-bold hover:text-primary/80 transition-colors cursor-pointer text-sm">Register</a>
+            <a
+              routerLink="/register"
+              class="font-semibold text-primary hover:text-primary/80 transition-colors cursor-pointer"
+              >Register</a
+            >
           </p>
         </form>
       </div>

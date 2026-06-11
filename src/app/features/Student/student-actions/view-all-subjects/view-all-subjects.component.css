@@ -1,13 +1,9 @@
-/*
-  الكارد بيتحرك بالـ translateX اللي بنحسبه في getCardStyle().
-  الـ transition دايماً شغال — مفيش snap مش smooth.
-*/
-.carousel-card {
+/*me*/
+/* .carousel-card {
   transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: transform;
 }
 
-/* Edge cards: بتتلاشى عشان تدي حس إن فيه حاجة وراهم */
 .card-edge-left {
   opacity: 0.4;
   mask-image: linear-gradient(to left, black 40%, transparent 100%);
@@ -20,4 +16,4 @@
   mask-image: linear-gradient(to right, black 40%, transparent 100%);
   -webkit-mask-image: linear-gradient(to right, black 40%, transparent 100%);
   transition: opacity 0.3s ease, mask-image 0.3s ease;
-}
+} */

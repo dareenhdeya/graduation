@@ -10,7 +10,7 @@ type GenderId = 1 | 2;
 @Component({
   selector: 'app-register-student',
   standalone: true,
-  imports: [ReactiveFormsModule], // RouterLink not needed if inside parent dashboard
+  imports: [ReactiveFormsModule],
   templateUrl: './register-student.component.html',
   styleUrl: './register-student.component.css',
 })
@@ -22,6 +22,8 @@ export class RegisterStudentComponent implements OnDestroy {
 
   isLoading = false;
   showPass: boolean = false;
+  genderDropdownOpen = false;
+  disabilityDropdownOpen = false;
   errMsg = '';
   fileErrMsg = '';
 
@@ -30,7 +32,6 @@ export class RegisterStudentComponent implements OnDestroy {
   showAvatarPicker = false;
   selectedAvatarSrc: string | null = null;
 
-  // Dropdown Data
   Disability: { id: number; label: string }[] = [
     { id: 0, label: 'None' },
     { id: 1, label: 'Hearing' },
@@ -62,29 +63,38 @@ export class RegisterStudentComponent implements OnDestroy {
     { id: '013-meerkat', src: '/images/pfp/013-meerkat.png' },
   ];
 
-  // Logic to determine what image to show
   get avatarPreview(): string | null {
     if (this.selectedAvatarSrc) return this.selectedAvatarSrc;
     if (this.filePreviewUrl) return this.filePreviewUrl;
     return null;
   }
 
-  // Form definition - Removed Role, Job, SubjectID
+  getGenderLabel(): string {
+    const gender = Number(this.signUpForm.get('Gender')?.value);
+    if (gender === 1) return 'Male';
+    if (gender === 2) return 'Female';
+    return 'Select Gender';
+  }
+
+  getDisabilityLabel(): string {
+    const disabilityId = Number(this.signUpForm.get('Disability')?.value);
+    return this.Disability.find((d) => d.id === disabilityId)?.label || 'None';
+  }
+
   signUpForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: [
       '',
       [Validators.required, Validators.pattern(/^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/)],
     ],
-    Gender: ['', [Validators.required]],
+    Gender: ['' as any, [Validators.required]],
     FName: ['', [Validators.required]],
     LName: ['', [Validators.required]],
     Address: ['', [Validators.required]],
-    BirthDate: ['', [Validators.required]], // Made required for student
+    BirthDate: ['', [Validators.required]],
     Disability: [0 as any],
   });
 
-  // --- Avatar / File Logic ---
   selectAvatar(src: string) {
     this.selectedAvatarSrc = src;
     this.selectedFile = null;
@@ -97,6 +107,7 @@ export class RegisterStudentComponent implements OnDestroy {
   openAvatarPicker() {
     this.showAvatarPicker = true;
   }
+
   closeAvatarPicker() {
     this.showAvatarPicker = false;
   }
@@ -111,7 +122,6 @@ export class RegisterStudentComponent implements OnDestroy {
     this.filePreviewUrl = file ? URL.createObjectURL(file) : null;
   }
 
-  // --- Submit Logic ---
   async submit() {
     if (this.signUpForm.invalid) {
       this.toastrService.warning('Please fill in all required fields correctly.', 'Warning');
@@ -131,7 +141,6 @@ export class RegisterStudentComponent implements OnDestroy {
     this.errMsg = '';
     this.fileErrMsg = '';
 
-    // Convert Avatar URL to File object if no manual upload
     if (!this.selectedFile && this.selectedAvatarSrc) {
       try {
         const res = await fetch(this.selectedAvatarSrc);
@@ -145,10 +154,9 @@ export class RegisterStudentComponent implements OnDestroy {
     const fd = new FormData();
     if (this.selectedFile) fd.append('file', this.selectedFile);
 
-    // Append Standard Fields
     fd.append('email', String(v.email || ''));
     fd.append('password', String(v.password || ''));
-    fd.append('role', '1'); // <--- HARDCODED STUDENT ROLE
+    fd.append('role', '1');
     fd.append('Gender', String(gender));
     fd.append('FName', String(v.FName || ''));
     fd.append('LName', String(v.LName || ''));
@@ -156,14 +164,10 @@ export class RegisterStudentComponent implements OnDestroy {
     fd.append('BirthDate', String(v.BirthDate || ''));
     fd.append('Disability', String(v.Disability || 0));
 
-    // Send to ParentService (Assuming registerStudent or similar method exists)
-    // If your service method is still generic, use that.
     this.parentService.registerStudent(fd).subscribe({
       next: () => {
         this.isLoading = false;
-
         this.toastrService.success('Student registered successfully');
-
         setTimeout(() => {
           this.router.navigateByUrl('/parent/dashboard');
         }, 1000);

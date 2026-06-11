@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Required for pipes and @if
-import { ActivatedRoute, RouterLink } from '@angular/router'; // Required for Link
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ParentServiceService } from '../../services/parent-service.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { IViewChildProfile, IChildProfile } from '../../interfaces/IViewChildProfile';
@@ -21,9 +21,9 @@ export class ChildProfileComponent implements OnInit {
   isLoading = true;
 
   readonly disabilityMap = [
-    { id: 0, label: 'None', icon: 'fa-solid fa-person-walking' },
-    { id: 1, label: 'Hearing', icon: 'fa-solid fa-ear-listen' },
-    { id: 2, label: 'Speech', icon: 'fa-solid fa-hands-asl-interpreting' },
+    { label: 'None', icon: 'fa-solid fa-person-walking' },
+    { label: 'Hearing', icon: 'fa-solid fa-ear-listen' },
+    { label: 'Speech', icon: 'fa-solid fa-hands-asl-interpreting' },
   ];
 
   ngOnInit(): void {
@@ -44,27 +44,35 @@ export class ChildProfileComponent implements OnInit {
       next: (res: IViewChildProfile) => {
         this.childProfile = res.data;
         this.isLoading = false;
-        console.log(this.childProfile);
-        console.log(res);
       },
       error: (err: HttpErrorResponse) => {
-        console.error(err.error.message || 'Error fetching profile.');
+        console.error(err.error?.message || 'Error fetching profile.');
         this.isLoading = false;
       },
     });
   }
 
-  getInitials(fName: string, lName: string): string {
-    return (fName.charAt(0) + lName.charAt(0)).toUpperCase();
+  getInitials(fName?: string, lName?: string): string {
+    const f = fName?.charAt(0) ?? '';
+    const l = lName?.charAt(0) ?? '';
+    return (f + l).toUpperCase() || '?';
   }
 
-  getDisabilityLabel(id: any): string {
-    const type = this.disabilityMap.find((d) => d.id === Number(id));
-    return type ? type.label : 'Unknown';
+  getDisabilityLabel(disability: string | number | null | undefined): string {
+    if (disability === null || disability === undefined) return 'None';
+    const value = String(disability).trim();
+    const match = this.disabilityMap.find((d) => d.label.toLowerCase() === value.toLowerCase());
+    return match ? match.label : 'Unknown';
   }
 
-  getDisabilityIcon(id: any): string {
-    const type = this.disabilityMap.find((d) => d.id === Number(id));
-    return type ? type.icon : 'fa-solid fa-circle-question';
+  getDisabilityIcon(disability: string | number | null | undefined): string {
+    if (disability === null || disability === undefined) return this.disabilityMap[0].icon;
+    const value = String(disability).trim();
+    const match = this.disabilityMap.find((d) => d.label.toLowerCase() === value.toLowerCase());
+    return match ? match.icon : 'fa-solid fa-circle-question';
+  }
+
+  hasDisability(disability: string | number | null | undefined): boolean {
+    return this.getDisabilityLabel(disability) !== 'None';
   }
 }

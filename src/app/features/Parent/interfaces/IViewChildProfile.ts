@@ -1,19 +1,6 @@
-export interface Parent {
-  phoneNumber: string;
-  address?: any;
-  job?: any;
-  reletationShip: number;
-  students?: any;
-  id: string;
-  emailorUserName: string;
-  profilePicture: string;
-  password?: any;
-  role: number;
-  gender?: any;
-  status: number;
-  fName: string;
-  lName: string;
-  refreshToken?: any;
+export interface IViewChildProfile {
+  message: string;
+  data: IChildProfile;
 }
 
 export interface IChildProfile {
@@ -21,19 +8,25 @@ export interface IChildProfile {
   fName: string;
   lName: string;
   email: string;
-  status?: any;
+  status: string | null;
   address: string;
-  phone?: any;
+  phone: string;
   role: string;
   birthDate: string;
-  disability: string;
-  parent: Parent;
-  pfpURL?: any;
-  teaches?: any;
+  disability: string | number;
+  pfpURL: string | null;
+  teaches: string | null;
   job: string;
+  subjectsCount: number;
+  cvPath: string | null;
+  parentContactInfo: IParentContactInfo | null;
 }
 
-export interface IViewChildProfile {
-  message: string;
-  data: IChildProfile;
+export interface IParentContactInfo {
+  parentEmail: string;
+  parentFName: string;
+  parentLName?: string; 
+  phoneNumber: string;
+  reletationShip: string; 
+  pProfilePicture: string | null;
 }

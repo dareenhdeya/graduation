@@ -64,7 +64,12 @@ export class LessonDetailsComponent implements OnInit {
 
   get levelDataAccessor(): any {
     if (!this.lesson) return null;
-    return this.lesson.levels || (this.lesson as any).Levels || (this.lesson as any).level || (this.lesson as any).Level;
+    return (
+      this.lesson.levels ||
+      (this.lesson as any).Levels ||
+      (this.lesson as any).level ||
+      (this.lesson as any).Level
+    );
   }
 
   get isLocked(): boolean {
@@ -78,12 +83,12 @@ export class LessonDetailsComponent implements OnInit {
   get exerciseId(): string {
     const levelData = this.levelDataAccessor;
     if (!levelData) return '';
-    if (typeof levelData === 'string') return levelData; // Fallback if backend just returns ID string
-    
+    if (typeof levelData === 'string') return levelData;
+
     if (Array.isArray(levelData)) {
-       const first = levelData[0];
-       if (!first) return '';
-       return first.id || first.ID || first.Id || first.iD || '';
+      const first = levelData[0];
+      if (!first) return '';
+      return first.id || first.ID || first.Id || first.iD || '';
     }
     return levelData.id || levelData.ID || levelData.Id || levelData.iD || '';
   }
@@ -99,9 +104,20 @@ export class LessonDetailsComponent implements OnInit {
     if (this.hasExercise) {
       const eid = this.exerciseId;
       if (eid) {
-        this.router.navigate(['/student/subject', this.subjectId, 'lesson', this.lessonId, 'exercise', eid, 'solve']);
+        this.router.navigate([
+          '/student/subject',
+          this.subjectId,
+          'lesson',
+          this.lessonId,
+          'exercise',
+          eid,
+          'solve',
+        ]);
       } else {
-        alert('Exercise Found but ID is missing from object! Raw Data: ' + JSON.stringify(this.levelDataAccessor));
+        alert(
+          'Exercise Found but ID is missing from object! Raw Data: ' +
+            JSON.stringify(this.levelDataAccessor)
+        );
       }
       return;
     }
@@ -111,12 +127,9 @@ export class LessonDetailsComponent implements OnInit {
       return;
     }
 
-    // Last video and no activities: mark lesson as completed
     this.studentService.completeLesson(this.subjectId, this.lessonId).subscribe({
-      
       next: () => {
-        console.log("compleeete");
-        // Optionally show toast / state change; kept minimal for now
+        console.log('compleeete');
       },
       error: (err) => {
         console.error(err);
@@ -124,4 +137,3 @@ export class LessonDetailsComponent implements OnInit {
     });
   }
 }
-

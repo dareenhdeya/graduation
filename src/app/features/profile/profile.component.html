@@ -1,6 +1,6 @@
-<section class="min-h-screen text-text-main px-4 py-10 transition-colors duration-300">
+<section class="text-text-main px-4 py-6 transition-colors duration-300">
   <div class="mx-auto max-w-6xl">
-    <h1 class="mb-8 text-4xl md:text-5xl font-black tracking-tight">
+    <h1 class="mb-5 text-3xl md:text-4xl font-black tracking-tight">
       My <span class="text-primary">Profile</span>
     </h1>
 
@@ -19,7 +19,7 @@
     } @else if (profile; as p) {
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
       <aside
-        class="lg:col-span-4 rounded-3xl border border-border-main bg-surface overflow-hidden shadow-sm transition-all relative"
+        class="lg:col-span-4 rounded-3xl border border-border-main bg-surface overflow-hidden shadow-sm relative flex flex-col"
       >
         <div class="relative h-28 bg-surface border-b border-border-main overflow-hidden">
           <div
@@ -30,17 +30,17 @@
           ></div>
         </div>
 
-        <div class="px-6 pb-8 relative z-10">
+        <div class="px-5 pb-5 relative z-10 flex flex-col flex-1">
           <div class="-mt-12 flex items-end justify-between">
             @if (p.pfpURL) {
             <img
               [src]="p.pfpURL"
-              class="size-24 rounded-full object-cover border-4 border-surface shadow-sm"
+              class="size-20 rounded-full object-cover border-4 border-surface shadow-sm"
               alt="avatar"
             />
             } @else {
             <div
-              class="size-24 text-3xl rounded-full border-4 border-surface bg-primary/10 flex items-center justify-center text-primary font-black shadow-sm uppercase"
+              class="size-20 text-3xl rounded-full border-4 border-surface bg-primary/10 flex items-center justify-center text-primary font-black shadow-sm uppercase"
             >
               {{ p.fName[0] }}
             </div>
@@ -80,116 +80,70 @@
             </span>
           </div>
 
-          <div class="my-6 h-px bg-border-main"></div>
+          <div class="mt-auto">
+            <div class="my-6 h-px bg-border-main"></div>
 
-          <div class="grid grid-cols-3 gap-3">
-            <button
-              type="button"
-              (click)="changepass()"
-              class="col-span-2 rounded-xl border border-border-main bg-surface px-4 py-3 text-sm font-bold text-text-main/80 hover:text-primary hover:border-primary/40 transition-all shadow-sm cursor-pointer"
-            >
-              <i class="fa-solid fa-lock mr-2 text-text-main/40"></i>Password
-            </button>
+            <div class="flex items-center gap-3">
+              <button
+                type="button"
+                (click)="changepass()"
+                class="flex-1 rounded-xl border border-border-main bg-surface px-4 py-3 text-sm font-bold text-text-main/80 hover:text-primary hover:border-primary/40 transition-all shadow-sm cursor-pointer"
+              >
+                <i class="fa-solid fa-lock mr-2 text-text-main/40"></i>Password
+              </button>
 
-            <button
-              (click)="openEdit()"
-              class="col-span-1 rounded-xl bg-primary px-4 py-3 text-sm font-bold text-white hover:bg-primary/90 transition-all shadow-sm cursor-pointer hover:-translate-y-0.5"
-            >
-              <i class="fa-solid fa-pen mr-1.5"></i>Edit
-            </button>
-          </div>
+              <button
+                (click)="openEdit()"
+                class="w-20 rounded-xl bg-primary px-3 py-3 text-sm font-bold text-white hover:bg-primary/90 transition-all shadow-sm cursor-pointer hover:-translate-y-0.5"
+              >
+                <i class="fa-solid fa-pen mr-1.5"></i>Edit
+              </button>
+            </div>
 
-          <!-- @if (p.role === 'Teacher' && p.cvPath) {
+            <!-- @if (p.role === 'Teacher' && p.cvPath) {
           <button type="button" (click)="showCvModal = true"
             class="mt-3 flex items-center justify-center gap-2 w-full rounded-xl border border-border-main bg-surface px-4 py-3 text-sm font-bold text-text-main/80 hover:text-primary hover:border-primary/40 transition-all shadow-sm cursor-pointer hover:-translate-y-0.5">
             <i class="fa-solid fa-file-pdf text-primary/70"></i> View CV
           </button>
           } -->
 
-          @if (p.role === 'Teacher') {
-          <div class="grid grid-cols-2 gap-3 mt-3">
-            @if (p.cvPath) {
-            <button
-              type="button"
-              (click)="showCvModal = true"
-              class="flex items-center justify-center gap-2 rounded-xl border border-border-main bg-surface px-4 py-3 text-sm font-bold text-text-main/80 hover:text-primary hover:border-primary/40 transition-all shadow-sm cursor-pointer"
-            >
-              <i class="fa-solid fa-file-pdf text-primary/70"></i>
-              View CV
-            </button>
-            }
-
-            <button
-              type="button"
-              (click)="cvInput.click()"
-              class="flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-bold text-white hover:bg-primary/90 transition-all shadow-sm cursor-pointer"
-            >
-              <i class="fa-solid fa-upload"></i>
-              Update CV
-            </button>
-          </div>
-
-          <input
-            #cvInput
-            type="file"
-            accept=".pdf"
-            class="hidden"
-            (change)="onCvSelected($event)"
-          />
-          }
-
-          @if (showCvModal && p.cvPath) {
-          <div
-            class="fixed inset-0 z-[70] flex items-center justify-center p-4"
-            (click)="showCvModal = false"
-          >
-            <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
-            <div
-              class="relative z-10 w-full max-w-4xl h-[85vh] flex flex-col rounded-3xl border border-border-main bg-surface shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200"
-              (click)="$event.stopPropagation()"
-            >
-              <div
-                class="flex items-center justify-between px-6 py-4 border-b border-border-main shrink-0"
+            @if (p.role === 'Teacher') {
+            <div class="grid grid-cols-2 gap-3 mt-3">
+              @if (p.cvPath) {
+              <button
+                type="button"
+                (click)="showCvModal = true"
+                class="flex items-center justify-center gap-2 rounded-xl border border-border-main bg-surface px-4 py-3 text-sm font-bold text-text-main/80 hover:text-primary hover:border-primary/40 transition-all shadow-sm cursor-pointer"
               >
-                <div class="flex items-center gap-3">
-                  <div
-                    class="size-9 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center"
-                  >
-                    <i class="fa-solid fa-file-pdf text-primary"></i>
-                  </div>
-                  <span class="font-black text-text-main text-base tracking-tight">CV Preview</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <a
-                    [href]="p.cvPath"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="inline-flex items-center gap-1.5 rounded-xl border border-border-main bg-surface px-3 py-2 text-xs font-bold text-text-main/70 hover:text-primary hover:border-primary/40 transition-all shadow-sm"
-                  >
-                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Open in new tab
-                  </a>
-                  <button
-                    type="button"
-                    (click)="showCvModal = false"
-                    class="size-9 grid place-items-center rounded-xl border border-border-main bg-surface text-text-main/50 hover:text-text-main hover:bg-border-main/50 transition-all cursor-pointer"
-                  >
-                    <i class="fa-solid fa-xmark"></i>
-                  </button>
-                </div>
-              </div>
-              <iframe
-                [src]="p.cvPath | safeUrl"
-                class="flex-1 w-full border-none"
-                title="CV Preview"
-              ></iframe>
+                <i class="fa-solid fa-file-pdf text-primary/70"></i>
+                View CV
+              </button>
+              }
+
+              <button
+                type="button"
+                (click)="cvInput.click()"
+                class="flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-bold text-white hover:bg-primary/90 transition-all shadow-sm cursor-pointer"
+              >
+                <i class="fa-solid fa-upload"></i>
+                Update CV
+              </button>
             </div>
+
+            <input
+              #cvInput
+              type="file"
+              accept="application/pdf,.pdf"
+              class="hidden"
+              (change)="onCvSelected($event)"
+            />
+            }
           </div>
-          }
         </div>
       </aside>
 
-      <main class="lg:col-span-8 space-y-6">
-        <div class="rounded-3xl border border-border-main bg-surface p-6 sm:p-8 shadow-sm">
+      <main class="lg:col-span-8 space-y-4">
+        <div class="rounded-3xl border border-border-main bg-surface p-5 sm:p-6 shadow-sm">
           <div class="flex items-center justify-between mb-6">
             <div class="font-black text-xl text-text-main tracking-tight">Details</div>
             <span class="text-xs font-bold uppercase tracking-wider text-text-main/40"
@@ -227,7 +181,7 @@
           </div>
         </div>
 
-        <div class="rounded-3xl border border-border-main bg-surface p-6 sm:p-8 shadow-sm">
+        <div class="rounded-3xl border border-border-main bg-surface p-5 sm:p-6 shadow-sm">
           <div class="flex items-center justify-between mb-6">
             <div class="font-black text-xl text-text-main tracking-tight">Work / Study</div>
             <span class="text-xs font-bold uppercase tracking-wider text-text-main/40"
@@ -778,6 +732,50 @@
         </button>
       </div>
     </form>
+  </div>
+  } @if (showCvModal && profile?.cvPath) {
+  <div
+    class="fixed inset-0 z-[70] flex items-center justify-center p-4"
+    (click)="showCvModal = false"
+  >
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+    <div
+      class="relative z-10 w-full max-w-4xl h-[85vh] flex flex-col rounded-3xl border border-border-main bg-surface shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="flex items-center justify-between px-6 py-4 border-b border-border-main shrink-0">
+        <div class="flex items-center gap-3">
+          <div
+            class="size-9 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center"
+          >
+            <i class="fa-solid fa-file-pdf text-primary"></i>
+          </div>
+          <span class="font-black text-text-main text-base tracking-tight">CV Preview</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <a
+            [href]="profile?.cvPath"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-1.5 rounded-xl border border-border-main bg-surface px-3 py-2 text-xs font-bold text-text-main/70 hover:text-primary hover:border-primary/40 transition-all shadow-sm"
+          >
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> Open in new tab
+          </a>
+          <button
+            type="button"
+            (click)="showCvModal = false"
+            class="size-9 grid place-items-center rounded-xl border border-border-main bg-surface text-text-main/50 hover:text-text-main hover:bg-border-main/50 transition-all cursor-pointer"
+          >
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+      <iframe
+        [src]="profile?.cvPath | safeUrl"
+        class="flex-1 w-full border-none"
+        title="CV Preview"
+      ></iframe>
+    </div>
   </div>
   }
 </section>

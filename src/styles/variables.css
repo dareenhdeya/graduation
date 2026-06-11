@@ -11,15 +11,16 @@
   /* Dark text */
   --border-color: #e2e8f0;
   /* Light gray borders */
+  --placeholder-color: rgba(0, 0, 0, 0.35);
 }
 
 :root.dark {
   --glass-bg: rgba(255, 255, 255, 0.05);
   --glass-border: rgba(255, 255, 255, 0.1);
-  --bg-main: #070A13;
+  --bg-main: #070a13;
   --bg-surface: rgba(255, 255, 255, 0.05);
   --brand-primary: #38bdf8;
   --text-color: #ffffff;
   --border-color: rgba(255, 255, 255, 0.1);
-
+  --placeholder-color: rgba(255, 255, 255, 0.35);
 }

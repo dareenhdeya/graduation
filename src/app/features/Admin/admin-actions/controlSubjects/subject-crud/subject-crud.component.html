@@ -31,7 +31,7 @@
     </div>
 
     <div
-      class="rounded-3xl border border-border-main bg-surface p-5 sm:p-6 mb-8 shadow-sm transition-all"
+      class="rounded-3xl bg-surface/40 backdrop-blur-xl border border-border-main bg-surface p-5 sm:p-6 mb-8 shadow-sm transition-all"
     >
       <div class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
         <div class="w-full lg:flex-1">
@@ -45,7 +45,7 @@
             ></i>
             <input
               [formControl]="search"
-              class="w-full pl-12 pr-20 rounded-2xl border border-border-main bg-surface px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all placeholder:text-text-main/40 focus:border-fuchsia-500 focus:ring-4 focus:ring-fuchsia-500/10 shadow-sm"
+              class="w-full pl-12 pr-20 rounded-2xl border border-border-main bg-surface px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all placeholder:text-text-main/40 focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm"
               placeholder="Search by name or ID..."
             />
             @if (search.value) {
@@ -184,7 +184,7 @@
               ></i>
               <input
                 [formControl]="subjectName"
-                class="w-full pl-12 rounded-2xl border border-border-main bg-surface px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all placeholder:text-text-main/30 focus:border-fuchsia-500 focus:ring-4 focus:ring-fuchsia-500/10 shadow-sm"
+                class="w-full pl-12 rounded-2xl border border-border-main bg-surface px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all placeholder:text-text-main/30 focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm"
                 placeholder="e.g. Advanced English"
               />
             </div>
@@ -336,7 +336,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       @for (s of filteredSubjects; track s.subjectId) {
       <div
-        class="group relative rounded-3xl border border-border-main bg-surface p-6 sm:p-8 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_10px_40px_-10px_var(--color-primary)] shadow-sm cursor-pointer overflow-hidden"
+        class="group bg-surface/40 backdrop-blur-xl relative rounded-3xl border border-border-main bg-surface p-6 sm:p-8 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_10px_40px_-10px_var(--color-primary)] shadow-sm cursor-pointer overflow-hidden"
         (click)="openSubject(s)"
       >
         <div

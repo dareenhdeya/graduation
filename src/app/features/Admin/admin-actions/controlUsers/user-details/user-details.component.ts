@@ -93,20 +93,64 @@ export class UserDetailsComponent implements OnInit {
     this.showDeleteModal = true;
   }
 
+  // confirmDelete(all: boolean) {
+  //   if (!this.user) return;
+  //   this.showDeleteModal = false;
+  //   this.admin.deleteUser(this.user, all).subscribe({
+  //     next: () => {
+  //       setTimeout(() => this.toastr.success('User deleted successfully.', 'Success'), 850);
+  //       this.router.navigate(['/admin/users']);
+  //     },
+  //     error: (err) => {
+  //       setTimeout(
+  //         () => this.toastr.error(err?.error?.message || 'Failed to delete user', 'Error'),
+  //         850
+  //       );
+  //     },
+  //   });
+  // }
   confirmDelete(all: boolean) {
     if (!this.user) return;
+
+    const userId = this.user.id; 
+
     this.showDeleteModal = false;
-    this.admin.deleteUser(this.user, all).subscribe({
-      next: () => {
-        setTimeout(() => this.toastr.success('User deleted successfully.', 'Success'), 850);
-        this.router.navigate(['/admin/users']);
-      },
-      error: (err) => {
-        setTimeout(
-          () => this.toastr.error(err?.error?.message || 'Failed to delete user', 'Error'),
-          850
-        );
-      },
-    });
+
+    this.admin
+      .deleteUser(
+        {
+          id: userId,
+          fName: null,
+          lName: null,
+          email: null,
+          status: 0,
+          address: null,
+          phone: null,
+          role: this.user.role,
+          birthDate: null,
+          disability: null,
+          pfpURL: null,
+          teaches: null,
+          job: null,
+          subjectsCount: 0,
+          parentContactInfo: null,
+          cvPath: null,
+        },
+        all
+      )
+      .subscribe({
+        next: () => {
+          setTimeout(() => {
+            this.toastr.success('User deleted successfully.', 'Success');
+          }, 850);
+
+          this.router.navigate(['/admin/users']);
+        },
+        error: (err) => {
+          setTimeout(() => {
+            this.toastr.error(err?.error?.message || 'Failed to delete user', 'Error');
+          }, 850);
+        },
+      });
   }
 }

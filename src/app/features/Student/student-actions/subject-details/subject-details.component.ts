@@ -21,7 +21,7 @@ export class SubjectDetailsComponent implements OnInit {
   private readonly router = inject(Router)
   private toastr = inject(ToastrService);
   subjectId!: string
-  subject: StudentSubject | null = null; // Changed to null for safety
+  subject: StudentSubject | null = null;
   isLoading = true;
 
   ngOnInit(): void {
@@ -45,10 +45,6 @@ export class SubjectDetailsComponent implements OnInit {
     });
   }
   
-
-  // Enroll in subject
-
-
   enrollSub(id: string) {
     this.studentService.enrollSubject(id).subscribe({
       next: (res : IEnrollSubResponse) => {

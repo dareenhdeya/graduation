@@ -1,183 +1,160 @@
-<section class="relative min-h-screen pt-28 pb-10 px-4 overflow-hidden">
-  <!-- <div
-    class="pointer-events-none absolute top-20 left-10 h-96 w-96 rounded-full bg-blue-600/10 blur-[100px]"
-  ></div>
-  <div
-    class="pointer-events-none absolute bottom-20 right-10 h-96 w-96 rounded-full bg-purple-600/10 blur-[100px]"
-  ></div> -->
-
-  <div class="container mx-auto max-w-4xl relative z-10">
-    <a
-      routerLink="/parent/view-children"
-      class="inline-flex items-center gap-2 text-white/50 hover:text-white mb-8 transition-colors cursor-pointer"
-    >
-      <i class="fa-solid fa-arrow-left"></i> Back to Children
-    </a>
-
+<section class="profile-page">
+  <div class="profile-container">
     @if (isLoading) {
-    <div class="animate-pulse space-y-6">
-      <div class="h-48 bg-white/5 rounded-3xl w-full"></div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 h-32">
-        <div class="bg-white/5 rounded-3xl"></div>
-        <div class="bg-white/5 rounded-3xl"></div>
-      </div>
+    <div class="skeleton-hero"></div>
+    <div class="skeleton-cards">
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
     </div>
     } @else if (childProfile) {
-    <div
-      class="relative rounded-3xl border border-white/10 bg-white/5 p-8 md:p-10 mb-8 flex flex-col items-center text-center backdrop-blur-md overflow-hidden"
-    >
-      <div
-        class="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-1 bg-gradient-to-r from-transparent via-sky-500 to-transparent opacity-50"
-      ></div>
 
-      <div class="relative mb-6">
-        <div
-          class="size-32 rounded-full border-4 border-white/10 bg-[#0F121C] flex items-center justify-center overflow-hidden shadow-2xl shadow-black/50"
-        >
-          @if (childProfile.pfpURL) {
-          <img
-            [src]="childProfile.pfpURL"
-            class="w-full h-full object-cover"
-            alt="Profile Picture"
-          />
-          } @else {
-          <span class="text-4xl font-bold text-sky-400">
-            {{ getInitials(childProfile.fName, childProfile.fName) }}
-          </span>
-          }
-        </div>
-        <div
-          class="absolute bottom-2 right-2 size-5 bg-green-500 border-4 border-[#1c1f2e] rounded-full"
-          title="Active"
-        ></div>
+    <div class="hero-card">
+      <div class="hero-topbar">
+        <a routerLink="/parent/view-children" class="back-link">
+          <i class="fa-solid fa-arrow-left"></i> Back to Children
+        </a>
       </div>
 
-      <h1 class="text-3xl md:text-4xl font-black text-white mb-2">
-        {{ childProfile.fName }} {{ childProfile.lName }}
-      </h1>
-
-      <div class="flex gap-2 justify-center mb-6">
-        <span
-          class="px-3 py-1 rounded-full bg-white/5 text-white/60 text-xs font-bold border border-white/5 uppercase tracking-wider"
-        >
-          {{ childProfile.role || 'Student' }}
-        </span>
-        @if (childProfile.disability) {
-        <span
-          class="px-3 py-1 rounded-full bg-pink-500/10 text-pink-400 text-xs font-bold border border-pink-500/20 uppercase tracking-wider"
-        >
-          {{ getDisabilityLabel(childProfile.disability) }}
-        </span>
-        }
-      </div>
-
-      <div class="flex gap-4">
-        <button
-          class="btn-solid bg-sky-600 hover:bg-sky-500 text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg shadow-sky-600/20 transition"
-        >
-          <i class="fa-solid fa-chart-line mr-2"></i> View Progress
-        </button>
-        <button
-          class="px-6 py-2 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 transition text-sm font-bold"
-        >
-          Edit Profile
-        </button>
-      </div>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div
-        class="rounded-3xl border border-white/5 bg-[#0b1021] p-6 hover:border-white/10 transition"
-      >
-        <div class="flex items-center gap-3 mb-4 text-sky-400">
-          <i class="fa-solid fa-address-card text-xl"></i>
-          <h3 class="font-bold text-white text-lg">Personal Info</h3>
-        </div>
-
-        <div class="space-y-4">
-          <div>
-            <p class="text-white/40 text-xs uppercase tracking-wider mb-1">Email</p>
-            <p class="text-white">{{ childProfile.email }}</p>
-          </div>
-
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <p class="text-white/40 text-xs uppercase tracking-wider mb-1">Birth Date</p>
-              <p class="text-white">{{ childProfile.birthDate | date : 'mediumDate' }}</p>
-            </div>
-            <div>
-              <p class="text-white/40 text-xs uppercase tracking-wider mb-1">Job/Status</p>
-              <p class="text-white">{{ childProfile.job }}</p>
-            </div>
-          </div>
-
-          <div>
-            <p class="text-white/40 text-xs uppercase tracking-wider mb-1">Address</p>
-            <p class="text-white">{{ childProfile.address }}</p>
-          </div>
-        </div>
-      </div>
-
-      <div
-        class="rounded-3xl border border-white/5 bg-[#0b1021] p-6 hover:border-white/10 transition flex flex-col"
-      >
-        <div
-          class="rounded-3xl border border-white/5 bg-[#0b1021] p-6 hover:border-white/10 transition flex flex-col"
-        >
-          <div class="mb-6">
-            <div class="flex items-center gap-3 mb-4 text-purple-400">
-              <i class="fa-solid fa-universal-access text-xl"></i>
-              <h3 class="font-bold text-white text-lg">Needs & Support</h3>
-            </div>
-
-            <div class="p-4 rounded-2xl bg-white/5 border border-white/5 flex items-center gap-4">
-              <div
-                class="size-12 rounded-full bg-purple-500/20 text-purple-300 flex items-center justify-center text-xl"
-              >
-                <i [class]="getDisabilityIcon(childProfile.disability)"></i>
-              </div>
-
-              <div>
-                <p class="text-white/40 text-xs uppercase tracking-wider mb-1">Disability Type</p>
-                <p class="text-white font-bold text-lg">
-                  {{ getDisabilityLabel(childProfile.disability) }}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div class="mt-auto pt-6 border-t border-white/5"></div>
-        </div>
-
-        <div class="mt-auto pt-6 border-t border-white/5">
-          <p class="text-white/40 text-xs uppercase tracking-wider mb-3">Linked Guardian</p>
-          <div class="flex items-center gap-3">
-            <div
-              class="size-10 rounded-full bg-white/10 flex items-center justify-center text-white/50"
-            >
-              <i class="fa-solid fa-user-shield"></i>
-            </div>
-
-            @if (childProfile.parent) {
-            <div>
-              <p class="text-white text-sm font-bold">
-                {{ childProfile.parent.fName }} {{ childProfile.parent.lName }}
-              </p>
-              <p class="text-white/40 text-xs">{{ childProfile.parent.phoneNumber }}</p>
-            </div>
+      <div class="hero-body">
+        <div class="avatar-wrap">
+          <div class="hero-avatar">
+            @if (childProfile.pfpURL) {
+            <img [src]="childProfile.pfpURL" alt="Profile picture" class="avatar-img" />
+            } @else {
+            <span>{{ getInitials(childProfile.fName, childProfile.lName) }}</span>
             }
           </div>
         </div>
+
+        <div class="hero-info">
+          <h1 class="hero-name">{{ childProfile.fName }} {{ childProfile.lName }}</h1>
+          <div class="badge-row">
+            <span class="badge">
+              <i class="fa-solid fa-user"></i>
+              {{ childProfile.role || 'Student' }}
+            </span>
+            @if (hasDisability(childProfile.disability)) {
+            <span class="badge">
+              <i class="fa-solid fa-universal-access"></i>
+              {{ getDisabilityLabel(childProfile.disability) }}
+            </span>
+            }
+          </div>
+          <div class="btn-row">
+            <button
+              class="btn-primary"
+              [routerLink]="['/parent/student-subjects/', childProfile.id]"
+            >
+              <i class="fa-solid fa-chart-line"></i> View Progress
+            </button>
+            <!-- <button class="btn-secondary"><i class="fa-solid fa-pen"></i> Edit Profile</button> -->
+          </div>
+        </div>
       </div>
     </div>
-    } @else {
-    <div class="flex flex-col items-center justify-center py-20 text-center">
-      <div
-        class="size-20 rounded-full bg-white/5 flex items-center justify-center text-white/20 mb-4"
-      >
-        <i class="fa-solid fa-user-slash text-3xl"></i>
+
+    <div class="cards-grid">
+      <div class="info-card">
+        <div class="card-header">
+          <div class="card-icon">
+            <i class="fa-solid fa-id-card"></i>
+          </div>
+          <h3 class="card-title">Personal Info</h3>
+        </div>
+        <div class="field">
+          <p class="field-label">Email</p>
+          <p class="field-value">{{ childProfile.email }}</p>
+        </div>
+        <div class="field-grid">
+          <div class="field">
+            <p class="field-label">Phone</p>
+            <p class="field-value">{{ childProfile.phone || '—' }}</p>
+          </div>
+          <div class="field">
+            <p class="field-label">Birth Date</p>
+            <p class="field-value">{{ childProfile.birthDate | date : 'mediumDate' }}</p>
+          </div>
+        </div>
+        <div class="field-grid">
+          <div class="field">
+            <p class="field-label">Job / Status</p>
+            <p class="field-value">{{ childProfile.job || '—' }}</p>
+          </div>
+          <div class="field">
+            <p class="field-label">Address</p>
+            <p class="field-value">{{ childProfile.address || '—' }}</p>
+          </div>
+        </div>
       </div>
-      <h3 class="text-xl font-bold text-white">Profile Not Found</h3>
+
+      <div class="info-card">
+        <div class="card-header">
+          <div class="card-icon">
+            <i class="fa-solid fa-heart-circle-plus"></i>
+          </div>
+          <h3 class="card-title">Needs &amp; Support</h3>
+        </div>
+
+        @if (hasDisability(childProfile.disability)) {
+        <div class="disability-block">
+          <div class="disability-icon">
+            <i [class]="getDisabilityIcon(childProfile.disability)"></i>
+          </div>
+          <div>
+            <p class="field-label">Disability Type</p>
+            <p class="disability-value">{{ getDisabilityLabel(childProfile.disability) }}</p>
+          </div>
+        </div>
+        } @else {
+        <div class="disability-block">
+          <div class="disability-icon">
+            <i class="fa-solid fa-circle-check"></i>
+          </div>
+          <div>
+            <p class="field-label">Disability Status</p>
+            <p class="disability-value">No special needs reported</p>
+          </div>
+        </div>
+        }
+
+        <div class="card-divider"></div>
+
+        <p class="field-label">Linked Guardian</p>
+        @if (childProfile.parentContactInfo) {
+        <div class="guardian-row">
+          <div class="guardian-avatar">
+            {{
+              getInitials(
+                childProfile.parentContactInfo.parentFName,
+                childProfile.parentContactInfo.parentLName
+              )
+            }}
+          </div>
+          <div>
+            <p class="guardian-name">
+              {{ childProfile.parentContactInfo.parentFName }}
+              {{ childProfile.parentContactInfo.parentLName }}
+              @if (childProfile.parentContactInfo.reletationShip) {
+              <span class="guardian-relation"
+                >({{ childProfile.parentContactInfo.reletationShip }})</span
+              >
+              }
+            </p>
+            <p class="guardian-phone">{{ childProfile.parentContactInfo.phoneNumber }}</p>
+            <p class="guardian-phone">{{ childProfile.parentContactInfo.parentEmail }}</p>
+          </div>
+        </div>
+        } @else {
+        <p class="field-value" style="margin-top: 6px">No guardian linked</p>
+        }
+      </div>
+    </div>
+
+    } @else {
+    <div class="empty-state">
+      <div class="empty-icon"><i class="fa-solid fa-user-slash"></i></div>
+      <h3 class="empty-title">Profile Not Found</h3>
+      <p class="empty-sub">This child profile doesn't exist or was removed.</p>
     </div>
     }
   </div>

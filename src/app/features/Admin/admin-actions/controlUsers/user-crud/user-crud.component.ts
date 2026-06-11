@@ -47,6 +47,9 @@ export class UserCrudComponent implements OnInit {
 
   search = new FormControl<string>('', { nonNullable: true });
   roleFilter = new FormControl<Role | 'All'>('All', { nonNullable: true });
+  isRoleDropdownOpen = false;
+
+  roles: Array<Role | 'All'> = ['All', 'Parent', 'Teacher', 'Student'];
 
   userToDelete: IADMIN | null = null;
   showDeleteModal = false;
@@ -75,6 +78,15 @@ export class UserCrudComponent implements OnInit {
         this.error = err?.message || 'Failed to load users';
       },
     });
+  }
+
+  selectRole(role: Role | 'All') {
+    this.roleFilter.setValue(role);
+    this.isRoleDropdownOpen = false;
+  }
+
+  get selectedRoleLabel() {
+    return this.roleFilter.value || 'All';
   }
 
   get filteredUsers(): IADMIN[] {
@@ -148,7 +160,7 @@ export class UserCrudComponent implements OnInit {
   onDeleteUser(u: IADMIN, e: MouseEvent, all: boolean = false) {
     e.stopPropagation();
     this.error = '';
-  
+
     this.adminService.deleteUser(u, all).subscribe({
       next: () => {
         setTimeout(() => {
@@ -171,11 +183,11 @@ export class UserCrudComponent implements OnInit {
     this.showDeleteModal = true;
   }
 
-confirmDelete(all: boolean) {
-  if (!this.userToDelete) return;
-  const fakeEvent = new MouseEvent('click');
-  this.showDeleteModal = false;
-  this.onDeleteUser(this.userToDelete, fakeEvent, all);
-  this.userToDelete = null;
-}
+  confirmDelete(all: boolean) {
+    if (!this.userToDelete) return;
+    const fakeEvent = new MouseEvent('click');
+    this.showDeleteModal = false;
+    this.onDeleteUser(this.userToDelete, fakeEvent, all);
+    this.userToDelete = null;
+  }
 }

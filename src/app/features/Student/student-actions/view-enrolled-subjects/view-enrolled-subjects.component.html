@@ -1,19 +1,20 @@
-<section class="relative py-10 px-4 overflow-hidden">
+<section class="relative py-10 px-4 overflow-hidden transition-colors duration-300">
   <div class="container mx-auto max-w-7xl relative z-10">
     <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
       <div>
         <h1 class="text-3xl md:text-5xl font-black tracking-tight text-text-main mb-2">
           Your
-          <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-400"
-            >Classroom</span
-          >
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/60">
+            Classroom
+          </span>
         </h1>
-        <p class="text-text-main/50 font-bold text-lg">Continue learning where you left off</p>
+
+        <p class="text-text-main/60 font-bold text-lg">Continue learning where you left off</p>
       </div>
 
       <a
         routerLink="/student/all-subjects"
-        class="px-6 py-2 rounded-full border border-border-main bg-surface text-text-main hover:bg-background transition text-sm font-bold shadow-sm"
+        class="px-6 py-2 rounded-full border border-border-main bg-surface/40 backdrop-blur-xl text-text-main hover:border-primary/30 hover:bg-primary/5 transition text-sm font-bold shadow-sm"
       >
         + Enroll in new
       </a>
@@ -26,6 +27,7 @@
       }
     </div>
     } @else if (!mySubjects?.length) {
+
     <div
       class="flex flex-col items-center justify-center py-24 text-center border border-dashed border-border-main rounded-3xl bg-surface"
     >
@@ -34,28 +36,29 @@
       >
         <i class="fa-solid fa-book-open text-3xl"></i>
       </div>
+
       <h3 class="font-black tracking-tight text-text-main text-xl">No enrollments yet</h3>
+
       <p class="text-text-main/50 mt-2 mb-6 font-bold">You haven't joined any subjects.</p>
+
       <a
         routerLink="/student/all-subjects"
-        class="rounded-2xl border border-sky-500/20 bg-sky-500/10 text-sky-500 px-6 py-3 font-bold transition-all hover:bg-sky-500/20 shadow-sm"
+        class="rounded-2xl border border-primary/20 bg-primary/10 text-primary px-6 py-3 font-bold transition-all hover:bg-primary/20 shadow-sm"
       >
         Browse Subjects
       </a>
     </div>
+
     } @else {
+
     <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      @for (sub of mySubjects; track sub.subjectId; let i = $index) {
+      @for (sub of mySubjects; track sub.subjectId) {
+
       <div
-        class="group relative flex flex-col items-center justify-center text-center rounded-3xl border border-border-main bg-surface p-8 transition-all duration-300 hover:-translate-y-1 hover:border-border-main/40 shadow-sm"
+        class="group relative flex flex-col items-center justify-center text-center rounded-3xl border border-border-main bg-surface/40 backdrop-blur-xl p-8 transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/10"
       >
         <div
-          [class]="
-            'size-20 rounded-2xl flex items-center justify-center text-3xl shadow-sm border border-border-main mb-6 transition-transform duration-300 group-hover:scale-110 ' +
-            getBgColor(i) +
-            ' ' +
-            getColor(i)
-          "
+          class="size-20 rounded-2xl flex items-center justify-center text-3xl shadow-sm border border-primary/20 bg-primary/10 text-primary mb-6 transition-transform duration-300 group-hover:scale-110"
         >
           <i class="fa-solid fa-graduation-cap"></i>
         </div>
@@ -68,9 +71,10 @@
 
         @if (sub.deaf_mute) {
         <span
-          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-pink-500/10 text-pink-500 text-xs font-bold border border-pink-500/20 uppercase tracking-wider mb-6"
+          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold border border-primary/20 uppercase tracking-wider mb-6"
         >
-          <i class="fa-solid fa-hands-asl-interpreting"></i> Accessible
+          <i class="fa-solid fa-hands-asl-interpreting"></i>
+          Accessible
         </span>
         } @else {
         <span class="block h-6 mb-6"></span>
@@ -78,13 +82,16 @@
 
         <button
           [routerLink]="['/student/subject-lessons', sub.subjectId]"
-          class="w-full rounded-2xl border border-sky-500/20 bg-sky-500/10 text-sky-500 px-6 py-3 text-sm font-bold transition-all hover:bg-sky-500/20 shadow-sm flex items-center justify-center gap-2"
+          class="cursor-pointer w-full rounded-2xl border border-primary/20 bg-primary/10 text-primary px-6 py-3 text-sm font-bold transition-all hover:bg-primary/20 shadow-sm flex items-center justify-center gap-2"
         >
-          View Lessons <i class="fa-solid fa-arrow-right text-xs"></i>
+          View Lessons
+          <i class="fa-solid fa-arrow-right text-xs"></i>
         </button>
       </div>
+
       }
     </div>
+
     }
   </div>
 </section>

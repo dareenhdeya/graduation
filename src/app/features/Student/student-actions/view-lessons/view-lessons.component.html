@@ -1,117 +1,141 @@
-<section class="relative min-h-screen pt-24 pb-10 px-4 overflow-hidden">
+<section class="relative py-10 px-4 overflow-hidden transition-colors duration-300">
   <div class="container mx-auto max-w-7xl relative z-10">
-    <div class="flex items-center gap-4 mb-8">
+    <div class="flex items-center gap-4 mb-10">
       <a
-        routerLink="/student/all-subjects"
-        class="size-10 rounded-2xl bg-surface border border-border-main flex items-center justify-center text-text-main/50 hover:text-text-main hover:bg-background transition shadow-sm cursor-pointer"
+        routerLink="/student/my-subjects"
+        class="size-11 rounded-2xl bg-surface/40 backdrop-blur-xl border border-border-main flex items-center justify-center text-text-main/60 hover:text-primary hover:border-primary/30 transition-all"
       >
         <i class="fa-solid fa-arrow-left"></i>
       </a>
+
       <div>
-        <h1 class="text-2xl font-black tracking-tight text-text-main">Course Content</h1>
-        <p class="text-text-main/50 text-sm font-bold">
-          <span class="text-sky-500">{{ lessons.length }} Lessons</span> available
+        <h1 class="text-3xl md:text-4xl font-black tracking-tight text-text-main">
+          Course
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/70">
+            Content
+          </span>
+        </h1>
+
+        <p class="text-text-main/60 text-sm font-medium mt-1">
+          <span class="text-primary font-bold">{{ lessons.length }}</span>
+          Lessons available
         </p>
       </div>
     </div>
 
     @if (isLoading) {
-      <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-5 animate-pulse">
-        @for (i of [1, 2, 3, 4, 5, 6, 7, 8]; track i) {
+
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-5 animate-pulse">
+      @for (i of [1,2,3,4,5,6,7,8,9,10]; track i) {
+      <div
+        class="aspect-square rounded-3xl bg-surface/40 backdrop-blur-xl border border-border-main"
+      ></div>
+      }
+    </div>
+
+    } @else if (lessons.length > 0) {
+
+    <div
+      class="relative overflow-hidden rounded-[2rem] border border-border-main bg-surface/40 backdrop-blur-xl p-6 md:p-8 shadow-sm"
+    >
+      <div
+        class="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 h-40 w-96 bg-primary/10 blur-[100px]"
+      ></div>
+
+      <div class="flex justify-center mb-8">
+        <div
+          class="rounded-2xl border border-primary/20 bg-primary/10 px-6 py-3 text-primary font-semibold text-sm"
+        >
+          Click any unlocked lesson to start learning
+        </div>
+      </div>
+
+      <div class="relative z-10 flex flex-wrap justify-center gap-5 md:gap-6">
+        @for (lesson of lessons; track lesson.id; let i = $index) {
+
+        <!-- @if (lesson.locked) {
+        <div
+          title="Complete the previous lesson first"
+          class="relative size-32 md:size-36 rounded-3xl border border-border-main bg-background flex flex-col items-center justify-center text-center p-4 opacity-70"
+        >
+          <i class="fa-solid fa-lock text-3xl text-text-main/50 mb-3"></i>
+
+          <span class="text-sm font-semibold text-text-main/60 line-clamp-2">
+            {{ lesson.title }}
+          </span>
+        </div>
+
+        }  
+
+        @else {-->
+
+        <a
+          [routerLink]="['/student/subject', subjectId, 'lesson', lesson.id]"
+          class="group relative"
+        >
           <div
-            class="h-24 md:h-28 rounded-2xl bg-surface border border-border-main shadow-sm"
-          ></div>
+            class="size-32 md:size-36 rounded-3xl flex flex-col items-center justify-center text-center p-4 text-white shadow-lg transition-all duration-300 hover:-translate-y-2 hover:scale-105"
+            [ngClass]="[
+              i % 10 === 0
+                ? 'bg-amber-400 hover:bg-amber-500'
+                : i % 10 === 1
+                ? 'bg-red-400 hover:bg-red-500'
+                : i % 10 === 2
+                ? 'bg-green-400 hover:bg-green-500'
+                : i % 10 === 3
+                ? 'bg-blue-400 hover:bg-blue-500'
+                : i % 10 === 4
+                ? 'bg-pink-400 hover:bg-pink-500'
+                : i % 10 === 5
+                ? 'bg-purple-400 hover:bg-purple-500'
+                : i % 10 === 6
+                ? 'bg-indigo-400 hover:bg-indigo-500'
+                : i % 10 === 7
+                ? 'bg-gray-400 hover:bg-gray-500'
+                : i % 10 === 8
+                ? 'bg-emerald-400 hover:bg-emerald-500'
+                : 'bg-orange-400 hover:bg-orange-500'
+            ]"
+          >
+            <i class="fa-solid fa-book-open text-2xl mb-3"></i>
+
+            <span class="text-sm md:text-base font-bold line-clamp-2">
+              {{ lesson.title }}
+            </span>
+          </div>
+        </a>
+
+        <!-- } -->
+
         }
       </div>
-    } @else if (lessons.length > 0) {
-      <div
-        class="relative rounded-3xl p-6 md:p-8 border border-border-main bg-surface backdrop-blur-md shadow-sm overflow-hidden"
-      >
-        <div class="flex flex-col items-center gap-3 mb-6">
-          <div
-            class="rounded-2xl px-6 py-3 border border-border-main bg-background flex items-center"
-          >
-            <p class="text-text-main font-bold">✨ Click any lesson to start learning! ✨</p>
-          </div>
-        </div>
+    </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-5">
-          @for (lesson of lessons; track lesson.id; let i = $index) {
-
-            <!-- LOCKED lesson -->
-            @if (lesson.locked) {
-              <div class="block" title="Complete the previous lesson to unlock this one">
-                <div
-                  class="relative flex flex-col items-center justify-center rounded-2xl size-24 md:size-28 font-bold text-base md:text-lg text-white/60 cursor-not-allowed shadow-sm bg-gray-300 dark:bg-gray-700 opacity-70 select-none"
-                >
-                  <!-- lock overlay -->
-                  <div class="absolute inset-0 rounded-2xl bg-black/20 flex flex-col items-center justify-center gap-1">
-                    <i class="fa-solid fa-lock text-2xl text-white/80 drop-shadow"></i>
-                    <span class="px-2 text-center line-clamp-2 text-xs text-white/80 font-semibold">
-                      {{ lesson.title }}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            }
-
-            <!-- UNLOCKED lesson -->
-            @else {
-              <a [routerLink]="['/student/subject', subjectId, 'lesson', lesson.id]" class="block">
-                <div
-                  class="flex items-center justify-center rounded-2xl size-24 md:size-28 font-bold text-lg md:text-xl text-white cursor-pointer transition-transform duration-300 hover:scale-110 shadow-sm"
-                  [ngClass]="[
-                    i % 10 === 0
-                      ? 'bg-amber-400 hover:bg-amber-500'
-                      : i % 10 === 1
-                        ? 'bg-red-400 hover:bg-red-500'
-                        : i % 10 === 2
-                          ? 'bg-green-400 hover:bg-green-500'
-                          : i % 10 === 3
-                            ? 'bg-blue-400 hover:bg-blue-500'
-                            : i % 10 === 4
-                              ? 'bg-pink-400 hover:bg-pink-500'
-                              : i % 10 === 5
-                                ? 'bg-purple-400 hover:bg-purple-500'
-                                : i % 10 === 6
-                                  ? 'bg-indigo-400 hover:bg-indigo-500'
-                                  : i % 10 === 7
-                                    ? 'bg-gray-400 hover:bg-gray-500'
-                                    : i % 10 === 8
-                                      ? 'bg-emerald-400 hover:bg-emerald-500'
-                                      : 'bg-orange-400 hover:bg-orange-500',
-                  ]"
-                >
-                  <span class="px-2 text-center line-clamp-2">
-                    {{ lesson.title }}
-                  </span>
-                </div>
-              </a>
-            }
-
-          }
-        </div>
-      </div>
     } @else {
+
+    <div
+      class="flex flex-col items-center justify-center py-24 text-center rounded-[2rem] border border-dashed border-border-main bg-surface/40 backdrop-blur-xl"
+    >
       <div
-        class="flex flex-col items-center justify-center py-32 text-center border border-dashed border-border-main rounded-3xl bg-surface"
+        class="size-24 rounded-3xl bg-background border border-border-main flex items-center justify-center mb-6"
       >
-        <div
-          class="size-24 rounded-2xl bg-background flex items-center justify-center text-text-main/20 mb-6 border border-border-main shadow-sm"
-        >
-          <i class="fa-solid fa-box-open text-4xl"></i>
-        </div>
-        <h2 class="text-2xl font-black tracking-tight text-text-main">No lessons yet</h2>
-        <p class="text-text-main/50 mt-2 font-bold">
-          The teacher hasn't uploaded any content for this subject.
-        </p>
-        <a
-          routerLink="/student/all-subjects"
-          class="mt-6 rounded-2xl border border-sky-500/20 bg-sky-500/10 text-sky-500 px-6 py-3 font-bold transition-all hover:bg-sky-500/20 shadow-sm cursor-pointer"
-        >
-          Go Back
-        </a>
+        <i class="fa-solid fa-box-open text-4xl text-text-main/20"></i>
       </div>
+
+      <h2 class="text-2xl font-black text-text-main mb-2">No lessons yet</h2>
+
+      <p class="text-text-main/60 max-w-md">
+        The teacher hasn't uploaded any content for this subject yet.
+      </p>
+
+      <a
+        routerLink="/student/all-subjects"
+        class="mt-6 rounded-2xl bg-primary/10 border border-primary/20 text-primary px-6 py-3 font-bold hover:bg-primary/15 transition"
+      >
+        Browse Subjects
+      </a>
+    </div>
+
     }
   </div>
 </section>
