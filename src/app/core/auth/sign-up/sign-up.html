@@ -92,7 +92,7 @@
 
                   @if (roleDropdownOpen) {
                   <div
-                    class="absolute top-full left-0 z-50 mt-2 w-full rounded-2xl border border-border-main bg-[#070A13] shadow-2xl overflow-hidden"
+                    class="absolute top-full left-0 z-50 mt-2 w-full rounded-2xl border border-border-main bg-background shadow-md overflow-hidden"
                   >
                     @for (r of roles; track r.id) {
                     <div
@@ -136,7 +136,7 @@
 
                 @if (genderDropdownOpen) {
                 <div
-                  class="absolute top-full left-0 z-50 mt-2 w-full rounded-2xl border border-border-main bg-[#070A13] shadow-2xl overflow-hidden"
+                  class="absolute top-full left-0 z-50 mt-2 w-full rounded-2xl border border-border-main bg-background shadow-md overflow-hidden"
                 >
                   <div
                     (click)="signUpForm.get('Gender')?.setValue(1); genderDropdownOpen = false"
@@ -402,7 +402,7 @@
 
                   @if (disabilityDropdownOpen) {
                   <div
-                    class="absolute bottom-full left-0 z-50 mt-2 w-full rounded-2xl border border-border-main bg-[#070A13] shadow-2xl overflow-hidden"
+                    class="absolute bottom-full left-0 z-50 mt-2 w-full rounded-2xl border border-border-main bg-background shadow-md overflow-hidden"
                   >
                     @for (d of Disability; track d.id) {
                     <div
@@ -521,7 +521,7 @@
             <button
               type="submit"
               [disabled]="isLoading"
-              class="w-full rounded-2xl bg-primary py-4 text-sm font-bold text-white hover:bg-primary/90 transition-all hover:-translate-y-0.5 shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
+              class="w-full cursor-pointer rounded-2xl bg-primary py-4 text-sm font-bold text-white hover:bg-primary/90 transition-all hover:-translate-y-0.5 shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <span class="flex items-center justify-center gap-2">
                 Sign Up @if (isLoading) {

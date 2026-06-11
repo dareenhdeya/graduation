@@ -32,7 +32,7 @@
 
       <a
         [routerLink]="['/teacher/subject', subjectId, 'add-lesson']"
-        class="border border-primary/20 bg-primary/10 text-primary hover:bg-primary/20 flex items-center gap-2 px-6 py-3 rounded-full font-bold transition-all shadow-sm hover:scale-105"
+        class="border border-primary/20 bg-surface/40 backdrop-blur-xl text-primary hover:bg-primary/20 flex items-center gap-2 px-6 py-3 rounded-full font-bold transition-all shadow-sm hover:scale-105"
       >
         <i class="fa-solid fa-plus"></i> <span>Add New Lesson</span>
       </a>
@@ -139,122 +139,184 @@
     >
       <h2 class="text-2xl font-black tracking-tight text-text-main mb-6">Edit Lesson</h2>
       <form [formGroup]="editForm" (ngSubmit)="saveEdit()">
+        <!-- Title -->
         <div class="mb-4">
           <label
-            class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1 block"
+            class="block text-xs font-semibold uppercase tracking-[0.15em] text-text-main/80 mb-2 pl-1"
             >Title</label
           >
           <input
             type="text"
             formControlName="title"
-            class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm"
+            [class.border-red-500]="
+              editForm.get('title')?.invalid && editForm.get('title')?.touched
+            "
+            class="w-full rounded-2xl border border-border-main bg-background/60 px-4 py-3.5 text-sm font-medium text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm placeholder:text-placeholder placeholder:font-medium"
             placeholder="Lesson Title"
           />
           @if (editForm.get('title')?.invalid && editForm.get('title')?.touched) {
-          <p class="text-red-500 text-xs font-bold mt-1 pl-1">Title is required (min 3 chars)</p>
+          <p
+            class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+          >
+            <i class="fas fa-circle-exclamation mt-0.5"></i>
+            <span>Title is required (min 3 chars).</span>
+          </p>
           }
         </div>
+
+        <!-- Description -->
         <div class="mb-4">
           <label
-            class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1 block"
+            class="block text-xs font-semibold uppercase tracking-[0.15em] text-text-main/80 mb-2 pl-1"
             >Description</label
           >
           <textarea
             formControlName="description"
             rows="4"
-            class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm resize-none"
+            [class.border-red-500]="
+              editForm.get('description')?.invalid && editForm.get('description')?.touched
+            "
+            class="w-full rounded-2xl border border-border-main bg-background/60 px-4 py-3.5 text-sm font-medium text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm resize-none placeholder:text-placeholder placeholder:font-medium"
             placeholder="Lesson Description"
           ></textarea>
           @if (editForm.get('description')?.invalid && editForm.get('description')?.touched) {
-          <p class="text-red-500 text-xs font-bold mt-1 pl-1">
-            Description is required (min 10 chars)
+          <p
+            class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+          >
+            <i class="fas fa-circle-exclamation mt-0.5"></i>
+            <span>Description is required (min 10 chars).</span>
           </p>
           }
         </div>
 
-        <!-- Prerequisite Type -->
+        <!-- Prerequisite Type — custom dropdown -->
         <div class="mb-4">
           <label
-            class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1 block"
+            class="block text-xs font-semibold uppercase tracking-[0.15em] text-text-main/80 mb-2 pl-1"
             >Prerequisite Type</label
           >
           <div class="relative">
-            <select
-              formControlName="perquisiteType"
-              (change)="onEditTypeChange()"
-              class="w-full appearance-none rounded-2xl border border-border-main bg-background px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm cursor-pointer pr-10"
+            @if (prereqTypeDropdownOpen) {
+            <div class="fixed inset-0 z-40" (click)="prereqTypeDropdownOpen = false"></div>
+            }
+            <div
+              (click)="prereqTypeDropdownOpen = !prereqTypeDropdownOpen"
+              class="w-full rounded-2xl border border-border-main bg-background/60 text-text-main px-4 py-3.5 cursor-pointer flex justify-between items-center text-sm font-medium"
+            >
+              <span>{{ getSelectedTypeLabel() }}</span>
+              <i
+                class="fa-solid fa-chevron-down transition-transform text-text-main/40 text-xs"
+                [class.rotate-180]="prereqTypeDropdownOpen"
+              ></i>
+            </div>
+            @if (prereqTypeDropdownOpen) {
+            <div
+              class="absolute top-full left-0 z-50 mt-2 w-full rounded-2xl border border-border-main bg-background shadow-md max-h-60 overflow-y-auto no-scrollbar"
             >
               @for (type of perquisiteTypes; track type.value) {
-              <option [value]="type.value">{{ type.label }}</option>
+              <div
+                (click)="selectPrereqType(type.value)"
+                class="px-4 py-3 hover:bg-primary/10 font-medium text-text-main cursor-pointer text-sm"
+                [class.text-primary]="selectedEditType === type.value"
+              >
+                {{ type.label }}
+              </div>
               }
-            </select>
-            <i
-              class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-text-main/40 pointer-events-none text-xs"
-            ></i>
+            </div>
+            }
           </div>
         </div>
 
-        <!-- Prerequisite Item (shown only when type != None) -->
+        <!-- Prerequisite Item — custom dropdown -->
         @if (selectedEditType !== 0) {
         <div class="mb-6">
           <label
-            class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1 block"
+            class="block text-xs font-semibold uppercase tracking-[0.15em] text-text-main/80 mb-2 pl-1"
           >
             Select {{ selectedEditType === 1 ? 'Lesson' : 'Quiz' }} Prerequisite
           </label>
 
           @if (isLoadingPrerequisites) {
           <div
-            class="flex items-center gap-2 text-sm text-text-main/50 font-semibold py-3.5 px-4 rounded-2xl border border-border-main bg-background"
+            class="flex items-center gap-2 text-sm text-text-main/50 font-medium py-3.5 px-4 rounded-2xl border border-border-main bg-background/60"
           >
             <i class="fas fa-spinner fa-spin"></i>
             <span>Loading {{ selectedEditType === 1 ? 'lessons' : 'quizzes' }}...</span>
           </div>
           } @else {
           <div class="relative">
-            <select
-              formControlName="perquisiteId"
-              class="w-full appearance-none rounded-2xl border border-border-main bg-background px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm cursor-pointer pr-10"
-              [class.border-red-400]="
+            @if (prereqItemDropdownOpen) {
+            <div class="fixed inset-0 z-40" (click)="prereqItemDropdownOpen = false"></div>
+            }
+            <div
+              (click)="prereqItemDropdownOpen = !prereqItemDropdownOpen"
+              class="w-full rounded-2xl border border-border-main bg-background/60 text-text-main px-4 py-3.5 cursor-pointer flex justify-between items-center text-sm font-medium"
+              [class.border-red-500]="
                 editForm.get('perquisiteId')?.touched && !editForm.get('perquisiteId')?.value
               "
             >
-              <option [value]="null">
+              <span [class.text-placeholder]="!editForm.get('perquisiteId')?.value">
+                {{ getSelectedPrereqLabel() }}
+              </span>
+              <i
+                class="fa-solid fa-chevron-down transition-transform text-text-main/40 text-xs"
+                [class.rotate-180]="prereqItemDropdownOpen"
+              ></i>
+            </div>
+            @if (prereqItemDropdownOpen) {
+            <div
+              class="absolute bottom-full left-0 z-50 mb-2 w-full rounded-2xl border border-border-main bg-background shadow-md max-h-60 overflow-y-auto no-scrollbar"
+            >
+              <div
+                (click)="selectPrereqItem(null)"
+                class="px-4 py-3 hover:bg-primary/10 font-medium text-text-main/50 cursor-pointer text-sm"
+              >
                 -- Select a {{ selectedEditType === 1 ? 'lesson' : 'quiz' }} --
-              </option>
+              </div>
+
               @for (option of prerequisiteOptions; track option.id) {
-              <option [value]="option.id">{{ option.title }}</option>
+              <div
+                (click)="selectPrereqItem(option.id)"
+                class="px-4 py-3 hover:bg-primary/10 font-medium text-text-main cursor-pointer text-sm"
+                [class.text-primary]="editForm.get('perquisiteId')?.value === option.id"
+              >
+                {{ option.title }}
+              </div>
               }
-            </select>
-            <i
-              class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-text-main/40 pointer-events-none text-xs"
-            ></i>
+            </div>
+            }
           </div>
 
-          @if (prerequisiteOptions.length === 0 && !isLoadingPrerequisites) {
+          @if (prerequisiteOptions.length === 0) {
           <p class="text-text-main/40 text-xs font-semibold mt-1 pl-1">
             No {{ selectedEditType === 1 ? 'lessons' : 'quizzes' }} available.
           </p>
           } @if (editForm.get('perquisiteId')?.touched && !editForm.get('perquisiteId')?.value) {
-          <p class="text-red-500 text-xs font-bold mt-1 pl-1">Please select a prerequisite item.</p>
+          <p
+            class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+          >
+            <i class="fas fa-circle-exclamation mt-0.5"></i>
+            <span>Please select a prerequisite item.</span>
+          </p>
           } }
         </div>
         } @else {
         <div class="mb-6"></div>
         }
 
+        <!-- Actions -->
         <div class="flex gap-4">
           <button
             type="button"
             (click)="closeEditModal()"
-            class="flex-1 py-3 rounded-2xl border border-border-main bg-surface text-text-main font-bold hover:bg-background transition shadow-sm"
+            class="flex-1 cursor-pointer py-3 rounded-2xl border border-border-main bg-surface text-text-main font-bold hover:bg-background transition shadow-sm"
           >
             Cancel
           </button>
           <button
             type="submit"
             [disabled]="editForm.invalid || isSubmitting"
-            class="flex-1 py-3 rounded-2xl bg-primary text-white font-bold hover:bg-primary/80 transition disabled:opacity-50 shadow-sm"
+            class="flex-1 cursor-pointer py-3 rounded-2xl bg-primary text-white font-bold hover:bg-primary/80 transition disabled:opacity-50 shadow-sm"
           >
             @if (isSubmitting) {
             <i class="fa-solid fa-spinner fa-spin mr-2"></i> Saving... } @else { Save Changes }
@@ -290,7 +352,7 @@
         <button
           type="button"
           (click)="closeDeleteModal()"
-          class="flex-1 py-3 rounded-2xl border border-border-main bg-surface text-text-main font-bold hover:bg-background transition shadow-sm"
+          class="flex-1 cursor-pointer py-3 rounded-2xl border border-border-main bg-surface text-text-main font-bold hover:bg-background transition shadow-sm"
         >
           Cancel
         </button>
@@ -298,7 +360,7 @@
           type="button"
           (click)="confirmDelete()"
           [disabled]="isDeleting"
-          class="flex-1 py-3 rounded-2xl bg-red-500 text-white font-bold hover:bg-red-600 transition disabled:opacity-50 shadow-sm"
+          class="flex-1 cursor-pointer py-3 rounded-2xl bg-red-500 text-white font-bold hover:bg-red-600 transition disabled:opacity-50 shadow-sm"
         >
           @if (isDeleting) {
           <i class="fa-solid fa-spinner fa-spin mr-2"></i> Deleting... } @else { Delete }

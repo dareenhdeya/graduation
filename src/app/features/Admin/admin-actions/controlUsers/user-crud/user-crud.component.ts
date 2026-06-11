@@ -32,10 +32,10 @@ export class UserCrudComponent implements OnInit {
 
   statusLabels = ['Inactive', 'Active', 'Pending', 'Banned', 'Locked'];
   statusStyles: any = {
-    0: 'bg-slate-500/10 text-slate-500 border-slate-500/20', // Inactive
-    1: 'bg-green-500/10 text-green-500 border-green-500/20', // Active
-    2: 'bg-amber-500/10 text-amber-500 border-amber-500/20', // Pending
-    3: 'bg-red-500/10 text-red-500 border-red-500/20', // Banned
+    0: 'bg-slate-500/10 text-slate-500 border-slate-500/20', // inactive
+    1: 'bg-green-500/10 text-green-500 border-green-500/20', // active
+    2: 'bg-amber-500/10 text-amber-500 border-amber-500/20', // pending
+    3: 'bg-red-500/10 text-red-500 border-red-500/20', // banned
     4: 'bg-fuchsia-500/10 text-fuchsia-500 border-fuchsia-500/20', // locked
   };
 
