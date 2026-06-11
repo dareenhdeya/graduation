@@ -167,16 +167,20 @@
         @for (ex of exercises.controls; track ex; let eIndex = $index) {
         <div [formGroupName]="eIndex"
           class="rounded-[28px] border border-white/10 bg-white/[0.03] backdrop-blur-xl p-6 md:p-8 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)] space-y-6 hover:border-white/20 transition-all"
-          [class.border-emerald-500]="getExerciseType(eIndex) === 'AI'">
+          [class.border-emerald-500]="getExerciseType(eIndex) === 'AI'"
+          [class.border-teal-500]="getExerciseType(eIndex) === 'AIWords'">
           <!-- Exercise Header -->
           <div class="flex items-center justify-between gap-4 flex-wrap">
             <div class="flex items-center gap-3">
               <div class="size-10 rounded-2xl flex items-center justify-center border font-black text-base shrink-0"
-                [class]="getExerciseType(eIndex) === 'AI' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : 'bg-primary/10 text-primary border-primary/20'">
+                [class]="getExerciseType(eIndex) === 'AI' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' 
+       : getExerciseType(eIndex) === 'AIWords' ? 'bg-teal-500/10 text-teal-500 border-teal-500/20' 
+       : 'bg-primary/10 text-primary border-primary/20'">
                 {{ eIndex + 1 }}
               </div>
               <h2 class="font-black text-text-main text-xl tracking-tight">
-                Exercise {{ eIndex + 1 }} {{ getExerciseType(eIndex) === 'AI' ? '(AI Sign Language)' : '' }}
+                Exercise {{ eIndex + 1 }} 
+{{ getExerciseType(eIndex) === 'AI' ? '(AI Sign Language)' : getExerciseType(eIndex) === 'AIWords' ? '(AI Words Practice)' : '' }}
               </h2>
             </div>
             <!-- Action buttons -->
@@ -242,6 +246,13 @@
                 [class]="getExerciseType(eIndex) !== 'AI' ? 'text-emerald-500 hover:bg-emerald-500/10' : ''">
                 <i class="fa-solid fa-robot"></i> AI Practice
               </button>
+              <button type="button" (click)="setExerciseType(eIndex, 'AIWords')"
+              class="px-5 py-2.5 flex items-center gap-2 border-l border-border-main transition-all"
+              [class.bg-teal-500]="getExerciseType(eIndex) === 'AIWords'"
+              [class.text-white]="getExerciseType(eIndex) === 'AIWords'"
+              [class]="getExerciseType(eIndex) !== 'AIWords' ? 'text-teal-500 hover:bg-teal-500/10' : ''">
+              <i class="fa-solid fa-spell-check"></i> AI Words
+            </button>
               }
             </div>
             <p class="text-text-main/40 text-xs font-bold mt-2 pl-1">
@@ -251,12 +262,14 @@
               Matching: each question has a single prompt paired with its correct answer.
               } @else if (getExerciseType(eIndex) === 'AI') {
               AI Practice: students record themselves signing letters assigned by you via webcam.
+              } @else if (getExerciseType(eIndex) === 'AIWords') {
+                AI Words Practice: students record themselves signing words. Set the number of words to practice.
               }
             </p>
           </div>
 
           <!-- ── Questions Block (MCQ/Matching) ── -->
-          @if (getExerciseType(eIndex) !== 'AI') {
+          @if (getExerciseType(eIndex) !== 'AI' && getExerciseType(eIndex) !== 'AIWords') {
           <div formArrayName="questions" class="space-y-5">
             <div class="flex items-center justify-between">
               <label class="text-xs font-bold uppercase tracking-wider text-text-main/50">Questions</label>
@@ -490,8 +503,11 @@
                 </div>
               </div>
               }
+
             </div>
             }
+
+           
           </div>
           }
 
@@ -567,6 +583,46 @@
               </div>
             </div>
             }
+          </div>
+          }
+
+         <!-- ai wordssssssssssssssssssssssssssss -->
+         @if (getExerciseType(eIndex) === 'AIWords') {
+          <div class="rounded-2xl border border-teal-500/20 bg-teal-500/5 p-6 space-y-4">
+            <div class="flex items-center gap-3 mb-2">
+              <div class="size-10 rounded-2xl bg-teal-500/10 text-teal-500 flex items-center justify-center border border-teal-500/20">
+                <i class="fa-solid fa-spell-check"></i>
+              </div>
+              <div>
+                <h3 class="font-black text-text-main tracking-tight">Words Practice</h3>
+                <p class="text-text-main/40 text-xs font-semibold">Set how many words the student will sign</p>
+              </div>
+            </div>
+          
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">
+                Number of Words
+              </label>
+              <div class="flex items-center gap-3">
+                <button type="button"
+                  (click)="exercises.at(eIndex).get('aiWordsCount')?.setValue(Math.max(1, (exercises.at(eIndex).get('aiWordsCount')?.value ?? 1) - 1))"
+                  class="size-11 rounded-xl border border-border-main bg-background text-text-main/60 hover:text-text-main font-bold text-lg cursor-pointer flex items-center justify-center transition-all">−</button>
+                <input type="number" formControlName="aiWordsCount" min="1" max="50"
+                  class="w-20 text-center rounded-2xl border border-teal-500/30 bg-background px-3 py-3 text-lg font-black text-text-main outline-none transition-all focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 shadow-sm" />
+                <button type="button"
+                  (click)="exercises.at(eIndex).get('aiWordsCount')?.setValue(Math.min(50, (exercises.at(eIndex).get('aiWordsCount')?.value ?? 1) + 1))"
+                  class="size-11 rounded-xl border border-border-main bg-background text-text-main/60 hover:text-text-main font-bold text-lg cursor-pointer flex items-center justify-center transition-all">+</button>
+                <span class="text-sm text-text-main/40 font-bold">words</span>
+              </div>
+            </div>
+          
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-teal-500/10 border border-teal-500/20">
+              <i class="fa-solid fa-circle-check text-teal-500 text-sm"></i>
+              <span class="text-sm font-bold text-teal-500">
+                {{ exercises.at(eIndex).get('aiWordsCount')?.value }} 
+                {{ exercises.at(eIndex).get('aiWordsCount')?.value === 1 ? 'word' : 'words' }} to practice
+              </span>
+            </div>
           </div>
           }
         </div>

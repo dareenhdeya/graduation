@@ -79,7 +79,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       @for (lesson of lessons; track lesson.id) {
       <div
-        class="flex flex-col h-full p-6 group relative rounded-3xl border border-border-main bg-surface shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl"
+        class="flex bg-surface/40 backdrop-blur-xl flex-col h-full p-6 group relative rounded-3xl border border-border-main bg-surface shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl"
       >
         <div
           class="size-14 rounded-2xl bg-gradient-to-br from-primary/10 to-purple-500/10 border border-primary/20 flex items-center justify-center text-primary mb-5 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3"
@@ -107,7 +107,7 @@
           <div class="flex items-center gap-1">
             <button
               (click)="openEditModal(lesson)"
-              class="size-8 rounded-2xl flex items-center justify-center text-text-main/50 border border-transparent hover:border-yellow-500/20 hover:bg-yellow-500/10 hover:text-yellow-500 transition-colors shadow-sm"
+              class="size-8 cursor-pointer rounded-2xl flex items-center justify-center text-text-main/50 border border-transparent hover:border-yellow-500/20 hover:bg-yellow-500/10 hover:text-yellow-500 transition-colors shadow-sm"
               title="Edit"
             >
               <i class="fa-solid fa-pen text-sm"></i>
@@ -115,7 +115,7 @@
 
             <button
               (click)="openDeleteModal(lesson)"
-              class="size-8 rounded-2xl flex items-center justify-center text-text-main/50 border border-transparent hover:border-red-500/20 hover:bg-red-500/10 hover:text-red-500 transition-colors shadow-sm"
+              class="size-8 cursor-pointer rounded-2xl flex items-center justify-center text-text-main/50 border border-transparent hover:border-red-500/20 hover:bg-red-500/10 hover:text-red-500 transition-colors shadow-sm"
               title="Delete"
             >
               <i class="fa-solid fa-trash text-sm"></i>

@@ -646,4 +646,27 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
       state: { aiLetters, exerciseIndex: eIdx, returnUrl: this.router.url },
     });
   }
+  goToAiWordsQuiz(eIdx: number) {
+    const exercises = this.getExercisesList(this.quizData());
+    const ex = exercises[eIdx];
+    const aiLetters = this.normalizeAiLetters(
+      ex?.aI_letters ?? ex?.ai_letters ?? ex?.AI_letters ?? {}
+    );
+    let subjectName = (this.quizData()?.subjectName ?? '').toLowerCase();
+
+    if (!subjectName) {
+      const firstKey = Object.keys(aiLetters)[0] ?? '';
+      subjectName = /[\u0600-\u06FF]/.test(firstKey) ? 'arabic' : 'english';
+    }
+
+    const route = subjectName === 'arabic' ? '/arabic-words' : '/word-quiz';
+
+    if (this.quizState() === 'in-progress') {
+      sessionStorage.setItem(this.inProgressKey, '1');
+    }
+
+    this.router.navigate([route], {
+      state: { aiLetters, exerciseIndex: eIdx, returnUrl: this.router.url },
+    });
+  }
 }

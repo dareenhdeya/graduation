@@ -57,7 +57,7 @@
       <div>
         <h1 class="text-3xl md:text-4xl font-black tracking-tight text-text-main">
           Manage
-          <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-400">{{
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-400">{{
             lesson.title
           }}</span>
         </h1>
@@ -75,7 +75,7 @@
             'view',
             exerciseId
           ]"
-          class="inline-flex items-center gap-2 h-11 px-5 rounded-2xl border border-primary/20 bg-primary/10 text-primary font-bold text-sm shadow-sm hover:bg-primary/20 hover:scale-[1.03] active:scale-[0.97] transition-all"
+          class="inline-flex items-center gap-2 h-11 px-5 rounded-2xl border border-primary/20 bg-surface/40 backdrop-blur-xl text-primary font-bold text-sm shadow-sm hover:bg-primary/20 hover:scale-[1.03] active:scale-[0.97] transition-all"
         >
           <i class="fa-solid fa-eye"></i> View Exercise
         </a>
@@ -89,7 +89,7 @@
             'edit',
             exerciseId
           ]"
-          class="inline-flex items-center gap-2 h-11 px-5 rounded-2xl border border-yellow-500/20 bg-yellow-500/10 text-yellow-500 font-bold text-sm shadow-sm hover:bg-yellow-500/20 hover:scale-[1.03] active:scale-[0.97] transition-all"
+          class="inline-flex items-center bg-surface/40 backdrop-blur-xl gap-2 h-11 px-5 rounded-2xl border border-primary/20 text-primary font-bold text-sm shadow-sm hover:bg-primary/20 hover:scale-[1.03] active:scale-[0.97] transition-all"
         >
           <i class="fa-solid fa-pen"></i> Edit Exercise
         </a>
@@ -128,7 +128,7 @@
         <div id="videos" class="space-y-4 lg:max-h-[650px] lg:overflow-y-auto lg:pr-3">
           @for (video of videos; track video.vId ?? video.title) {
           <div
-            class="group rounded-3xl border border-border-main bg-surface overflow-hidden hover:border-primary/40 transition-all duration-300 hover:-translate-y-1 shadow-sm hover:shadow-xl"
+            class="group bg-surface/40 backdrop-blur-xl rounded-3xl border border-border-main overflow-hidden hover:border-primary/40 transition-all duration-300 hover:-translate-y-1 shadow-sm hover:shadow-xl"
           >
             <div class="relative h-40 bg-background overflow-hidden border-b border-border-main">
               @if (video.videoUrl) {
@@ -174,11 +174,12 @@
 
       <!-- Upload form -->
       <div
-        class="relative rounded-3xl border border-border-main bg-surface shadow-sm px-6 md:px-8 py-8 flex flex-col transition-all duration-300 hover:-translate-y-1 hover:border-primary/40"
+        class="relative bg-surface/40 backdrop-blur-xl rounded-3xl border border-border-main shadow-sm px-6 md:px-8 py-8 flex flex-col transition-all duration-300 hover:-translate-y-1 hover:border-primary/40"
       >
         <div class="text-left mb-6">
+          <!-- ✅ كان sky-500 → primary -->
           <div
-            class="inline-flex items-center justify-center size-12 rounded-2xl bg-sky-500/10 text-sky-500 mb-3 border border-sky-500/20 shadow-sm"
+            class="inline-flex items-center justify-center size-12 rounded-2xl bg-primary/10 text-primary mb-3 border border-primary/20 shadow-sm"
           >
             <i class="fa-solid fa-cloud-arrow-up text-xl"></i>
           </div>
@@ -195,12 +196,15 @@
             <input
               formControlName="title"
               type="text"
-              class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm placeholder:text-text-main/30"
+              class="w-full rounded-2xl border border-border-main bg-background/60 px-4 py-3.5 text-sm font-medium text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm placeholder:text-placeholder placeholder:font-medium"
               placeholder="e.g., Introduction"
             />
             @if (uploadForm.get('title')?.touched && uploadForm.get('title')?.invalid) {
-            <p class="text-red-500 text-xs font-bold mt-1 pl-1">
-              Title is required (min 3 characters).
+            <p
+              class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+            >
+              <i class="fas fa-circle-exclamation mt-0.5"></i>
+              <span>Title is required (min 3 characters).</span>
             </p>
             }
           </div>
@@ -213,13 +217,15 @@
             <textarea
               formControlName="description"
               rows="3"
-              class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm resize-none placeholder:text-text-main/30"
+              class="w-full rounded-2xl border border-border-main bg-background/60 px-4 py-3.5 text-sm font-medium text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm resize-none placeholder:text-placeholder placeholder:font-medium"
               placeholder="Describe this video..."
             ></textarea>
-            @if ( uploadForm.get('description')?.touched && uploadForm.get('description')?.invalid )
-            {
-            <p class="text-red-500 text-xs font-bold mt-1 pl-1">
-              Description is required (min 3 characters).
+            @if (uploadForm.get('description')?.touched && uploadForm.get('description')?.invalid) {
+            <p
+              class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+            >
+              <i class="fas fa-circle-exclamation mt-0.5"></i>
+              <span>Description is required (min 3 characters).</span>
             </p>
             }
           </div>
@@ -237,9 +243,16 @@
                 accept="video/*,image/*"
                 class="hidden"
               />
+              <!-- ✅ كان hover:border-sky-500/50 → hover:border-primary/50 -->
               <div
                 (click)="mediaInput.click()"
-                class="w-full cursor-pointer rounded-3xl border-2 border-dashed border-border-main bg-background hover:bg-surface hover:border-sky-500/50 transition-all duration-300 p-6 flex flex-col items-center justify-center text-center shadow-sm min-h-[160px]"
+                class="w-full cursor-pointer rounded-3xl border-2 border-dashed bg-background/60 hover:bg-surface hover:border-primary/50 transition-all duration-300 p-6 flex flex-col items-center justify-center text-center shadow-sm min-h-[160px]"
+                [class.border-border-main]="
+                  !(uploadForm.get('videoFile')?.touched && uploadForm.get('videoFile')?.invalid)
+                "
+                [class.border-red-500]="
+                  uploadForm.get('videoFile')?.touched && uploadForm.get('videoFile')?.invalid
+                "
               >
                 @if (selectedFile) { @if (isImage) {
                 <div
@@ -264,8 +277,9 @@
                 </div>
                 <p class="text-text-main/40 font-bold text-xs mt-2 uppercase">Click to replace</p>
                 } @else {
+                <!-- ✅ كان bg-sky-500/10 text-sky-500 border-sky-500/20 → primary -->
                 <div
-                  class="size-14 rounded-2xl bg-sky-500/10 text-sky-500 border border-sky-500/20 shadow-sm flex items-center justify-center mb-3 group-hover:scale-110 transition-transform"
+                  class="size-14 rounded-2xl bg-primary/10 text-primary border border-primary/20 shadow-sm flex items-center justify-center mb-3 group-hover:scale-110 transition-transform"
                 >
                   <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
                 </div>
@@ -277,15 +291,21 @@
               </div>
             </div>
             @if (uploadForm.get('videoFile')?.touched && uploadForm.get('videoFile')?.invalid) {
-            <p class="text-red-500 text-xs font-bold mt-1 pl-1">Media file is required.</p>
+            <p
+              class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+            >
+              <i class="fas fa-circle-exclamation mt-0.5"></i>
+              <span>Media file is required.</span>
+            </p>
             }
           </div>
 
           <div class="pt-4 border-t border-border-main">
+            <!-- ✅ كان bg-sky-500 hover:bg-sky-600 → bg-primary hover:bg-primary/80 -->
             <button
               type="submit"
               [disabled]="uploadForm.invalid || isUploading"
-              class="w-full h-12 cursor-pointer rounded-2xl bg-sky-500 font-bold text-white shadow-sm hover:bg-sky-600 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+              class="w-full h-12 cursor-pointer rounded-2xl bg-primary font-bold text-white shadow-sm hover:bg-primary/80 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
             >
               <span class="flex items-center justify-center gap-2">
                 @if (isUploading) {
