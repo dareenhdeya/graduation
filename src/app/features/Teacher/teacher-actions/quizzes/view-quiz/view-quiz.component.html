@@ -5,14 +5,14 @@
         @if (lessonId()) {
         <a
           [routerLink]="['/teacher/subject', subjectId(), 'lesson', lessonId(), 'manage']"
-          class="size-10 rounded-full bg-surface border border-border-main flex items-center justify-center text-text-main hover:bg-background transition-colors hover:text-violet-500 shadow-sm"
+          class="size-10 rounded-full bg-surface border border-border-main flex items-center justify-center text-text-main hover:bg-background transition-colors hover:text-primary shadow-sm"
         >
           <i class="fa-solid fa-arrow-left"></i>
         </a>
         } @else {
         <a
           [routerLink]="['/teacher/subject', subjectId(), 'quizzes']"
-          class="size-10 rounded-full bg-surface border border-border-main flex items-center justify-center text-text-main hover:bg-background transition-colors hover:text-violet-500 shadow-sm"
+          class="size-10 rounded-full bg-surface border border-border-main flex items-center justify-center text-text-main hover:bg-background transition-colors hover:text-primary shadow-sm"
         >
           <i class="fa-solid fa-arrow-left"></i>
         </a>
@@ -20,9 +20,7 @@
         <div>
           <h1 class="text-3xl md:text-4xl font-black tracking-tight text-text-main">
             View
-            <span
-              class="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-purple-400"
-            >
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-primary">
               {{ lessonId() ? 'Exercise' : 'Quiz' }}
             </span>
           </h1>
@@ -44,7 +42,7 @@
           'edit',
           quizId()
         ]"
-        class="border border-yellow-500/20 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20 flex items-center gap-2 px-6 py-3 rounded-full font-bold transition-all shadow-sm hover:scale-105 cursor-pointer"
+        class="border border-primary/20 bg-primary/10 text-primary hover:bg-primary/20 flex items-center gap-2 px-6 py-3 rounded-full font-bold transition-all shadow-sm hover:scale-105 cursor-pointer"
       >
         <i class="fa-solid fa-pen"></i> <span>Edit Exercise</span>
       </a>
@@ -84,11 +82,13 @@
       </div>
     </div>
     } @else if (quizData()) {
-    <div class="rounded-3xl border border-border-main bg-surface overflow-hidden shadow-sm">
-      <div class="bg-violet-500/5 p-8 border-b border-border-main">
+    <div
+      class="rounded-3xl bg-surface/40 backdrop-blur-xl border border-border-main overflow-hidden shadow-sm"
+    >
+      <div class="bg-primary/5 p-8 border-b border-border-main">
         <div class="flex items-center gap-4 mb-2">
           <div
-            class="size-12 rounded-2xl bg-violet-500/10 text-violet-500 flex items-center justify-center text-xl"
+            class="size-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center text-xl"
           >
             <i class="fa-solid fa-clipboard-question"></i>
           </div>
@@ -98,7 +98,7 @@
           <div
             class="px-4 py-2 rounded-xl bg-background border border-border-main flex items-center gap-2 text-sm font-bold text-text-main/70"
           >
-            <i class="fa-solid fa-gauge-high text-violet-500"></i> Difficulty: {{ quizDifficulty }}
+            <i class="fa-solid fa-gauge-high text-primary"></i> Difficulty: {{ quizDifficulty }}
           </div>
           <div
             class="px-4 py-2 rounded-xl bg-background border border-border-main flex items-center gap-2 text-sm font-bold text-text-main/70"
@@ -111,7 +111,7 @@
 
       <div class="p-8">
         <h3 class="text-xl font-bold flex items-center gap-2 text-text-main mb-6">
-          <i class="fa-solid fa-list-check text-violet-500"></i> Exercises
+          <i class="fa-solid fa-list-check text-primary"></i> Exercises
         </h3>
 
         @if (exercises.length === 0) {
@@ -121,170 +121,199 @@
           No exercises found for this quiz.
         </div>
         } @else {
-        <div class="space-y-6">
+        <div class="space-y-4">
           @for (exercise of exercises; track exercise.id) {
-          <div class="rounded-2xl border border-border-main bg-background overflow-hidden">
+
+          <div
+            class="ex-card overflow-hidden rounded-2xl border border-border-main bg-surface shadow-sm transition-all duration-300 hover:shadow-xl hover:border-primary/30"
+          >
             <div
-              class="p-5 border-b border-border-main bg-violet-500/5 hover:bg-violet-500/10 transition-colors flex items-center justify-between"
+              class="flex items-center gap-4 px-5 py-4 border-b border-border-main bg-gradient-to-r from-primary/10 via-primary/5 to-transparent"
             >
-              <div class="flex flex-col">
-                <span class="text-xs font-bold text-violet-500 uppercase tracking-wider mb-1"
-                  >Exercise {{ $index + 1 }}</span
-                >
-                <span class="font-bold text-text-main text-lg">{{
-                  exercise?.name ||
-                    exercise?.Name ||
-                    exercise?.title ||
-                    exercise?.Title ||
-                    'Untitled Exercise'
-                }}</span>
+              <div
+                class="size-9 rounded-lg bg-primary text-white flex items-center justify-center text-sm font-medium shrink-0"
+              >
+                {{ $index + 1 }}
               </div>
+
+              <div class="flex-1 min-w-0">
+                <p class="text-[11px] uppercase tracking-widest text-text-main/40 mb-0.5">
+                  Exercise
+                </p>
+                <h3 class="text-[15px] font-medium text-text-main truncate">
+                  {{
+                    exercise?.name ||
+                      exercise?.Name ||
+                      exercise?.title ||
+                      exercise?.Title ||
+                      'Untitled Exercise'
+                  }}
+                </h3>
+              </div>
+
               <span
-                class="px-3 py-1 bg-surface border border-border-main rounded-lg text-xs font-bold text-text-main/70 shadow-sm"
+                class="shrink-0 text-[11px] font-medium px-2.5 py-1 rounded-md border"
+                [ngClass]="
+                  exercise?.type === 3 || exercise?.type === 'AI'
+                    ? 'bg-green-500/10 text-green-600 border-green-500/20'
+                    : 'bg-background text-text-main/60 border-border-main'
+                "
               >
                 {{
                   exercise?.type === 1
                     ? 'MCQ'
                     : exercise?.type === 2
                     ? 'Matching'
-                    : exercise?.type || exercise?.Type || exercise?.exerciseType || 'Standard'
+                    : exercise?.type === 3
+                    ? 'AI'
+                    : exercise?.type || exercise?.Type || 'Standard'
                 }}
               </span>
             </div>
 
-            <!-- AI Letters (for AI exercises) -->
             @if (exercise?.type === 3 || exercise?.type === 'AI') {
-            <div class="p-5 bg-surface/50">
-              <h4 class="text-sm font-bold text-text-main/60 uppercase tracking-wider mb-3">
-                <i class="fa-solid fa-robot text-emerald-500 mr-2"></i>Selected Letters & Rounds
-              </h4>
+            <div class="px-5 py-4">
+              <p
+                class="text-[11px] uppercase tracking-widest font-medium text-primary flex items-center gap-1.5 mb-3"
+              >
+                <i class="fa-solid fa-robot text-xs"></i>
+                Letters & Rounds
+              </p>
 
               @if (!exercise?.aI_letters || getAiLettersArray(exercise?.aI_letters).length === 0) {
-              <p class="text-sm font-bold text-text-main/40 italic">No letters selected.</p>
+              <div
+                class="rounded-xl border border-dashed border-border-main bg-background p-5 text-center"
+              >
+                <p class="text-sm text-text-main/40">No letters selected.</p>
+              </div>
               } @else {
-              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              <div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-2">
                 @for (entry of getAiLettersArray(exercise?.aI_letters); track entry.letter) {
                 <div
-                  class="flex items-center gap-3 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3"
+                  class="flex items-center gap-3 px-3 py-2.5 rounded-xl border border-border-main bg-background"
                 >
-                  <span
-                    class="size-9 rounded-xl bg-emerald-500 text-white font-black text-sm flex items-center justify-center shrink-0"
+                  <div
+                    class="size-8 rounded-lg bg-green-500/10 text-green-600 flex items-center justify-center text-sm font-medium shrink-0"
                   >
                     {{ entry.letter }}
-                  </span>
-                  <div class="flex items-center gap-2 flex-1">
-                    <span class="text-sm font-semibold text-text-main">{{ entry.rounds }}</span>
-                    <span class="text-xs text-text-main/60">{{
-                      entry.rounds === 1 ? 'round' : 'rounds'
-                    }}</span>
+                  </div>
+                  <div class="leading-tight">
+                    <div class="text-sm font-medium text-text-main">{{ entry.rounds }}</div>
+                    <div class="text-[11px] text-text-main/40">
+                      {{ entry.rounds === 1 ? 'Round' : 'Rounds' }}
+                    </div>
                   </div>
                 </div>
                 }
               </div>
               }
             </div>
-            }
-
-            <!-- Questions List (for MCQ/Matching) -->
-            @if (exercise?.type !== 3 && exercise?.type !== 'AI') {
-            <div class="p-5 bg-surface/50">
-              <h4 class="text-sm font-bold text-text-main/60 uppercase tracking-wider mb-3">
-                Questions ({{ exercise?.questions?.length || 0 }})
-              </h4>
+            } @if (exercise?.type !== 3 && exercise?.type !== 'AI') {
+            <div class="px-5 py-4">
+              <div
+                class="inline-flex items-center gap-1.5 bg-primary/10 text-primary text-xs font-semibold rounded-full px-3 py-1 mb-3"
+              >
+                <i class="fa-solid fa-circle-dot text-[10px]"></i>
+                {{ exercise?.questions?.length || 0 }} Questions
+              </div>
 
               @if (!exercise.questions || exercise.questions.length === 0) {
-              <p class="text-sm font-bold text-text-main/40 italic">No questions added yet.</p>
+              <div
+                class="rounded-xl border border-dashed border-border-main bg-background p-5 text-center"
+              >
+                <p class="text-sm text-text-main/40">No questions added yet.</p>
+              </div>
               } @else {
-              <ul class="space-y-3">
+              <div class="flex flex-col gap-2">
                 @for (q of exercise.questions; track q.qid || q.id) {
-                <li
-                  class="p-4 rounded-xl border border-border-main bg-background flex flex-col gap-2"
-                >
-                  <div class="flex justify-between items-start gap-4">
-                    <span class="font-semibold text-text-main text-sm">{{
-                      q.prompt_text || q.prompt || 'No question text provided'
-                    }}</span>
-                    <span
-                      class="whitespace-nowrap rounded-lg bg-green-500/10 px-2 py-1 text-xs font-bold text-green-500"
-                      >{{ q.score }} pts</span
+
+                <div class="rounded-xl border border-border-main overflow-hidden">
+                  <div class="flex items-start gap-3 px-4 py-3">
+                    <div
+                      class="size-7 rounded-md bg-primary/10 text-primary flex items-center justify-center text-xs shrink-0 mt-0.5"
                     >
+                      <i class="fa-solid fa-question"></i>
+                    </div>
+                    <p class="flex-1 text-[13px] text-text-main leading-relaxed">
+                      {{ q.prompt_text || q.prompt || 'No question text provided' }}
+                    </p>
+                    <span
+                      class="shrink-0 text-[12px] font-medium px-2 py-0.5 rounded-md bg-green-500/10 text-green-600"
+                    >
+                      {{ q.score }} pts
+                    </span>
                   </div>
-                  <!-- Optional image display -->
+
                   @if (q.prompt_image || q.imgPath) {
                   <img
                     [src]="q.prompt_image || q.imgPath"
-                    alt="Question specific image"
-                    class="h-16 w-16 rounded-lg object-cover border border-border-main mt-2"
+                    alt="Question Image"
+                    class="w-full max-h-44 object-cover border-t border-border-main block"
                   />
-                  }
-
-                  <!-- Display correct answer(s) -->
-                  <div class="mt-2 p-3 bg-green-500/5 rounded-xl border border-green-500/20">
-                    <h5 class="text-xs font-bold text-green-500 uppercase tracking-wider mb-2">
-                      Right Answer
-                    </h5>
-                    <div class="flex flex-col gap-2">
-                      <!-- MCQ answers -->
-                      @if (q.answers || q.Answers) { @for (ans of (q.answers || q.Answers); track
-                      ans.id || ans.answer || $index) { @if (ans.isCorrect || ans.IsCorrect) {
-                      <div class="flex items-center gap-2">
-                        <i class="fa-solid fa-check text-green-500"></i>
-                        @if (ans.answer || ans.Answer) {
-                        <span class="text-sm font-semibold text-text-main">{{
-                          ans.answer || ans.Answer
-                        }}</span>
-                        } @if (ans.img || ans.Img || ans.IMG || ans.image || ans.imgPath) {
-                        <img
-                          [src]="ans.img || ans.Img || ans.IMG || ans.image || ans.imgPath"
-                          alt="Correct Answer"
-                          class="h-12 w-12 rounded-lg object-cover border border-border-main"
-                        />
-                        }
-                      </div>
-                      } } }
-
-                      <!-- Matching answer block -->
-                      @if (q.answer || q.Answer) {
-                      <div class="flex items-center gap-2">
-                        <i class="fa-solid fa-check text-green-500"></i>
-                        @if ((q.answer || q.Answer).answer || (q.answer || q.Answer).Answer) {
-                        <span class="text-sm font-semibold text-text-main">{{
-                          (q.answer || q.Answer).answer || (q.answer || q.Answer).Answer
-                        }}</span>
-                        } @else if (!(q.answer || q.Answer).img && !(q.answer || q.Answer).Img &&
-                        !(q.answer || q.Answer).IMG && !(q.answer || q.Answer).image && !(q.answer
-                        || q.Answer).imgPath) {
-                        <span class="text-sm font-semibold text-text-main">{{
-                          q.answer || q.Answer
-                        }}</span>
-                        } @if ((q.answer || q.Answer).img || (q.answer || q.Answer).Img || (q.answer
-                        || q.Answer).IMG || (q.answer || q.Answer).image || (q.answer ||
-                        q.Answer).imgPath) {
-                        <img
-                          [src]="
-                            (q.answer || q.Answer).img ||
-                            (q.answer || q.Answer).Img ||
-                            (q.answer || q.Answer).IMG ||
-                            (q.answer || q.Answer).image ||
-                            (q.answer || q.Answer).imgPath
-                          "
-                          alt="Correct Answer"
-                          class="h-12 w-12 rounded-lg object-cover border border-border-main"
-                        />
-                        }
-                      </div>
-                      }
+                  } @if (q.answers || q.Answers) { @for (ans of (q.answers || q.Answers); track
+                  ans.id || ans.answer || $index) { @if (ans.isCorrect || ans.IsCorrect) {
+                  <div
+                    class="flex bg-green-400/5 items-center gap-3 px-4 py-2.5 border-t border-border-main"
+                  >
+                    <div
+                      class="size-5 rounded-full bg-green-500/10 text-green-600 flex items-center justify-center text-[10px] shrink-0"
+                    >
+                      <i class="fa-solid fa-check"></i>
                     </div>
+                    @if (ans.answer || ans.Answer) {
+                    <span class="flex-1 text-[13px] text-text-main">{{
+                      ans.answer || ans.Answer
+                    }}</span>
+                    } @if (ans.img || ans.Img || ans.IMG || ans.image || ans.imgPath) {
+                    <img
+                      [src]="ans.img || ans.Img || ans.IMG || ans.image || ans.imgPath"
+                      alt="Correct Answer"
+                      class="size-10 rounded-lg object-cover border border-border-main shrink-0"
+                    />
+                    }
                   </div>
-                </li>
+                  } } } @if (q.answer || q.Answer) {
+                  <div
+                    class="flex bg-green-400/5 items-center gap-3 px-4 py-2.5 border-t border-border-main"
+                  >
+                    <div
+                      class="size-5 rounded-full bg-green-500/10 text-green-600 flex items-center justify-center text-[10px] shrink-0"
+                    >
+                      <i class="fa-solid fa-check"></i>
+                    </div>
+                    <span class="flex-1 text-[13px] text-text-main">
+                      {{
+                        (q.answer || q.Answer).answer ||
+                          (q.answer || q.Answer).Answer ||
+                          q.answer ||
+                          q.Answer
+                      }}
+                    </span>
+                    @if ((q.answer || q.Answer).img || (q.answer || q.Answer).Img || (q.answer ||
+                    q.Answer).image || (q.answer || q.Answer).imgPath) {
+                    <img
+                      [src]="
+                        (q.answer || q.Answer).img ||
+                        (q.answer || q.Answer).Img ||
+                        (q.answer || q.Answer).image ||
+                        (q.answer || q.Answer).imgPath
+                      "
+                      alt="Correct Answer"
+                      class="size-10 rounded-lg object-cover border border-border-main shrink-0"
+                    />
+                    }
+                  </div>
+                  }
+                </div>
                 }
-              </ul>
+              </div>
               }
             </div>
             }
           </div>
           }
         </div>
+
         }
       </div>
     </div>
@@ -297,6 +326,7 @@
     </div>
     }
   </div>
+
   @if (isDeleteModalOpen()) {
   <div
     class="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/40 backdrop-blur-sm"
@@ -323,7 +353,7 @@
         <button
           type="button"
           (click)="closeDeleteModal()"
-          class="flex-1 py-3 rounded-2xl border border-border-main bg-surface text-text-main font-bold hover:bg-background transition shadow-sm"
+          class="cursor-pointer flex-1 py-3 rounded-2xl border border-border-main bg-surface text-text-main font-bold hover:bg-background transition shadow-sm"
         >
           Cancel
         </button>
@@ -331,7 +361,7 @@
           type="button"
           (click)="confirmDelete()"
           [disabled]="isDeleting()"
-          class="flex-1 py-3 rounded-2xl bg-red-500 text-white font-bold hover:bg-red-600 transition disabled:opacity-50 shadow-sm"
+          class="cursor-pointer flex-1 py-3 rounded-2xl bg-red-500 text-white font-bold hover:bg-red-600 transition disabled:opacity-50 shadow-sm"
         >
           @if (isDeleting()) {
           <i class="fa-solid fa-spinner fa-spin mr-2"></i> Deleting... } @else { Delete }

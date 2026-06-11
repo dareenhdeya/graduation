@@ -26,7 +26,7 @@ export class ForgotpassComponent {
 
   showNewPass = false;
   showConfirmPass = false;
-
+  stepDropdownOpen = false;
   steps = [
     { id: 1, label: 'Forgot Password' },
     { id: 2, label: 'Verify OTP' },
@@ -34,7 +34,7 @@ export class ForgotpassComponent {
   ];
 
   emailForm = this.fb.group({
-    emailOrUserName: ['', Validators.required, Validators.email],
+    emailOrUserName: ['', [Validators.required, Validators.email]],
   });
 
   otpForm = this.fb.group({

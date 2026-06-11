@@ -32,6 +32,10 @@ export class GetTeacherLessonsComponent implements OnInit {
   isLoading = true;
   subjectId: string | null = null;
 
+  // dropdown state
+  prereqTypeDropdownOpen = false;
+  prereqItemDropdownOpen = false;
+
   // --- EDIT MODAL STATE ---
   isEditModalOpen = false;
   isSubmitting = false;
@@ -86,6 +90,27 @@ export class GetTeacherLessonsComponent implements OnInit {
         this.isLoading = false;
       },
     });
+  }
+
+  getSelectedTypeLabel(): string {
+    return this.perquisiteTypes.find((t) => t.value === this.selectedEditType)?.label ?? 'None';
+  }
+
+  getSelectedPrereqLabel(): string {
+    const id = this.editForm.get('perquisiteId')?.value;
+    if (!id) return `-- Select a ${this.selectedEditType === 1 ? 'lesson' : 'quiz'} --`;
+    return this.prerequisiteOptions.find((o) => o.id === id)?.title ?? '-- Select --';
+  }
+
+  selectPrereqType(value: number): void {
+    this.editForm.get('perquisiteType')?.setValue(value);
+    this.prereqTypeDropdownOpen = false;
+    this.onEditTypeChange();
+  }
+
+  selectPrereqItem(id: string | null): void {
+    this.editForm.get('perquisiteId')?.setValue(id);
+    this.prereqItemDropdownOpen = false;
   }
 
   // --- DELETE FLOW ---
@@ -165,7 +190,7 @@ export class GetTeacherLessonsComponent implements OnInit {
   onEditTypeChange(): void {
     this.editForm.get('perquisiteId')?.setValue(null);
     this.prerequisiteOptions = [];
-
+    this.prereqItemDropdownOpen = false;
     const type = this.selectedEditType;
     if (type !== PerquisiteType.None && this.subjectId) {
       this.isLoadingPrerequisites = true;
@@ -190,6 +215,8 @@ export class GetTeacherLessonsComponent implements OnInit {
     this.currentLessonId = null;
     this.editForm.reset();
     this.prerequisiteOptions = [];
+    this.prereqTypeDropdownOpen = false; // add
+    this.prereqItemDropdownOpen = false; // add
   }
 
   saveEdit() {

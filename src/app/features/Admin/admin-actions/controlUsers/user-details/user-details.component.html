@@ -141,23 +141,6 @@
             <div class="font-bold text-text-main">{{ user.job || '-' }}</div>
           </div>
         </div>
-        <!-- <div class="mt-8 pt-6 border-t border-border-main flex flex-wrap gap-3">
-          <button
-            type="button"
-            class="py-2.5 px-5 inline-flex items-center gap-2 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-500 font-bold text-sm transition-all hover:bg-amber-500/20 hover:-translate-y-0.5 cursor-pointer"
-          >
-            <i class="fa-solid fa-power-off"></i>
-            End Session
-          </button>
-
-          <button
-            type="button"
-            class="py-2.5 px-5 inline-flex items-center gap-2 rounded-xl border border-red-500/30 bg-red-500/10 text-red-500 font-bold text-sm transition-all hover:bg-red-500/20 hover:-translate-y-0.5 cursor-pointer"
-          >
-            <i class="fa-solid fa-ban"></i>
-            Block User
-          </button>
-        </div> -->
 
         <div
           class="mt-8 pt-6 border-t border-border-main flex flex-wrap items-center justify-between gap-3"
@@ -173,7 +156,7 @@
             <button
               type="button"
               [disabled]="user.status === 2"
-              class="cursor-pointer py-2.5 px-5 inline-flex items-center gap-2 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-500 font-bold text-sm transition-all hover:bg-amber-500/20 hover:-translate-y-0.5 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+              class="py-2.5 px-5 inline-flex items-center gap-2 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-500 font-bold text-sm transition-all hover:bg-amber-500/20 hover:-translate-y-0.5 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
               (click)="onEndSession()"
             >
               <i class="fa-solid fa-power-off"></i>
