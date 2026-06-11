@@ -86,7 +86,7 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private studentService: StudentServiceService,
     private toastr: ToastrService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.quizForm = this.fb.group({ exercises: this.fb.array([]) });
@@ -176,6 +176,7 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
     exercises.forEach((ex: any, eIdx: number) => {
       const qList = ex.questions || ex.Questions || [];
       const exType = ex.exerciseType ?? ex.ExerciseType ?? ex.type ?? ex.Type;
+      console.log(`Exercise ${eIdx} (Type ${exType}):`, ex);
 
       const questionsArray = this.fb.array(
         qList.map((q: any) =>
@@ -187,7 +188,7 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
         )
       );
 
-      const isAiExercise = exType == 3 || exType === '3' || exType === 'AI';
+      const isAiExercise = exType == 3 || exType === '3' || exType === 'AI' || exType == 4 || exType === '4' || exType === 'AI_Word';
       this.exercisesFormArray.push(
         this.fb.group({
           exerciseId: [ex.id || ex.Id],
@@ -273,7 +274,7 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
       data.exercises?.forEach((ex: any, eIdx: number) => {
         if (ex.aiScore != null) this.aiScores.set(eIdx, ex.aiScore);
       });
-    } catch {}
+    } catch { }
   }
 
   clearDraft() {
@@ -292,7 +293,7 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
     const sedtos: any[] = [];
     this.quizForm.value.exercises.forEach((ex: any, eIdx: number) => {
       const exType = ex.exerciseType;
-      if (exType == 3 || exType === '3' || exType === 'AI') {
+      if (exType == 3 || exType === '3' || exType === 'AI' || exType == 4 || exType === '4' || exType === 'AI_Word') {
         const correctRounds = this.aiScores.get(eIdx) ?? ex.aiScore ?? 0;
         sedtos.push({ Eid: ex.exerciseId, Score: correctRounds * 10, SADTO: [] });
       } else {
@@ -649,6 +650,7 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
   goToAiWordsQuiz(eIdx: number) {
     const exercises = this.getExercisesList(this.quizData());
     const ex = exercises[eIdx];
+    console.log('goToAiWordsQuiz - ex:', ex);
     const aiLetters = this.normalizeAiLetters(
       ex?.aI_letters ?? ex?.ai_letters ?? ex?.AI_letters ?? {}
     );

@@ -1,6 +1,7 @@
-import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { Hands, Results, HAND_CONNECTIONS } from '@mediapipe/hands';
 import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils';
 import { CelebrationService } from '../celebration.service';
@@ -14,19 +15,24 @@ type WordState = 'signing' | 'correct' | 'finished';
   templateUrl: './english-word-quiz.component.html',
   styleUrls: ['./english-word-quiz.component.css'],
 })
-export class EnglishWordQuizComponent implements AfterViewInit, OnDestroy {
+export class EnglishWordQuizComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('video') video!: ElementRef<HTMLVideoElement>;
   @ViewChild('canvas') canvas!: ElementRef<HTMLCanvasElement>;
   @ViewChild('confettiCanvas') confettiCanvas!: ElementRef<HTMLCanvasElement>;
 
+  @Input() aiLetters?: Record<string, number>;
+  @Output() scoreSubmitted = new EventEmitter<number>();
+
+  returnUrl?: string;
+  exerciseIndex?: number;
+
   readonly Math = Math;
   readonly API = 'http://127.0.0.1:8000';
   readonly SESSION = 'en-' + Math.random().toString(36).slice(2);
-  readonly TOTAL_WORDS = 5;
+  totalWords = 5;
   readonly FRAMES_NEEDED = 8;
 
-  // no repeatition
-  private usedWords: Set<string> = new Set();
+  private exerciseQueue: string[] = [];
 
   words: string[] = [];
   currentWord: string = '';
@@ -44,14 +50,22 @@ export class EnglishWordQuizComponent implements AfterViewInit, OnDestroy {
   private stream!: MediaStream;
   private animFrame = 0;
 
-  constructor(private http: HttpClient, private celebration: CelebrationService) {}
+  constructor(private http: HttpClient, private celebration: CelebrationService, private router: Router) { }
+
+  ngOnInit() {
+    const state = history.state ?? {};
+    this.aiLetters = state.aiLetters ?? this.aiLetters;
+    console.log('EnglishWordQuizComponent aiLetters:', this.aiLetters);
+    this.returnUrl = state.returnUrl;
+    this.exerciseIndex = state.exerciseIndex;
+    this.buildQueue();
+  }
 
   ngAfterViewInit() {
-    this.http.get<any>(`${this.API}/words/english`).subscribe((res) => {
-      this.words = res.words;
-      this.pickWord();
-    });
     this.initMediaPipe();
+    if (this.exerciseQueue.length > 0) {
+      this.pickWord();
+    }
   }
 
   ngOnDestroy() {
@@ -59,18 +73,45 @@ export class EnglishWordQuizComponent implements AfterViewInit, OnDestroy {
     this.stream?.getTracks().forEach((t) => t.stop());
   }
 
-  private pickWord() {
-    // reset
-    if (this.usedWords.size >= this.words.length) {
-      this.usedWords.clear();
+  private buildQueue() {
+    this.exerciseQueue = [];
+    if (!this.aiLetters) return;
+
+    for (const [word, rounds] of Object.entries(this.aiLetters)) {
+      const upper = word.toUpperCase();
+      // user requested 1 round per word coming from AI_WORD
+      for (let i = 0; i < (rounds as number); i++) {
+        this.exerciseQueue.push(upper);
+      }
     }
-    const pool = this.words.filter((w) => !this.usedWords.has(w));
-    this.currentWord = pool[Math.floor(Math.random() * pool.length)];
-    this.usedWords.add(this.currentWord);
+    console.log('Generated exerciseQueue:', this.exerciseQueue);
+    this.totalWords = this.exerciseQueue.length || 5;
+  }
+
+  private pickWord() {
+    if (this.exerciseQueue.length === 0) {
+      this.state = 'finished';
+      this.emitScore();
+      return;
+    }
+
+    this.currentWord = this.exerciseQueue.shift()!;
+    console.log('Picked new word:', this.currentWord);
     this.letterIndex = 0;
     this.correctStreak = 0;
     this.prediction = '';
     this.state = 'signing';
+  }
+
+  private emitScore() {
+    this.scoreSubmitted.emit(this.score);
+  }
+
+  returnToQuiz() {
+    if (!this.returnUrl) return;
+    this.router.navigateByUrl(this.returnUrl, {
+      state: { aiScore: this.score, exerciseIndex: this.exerciseIndex },
+    });
   }
 
   get currentTargetLetter() {
@@ -78,7 +119,7 @@ export class EnglishWordQuizComponent implements AfterViewInit, OnDestroy {
   }
   get progressPct() {
     if (this.state === 'finished') return 100;
-    return Math.round(((this.wordsDone + 1) / this.TOTAL_WORDS) * 100);
+    return Math.round(((this.wordsDone + 1) / this.totalWords) * 100);
   }
   get streakPct() {
     return Math.round((this.correctStreak / this.FRAMES_NEEDED) * 100);
@@ -192,6 +233,7 @@ export class EnglishWordQuizComponent implements AfterViewInit, OnDestroy {
           this.sending = false;
           this.prediction = res.letter;
           this.confidence = res.confidence;
+          console.log('English Word Prediction:', res);
           if (res.letter === '...') {
             this.correctStreak = 0;
             return;
@@ -222,29 +264,14 @@ export class EnglishWordQuizComponent implements AfterViewInit, OnDestroy {
       this.celebration.launchConfetti(this.confettiCanvas.nativeElement);
 
       setTimeout(() => {
-        if (this.wordsDone >= this.TOTAL_WORDS) {
+        if (this.wordsDone >= this.totalWords) {
           this.state = 'finished';
-          this.saveResult();
+          this.emitScore();
         } else {
           this.pickWord();
         }
       }, 1800);
     }
-  }
-
-  private saveResult() {
-    this.http
-      .post('http://localhost:7168/api/Quiz', {
-        quizType: 'english-words',
-        score: this.score,
-        total: this.TOTAL_WORDS,
-        percentage: Math.round((this.score / this.TOTAL_WORDS) * 100),
-        completedAt: new Date().toISOString(),
-      })
-      .subscribe({
-        next: () => console.log('✅ Result saved'),
-        error: (e) => console.warn('⚠️ Backend not running on :7168', e),
-      });
   }
 
   private drawCanvas(results: Results) {
@@ -300,16 +327,20 @@ export class EnglishWordQuizComponent implements AfterViewInit, OnDestroy {
 
   skipWord() {
     this.wordsDone++;
-    if (this.wordsDone >= this.TOTAL_WORDS) {
+    if (this.wordsDone >= this.totalWords) {
       this.state = 'finished';
-      this.saveResult();
+      this.emitScore();
     } else this.pickWord();
   }
 
   restart() {
     this.score = 0;
     this.wordsDone = 0;
-    this.usedWords.clear();
+    this.buildQueue();
     this.pickWord();
+  }
+
+  get TOTAL_WORDS() {
+    return this.totalWords;
   }
 }

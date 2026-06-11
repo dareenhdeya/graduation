@@ -1,6 +1,7 @@
-import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { Hands, Results, HAND_CONNECTIONS } from '@mediapipe/hands';
 import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils';
 import { CelebrationService } from '../celebration.service';
@@ -19,55 +20,34 @@ interface ArabicWord {
   templateUrl: './arabic-word-quiz.component.html',
   styleUrls: ['./arabic-word-quiz.component.css'],
 })
-export class ArabicWordQuizComponent implements AfterViewInit, OnDestroy {
+export class ArabicWordQuizComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('video') video!: ElementRef<HTMLVideoElement>;
   @ViewChild('canvas') canvas!: ElementRef<HTMLCanvasElement>;
   @ViewChild('confettiCanvas') confettiCanvas!: ElementRef<HTMLCanvasElement>;
 
+  @Input() aiLetters?: Record<string, number>;
+  @Output() scoreSubmitted = new EventEmitter<number>();
+
+  returnUrl?: string;
+  exerciseIndex?: number;
+
   readonly Math = Math;
   readonly API = 'http://127.0.0.1:8000';
   readonly SESSION = 'ar-' + Math.random().toString(36).slice(2);
-  readonly TOTAL_WORDS = 5;
+  totalWords = 5;
   readonly FRAMES_NEEDED = 8;
 
-  // كلمات مش هتتكرر
-  private usedWords: Set<string> = new Set();
+  private exerciseQueue: ArabicWord[] = [];
 
   readonly LETTER_MAP: Record<string, string> = {
-    aleff: 'ا',
-    bb: 'ب',
-    taa: 'ت',
-    thaa: 'ث',
-    jeem: 'ج',
-    haa: 'ح',
-    khaa: 'خ',
-    dal: 'د',
-    thal: 'ذ',
-    ra: 'ر',
-    zay: 'ز',
-    seen: 'س',
-    sheen: 'ش',
-    saad: 'ص',
-    dhad: 'ض',
-    ta: 'ط',
-    dha: 'ظ',
-    ain: 'ع',
-    ghain: 'غ',
-    fa: 'ف',
-    gaaf: 'ق',
-    kaaf: 'ك',
-    laam: 'ل',
-    meem: 'م',
-    nun: 'ن',
-    ha: 'ه',
-    waw: 'و',
-    ya: 'ي',
-    la: 'لا',
-    al: 'ال',
-    toot: 'ة',
-    alef_maqsura: 'ى',
-    ta_marbuta: 'ة',
+    aleff: 'ا', ba: 'ب', taa: 'ت', thaa: 'ث', jeem: 'ج', haa: 'ح', khaa: 'خ',
+    dal: 'د', thal: 'ذ', ra: 'ر', zay: 'ز', seen: 'س', sheen: 'ش', saad: 'ص',
+    dhad: 'ض', ta: 'ط', dha: 'ظ', ain: 'ع', ghain: 'غ', fa: 'ف', gaaf: 'ق',
+    kaaf: 'ك', laam: 'ل', meem: 'م', nun: 'ن', ha: 'ه', waw: 'و', ya: 'ي',
+    la: 'لا', al: 'ال', toot: 'ة', alef_maqsura: 'ى', ta_marbuta: 'ة',
   };
+
+  private REVERSE_MAP: Record<string, string> = {};
 
   words: ArabicWord[] = [];
   currentWord!: ArabicWord;
@@ -85,14 +65,32 @@ export class ArabicWordQuizComponent implements AfterViewInit, OnDestroy {
   private stream!: MediaStream;
   private animFrame = 0;
 
-  constructor(private http: HttpClient, private celebration: CelebrationService) {}
+  constructor(private http: HttpClient, private celebration: CelebrationService, private router: Router) {
+    // build reverse map for decomposition
+    Object.entries(this.LETTER_MAP).forEach(([name, char]) => {
+      this.REVERSE_MAP[char] = name;
+    });
+    // Add common variants for robustness
+    this.REVERSE_MAP['أ'] = 'aleff';
+    this.REVERSE_MAP['إ'] = 'aleff';
+    this.REVERSE_MAP['آ'] = 'aleff';
+    this.REVERSE_MAP['ؤ'] = 'waw';
+    this.REVERSE_MAP['ئ'] = 'ya';
+    this.REVERSE_MAP['ى'] = 'alef_maqsura';
+  }
+
+  ngOnInit() {
+    const state = history.state ?? {};
+    this.aiLetters = state.aiLetters ?? this.aiLetters;
+    console.log('ArabicWordQuizComponent aiLetters:', this.aiLetters);
+    this.returnUrl = state.returnUrl;
+    this.exerciseIndex = state.exerciseIndex;
+    this.buildQueue();
+  }
 
   ngAfterViewInit() {
-    this.http.get<any>(`${this.API}/words/arabic`).subscribe((res) => {
-      this.words = res.words;
-      this.pickWord();
-    });
     this.initMediaPipe();
+    this.pickWord();
   }
 
   ngOnDestroy() {
@@ -100,18 +98,57 @@ export class ArabicWordQuizComponent implements AfterViewInit, OnDestroy {
     this.stream?.getTracks().forEach((t) => t.stop());
   }
 
-  private pickWord() {
-    //reset
-    if (this.usedWords.size >= this.words.length) {
-      this.usedWords.clear();
+  private buildQueue() {
+    this.exerciseQueue = [];
+    if (!this.aiLetters) return;
+
+    for (const [word, rounds] of Object.entries(this.aiLetters)) {
+      const letters: string[] = [];
+      // Strip diacritics (Tashkeel) and decompose
+      const normalizedWord = word.replace(/[\u064B-\u0652]/g, '');
+
+      for (const char of normalizedWord) {
+        if (this.REVERSE_MAP[char]) {
+          letters.push(this.REVERSE_MAP[char]);
+        } else {
+          console.warn(`Skipping character '${char}' in word '${word}' - not in REVERSE_MAP`);
+        }
+      }
+
+      if (letters.length > 0) {
+        for (let i = 0; i < (rounds as number); i++) {
+          this.exerciseQueue.push({ display: word, letters });
+        }
+      }
     }
-    const pool = this.words.filter((w) => !this.usedWords.has(w.display));
-    this.currentWord = pool[Math.floor(Math.random() * pool.length)];
-    this.usedWords.add(this.currentWord.display);
+    console.log('Generated exerciseQueue:', this.exerciseQueue);
+    this.totalWords = this.exerciseQueue.length || 5;
+  }
+
+  private pickWord() {
+    if (this.exerciseQueue.length === 0) {
+      this.state = 'finished';
+      this.emitScore();
+      return;
+    }
+
+    this.currentWord = this.exerciseQueue.shift()!;
+    console.log('Picked new word:', this.currentWord);
     this.letterIndex = 0;
     this.correctStreak = 0;
     this.prediction = '';
     this.state = 'signing';
+  }
+
+  private emitScore() {
+    this.scoreSubmitted.emit(this.score);
+  }
+
+  returnToQuiz() {
+    if (!this.returnUrl) return;
+    this.router.navigateByUrl(this.returnUrl, {
+      state: { aiScore: this.score, exerciseIndex: this.exerciseIndex },
+    });
   }
 
   get currentTargetLetter(): string {
@@ -124,7 +161,7 @@ export class ArabicWordQuizComponent implements AfterViewInit, OnDestroy {
 
   get progressPct() {
     if (this.state === 'finished') return 100;
-    return Math.round(((this.wordsDone + 1) / this.TOTAL_WORDS) * 100);
+    return Math.round(((this.wordsDone + 1) / this.totalWords) * 100);
   }
   get streakPct() {
     return Math.round((this.correctStreak / this.FRAMES_NEEDED) * 100);
@@ -239,6 +276,7 @@ export class ArabicWordQuizComponent implements AfterViewInit, OnDestroy {
           this.sending = false;
           this.prediction = res.letter;
           this.confidence = res.confidence;
+          console.log('Arabic Word Prediction:', res);
 
           const letterName: string = res.letter_name;
           if (letterName === '...') {
@@ -271,29 +309,14 @@ export class ArabicWordQuizComponent implements AfterViewInit, OnDestroy {
       this.celebration.launchConfetti(this.confettiCanvas.nativeElement);
 
       setTimeout(() => {
-        if (this.wordsDone >= this.TOTAL_WORDS) {
+        if (this.wordsDone >= this.totalWords) {
           this.state = 'finished';
-          this.saveResult();
+          this.emitScore();
         } else {
           this.pickWord();
         }
       }, 1800);
     }
-  }
-
-  private saveResult() {
-    this.http
-      .post('http://localhost:7168/api/Quiz', {
-        quizType: 'arabic-words',
-        score: this.score,
-        total: this.TOTAL_WORDS,
-        percentage: Math.round((this.score / this.TOTAL_WORDS) * 100),
-        completedAt: new Date().toISOString(),
-      })
-      .subscribe({
-        next: () => console.log('✅ Result saved'),
-        error: (e) => console.warn('⚠️ Backend not running on :7168', e),
-      });
   }
 
   private drawCanvas(results: Results) {
@@ -349,16 +372,20 @@ export class ArabicWordQuizComponent implements AfterViewInit, OnDestroy {
 
   skipWord() {
     this.wordsDone++;
-    if (this.wordsDone >= this.TOTAL_WORDS) {
+    if (this.wordsDone >= this.totalWords) {
       this.state = 'finished';
-      this.saveResult();
+      this.emitScore();
     } else this.pickWord();
   }
 
   restart() {
     this.score = 0;
     this.wordsDone = 0;
-    this.usedWords.clear();
+    this.buildQueue();
     this.pickWord();
+  }
+
+  get TOTAL_WORDS() {
+    return this.totalWords;
   }
 }

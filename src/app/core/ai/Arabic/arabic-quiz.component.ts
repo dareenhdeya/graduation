@@ -94,11 +94,12 @@ export class ArabicQuizComponent implements OnInit, AfterViewInit, OnDestroy {
     private http: HttpClient,
     private celebration: CelebrationService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     const state = history.state ?? {};
     this.aiLetters = state.aiLetters ?? this.aiLetters;
+    console.log('ArabicQuizComponent aiLetters:', this.aiLetters);
     this.returnUrl = state.returnUrl;
     this.exerciseIndex = state.exerciseIndex;
     this.buildQueue();
@@ -284,6 +285,15 @@ export class ArabicQuizComponent implements OnInit, AfterViewInit, OnDestroy {
             return;
           }
 
+
+          console.log('Arabic Prediction:', res);
+
+          if (!this.currentLetter) {
+            console.warn('Prediction received but no currentLetter is set.');
+            this.sending = false;
+            return;
+          }
+
           this.prediction = LETTER_MAP[res.letter_name] ?? res.letter ?? res.letter_name;
 
           const matched =
@@ -336,11 +346,11 @@ export class ArabicQuizComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (this.exerciseQueue.length === 0) {
 
-        this.state = 'finished';
+      this.state = 'finished';
 
-        this.emitScore();
+      this.emitScore();
 
-        return;
+      return;
     }
 
     this.currentLetter = { ...this.exerciseQueue.shift()! };
@@ -361,15 +371,15 @@ export class ArabicQuizComponent implements OnInit, AfterViewInit, OnDestroy {
     } else this.pickLetter();
   }
 
- restart() {
-  this.score = 0;
-  this.round = 0;
-  this.correctStreak = 0;
-  this.prediction = '';
-  this.state = 'waiting';
+  restart() {
+    this.score = 0;
+    this.round = 0;
+    this.correctStreak = 0;
+    this.prediction = '';
+    this.state = 'waiting';
 
-  this.buildQueue();   // 🔥 IMPORTANT
-  this.pickLetter();
+    this.buildQueue();   // 🔥 IMPORTANT
+    this.pickLetter();
   }
 
 

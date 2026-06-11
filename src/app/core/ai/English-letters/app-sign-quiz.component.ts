@@ -449,11 +449,12 @@ export class SignQuizComponent implements OnInit, AfterViewInit, OnDestroy {
     private http: HttpClient,
     private celebration: CelebrationService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     const state = history.state ?? {};
     this.aiLetters = state.aiLetters ?? this.aiLetters;
+    console.log('SignQuizComponent aiLetters:', this.aiLetters);
     this.returnUrl = state.returnUrl;
     this.exerciseIndex = state.exerciseIndex;
     this.buildQueue();
@@ -663,6 +664,14 @@ export class SignQuizComponent implements OnInit, AfterViewInit, OnDestroy {
             return;
           }
           this.sendingPrediction = false;
+
+          console.log('English Prediction:', res);
+
+          if (!this.currentLetter) {
+            console.warn('Prediction received but no currentLetter is set.');
+            return;
+          }
+
           this.confidence = res.confidence;
 
           if (res.confidence < this.CONFIDENCE_THRESHOLD) {

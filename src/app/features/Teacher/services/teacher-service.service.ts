@@ -113,9 +113,9 @@ export class TeacherServiceService extends baseHttp {
 
   updateCv(file: File) {
     const formData = new FormData();
-  
+
     formData.append('file', file);
-  
+
     return this.patch<any>(
       APP_APIs.teacherUpdateCv,
       formData
@@ -128,6 +128,10 @@ export class TeacherServiceService extends baseHttp {
 
   getAllStudentsProgress(subjectId: string) {
     return this.get<any>(APP_APIs.teacherGetAllStudentsProgress(subjectId), {});
+  }
+
+  viewDictionary(subjectId: string) {
+    return this.get<any>(APP_APIs.teacherViewDictionary(subjectId), {});
   }
 
   // // Converts Array to FormData
