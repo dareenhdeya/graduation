@@ -11,7 +11,7 @@
     <!-- PRE-START -->
     @if (quizState() === 'pre-start') {
     <div
-      class="max-w-3xl mx-auto rounded-3xl border border-border-main bg-surface shadow-lg overflow-hidden animate-in fade-in zoom-in duration-500">
+      class="max-w-3xl mx-auto rounded-3xl border border-border-main bg-surface/40 backdrop-blur-xl shadow-lg overflow-hidden animate-in fade-in zoom-in duration-500">
       <div class="bg-gradient-to-r from-violet-500/10 to-primary/10 p-10 md:p-14 text-center">
         <div
           class="size-20 rounded-3xl bg-background border border-border-main flex items-center justify-center mx-auto mb-6 shadow-sm">
@@ -166,7 +166,7 @@
                 Matching Exercise
                 }
                 @else {
-                Sign Language Quiz
+                  {{ exControl.value.exerciseType == 3 ? 'Sign Language Quiz' : 'Sign Language Words Quiz' }}
                 }
               </h3>
 

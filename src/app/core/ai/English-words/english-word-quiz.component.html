@@ -7,7 +7,11 @@
         {{ score }}<span>/{{ TOTAL_WORDS }}</span>
       </div>
       <p class="pct">{{ Math.round((score / TOTAL_WORDS) * 100) }}%</p>
-      <button (click)="restart()">Play Again</button>
+      @if (returnUrl) {
+        <button (click)="returnToQuiz()">Return to Quiz</button>
+      } @else {
+        <button (click)="restart()">Play Again</button>
+      }
     </div>
   </div>
 
