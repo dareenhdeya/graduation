@@ -572,6 +572,27 @@
     "VIEW_QUIZZES": "عرض الاختبارات"
   },
   "TEACHER": {
+    "SUBJECT_VIEW": {
+  "HEADER_SUBJECT": "لوحة تحكم",
+  "HEADER_DASHBOARD": "المادة",
+  "DESC": "إدارة الدروس، الطلاب، والكلمات الخاصة بهذه المادة.",
+  "MY_LESSONS": "دروسي",
+  "MY_LESSONS_DESC": "عرض، تعديل، وإدارة جميع دروس الفيديو المرفوعة.",
+  "VIEW_ALL": "عرض الكل",
+  "CREATE_LESSON": "إنشاء درس",
+  "CREATE_LESSON_DESC": "رفع محتوى جديد، فيديوهات، أو أنشطة لطلابك.",
+  "START_CREATING": "ابدأ الإنشاء",
+  "DICTIONARY": "القاموس",
+  "DICTIONARY_DESC": "إضافة كلمات جديدة ومرفقات للمادة.",
+  "ADD_WORDS": "إضافة كلمات",
+  "MY_STUDENTS": "طلابي",
+  "MY_STUDENTS_DESC": "متابعة التقدم، عرض الملفات الشخصية، وإدارة قائمة الفصل.",
+  "VIEW_LIST": "عرض القائمة",
+  "QUIZZES": "الاختبارات",
+  "QUIZZES_DESC": "إنشاء اختبارات وتدريبات ليقوم الطلاب بحلها.",
+  "CREATE_QUIZ": "إنشاء اختبار"
+},
+    
     "ACCESSIBLE": "متاح",
     "ADD_ANOTHER_WORD": "إضافة كلمة أخرى",
     "ADD_CHOICE": "إضافة خيار",
@@ -619,7 +640,7 @@
     "DASHBOARD": {
       "QUICK_ACTIONS": "إجراءات سريعة",
       "RECENT_ACTIVITY": "النشاط الأخير",
-      "TITLE": "لوحة تحكم المعلم",
+      "TITLE": "لوحة تحكم ",
       "TOTAL_LESSONS": "إجمالي الدروس",
       "TOTAL_QUIZZES": "إجمالي الاختبارات",
       "TOTAL_STUDENTS": "إجمالي الطلاب",
@@ -632,7 +653,8 @@
     "DESCRIPTION_REQUIRED": "الوصف مطلوب",
     "DETAILED_BREAKDOWN_DESC": "تفصيل دقيق للدرجات والأداء",
     "DICTIONARY": {
-      "TITLE": "قاموس لغة الإشارة"
+      "TITLE": "قاموس لغة الإشارة",
+      "DESC": "إضافة كلمات ومرفقات جديدة للمادة."
     },
     "DICTIONARY_BUILDER": "بناء القاموس",
     "DICTIONARY_DESC": "إدارة قاموس المصطلحات",
@@ -816,6 +838,7 @@
     "STUDENT": "سجل",
     "STUDENTS": "الطلاب",
     "STUDENTS_L": "طلاب",
+    "Dashboard_TITLE":"لوحة تحكم المعلم",
     "SUBJECT": {
       "CODE": "رمز المادة",
       "CREATE": "إنشاء مادة",

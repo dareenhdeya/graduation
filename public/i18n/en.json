@@ -572,6 +572,8 @@
     "VIEW_QUIZZES": "View Quizzes"
   },
   "TEACHER": {
+        "Dashboard_TITLE":"Teacher Dashboard",
+
   "SUBJECT_DASHBOARD_DESC": "Manage lessons, students, and vocabulary for this subject.",
   "MY_LESSONS": "My Lessons",
   "MY_LESSONS_DESC": "View, edit, and manage all your uploaded video lessons.",
@@ -643,7 +645,8 @@
     "DESCRIPTION_REQUIRED": "Description Required",
     "DETAILED_BREAKDOWN_DESC": "Detailed Breakdown Desc",
     "DICTIONARY": {
-      "TITLE": "Sign Language Dictionary"
+      "TITLE": " Language Dictionary"
+      ,"DESC":"Add new vocabulary words and attachments to the subject."
     },
     "DICTIONARY_BUILDER": "Dictionary Builder",
     "DIFFICULTY": "Difficulty",
