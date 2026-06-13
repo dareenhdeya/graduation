@@ -27,12 +27,14 @@ export class LessonDetailsComponent implements OnInit {
   hasActivities = false;
 
   ngOnInit(): void {
-    this.subjectId = this.route.snapshot.paramMap.get('sid') || '';
-    this.lessonId = this.route.snapshot.paramMap.get('lid') || '';
+    this.route.paramMap.subscribe((params) => {
+      this.subjectId = params.get('sid') || '';
+      this.lessonId = params.get('lid') || '';
 
-    if (this.subjectId && this.lessonId) {
-      this.loadLesson();
-    }
+      if (this.subjectId && this.lessonId) {
+        this.loadLesson();
+      }
+    });
   }
 
   loadLesson(): void {
@@ -40,6 +42,13 @@ export class LessonDetailsComponent implements OnInit {
     this.studentService.getLessonDetails(this.subjectId, this.lessonId).subscribe({
       next: (res) => {
         this.lesson = res.result;
+        if (this.lesson) {
+          // Normalize casing and handle nlid fallback from response
+          const rawResult = res.result as any;
+          this.lesson.nlid = rawResult.nlid || rawResult.Nlid;
+          this.lesson.next = rawResult.next || rawResult.Next || this.lesson.nlid;
+          this.lesson.nextType = rawResult.nextType ?? rawResult.NextType;
+        }
         this.videos = res.result?.videos || [];
         this.activeVideoIndex = 0;
         this.isLoading = false;
@@ -96,9 +105,9 @@ export class LessonDetailsComponent implements OnInit {
 
   get buttonLabel(): string {
     if (this.hasExercise) {
-      return 'Jump to Exercises';
+      return 'STUDENT.LESSON.JUMP_EXERCISES';
     }
-    return this.isLastVideo ? 'Complete Lesson' : 'Next Video';
+    return this.isLastVideo ? 'STUDENT.LESSON.COMPLETE_LESSON' : 'STUDENT.LESSON.NEXT_VIDEO';
   }
 
   goNextOrComplete(): void {
@@ -128,14 +137,16 @@ export class LessonDetailsComponent implements OnInit {
       return;
     }
 
+    this.isLoading = true;
     this.studentService.completeLesson(this.subjectId, this.lessonId).subscribe({
       next: (res: any) => {
+        this.isLoading = false;
         console.log('Lesson completion response:', res);
         const data = res?.result || res;
 
         // Handle all possible casing for next/nextId and nextType
-        const nextId = data?.next || data?.Next || data?.nextId || data?.NextId;
-        const rawType = data?.nextType ?? data?.NextType;
+        const nextId = data?.next || data?.Next || data?.nextId || data?.NextId || data?.id || data?.Id;
+        const rawType = data?.nextType ?? data?.NextType ?? data?.type ?? data?.Type;
         const nextType = (rawType !== undefined && rawType !== null) ? Number(rawType) : null;
 
         console.log('Parsed redirection data:', { nextId, nextType, message: res?.message });
@@ -143,41 +154,34 @@ export class LessonDetailsComponent implements OnInit {
         // Redirection logic: nextType 1 = Lesson, 2 = Quiz
         if (nextId && nextType) {
           if (nextType === 1) {
-            console.log('Navigating to next lesson:', nextId);
-            this.router.navigate([
-              '/student/subject',
-              this.subjectId,
-              'lesson',
-              nextId,
-            ]);
+            this.router.navigate(['/student/subject', this.subjectId, 'lesson', nextId]);
           } else if (nextType === 2) {
-            console.log('Navigating to next quiz:', nextId);
-            // Check if we have a lessonId to use for the route.
-            // If the quiz is standalone, we might need a different route.
-            // For now, assume it's under the current subject.
-            this.router.navigate([
-              '/student/subject',
-              this.subjectId,
-              'quizzes',
-              nextId,
-              'solve',
-            ]);
+            this.router.navigate(['/student/subject', this.subjectId, 'quizzes', nextId, 'solve']);
           } else {
-            console.warn('Unknown nextType:', nextType);
             this.router.navigate(['/student/subject', this.subjectId]);
           }
         } else {
-
-          console.log('No next activity found, going back to subject');
           this.router.navigate(['/student/subject', this.subjectId]);
         }
       },
       error: (err) => {
+        this.isLoading = false;
         console.error('Failed to complete lesson', err);
       },
     });
+  }
 
+  getNextActivityLink(): any[] {
+    if (!this.lesson) return [];
+    const nlid = this.lesson.nlid || (this.lesson as any).Nlid;
+    const nextId = this.lesson.next || (this.lesson as any).Next || nlid;
+    const nextType = this.lesson.nextType ?? (this.lesson as any).NextType;
 
-
+    if (nextType === 1) {
+      return ['/student/subject', this.subjectId, 'lesson', nextId];
+    } else if (nextType === 2) {
+      return ['/student/subject', this.subjectId, 'quizzes', nextId, 'solve'];
+    }
+    return [];
   }
 }

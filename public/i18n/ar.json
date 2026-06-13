@@ -428,7 +428,13 @@
       "RESTRICTED_AREA": "منطقة مقيدة",
       "RESTRICTED_DESC": "ليس لديك الصلاحية للوصول إلى هذا الدرس حالياً.",
       "VIDEOS_IN_LESSON": "فيديوهات في الدرس",
-      "VISUAL_CONTENT": "المحتوى المرئي"
+      "VISUAL_CONTENT": "المحتوى المرئي",
+      "COMPLETED": "تم إكمال الدرس",
+      "JUMP_EXERCISES": "انتقل إلى التمارين",
+      "COMPLETE_LESSON": "إكمال الدرس",
+      "NEXT_VIDEO": "الفيديو التالي",
+      "GO_TO_QUIZ": "انتقل إلى الاختبار التالي",
+      "GO_TO_LESSON": "انتقل إلى الدرس التالي"
     },
     "LESSONS": {
       "BROWSE_SUBJECTS": "تصفح المواد",
@@ -437,7 +443,8 @@
       "COURSE": "محتوى",
       "LESSONS_AVAILABLE": "الدروس المتاحة",
       "NO_CONTENT": "لا يوجد محتوى متاح",
-      "NO_LESSONS": "لا توجد دروس"
+      "NO_LESSONS": "لا توجد دروس",
+      "NEXT_ACTIVITY": "النشاط التالي"
     },
     "PROGRESS": {
       "ATTEMPTS_RETAKES": "المحاولات / الإعادات",
@@ -573,26 +580,25 @@
   },
   "TEACHER": {
     "SUBJECT_VIEW": {
-  "HEADER_SUBJECT": "لوحة تحكم",
-  "HEADER_DASHBOARD": "المادة",
-  "DESC": "إدارة الدروس، الطلاب، والكلمات الخاصة بهذه المادة.",
-  "MY_LESSONS": "دروسي",
-  "MY_LESSONS_DESC": "عرض، تعديل، وإدارة جميع دروس الفيديو المرفوعة.",
-  "VIEW_ALL": "عرض الكل",
-  "CREATE_LESSON": "إنشاء درس",
-  "CREATE_LESSON_DESC": "رفع محتوى جديد، فيديوهات، أو أنشطة لطلابك.",
-  "START_CREATING": "ابدأ الإنشاء",
-  "DICTIONARY": "القاموس",
-  "DICTIONARY_DESC": "إضافة كلمات جديدة ومرفقات للمادة.",
-  "ADD_WORDS": "إضافة كلمات",
-  "MY_STUDENTS": "طلابي",
-  "MY_STUDENTS_DESC": "متابعة التقدم، عرض الملفات الشخصية، وإدارة قائمة الفصل.",
-  "VIEW_LIST": "عرض القائمة",
-  "QUIZZES": "الاختبارات",
-  "QUIZZES_DESC": "إنشاء اختبارات وتدريبات ليقوم الطلاب بحلها.",
-  "CREATE_QUIZ": "إنشاء اختبار"
-},
-    
+      "HEADER_SUBJECT": "لوحة تحكم",
+      "HEADER_DASHBOARD": "المادة",
+      "DESC": "إدارة الدروس، الطلاب، والكلمات الخاصة بهذه المادة.",
+      "MY_LESSONS": "دروسي",
+      "MY_LESSONS_DESC": "عرض، تعديل، وإدارة جميع دروس الفيديو المرفوعة.",
+      "VIEW_ALL": "عرض الكل",
+      "CREATE_LESSON": "إنشاء درس",
+      "CREATE_LESSON_DESC": "رفع محتوى جديد، فيديوهات، أو أنشطة لطلابك.",
+      "START_CREATING": "ابدأ الإنشاء",
+      "DICTIONARY": "القاموس",
+      "DICTIONARY_DESC": "إضافة كلمات جديدة ومرفقات للمادة.",
+      "ADD_WORDS": "إضافة كلمات",
+      "MY_STUDENTS": "طلابي",
+      "MY_STUDENTS_DESC": "متابعة التقدم، عرض الملفات الشخصية، وإدارة قائمة الفصل.",
+      "VIEW_LIST": "عرض القائمة",
+      "QUIZZES": "الاختبارات",
+      "QUIZZES_DESC": "إنشاء اختبارات وتدريبات ليقوم الطلاب بحلها.",
+      "CREATE_QUIZ": "إنشاء اختبار"
+    },
     "ACCESSIBLE": "متاح",
     "ADD_ANOTHER_WORD": "إضافة كلمة أخرى",
     "ADD_CHOICE": "إضافة خيار",
@@ -838,7 +844,7 @@
     "STUDENT": "سجل",
     "STUDENTS": "الطلاب",
     "STUDENTS_L": "طلاب",
-    "Dashboard_TITLE":"لوحة تحكم المعلم",
+    "Dashboard_TITLE": "لوحة تحكم المعلم",
     "SUBJECT": {
       "CODE": "رمز المادة",
       "CREATE": "إنشاء مادة",

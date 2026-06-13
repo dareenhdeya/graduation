@@ -1,15 +1,14 @@
 <section class="relative py-10 px-4 overflow-hidden transition-colors duration-300">
   <div class="container mx-auto max-w-7xl relative z-10">
     <div class="flex items-center gap-4 mb-10">
-      <a
-        routerLink="/student/my-subjects"
-        class="size-11 rounded-2xl bg-surface/40 backdrop-blur-xl border border-border-main flex items-center justify-center text-text-main/60 hover:text-primary hover:border-primary/30 transition-all"
-      >
+      <a routerLink="/student/my-subjects"
+        class="size-11 rounded-2xl bg-surface/40 backdrop-blur-xl border border-border-main flex items-center justify-center text-text-main/60 hover:text-primary hover:border-primary/30 transition-all">
         <i class="fa-solid fa-arrow-left"></i>
       </a>
 
       <div>
-        <h1 class="text-3xl md:text-4xl font-black tracking-tight text-transparent bg-clip-text bg-linear-to-r from-primary to-text-main">
+        <h1
+          class="text-3xl md:text-4xl font-black tracking-tight text-transparent bg-clip-text bg-linear-to-r from-primary to-text-main">
           {{ 'STUDENT.LESSONS.COURSE' | translate }}
           <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/70">
             {{ 'STUDENT.LESSONS.CONTENT' | translate }}
@@ -27,25 +26,19 @@
 
     <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-5 animate-pulse">
       @for (i of [1,2,3,4,5,6,7,8,9,10]; track i) {
-      <div
-        class="aspect-square rounded-3xl bg-surface/40 backdrop-blur-xl border border-border-main"
-      ></div>
+      <div class="aspect-square rounded-3xl bg-surface/40 backdrop-blur-xl border border-border-main"></div>
       }
     </div>
 
     } @else if (lessons.length > 0) {
 
     <div
-      class="relative overflow-hidden rounded-[2rem] border border-border-main bg-surface/40 backdrop-blur-xl p-6 md:p-8 shadow-sm"
-    >
-      <div
-        class="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 h-40 w-96 bg-primary/10 blur-[100px]"
-      ></div>
+      class="relative overflow-hidden rounded-[2rem] border border-border-main bg-surface/40 backdrop-blur-xl p-6 md:p-8 shadow-sm">
+      <div class="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 h-40 w-96 bg-primary/10 blur-[100px]">
+      </div>
 
       <div class="flex justify-center mb-8">
-        <div
-          class="rounded-2xl border border-primary/20 bg-primary/10 px-6 py-3 text-primary font-semibold text-sm"
-        >
+        <div class="rounded-2xl border border-primary/20 bg-primary/10 px-6 py-3 text-primary font-semibold text-sm">
           {{ 'STUDENT.LESSONS.CLICK_UNLOCKED' | translate }}
         </div>
       </div>
@@ -69,10 +62,7 @@
 
         @else {-->
 
-        <a
-          [routerLink]="['/student/subject', subjectId, 'lesson', lesson.id]"
-          class="group relative"
-        >
+        <a [routerLink]="['/student/subject', subjectId, 'lesson', lesson.id]" class="group relative">
           <div
             class="size-32 md:size-36 rounded-3xl flex flex-col items-center justify-center text-center p-4 text-white shadow-lg transition-all duration-300 hover:-translate-y-2 hover:scale-105"
             [ngClass]="[
@@ -95,8 +85,7 @@
                 : i % 10 === 8
                 ? 'bg-emerald-400 hover:bg-emerald-500'
                 : 'bg-orange-400 hover:bg-orange-500'
-            ]"
-          >
+            ]">
             <i class="fa-solid fa-book-open text-2xl mb-3"></i>
 
             <span class="text-sm md:text-base font-bold line-clamp-2">
@@ -114,11 +103,8 @@
     } @else {
 
     <div
-      class="flex flex-col items-center justify-center py-24 text-center rounded-[2rem] border border-dashed border-border-main bg-surface/40 backdrop-blur-xl"
-    >
-      <div
-        class="size-24 rounded-3xl bg-background border border-border-main flex items-center justify-center mb-6"
-      >
+      class="flex flex-col items-center justify-center py-24 text-center rounded-[2rem] border border-dashed border-border-main bg-surface/40 backdrop-blur-xl">
+      <div class="size-24 rounded-3xl bg-background border border-border-main flex items-center justify-center mb-6">
         <i class="fa-solid fa-box-open text-4xl text-text-main/20"></i>
       </div>
 
@@ -128,10 +114,8 @@
         {{ 'STUDENT.LESSONS.NO_CONTENT' | translate }}
       </p>
 
-      <a
-        routerLink="/student/all-subjects"
-        class="mt-6 rounded-2xl bg-primary/10 border border-primary/20 text-primary px-6 py-3 font-bold hover:bg-primary/15 transition"
-      >
+      <a routerLink="/student/all-subjects"
+        class="mt-6 rounded-2xl bg-primary/10 border border-primary/20 text-primary px-6 py-3 font-bold hover:bg-primary/15 transition">
         {{ 'STUDENT.LESSONS.BROWSE_SUBJECTS' | translate }}
       </a>
     </div>

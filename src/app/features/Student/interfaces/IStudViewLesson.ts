@@ -13,6 +13,7 @@ export interface StudLesson {
   videoFile?: any;
   videoUrl?: any;
   releaseDate?: string;
+  completed: boolean;
 }
 
 export interface IStudViewLesson {

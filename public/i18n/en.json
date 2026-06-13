@@ -422,13 +422,19 @@
     },
     "LESSON": {
       "BACK_TO_COURSE": "Back To Course",
+      "COMPLETED": "Completed",
       "CONTACT_TEACHER": "Contact Teacher",
       "CONTENT_LOCKED": "Content Locked",
       "NOT_FOUND": "Not Found",
       "RESTRICTED_AREA": "Restricted Area",
       "RESTRICTED_DESC": "Restricted Desc",
       "VIDEOS_IN_LESSON": "Videos In Lesson",
-      "VISUAL_CONTENT": "Visual Content"
+      "VISUAL_CONTENT": "Visual Content",
+      "JUMP_EXERCISES": "Jump to Exercises",
+      "COMPLETE_LESSON": "Complete Lesson",
+      "NEXT_VIDEO": "Next Video",
+      "GO_TO_QUIZ": "Go to Next Quiz",
+      "GO_TO_LESSON": "Go to Next Lesson"
     },
     "LESSONS": {
       "BROWSE_SUBJECTS": "Browse Subjects",
@@ -437,7 +443,8 @@
       "COURSE": "Course",
       "LESSONS_AVAILABLE": "Lessons Available",
       "NO_CONTENT": "No Content",
-      "NO_LESSONS": "No Lessons"
+      "NO_LESSONS": "No Lessons",
+      "NEXT_ACTIVITY": "Next Activity"
     },
     "PROGRESS": {
       "ATTEMPTS_RETAKES": "Attempts Retakes",
@@ -572,22 +579,21 @@
     "VIEW_QUIZZES": "View Quizzes"
   },
   "TEACHER": {
-        "Dashboard_TITLE":"Teacher Dashboard",
-
-  "SUBJECT_DASHBOARD_DESC": "Manage lessons, students, and vocabulary for this subject.",
-  "MY_LESSONS": "My Lessons",
-  "MY_LESSONS_DESC": "View, edit, and manage all your uploaded video lessons.",
-  "VIEW_ALL": "View All",
-  "CREATE_LESSON": "Create Lesson",
-  "CREATE_LESSON_DESC": "Upload new content, videos, or activities for your students.",
-  "START_CREATING": "Start Creating",
-  "DICTIONARY_DESC": "Add new vocabulary words and attachments to the subject.",
-  "MY_STUDENTS": "My Students",
-  "MY_STUDENTS_DESC": "Track progress, view profiles, and manage the class roster.",
-  "VIEW_LIST": "View List",
-  "QUIZZES": "Quizzes",
-  "QUIZZES_DESC": "Create quizzes and exercises for your students to complete.",
-  "CREATE_QUIZ": "Create Quiz",
+    "Dashboard_TITLE": "Teacher Dashboard",
+    "SUBJECT_DASHBOARD_DESC": "Manage lessons, students, and vocabulary for this subject.",
+    "MY_LESSONS": "My Lessons",
+    "MY_LESSONS_DESC": "View, edit, and manage all your uploaded video lessons.",
+    "VIEW_ALL": "View All",
+    "CREATE_LESSON": "Create Lesson",
+    "CREATE_LESSON_DESC": "Upload new content, videos, or activities for your students.",
+    "START_CREATING": "Start Creating",
+    "DICTIONARY_DESC": "Add new vocabulary words and attachments to the subject.",
+    "MY_STUDENTS": "My Students",
+    "MY_STUDENTS_DESC": "Track progress, view profiles, and manage the class roster.",
+    "VIEW_LIST": "View List",
+    "QUIZZES": "Quizzes",
+    "QUIZZES_DESC": "Create quizzes and exercises for your students to complete.",
+    "CREATE_QUIZ": "Create Quiz",
     "ACCESSIBLE": "Accessible",
     "ADD_ANOTHER_WORD": "Add Another Word",
     "ADD_CHOICE": "Add Choice",
@@ -645,8 +651,8 @@
     "DESCRIPTION_REQUIRED": "Description Required",
     "DETAILED_BREAKDOWN_DESC": "Detailed Breakdown Desc",
     "DICTIONARY": {
-      "TITLE": " Language Dictionary"
-      ,"DESC":"Add new vocabulary words and attachments to the subject."
+      "TITLE": " Language Dictionary",
+      "DESC": "Add new vocabulary words and attachments to the subject."
     },
     "DICTIONARY_BUILDER": "Dictionary Builder",
     "DIFFICULTY": "Difficulty",

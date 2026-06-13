@@ -17,6 +17,10 @@ export interface IStudLessonContentResult {
   videos: IStudVideo[];
   locked?: boolean;
   levels?: any;
+  completed: boolean;
+  next: string;
+  nlid: string;
+  nextType: number;
 }
 
 export interface IStudLessonContentResponse {
