@@ -1,10 +1,12 @@
 import { Component, OnInit, OnDestroy, HostListener, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormArray, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, RouterLink, Router } from '@angular/router';
+import { ActivatedRoute, RouterLink, Router, NavigationEnd } from '@angular/router';
+import { filter, Subscription } from 'rxjs';
 import { StudentServiceService } from '../../../services/student-service.service';
 import { ToastrService } from 'ngx-toastr';
 import confetti from 'canvas-confetti';
+import { TranslateModule } from '@ngx-translate/core';
 
 interface QuizState {
   status: 'pre-start' | 'in-progress' | 'submitting' | 'completed';
@@ -20,7 +22,7 @@ interface SvgLine {
 @Component({
   selector: 'app-solve-quiz',
   standalone: true,
-  imports: [CommonModule, RouterLink, ReactiveFormsModule],
+  imports: [CommonModule, RouterLink, ReactiveFormsModule, TranslateModule],
   templateUrl: './solve-quiz.component.html',
   styleUrl: './solve-quiz.component.css',
 })
@@ -66,6 +68,10 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
     '#f87171',
   ];
 
+  // ── AI sign quiz scores ────────────────────────────────────────
+  aiScores = new Map<number, number>();
+  private routerSub?: Subscription;
+
   // ── Drag-line state ────────────────────────────────────────────
   isDrawingLine = false;
   drawEIdx = -1;
@@ -81,10 +87,15 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private studentService: StudentServiceService,
     private toastr: ToastrService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.quizForm = this.fb.group({ exercises: this.fb.array([]) });
+    this.captureAiScoreFromState();
+    this.routerSub = this.router.events
+      .pipe(filter((e) => e instanceof NavigationEnd))
+      .subscribe(() => this.captureAiScoreFromState());
+
     this.route.paramMap.subscribe((params) => {
       const sid = params.get('sid');
       const lid = params.get('lid');
@@ -100,6 +111,7 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     if (this.timerInterval) clearInterval(this.timerInterval);
+    this.routerSub?.unsubscribe();
   }
 
   // ── Getters ────────────────────────────────────────────────────
@@ -143,6 +155,8 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
         this.quizData.set(data);
         this.durationMinutes.set(data?.durationInMinutes ?? data?.DurationInMinutes ?? -1);
         this.initializeForm(data);
+        this.captureAiScoreFromState();
+        this.tryResumeQuiz();
         this.isLoading.set(false);
       },
       error: () => {
@@ -163,6 +177,7 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
     exercises.forEach((ex: any, eIdx: number) => {
       const qList = ex.questions || ex.Questions || [];
       const exType = ex.exerciseType ?? ex.ExerciseType ?? ex.type ?? ex.Type;
+      console.log(`Exercise ${eIdx} (Type ${exType}):`, ex);
 
       const questionsArray = this.fb.array(
         qList.map((q: any) =>
@@ -174,11 +189,13 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
         )
       );
 
+      const isAiExercise = exType == 3 || exType === '3' || exType === 'AI' || exType == 4 || exType === '4' || exType === 'AI_Word';
       this.exercisesFormArray.push(
         this.fb.group({
           exerciseId: [ex.id || ex.Id],
           exerciseType: [exType],
           questions: questionsArray,
+          ...(isAiExercise ? { aiScore: [this.aiScores.get(eIdx) ?? null] } : {}),
         })
       );
 
@@ -219,6 +236,30 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
     return `quiz_draft_${this.quizId()}`;
   }
 
+  private get inProgressKey() {
+    return `quiz_in_progress_${this.quizId()}`;
+  }
+
+  private tryResumeQuiz() {
+    if (sessionStorage.getItem(this.inProgressKey) !== '1') return;
+    sessionStorage.removeItem(this.inProgressKey);
+    this.quizState.set('in-progress');
+    this.loadDraft();
+    const mins = this.durationMinutes();
+    if (mins > 0) {
+      this.timeLeftSeconds.set(mins * 60);
+      if (this.timerInterval) clearInterval(this.timerInterval);
+      this.timerInterval = setInterval(() => {
+        const c = this.timeLeftSeconds();
+        if (c <= 1) {
+          clearInterval(this.timerInterval);
+          this.timeLeftSeconds.set(0);
+          this.autoSubmit();
+        } else this.timeLeftSeconds.set(c - 1);
+      }, 1000);
+    }
+  }
+
   saveDraft() {
     if (this.quizState() !== 'in-progress') return;
     localStorage.setItem(this.draftKey, JSON.stringify(this.quizForm.value));
@@ -228,8 +269,13 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
   loadDraft() {
     try {
       const v = localStorage.getItem(this.draftKey);
-      if (v) this.quizForm.patchValue(JSON.parse(v));
-    } catch {}
+      if (!v) return;
+      const data = JSON.parse(v);
+      this.quizForm.patchValue(data);
+      data.exercises?.forEach((ex: any, eIdx: number) => {
+        if (ex.aiScore != null) this.aiScores.set(eIdx, ex.aiScore);
+      });
+    } catch { }
   }
 
   clearDraft() {
@@ -246,11 +292,17 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
     if (this.timerInterval) clearInterval(this.timerInterval);
 
     const sedtos: any[] = [];
-    this.quizForm.value.exercises.forEach((ex: any) => {
-      const sadtos = ex.questions
-        .filter((q: any) => q.selectedAnswerId)
-        .map((q: any) => ({ Qid: q.questionId, Aid: q.selectedAnswerId }));
-      sedtos.push({ Eid: ex.exerciseId, SADTO: sadtos });
+    this.quizForm.value.exercises.forEach((ex: any, eIdx: number) => {
+      const exType = ex.exerciseType;
+      if (exType == 3 || exType === '3' || exType === 'AI' || exType == 4 || exType === '4' || exType === 'AI_Word') {
+        const correctRounds = this.aiScores.get(eIdx) ?? ex.aiScore ?? 0;
+        sedtos.push({ Eid: ex.exerciseId, Score: correctRounds * 10, SADTO: [] });
+      } else {
+        const sadtos = ex.questions
+          .filter((q: any) => q.selectedAnswerId)
+          .map((q: any) => ({ Qid: q.questionId, Aid: q.selectedAnswerId }));
+        sedtos.push({ Eid: ex.exerciseId, Score: 0, SADTO: sadtos });
+      }
     });
 
     const payload = {
@@ -541,5 +593,83 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
   }
   getExerciseAnswers(eIdx: number): any[] {
     return this.getExercisesList(this.quizData())[eIdx]?.answers || [];
+  }
+
+  private normalizeAiLetters(raw: any): Record<string, number> {
+    const src = raw ?? {};
+    if (Array.isArray(src)) {
+      return Object.fromEntries(
+        src.map((i: any) => [i.key ?? i.Key, i.value ?? i.Value ?? 1])
+      );
+    }
+    return src;
+  }
+
+  private captureAiScoreFromState() {
+    const { aiScore, exerciseIndex } = history.state ?? {};
+    if (aiScore == null || exerciseIndex == null) return;
+    this.aiScores.set(exerciseIndex, aiScore);
+    const exCtrl = this.exercisesFormArray.at(exerciseIndex);
+    exCtrl?.patchValue({ aiScore });
+  }
+
+  getAiTotalRounds(eIdx: number): number {
+    const ex = this.getExercisesList(this.quizData())[eIdx];
+    const letters = this.normalizeAiLetters(
+      ex?.aI_letters ?? ex?.ai_letters ?? ex?.AI_letters ?? {}
+    );
+    return Object.values(letters).reduce((sum, r) => sum + r, 0);
+  }
+
+  getAiScore(eIdx: number): number | null {
+    return this.aiScores.get(eIdx) ?? this.exercisesFormArray.at(eIdx)?.get('aiScore')?.value ?? null;
+  }
+
+  goToAiQuiz(eIdx: number) {
+    const exercises = this.getExercisesList(this.quizData());
+    const ex = exercises[eIdx];
+    const aiLetters = this.normalizeAiLetters(
+      ex?.aI_letters ?? ex?.ai_letters ?? ex?.AI_letters ?? {}
+    );
+    let subjectName = (this.quizData()?.subjectName ?? '').toLowerCase();
+
+    if (!subjectName) {
+      const firstKey = Object.keys(aiLetters)[0] ?? '';
+      subjectName = /[\u0600-\u06FF]/.test(firstKey) ? 'arabic' : 'english';
+    }
+
+    const route = subjectName === 'arabic' ? '/arabic-quiz' : '/quiz';
+
+    if (this.quizState() === 'in-progress') {
+      sessionStorage.setItem(this.inProgressKey, '1');
+    }
+
+    this.router.navigate([route], {
+      state: { aiLetters, exerciseIndex: eIdx, returnUrl: this.router.url },
+    });
+  }
+  goToAiWordsQuiz(eIdx: number) {
+    const exercises = this.getExercisesList(this.quizData());
+    const ex = exercises[eIdx];
+    console.log('goToAiWordsQuiz - ex:', ex);
+    const aiLetters = this.normalizeAiLetters(
+      ex?.aI_letters ?? ex?.ai_letters ?? ex?.AI_letters ?? {}
+    );
+    let subjectName = (this.quizData()?.subjectName ?? '').toLowerCase();
+
+    if (!subjectName) {
+      const firstKey = Object.keys(aiLetters)[0] ?? '';
+      subjectName = /[\u0600-\u06FF]/.test(firstKey) ? 'arabic' : 'english';
+    }
+
+    const route = subjectName === 'arabic' ? '/arabic-words' : '/word-quiz';
+
+    if (this.quizState() === 'in-progress') {
+      sessionStorage.setItem(this.inProgressKey, '1');
+    }
+
+    this.router.navigate([route], {
+      state: { aiLetters, exerciseIndex: eIdx, returnUrl: this.router.url },
+    });
   }
 }

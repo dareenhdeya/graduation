@@ -6,11 +6,12 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { IStudSubDetailsResponse, StudentSubject } from '../../interfaces/IStudSubDetailsResponse';
 import { IEnrollSubResponse } from '../../interfaces/IEnrollSubResponse';
 import { ToastrService } from 'ngx-toastr';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-subject-details',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, TranslateModule],
   templateUrl: './subject-details.component.html',
   styleUrl: './subject-details.component.css',
 })
@@ -21,7 +22,7 @@ export class SubjectDetailsComponent implements OnInit {
   private readonly router = inject(Router)
   private toastr = inject(ToastrService);
   subjectId!: string
-  subject: StudentSubject | null = null; // Changed to null for safety
+  subject: StudentSubject | null = null;
   isLoading = true;
 
   ngOnInit(): void {
@@ -45,10 +46,6 @@ export class SubjectDetailsComponent implements OnInit {
     });
   }
   
-
-  // Enroll in subject
-
-
   enrollSub(id: string) {
     this.studentService.enrollSubject(id).subscribe({
       next: (res : IEnrollSubResponse) => {

@@ -1,121 +1,220 @@
-<section class="relative h-[calc(100vh)] overflow-hidden bg-background transition-colors duration-300">
+﻿<section
+  class="relative h-[calc(100vh)] overflow-hidden bg-background transition-colors duration-300"
+>
   <div
-    class="pointer-events-none absolute -top-64 -left-72 h-[520px] w-[820px] rounded-[999px] bg-primary/10 blur-[130px]">
-  </div>
+    class="pointer-events-none absolute -top-64 -left-72 h-[520px] w-[820px] rounded-[999px] bg-primary/10 blur-[130px]"
+  ></div>
   <div
-    class="pointer-events-none absolute -bottom-72 -right-60 h-[720px] w-[720px] rounded-full bg-primary/10 blur-[140px]">
-  </div>
+    class="pointer-events-none absolute -bottom-72 -right-60 h-[720px] w-[720px] rounded-full bg-primary/10 blur-[140px]"
+  ></div>
 
   <div class="relative z-10 h-full flex items-center justify-center px-4">
     <div class="mx-auto w-full max-w-2xl">
       <div
-        class="bg-surface backdrop-blur-xl rounded-3xl border border-border-main p-8 shadow-2xl relative z-10 pt-20 pb-6 max-h-[calc(100vh-9rem)] flex flex-col min-h-0">
+        class="bg-surface/90 backdrop-blur-xl rounded-3xl border border-border-main p-8 shadow-2xl relative z-10 pt-20 pb-6 max-h-[calc(100vh-9rem)] flex flex-col min-h-0"
+      >
         <div class="absolute -top-14 left-1/2 -translate-x-1/2">
           <div
-            class="group relative size-28 md:size-32 rounded-full border-2 border-surface bg-background hover:border-primary/60 transition shadow-lg">
+            class="group relative size-28 md:size-32 rounded-full border-2 border-surface bg-background hover:border-primary/60 transition shadow-lg"
+          >
             <div class="absolute inset-0 rounded-full overflow-hidden">
               @if (avatarPreview) {
               <img [src]="avatarPreview" class="w-full h-full object-cover" />
               } @else {
-              <div class="w-full h-full flex items-center justify-center text-text-main/50 bg-black/5">
+              <div
+                class="w-full h-full flex items-center justify-center text-text-main/50 bg-black/5"
+              >
                 <i class="fa-regular fa-user text-3xl"></i>
               </div>
               }
-              <div class="absolute inset-0 bg-black/35 opacity-0 group-hover:opacity-100 transition"></div>
+              <div
+                class="absolute inset-0 bg-black/35 opacity-0 group-hover:opacity-100 transition"
+              ></div>
             </div>
 
-            <button type="button" (click)="openAvatarPicker()"
+            <button
+              type="button"
+              (click)="openAvatarPicker()"
               class="cursor-pointer absolute -bottom-1 right-2 rounded-full bg-primary text-white flex items-center justify-center text-md border-2 border-surface shadow-lg shadow-primary/20 z-10 hover:bg-primary/90 hover:-translate-y-0.5 transition-all size-10"
-              [title]="'AUTH.CHOOSE_AVATAR' | translate">
+              [title]="'AUTH.CHANGE_PICTURE' | translate"
+            >
               <i class="fa-solid fa-pen"></i>
             </button>
           </div>
         </div>
 
         <div class="text-center">
-          <h1 class="text-3xl md:text-4xl font-black tracking-tight text-text-main mb-2">
+          <h1 class="text-3xl md:text-4xl font-black tracking-tight mb-2 text-transparent bg-clip-text bg-linear-to-r from-primary to-text-main">
             {{ 'AUTH.SIGNUP_TITLE' | translate }}
           </h1>
         </div>
 
         @if (errMsg) {
         <div
-          class="rounded-2xl border border-red-500/30 bg-red-500/10 p-4 text-sm font-bold text-red-500 shadow-sm flex items-center gap-2 mb-6">
+          class="mb-6 flex items-start gap-3 rounded-2xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm font-medium text-red-500 shadow-sm"
+        >
           <i class="fas fa-exclamation-circle mr-2"></i> {{ errMsg }}
         </div>
         }
 
-        <form [formGroup]="signUpForm" (ngSubmit)="submit()" class="mt-7 flex flex-col flex-1 min-h-0">
+        <form
+          [formGroup]="signUpForm"
+          (ngSubmit)="submit()"
+          class="mt-7 flex flex-col flex-1 min-h-0"
+        >
           <div class="overflow-y-auto pr-2 custom-scroll flex-1 min-h-0 space-y-5">
             <div>
               <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">{{ 'AUTH.ROLE' | translate }}</label>
-                <select formControlName="role"
-                  class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all">
-                  @for (r of roles; track r.id) {
-                  <option class="bg-background text-text-main" [value]="r.id">
-                    {{ r.label }}
-                  </option>
+                <label
+                  class="block text-xs font-semibold uppercase tracking-[0.15em] text-text-main/80 mb-2 pl-1"
+                  >{{ 'AUTH.ROLE' | translate }}</label
+                >
+                <div class="relative">
+                  @if (roleDropdownOpen) {
+                  <div class="fixed inset-0 z-40" (click)="roleDropdownOpen = false"></div>
                   }
-                </select>
+
+                  <div
+                    (click)="roleDropdownOpen = !roleDropdownOpen"
+                    class="w-full rounded-2xl border border-border-main bg-background/60 text-text-main px-4 py-3.5 cursor-pointer flex items-center justify-between"
+                  >
+                    <span>
+                      <button type="button">
+                        {{ getRoleLabel() }}
+                      </button>
+                    </span>
+
+                    <i
+                      class="fa-solid fa-chevron-down transition-transform"
+                      [class.rotate-180]="roleDropdownOpen"
+                    ></i>
+                  </div>
+
+                  @if (roleDropdownOpen) {
+                  <div
+                    class="absolute top-full left-0 z-50 mt-2 w-full rounded-2xl border border-border-main bg-background shadow-md overflow-hidden"
+                  >
+                    @for (r of roles; track r.id) {
+                    <div
+                      (click)="signUpForm.get('role')?.setValue(r.id); roleDropdownOpen = false"
+                      class="px-4 py-3 hover:bg-primary/10 cursor-pointer"
+                    >
+                      <span class="font-medium text-text-main">{{ r.label }}</span>
+                    </div>
+                    }
+                  </div>
+                  }
+                </div>
               </div>
             </div>
 
             <div>
-              <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">{{ 'AUTH.GENDER' | translate }}</label>
-              <select formControlName="Gender" [class.border-red-500]="isInvalid('Gender')"
-                class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all">
-                <option class="bg-background text-text-main" value="" disabled>
-                  {{ 'AUTH.GENDER_SELECT' | translate }}
-                </option>
-                <option class="bg-background text-text-main" [value]="1">{{ 'AUTH.GENDER_MALE' | translate }}</option>
-                <option class="bg-background text-text-main" [value]="2">{{ 'AUTH.GENDER_FEMALE' | translate }}</option>
-              </select>
+              <label
+                class="block text-xs font-semibold uppercase tracking-[0.15em] text-text-main/80 mb-2 pl-1"
+                >{{ 'AUTH.GENDER' | translate }}</label
+              >
+              <div class="relative">
+                @if (genderDropdownOpen) {
+                <div class="fixed inset-0 z-40" (click)="genderDropdownOpen = false"></div>
+                }
 
-              @if (isInvalid('Gender')) {
-              @if (signUpForm.get('Gender')?.hasError('required')) {
-              <p
-                class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                {{ 'VALIDATION.REQUIRED' | translate }}
-              </p>
-              }
-              }
-            </div>
+                <div
+                  (click)="genderDropdownOpen = !genderDropdownOpen"
+                  class="w-full rounded-2xl border border-border-main bg-background/60 text-text-main px-4 py-3.5 cursor-pointer flex justify-between items-center"
+                >
+                  <span>
+                    <button type="button">
+                      {{ getGenderLabel() }}
+                    </button>
+                  </span>
 
-            <div>
-              <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">{{ 'AUTH.EMAIL' | translate }}</label>
-              <input formControlName="email" [class.border-red-500]="isInvalid('email')" type="email"
-                class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-text-main/30"
-                [placeholder]="'AUTH.PLACEHOLDER_EMAIL' | translate" />
+                  <i
+                    class="fa-solid fa-chevron-down transition-transform"
+                    [class.rotate-180]="genderDropdownOpen"
+                  ></i>
+                </div>
 
-              @if (isInvalid('email')) {
-              @if (signUpForm.get('email')?.hasError('required')) {
+                @if (genderDropdownOpen) {
+                <div
+                  class="absolute top-full left-0 z-50 mt-2 w-full rounded-2xl border border-border-main bg-background shadow-md overflow-hidden"
+                >
+                  <div
+                    (click)="signUpForm.get('Gender')?.setValue(1); genderDropdownOpen = false"
+                    class="px-4 py-3 hover:bg-primary/10 font-medium text-text-main cursor-pointer"
+                  >
+                    {{ 'AUTH.GENDER_MALE' | translate }}
+                  </div>
+
+                  <div
+                    (click)="signUpForm.get('Gender')?.setValue(2); genderDropdownOpen = false"
+                    class="px-4 py-3 hover:bg-primary/10 font-medium text-text-main cursor-pointer"
+                  >
+                    {{ 'AUTH.GENDER_FEMALE' | translate }}
+                  </div>
+                </div>
+                }
+              </div>
+
+              @if (isInvalid('Gender')) { @if (signUpForm.get('Gender')?.hasError('required')) {
               <p
-                class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                {{ 'VALIDATION.REQUIRED' | translate }}
+                class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+              >
+                <i class="fas fa-circle-exclamation mt-0.5"></i>
+                <span>{{ 'VALIDATION.REQUIRED' | translate }}</span>
               </p>
-              }
-              @if (signUpForm.get('email')?.hasError('email')) {
-              <p
-                class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                {{ 'VALIDATION.EMAIL_INVALID' | translate }}
-              </p>
-              }
-              }
+              } }
             </div>
 
             <div>
               <label
-                class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">{{ 'AUTH.PASSWORD' | translate }}</label>
+                class="block text-xs font-semibold uppercase tracking-[0.15em] text-text-main/80 mb-2 pl-1"
+                >{{ 'AUTH.EMAIL' | translate }}</label
+              >
+              <input
+                formControlName="email"
+                [class.border-red-500]="isInvalid('email')"
+                type="email"
+                class="w-full rounded-2xl border border-border-main bg-background/60 text-sm font-medium px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-placeholder placeholder:font-medium"
+                [placeholder]="'AUTH.PLACEHOLDER_EMAIL' | translate"
+              />
+
+              @if (isInvalid('email')) { @if (signUpForm.get('email')?.hasError('required')) {
+              <p
+                class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+              >
+                <i class="fas fa-circle-exclamation mt-0.5"></i>
+                <span>{{ 'VALIDATION.REQUIRED' | translate }}</span>
+              </p>
+              } @if (signUpForm.get('email')?.hasError('email')) {
+              <p
+                class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+              >
+                <i class="fas fa-circle-exclamation mt-0.5"></i>
+                <span>{{ 'VALIDATION.EMAIL_INVALID' | translate }}</span>
+              </p>
+              } }
+            </div>
+
+            <div>
+              <label
+                class="block text-xs font-semibold uppercase tracking-[0.15em] text-text-main/80 mb-2 pl-1"
+                >{{ 'AUTH.PASSWORD' | translate }}</label
+              >
 
               <div class="relative">
-                <input formControlName="password" [class.border-red-500]="isInvalid('password')"
+                <input
+                  formControlName="password"
+                  [class.border-red-500]="isInvalid('password')"
                   [type]="showPass ? 'text' : 'password'"
-                  class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 pr-12 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-text-main/30" />
+                  class="w-full rounded-2xl border border-border-main bg-background/60 text-sm font-medium px-4 py-3.5 pr-12 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-placeholder placeholder:font-medium"
+                />
 
-                <button type="button" (click)="showPass = !showPass"
-                  class="absolute right-4 top-1/2 -translate-y-1/2 text-text-main/40 hover:text-primary transition-colors cursor-pointer"
-                  [attr.aria-label]="'AUTH.TOGGLE_PASSWORD' | translate">
+                <button
+                  type="button"
+                  (click)="showPass = !showPass"
+                  class="absolute right-4 top-1/2 -translate-y-1/2 text-text-main/50 hover:text-primary transition-all duration-200 cursor-pointer"
+                  aria-label="Toggle password visibility"
+                >
                   @if (showPass) {
                   <i class="fas fa-eye-slash"></i>
                   } @else {
@@ -124,195 +223,279 @@
                 </button>
               </div>
 
-              @if (
-              signUpForm.get('password')?.invalid &&
-              (signUpForm.get('password')?.touched || submitted)
-              ) {
-              @if (signUpForm.get('password')?.hasError('required')) {
+              @if ( signUpForm.get('password')?.invalid && (signUpForm.get('password')?.touched ||
+              submitted) ) { @if (signUpForm.get('password')?.hasError('required')) {
               <p
-                class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                {{ 'VALIDATION.REQUIRED' | translate }}
+                class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+              >
+                <i class="fas fa-circle-exclamation mt-0.5"></i>
+                <span>{{ 'VALIDATION.REQUIRED' | translate }}</span>
               </p>
-              }
-              @if (signUpForm.get('password')?.hasError('pattern')) {
+              } @if (signUpForm.get('password')?.hasError('pattern')) {
               <p
-                class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                {{ 'VALIDATION.PASSWORD_MIN' | translate }}
+                class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+              >
+                <i class="fas fa-circle-exclamation mt-0.5"></i>
+                <span>{{ 'VALIDATION.PASSWORD_PATTERN' | translate }}</span>
               </p>
-              }
-              }
+              } }
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">{{ 'AUTH.FIRST_NAME' | translate }}</label>
-                <input formControlName="FName" [class.border-red-500]="isInvalid('FName')"
-                  class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-text-main/30"
-                  [placeholder]="'AUTH.PLACEHOLDER_FIRST_NAME' | translate" />
+                <label
+                  class="block text-xs font-semibold uppercase tracking-[0.15em] text-text-main/80 mb-2 pl-1"
+                  >{{ 'AUTH.FIRST_NAME' | translate }}</label
+                >
+                <input
+                  formControlName="FName"
+                  [class.border-red-500]="isInvalid('FName')"
+                  class="w-full rounded-2xl border border-border-main bg-background/60 text-sm font-medium px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-placeholder placeholder:font-medium"
+                  [placeholder]="'AUTH.PLACEHOLDER_FIRST_NAME' | translate"
+                />
 
-                @if (isInvalid('FName')) {
-                @if (signUpForm.get('FName')?.hasError('required')) {
+                @if (isInvalid('FName')) { @if (signUpForm.get('FName')?.hasError('required')) {
                 <p
-                  class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                  {{ 'VALIDATION.REQUIRED' | translate }}
+                  class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+                >
+                  <i class="fas fa-circle-exclamation mt-0.5"></i>
+                  <span>{{ 'VALIDATION.REQUIRED' | translate }}</span>
                 </p>
-                }
-                @if (signUpForm.get('FName')?.hasError('minlength')) {
+                } @if (signUpForm.get('FName')?.hasError('minlength')) {
                 <p
-                  class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                  {{ 'VALIDATION.PASSWORD_MIN' | translate }}
+                  class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+                >
+                  <i class="fas fa-circle-exclamation mt-0.5"></i>
+                  <span>{{ 'VALIDATION.MIN_LENGTH' | translate }}</span>
                 </p>
-                }
-                @if (signUpForm.get('FName')?.hasError('pattern')) {
+                } @if (signUpForm.get('FName')?.hasError('pattern')) {
                 <p
-                  class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                  {{ 'VALIDATION.EMAIL_INVALID' | translate }}
+                  class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+                >
+                  <i class="fas fa-circle-exclamation mt-0.5"></i>
+                  <span>{{ 'VALIDATION.LETTERS_ONLY' | translate }}</span>
                 </p>
-                }
-                }
+                } }
               </div>
 
               <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">{{ 'AUTH.LAST_NAME' | translate }}</label>
-                <input formControlName="LName" [class.border-red-500]="isInvalid('LName')"
-                  class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-text-main/30"
-                  [placeholder]="'AUTH.PLACEHOLDER_LAST_NAME' | translate" />
-                @if (isInvalid('LName')) {
-                @if (signUpForm.get('LName')?.hasError('required')) {
+                <label
+                  class="block text-xs font-semibold uppercase tracking-[0.15em] text-text-main/80 mb-2 pl-1"
+                  >{{ 'AUTH.LAST_NAME' | translate }}</label
+                >
+                <input
+                  formControlName="LName"
+                  [class.border-red-500]="isInvalid('LName')"
+                  class="w-full rounded-2xl border border-border-main bg-background/60 text-sm font-medium px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-placeholder placeholder:font-medium"
+                  [placeholder]="'AUTH.PLACEHOLDER_LAST_NAME' | translate"
+                />
+                @if (isInvalid('LName')) { @if (signUpForm.get('LName')?.hasError('required')) {
                 <p
-                  class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                  {{ 'VALIDATION.REQUIRED' | translate }}
+                  class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+                >
+                  <i class="fas fa-circle-exclamation mt-0.5"></i>
+                  <span>{{ 'VALIDATION.REQUIRED' | translate }}</span>
                 </p>
-                }
-                @if (signUpForm.get('LName')?.hasError('minlength')) {
+                } @if (signUpForm.get('LName')?.hasError('minlength')) {
                 <p
-                  class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                  {{ 'VALIDATION.PASSWORD_MIN' | translate }}
+                  class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+                >
+                  <i class="fas fa-circle-exclamation mt-0.5"></i>
+                  <span>{{ 'VALIDATION.MIN_LENGTH' | translate }}</span>
                 </p>
-                }
-                @if (signUpForm.get('LName')?.hasError('pattern')) {
+                } @if (signUpForm.get('LName')?.hasError('pattern')) {
                 <p
-                  class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                  {{ 'VALIDATION.EMAIL_INVALID' | translate }}
+                  class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+                >
+                  <i class="fas fa-circle-exclamation mt-0.5"></i>
+                  <span>{{ 'VALIDATION.LETTERS_ONLY' | translate }}</span>
                 </p>
-                }
-                }
+                } }
               </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <!-- @if (+signUpForm.get('role')?.value !== 1) { -->
               <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">{{ 'AUTH.PHONE' | translate }}</label>
-                <input formControlName="phoneNumber" [class.border-red-500]="isInvalid('phoneNumber')"
-                  class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-text-main/30"
-                  [placeholder]="'AUTH.PLACEHOLDER_PHONE' | translate" />
+                <label
+                  class="block text-xs font-semibold uppercase tracking-[0.15em] text-text-main/80 mb-2 pl-1"
+                  >{{ 'AUTH.PHONE' | translate }}</label
+                >
+                <input
+                  formControlName="phoneNumber"
+                  [class.border-red-500]="isInvalid('phoneNumber')"
+                  class="w-full rounded-2xl border border-border-main bg-background/60 text-sm font-medium px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-placeholder placeholder:font-medium"
+                  placeholder="01xxxxxxxxx"
+                />
 
-                @if (isInvalid('phoneNumber')) {
-                @if (signUpForm.get('phoneNumber')?.hasError('required')) {
+                @if (isInvalid('phoneNumber')) { @if
+                (signUpForm.get('phoneNumber')?.hasError('required')) {
                 <p
-                  class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                  {{ 'VALIDATION.REQUIRED' | translate }}
+                  class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+                >
+                  <i class="fas fa-circle-exclamation mt-0.5"></i>
+                  <span>{{ 'VALIDATION.REQUIRED' | translate }}</span>
                 </p>
-                }
-                @if (signUpForm.get('phoneNumber')?.hasError('pattern')) {
+                } @if (signUpForm.get('phoneNumber')?.hasError('pattern')) {
                 <p
-                  class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                  {{ 'VALIDATION.PHONE_INVALID' | translate }}
+                  class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+                >
+                  <i class="fas fa-circle-exclamation mt-0.5"></i>
+                  <span>{{ 'VALIDATION.PHONE_INVALID' | translate }}</span>
                 </p>
-                }
-                }
+                } }
               </div>
               <!-- } @else { -->
               <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">{{ 'AUTH.BIRTH_DATE' | translate }}</label>
-                <input type="date" formControlName="BirthDate" [class.border-red-500]="isInvalid('BirthDate')"
-                  class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all"
-                  [placeholder]="'AUTH.PLACEHOLDER_BIRTH_DATE' | translate" />
+                <label
+                  class="block text-xs font-semibold uppercase tracking-[0.15em] text-text-main/80 mb-2 pl-1"
+                  >{{ 'AUTH.BIRTH_DATE' | translate }}</label
+                >
+                <input
+                  type="date"
+                  formControlName="BirthDate"
+                  [class.border-red-500]="isInvalid('BirthDate')"
+                  class="w-full rounded-2xl border border-border-main bg-background/60 text-sm font-medium px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all"
+                  placeholder="Birth date"
+                />
 
-                @if (isInvalid('BirthDate')) {
-                @if (signUpForm.get('BirthDate')?.hasError('required')) {
+                @if (isInvalid('BirthDate')) { @if
+                (signUpForm.get('BirthDate')?.hasError('required')) {
                 <p
-                  class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                  {{ 'VALIDATION.REQUIRED' | translate }}
+                  class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+                >
+                  <i class="fas fa-circle-exclamation mt-0.5"></i>
+                  <span>{{ 'VALIDATION.REQUIRED' | translate }}</span>
                 </p>
-                }
-                }
+                } }
               </div>
 
               @if (+signUpForm.get('role')?.value! === 1) {
               <div>
                 <label
-                  class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">{{ 'AUTH.DISABILITY' | translate }}</label>
-                <select formControlName="Disability"
-                  class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all">
-                  @for (d of Disability; track d.id) {
-                  <option class="bg-background text-text-main" [value]="d.id">
-                    {{ d.label }}
-                  </option>
+                  class="block text-xs font-semibold uppercase tracking-[0.15em] text-text-main/80 mb-2 pl-1"
+                  >{{ 'AUTH.DISABILITY' | translate }}</label
+                >
+                <div class="relative">
+                  @if (disabilityDropdownOpen) {
+                  <div class="fixed inset-0 z-40" (click)="disabilityDropdownOpen = false"></div>
                   }
-                </select>
+
+                  <div
+                    (click)="disabilityDropdownOpen = !disabilityDropdownOpen"
+                    class="w-full rounded-2xl border border-border-main bg-background/60 text-text-main px-4 py-3.5 cursor-pointer flex justify-between items-center"
+                  >
+                    <span>
+                      <button type="button">
+                        {{ getDisabilityLabel() }}
+                      </button>
+                    </span>
+
+                    <i
+                      class="fa-solid fa-chevron-down transition-transform"
+                      [class.rotate-180]="disabilityDropdownOpen"
+                    ></i>
+                  </div>
+
+                  @if (disabilityDropdownOpen) {
+                  <div
+                    class="absolute bottom-full left-0 z-50 mt-2 w-full rounded-2xl border border-border-main bg-background shadow-md overflow-hidden"
+                  >
+                    @for (d of Disability; track d.id) {
+                    <div
+                      (click)="
+                        signUpForm.get('Disability')?.setValue(d.id); disabilityDropdownOpen = false
+                      "
+                      class="px-4 py-3 hover:bg-primary/10 cursor-pointer"
+                    >
+                      <span class="font-medium text-text-main">{{ d.label }}</span>
+                    </div>
+                    }
+                  </div>
+                  }
+                </div>
               </div>
               }
-              <!-- } -->
 
               <div>
                 <label
-                  class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">{{ 'AUTH.ADDRESS' | translate }}</label>
-                <input formControlName="Address" [class.border-red-500]="isInvalid('Address')"
-                  class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-text-main/30"
-                  [placeholder]="'AUTH.PLACEHOLDER_ADDRESS' | translate" />
+                  class="block text-xs font-semibold uppercase tracking-[0.15em] text-text-main/80 mb-2 pl-1"
+                  >{{ 'AUTH.ADDRESS' | translate }}</label
+                >
+                <input
+                  formControlName="Address"
+                  [class.border-red-500]="isInvalid('Address')"
+                  class="w-full rounded-2xl border border-border-main bg-background/60 text-sm font-medium px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-placeholder placeholder:font-medium"
+                  placeholder="Address"
+                />
 
-                @if (isInvalid('Address')) {
-                @if (signUpForm.get('Address')?.hasError('required')) {
+                @if (isInvalid('Address')) { @if (signUpForm.get('Address')?.hasError('required')) {
                 <p
-                  class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                  {{ 'VALIDATION.REQUIRED' | translate }}
+                  class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+                >
+                  <i class="fas fa-circle-exclamation mt-0.5"></i>
+                  <span>{{ 'VALIDATION.REQUIRED' | translate }}</span>
                 </p>
-                }
-                @if (signUpForm.get('Address')?.hasError('minlength')) {
+                } @if (signUpForm.get('Address')?.hasError('minlength')) {
                 <p
-                  class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                  {{ 'VALIDATION.PASSWORD_MIN' | translate }}
+                  class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+                >
+                  <i class="fas fa-circle-exclamation mt-0.5"></i>
+                  <span>{{ 'VALIDATION.MIN_LENGTH' | translate }}</span>
                 </p>
-                }
-                }
+                } }
               </div>
             </div>
 
             @if (+signUpForm.get('role')?.value! === 2) {
             <div>
-              <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">{{ 'AUTH.JOB' | translate }}</label>
-              <input formControlName="Job" [class.border-red-500]="isInvalid('Job')"
-                class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-text-main/30"
-                [placeholder]="'AUTH.PLACEHOLDER_JOB' | translate" />
+              <label
+                class="block text-xs font-semibold uppercase tracking-[0.15em] text-text-main/80 mb-2 pl-1"
+                >{{ 'AUTH.JOB' | translate }}</label
+              >
+              <input
+                formControlName="Job"
+                [class.border-red-500]="isInvalid('Job')"
+                class="w-full rounded-2xl border border-border-main bg-background/60 text-sm font-medium px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-placeholder placeholder:font-medium"
+                [placeholder]="'AUTH.PLACEHOLDER_JOB' | translate"
+              />
 
-              @if (isInvalid('Job')) {
-              @if (signUpForm.get('Job')?.hasError('required')) {
+              @if (isInvalid('Job')) { @if (signUpForm.get('Job')?.hasError('required')) {
               <p
-                class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                {{ 'VALIDATION.REQUIRED' | translate }}
+                class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+              >
+                <i class="fas fa-circle-exclamation mt-0.5"></i>
+                <span>{{ 'VALIDATION.REQUIRED' | translate }}</span>
               </p>
-              }
-              @if (signUpForm.get('Job')?.hasError('minlength')) {
+              } @if (signUpForm.get('Job')?.hasError('minlength')) {
               <p
-                class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                {{ 'VALIDATION.PASSWORD_MIN' | translate }}
+                class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+              >
+                <i class="fas fa-circle-exclamation mt-0.5"></i>
+                <span>{{ 'VALIDATION.MIN_LENGTH' | translate }}</span>
               </p>
-              }
-              }
+              } }
             </div>
-            }
-
-            @if (+signUpForm.get('role')?.value! === 3) {
+            } @if (+signUpForm.get('role')?.value! === 3) {
             <div>
-              <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">{{ 'AUTH.CV_RESUME' | translate }}</label>
+              <label
+                class="block text-xs font-semibold uppercase tracking-[0.15em] text-text-main/80 mb-2 pl-1"
+                >{{ 'AUTH.CV_RESUME' | translate }}</label
+              >
               <label
                 class="flex items-center gap-4 w-full rounded-2xl border border-dashed border-border-main bg-background px-4 py-3.5 cursor-pointer hover:border-primary/60 transition-all group"
-                [class.border-red-500]="isInvalid('cv')">
-                <input #cvInput type="file" (change)="onCvChange($event)" class="hidden" accept=".pdf,.doc,.docx" />
+                [class.border-red-500]="isInvalid('cv')"
+              >
+                <input
+                  #cvInput
+                  type="file"
+                  (change)="onCvChange($event)"
+                  class="hidden"
+                  accept=".pdf,.doc,.docx"
+                />
                 <i
-                  class="fa-solid fa-file-arrow-up text-xl text-primary/60 group-hover:text-primary transition-colors"></i>
+                  class="fa-solid fa-file-arrow-up text-xl text-primary/60 group-hover:text-primary transition-colors"
+                ></i>
                 <span class="text-sm font-medium text-text-main/60 truncate">
                   {{ cvFileName || ('AUTH.UPLOAD_CV' | translate) }}
                 </span>
@@ -320,32 +503,37 @@
 
               @if (isInvalid('cv')) {
               <p
-                class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                <i class="fa-solid fa-circle-exclamation"></i> {{ 'VALIDATION.REQUIRED' | translate }}
+                class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+              >
+                <i class="fas fa-circle-exclamation mt-0.5"></i>
+                <span>{{ 'VALIDATION.REQUIRED' | translate }}</span>
               </p>
               }
             </div>
-            }
-
-            @if (fileErrMsg) {
+            } @if (fileErrMsg) {
             <p class="text-red-400 text-sm">{{ fileErrMsg }}</p>
             }
           </div>
           <div class="pt-4 mt-4 border-t border-border-main">
-            <button type="submit" [disabled]="isLoading"
-              class="w-full rounded-2xl bg-primary py-4 text-sm font-bold text-white hover:bg-primary/90 transition-all hover:-translate-y-0.5 shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed">
+            <button
+              type="submit"
+              [disabled]="isLoading"
+              class="w-full cursor-pointer rounded-2xl bg-primary py-4 text-sm font-bold text-white hover:bg-primary/90 transition-all hover:-translate-y-0.5 shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
               <span class="flex items-center justify-center gap-2">
-                {{ 'AUTH.SIGNUP_BTN' | translate }}
-                @if (isLoading) {
+                {{ 'AUTH.SIGNUP_BTN' | translate }} @if (isLoading) {
                 <i class="fas fa-spinner fa-spin"></i>
                 }
               </span>
             </button>
 
-            <p class="text-sm font-medium text-text-main/50 text-center mt-4">
+            <p class="text-sm text-text-main/60 text-center mt-4">
               {{ 'AUTH.HAVE_ACCOUNT' | translate }}
-              <a routerLink="/login"
-                class="text-primary font-bold hover:text-primary/80 transition-colors cursor-pointer">{{ 'AUTH.LOGIN_LINK_LABEL' | translate }}</a>
+              <a
+                routerLink="/login"
+                class="font-semibold text-primary hover:text-primary/80 transition-colors cursor-pointer"
+                >{{ 'AUTH.LOGIN_LINK_LABEL' | translate }}</a
+              >
             </p>
           </div>
         </form>
@@ -355,22 +543,35 @@
 
   @if (showAvatarPicker) {
   <div class="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-    <div class="w-full max-w-3xl rounded-3xl bg-surface border border-border-main p-5 backdrop-blur-2xl">
+    <div
+      class="w-full max-w-3xl rounded-3xl bg-surface/90 border border-border-main p-5 backdrop-blur-2xl"
+    >
       <div class="flex items-center justify-between mb-4">
         <h3 class="text-lg font-semibold text-text-main">{{ 'AUTH.CHOOSE_AVATAR' | translate }}</h3>
-        <button type="button" (click)="closeAvatarPicker()"
-          class="cursor-pointer text-text-main/70 hover:text-text-main">
+        <button
+          type="button"
+          (click)="closeAvatarPicker()"
+          class="cursor-pointer text-text-main/70 hover:text-text-main"
+        >
           <i class="fa-solid fa-xmark text-xl"></i>
         </button>
       </div>
 
       <div class="flex items-center gap-3 mb-5">
-        <input #fileInput type="file" (change)="onFileChange($event); closeAvatarPicker()" class="hidden"
-          accept="image/*" />
+        <input
+          #fileInput
+          type="file"
+          (change)="onFileChange($event); closeAvatarPicker()"
+          class="hidden"
+          accept="image/*"
+        />
 
-        <button type="button" (click)="fileInput.click()"
+        <button
+          type="button"
+          (click)="fileInput.click()"
           class="cursor-pointer size-14 rounded-full border border-border-main bg-background hover:border-primary/60 hover:bg-black/5 transition flex items-center justify-center text-text-main"
-          [title]="'AUTH.UPLOAD_FROM_DEVICE' | translate">
+          [title]="'AUTH.UPLOAD_FROM_DEVICE' | translate"
+        >
           <i class="fa-solid fa-upload text-lg"></i>
         </button>
 
@@ -379,17 +580,23 @@
 
       <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-3">
         @for (a of avatars; track a.id) {
-        <button type="button" (click)="selectAvatar(a.src)"
+        <button
+          type="button"
+          (click)="selectAvatar(a.src)"
           class="cursor-pointer rounded-full overflow-hidden border border-border-main hover:border-primary/60 transition"
-          [title]="'AUTH.CHOOSE_AVATAR' | translate">
+          [title]="'AUTH.CHOOSE_AVATAR' | translate"
+        >
           <img [src]="a.src" class="w-full aspect-square object-cover" />
         </button>
         }
       </div>
 
       <div class="flex justify-end gap-2 mt-6">
-        <button type="button" (click)="closeAvatarPicker()"
-          class="rounded-2xl cursor-pointer bg-background border border-border-main px-4 py-2 text-text-main hover:bg-black/5 transition">
+        <button
+          type="button"
+          (click)="closeAvatarPicker()"
+          class="rounded-2xl cursor-pointer bg-background border border-border-main px-4 py-2 text-text-main hover:bg-black/5 transition"
+        >
           {{ 'COMMON.CANCEL' | translate }}
         </button>
       </div>

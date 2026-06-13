@@ -1,102 +1,224 @@
-<section class="relative min-h-screen overflow-hidden flex items-center justify-center py-10">
+<section class="relative overflow-hidden flex items-center justify-center py-10">
   <div class="relative z-10 w-full px-4">
     <div class="mx-auto w-full max-w-2xl">
       <div
-        class="relative rounded-3xl border border-border-main bg-surface backdrop-blur-md shadow-sm px-6 md:px-8 py-10 flex flex-col transition-all duration-300 hover:-translate-y-1 hover:border-primary/40">
+        class="relative rounded-3xl border border-border-main bg-surface backdrop-blur-md shadow-sm px-6 md:px-8 py-10 flex flex-col transition-all duration-300 hover:-translate-y-1 hover:border-primary/40"
+      >
         <div class="text-center mb-8">
           <div
-            class="inline-flex flex items-center justify-center size-16 rounded-2xl bg-sky-500/10 text-sky-500 mb-4 border border-sky-500/20 shadow-sm">
+            class="inline-flex items-center justify-center size-16 rounded-2xl bg-primary/10 text-primary mb-4 border border-primary/20 shadow-sm"
+          >
             <i class="fa-solid fa-clapperboard text-2xl"></i>
           </div>
-          <h1 class="text-3xl md:text-4xl font-black tracking-tight text-text-main">
-            {{ 'TEACHER.LESSON.CREATE' | translate }}
+
+          <h1 class="text-3xl md:text-4xl font-black tracking-tight text-transparent bg-clip-text bg-linear-to-r from-primary to-text-main">
+            {{ 'TEACHER.CREATE_NEW_LESSON' | translate }}
           </h1>
+
           <p class="text-text-main/50 text-sm mt-2 font-bold">
-            Add a lesson title now. You can upload videos and edit details later.
+            {{ 'TEACHER.CREATE_NEW_LESSON_DESC' | translate }}
           </p>
         </div>
 
         <form [formGroup]="lessonForm" (ngSubmit)="onSubmit()" class="space-y-6">
-
           <!-- Lesson Title -->
           <div>
-            <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">{{ 'TEACHER.LESSON.NAME' | translate }}</label>
-            <input formControlName="title" type="text"
-              class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm placeholder:text-text-main/30"
-              placeholder="e.g., Learn ABCs in ASL" />
+            <label
+              class="block text-xs font-semibold uppercase tracking-[0.15em] text-text-main/80 mb-2 pl-1"
+            >
+              {{ 'TEACHER.LESSON_TITLE' | translate }}
+            </label>
+
+            <input
+              formControlName="title"
+              type="text"
+              class="w-full rounded-2xl border border-border-main bg-background/60 backdrop-blur-xl text-sm font-medium px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-placeholder placeholder:font-medium"
+              [placeholder]="'TEACHER.PLACEHOLDER_LESSON_TITLE' | translate"
+            />
+
             @if (lessonForm.get('title')?.touched && lessonForm.get('title')?.invalid) {
-            <p class="text-red-500 text-xs font-bold mt-1 pl-1">
-              Title is required (min 3 characters).
-            </p>
+              <p
+                class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+              >
+                <i class="fas fa-circle-exclamation mt-0.5"></i>
+                <span>{{ 'TEACHER.TITLE_REQUIRED' | translate }}</span>
+              </p>
             }
           </div>
 
           <!-- Prerequisite Type -->
           <div>
-            <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">{{ 'TEACHER.QUIZ.PREREQUISITE_TYPE' | translate }}</label>
-            <div class="relative">
-              <select formControlName="perquisiteType" (change)="onTypeChange()"
-                class="w-full appearance-none rounded-2xl border border-border-main bg-background px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm cursor-pointer pr-10">
+            <label
+              class="block text-xs font-semibold uppercase tracking-[0.15em] text-text-main/80 mb-2 pl-1"
+            >
+              {{ 'TEACHER.PREREQUISITE_TYPE' | translate }}
+            </label>
+
+            <!-- <div class="relative">
+              <select
+                formControlName="perquisiteType"
+                (change)="onTypeChange()"
+                class="w-full appearance-none rounded-2xl border border-border-main bg-background px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm cursor-pointer pr-10"
+              >
                 @for (type of perquisiteTypes; track type.value) {
                 <option [value]="type.value">{{ type.label }}</option>
                 }
               </select>
+
               <i
-                class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-text-main/40 pointer-events-none text-xs"></i>
+                class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-text-main/40 pointer-events-none text-xs"
+              ></i>
+            </div> -->
+            <div class="relative">
+              @if (typeDropdownOpen) {
+                <div class="fixed inset-0 z-40" (click)="typeDropdownOpen = false"></div>
+              }
+
+              <div
+                (click)="typeDropdownOpen = !typeDropdownOpen"
+                class="w-full rounded-2xl border border-border-main bg-background/60 backdrop-blur-xl text-text-main px-4 py-3.5 cursor-pointer flex justify-between items-center"
+              >
+                <span>
+                  {{ getSelectedTypeLabel() }}
+                </span>
+
+                <i
+                  class="fa-solid fa-chevron-down transition-transform"
+                  [class.rotate-180]="typeDropdownOpen"
+                ></i>
+              </div>
+
+              @if (typeDropdownOpen) {
+                <div
+                  class="absolute top-full left-0 z-50 mt-2 w-full rounded-2xl border border-border-main bg-background shadow-md overflow-hidden"
+                >
+                  @for (type of perquisiteTypes; track type.value) {
+                    <div
+                      (click)="selectType(type.value)"
+                      class="bg-[#070A13] px-4 py-3 hover:bg-primary/10 font-medium text-text-main cursor-pointer"
+                    >
+                      {{ type.label }}
+                    </div>
+                  }
+                </div>
+              }
             </div>
           </div>
 
-          <!-- Prerequisite Item (shown only when type != None) -->
+          <!-- Prerequisite Item -->
           @if (selectedType !== 0) {
-          <div>
-            <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">
-              Select {{ selectedType === 1 ? 'Lesson' : 'Quiz' }} Prerequisite
-            </label>
+            <div>
+              <label
+                class="block text-xs font-semibold uppercase tracking-[0.15em] text-text-main/80 mb-2 pl-1"
+              >
+                {{ 'TEACHER.SELECT' | translate }} {{ selectedType === 1 ? ('TEACHER.LESSON' | translate) : ('TEACHER.QUIZ' | translate) }} {{ 'TEACHER.PREREQUISITE' | translate }}
+              </label>
 
-            @if (isLoadingPrerequisites) {
-            <div
-              class="flex items-center gap-2 text-sm text-text-main/50 font-semibold py-3.5 px-4 rounded-2xl border border-border-main bg-background">
-              <i class="fas fa-spinner fa-spin"></i>
-              <span>Loading {{ selectedType === 1 ? 'lessons' : 'quizzes' }}...</span>
-            </div>
-            } @else {
-            <div class="relative">
-              <select formControlName="perquisiteId"
+              @if (isLoadingPrerequisites) {
+                <div
+                  class="flex items-center gap-2 text-sm text-text-main/50 font-semibold py-3.5 px-4 rounded-2xl border border-border-main bg-background"
+                >
+                  <i class="fas fa-spinner fa-spin"></i>
+                  <span> {{ 'COMMON.LOADING' | translate }} {{ selectedType === 1 ? ('TEACHER.LESSONS' | translate) : ('TEACHER.QUIZZES' | translate) }}... </span>
+                </div>
+              } @else {
+                <!-- <div class="relative">
+              <select
+                formControlName="perquisiteId"
                 class="w-full appearance-none rounded-2xl border border-border-main bg-background px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm cursor-pointer pr-10"
-                [class.border-red-400]="lessonForm.get('perquisiteId')?.touched && !lessonForm.get('perquisiteId')?.value">
-                <option [value]="null">-- Select a {{ selectedType === 1 ? 'lesson' : 'quiz' }} --</option>
+                [class.border-red-400]="
+                  lessonForm.get('perquisiteId')?.touched && !lessonForm.get('perquisiteId')?.value
+                "
+              >
+                <option [value]="null">
+                  -- Select a {{ selectedType === 1 ? 'lesson' : 'quiz' }} --
+                </option>
+
                 @for (option of prerequisiteOptions; track option.id) {
-                <option [value]="option.id">{{ option.title }}</option>
+                <option [value]="option.id">
+                  {{ option.title }}
+                </option>
                 }
               </select>
+
               <i
-                class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-text-main/40 pointer-events-none text-xs"></i>
+                class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-text-main/40 pointer-events-none text-xs"
+              ></i>
+            </div> -->
+                <div class="relative">
+                  @if (prerequisiteDropdownOpen) {
+                    <div
+                      class="fixed inset-0 z-40"
+                      (click)="prerequisiteDropdownOpen = false"
+                    ></div>
+                  }
+
+                  <div
+                    (click)="prerequisiteDropdownOpen = !prerequisiteDropdownOpen"
+                    class="w-full rounded-2xl border border-border-main bg-background/60 backdrop-blur-xl text-text-main px-4 py-3.5 cursor-pointer flex justify-between items-center"
+                    [class.border-red-500]="
+                      lessonForm.get('perquisiteId')?.touched &&
+                      !lessonForm.get('perquisiteId')?.value
+                    "
+                  >
+                    <span>
+                      {{ getSelectedPrerequisiteLabel() }}
+                    </span>
+
+                    <i
+                      class="fa-solid fa-chevron-down transition-transform"
+                      [class.rotate-180]="prerequisiteDropdownOpen"
+                    ></i>
+                  </div>
+
+                  @if (prerequisiteDropdownOpen) {
+                    <div
+                      class="absolute bottom-full left-0 z-50 mt-2 w-full rounded-2xl border border-border-main bg-background shadow-md overflow-hidden max-h-60 overflow-y-auto"
+                    >
+                      @for (option of prerequisiteOptions; track option.id) {
+                        <div
+                          (click)="selectPrerequisite(option)"
+                          class="px-4 py-3 hover:bg-primary/10 font-medium text-text-main cursor-pointer"
+                        >
+                          {{ option.title }}
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+                @if (prerequisiteOptions.length === 0 && !isLoadingPrerequisites) {
+                  <p class="text-text-main/40 text-xs font-semibold mt-1 pl-1">
+                    {{ 'TEACHER.NO' | translate }} {{ selectedType === 1 ? ('TEACHER.LESSONS' | translate) : ('TEACHER.QUIZZES' | translate) }} {{ 'TEACHER.AVAILABLE' | translate }}
+                  </p>
+                }
+                @if (
+                  lessonForm.get('perquisiteId')?.touched && !lessonForm.get('perquisiteId')?.value
+                ) {
+                  <p
+                    class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+                  >
+                    <i class="fas fa-circle-exclamation mt-0.5"></i>
+                    <span>{{ 'TEACHER.PLEASE_SELECT_PREREQUISITE' | translate }}</span>
+                  </p>
+                }
+              }
             </div>
-
-            @if (prerequisiteOptions.length === 0 && !isLoadingPrerequisites) {
-            <p class="text-text-main/40 text-xs font-semibold mt-1 pl-1">
-              No {{ selectedType === 1 ? 'lessons' : 'quizzes' }} available.
-            </p>
-            }
-
-            @if (lessonForm.get('perquisiteId')?.touched && !lessonForm.get('perquisiteId')?.value) {
-            <p class="text-red-500 text-xs font-bold mt-1 pl-1">
-              Please select a prerequisite item.
-            </p>
-            }
-            }
-          </div>
           }
 
           <!-- Submit -->
           <div class="pt-4 border-t border-border-main">
-            <button type="submit" [disabled]="lessonForm.invalid || isLoading"
-              class="w-full h-12 cursor-pointer rounded-2xl bg-sky-500 font-bold text-white shadow-sm hover:bg-sky-600 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100">
+            <button
+              type="submit"
+              [disabled]="lessonForm.invalid || isLoading"
+              class="w-full h-12 cursor-pointer rounded-2xl bg-primary text-white font-bold shadow-sm hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+            >
               <span class="flex items-center justify-center gap-2">
                 @if (isLoading) {
-                <i class="fas fa-spinner fa-spin"></i> Creating...
+                  <i class="fas fa-spinner fa-spin"></i>
+                  {{ 'TEACHER.CREATING' | translate }}
                 } @else {
-                <i class="fa-solid fa-paper-plane"></i> {{ 'TEACHER.LESSON.CREATE' | translate }}
+                  <i class="fa-solid fa-paper-plane"></i>
+                  {{ 'TEACHER.CREATE_LESSON' | translate }}
                 }
               </span>
             </button>

@@ -6,12 +6,13 @@ import { forkJoin } from 'rxjs'; // Import for parallel requests
 import { IAddToDictionaryResponse } from '../../interfaces/IAddToDictionaryResponse';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @Component({
   selector: 'app-add-dictionary',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, TranslateModule],
   templateUrl: './add-dictionary.component.html',
   styleUrl: './add-dictionary.component.css',
 })
@@ -28,6 +29,8 @@ export class AddDictionaryComponent implements OnInit {
   // Store image previews for each row
   previews: (string | null)[] = [null];
   private subjectId: string | null = null;
+  existingWords: any[] = [];
+  isDictionaryLoading = false;
 
   ngOnInit(): void {
     // Initialize with 1 empty row
@@ -35,6 +38,26 @@ export class AddDictionaryComponent implements OnInit {
       words: this.fb.array([this.createWordGroup()])
     });
     this.subjectId = this.route.snapshot.paramMap.get('sid');
+    if (this.subjectId) {
+      this.loadDictionary();
+    }
+  }
+
+  loadDictionary(): void {
+    if (!this.subjectId) return;
+    this.isDictionaryLoading = true;
+    this.teacherS.viewDictionary(this.subjectId).subscribe({
+      next: (response) => {
+        // Backend returns VocabDTO { Words: [...] }
+        const data = response.result;
+        this.existingWords = data?.words || data?.Words || [];
+        this.isDictionaryLoading = false;
+      },
+      error: (err) => {
+        console.error('Error loading dictionary:', err);
+        this.isDictionaryLoading = false;
+      }
+    });
   }
 
   get wordsArray(): FormArray {
@@ -114,7 +137,8 @@ export class AddDictionaryComponent implements OnInit {
           }, 850),
           this.isLoading = false,
           this.dictionaryForm.reset(),
-          this.previews = [null] // Reset preview for single item
+          this.previews = [null], // Reset preview for single item
+          this.loadDictionary()
         ),
         error: (err) => {
           console.error('Error:', err);
@@ -143,7 +167,8 @@ export class AddDictionaryComponent implements OnInit {
           }, 850),
           this.isLoading = false,
           this.dictionaryForm.reset(),
-          this.previews = [null] // Reset previews after batch submission
+          this.previews = [null], // Reset previews after batch submission
+          this.loadDictionary()
         ),
         error: (err) => {
           console.error('Error in batch:', err);

@@ -147,26 +147,37 @@ export class PendingTeachersComponent implements OnInit {
 
     this.activating = true;
 
+    const isActivation = this.selectedTeacher.status === 2;
+
     const payload: IAproveTeacher = {
       teacherId: this.selectedTeacher.id,
       subjectId: this.selectedSubjectId.value,
     };
-    console.log(payload);
+
     this.adminService.approveTeacher(payload).subscribe({
       next: (response: IAproveResponse) => {
         setTimeout(() => {
-          this.toastr.success('Teacher activated successfully.', 'Success');
+          this.toastr.success(
+            isActivation
+              ? 'Teacher activated successfully.'
+              : 'Subject assigned to teacher successfully.',
+            'Success'
+          );
         }, 850);
-        console.log(response.message);
+
         this.activating = false;
         this.closeModal();
         this.loadUsers();
       },
       error: (err: HttpErrorResponse) => {
-        console.log(err.message);
         this.activating = false;
+
         setTimeout(() => {
-          this.toastr.error(err.message || 'Failed to activate teacher.', 'Error');
+          this.toastr.error(
+            err.message ||
+              (isActivation ? 'Failed to activate teacher.' : 'Failed to assign subject.'),
+            'Error'
+          );
         }, 850);
       },
     });

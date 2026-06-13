@@ -4,6 +4,7 @@ export interface IAdminSubject {
   studentsCount: number;
   teachersCount: number;
   deaf_mute: boolean;
+  aI_supported: boolean;
   lessonsCount: number;
   levelsCount: number;
 }
@@ -21,6 +22,7 @@ export interface ViewSubjectResponse {
 export interface AddSubjectBody {
   subjectName: string;
   deaf_mute: boolean;
+  aI_supported: boolean;
 }
 
 export interface AddSubjectResponse {
@@ -28,10 +30,10 @@ export interface AddSubjectResponse {
   data: any;
 }
 export interface IAproveTeacher {
-	teacherId: string;
-	subjectId: string;
+  teacherId: string;
+  subjectId: string;
 }
 
 export interface IAproveResponse {
-	message: string;
+  message: string;
 }

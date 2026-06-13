@@ -42,6 +42,11 @@ import { SolveQuizComponent } from './features/Student/student-actions/quizzes/s
 import { StudentSubjectsComponent } from './features/Parent/parent-actions/student-subjects/student-subjects.component';
 import { SubjectReportComponent } from './features/Parent/parent-actions/subject-report/subject-report.component';
 import { ProgressComponent } from './features/Student/progress/progress.component';
+import { SignQuizComponent } from './core/ai/English-letters/app-sign-quiz.component';
+import { ArabicQuizComponent } from './core/ai/Arabic/arabic-quiz.component';
+import { EnglishWordQuizComponent } from './core/ai/English-words/english-word-quiz.component';
+import { ArabicWordQuizComponent } from './core/ai/Arabic-words/arabic-word-quiz.component';
+import { StudentProgressComponent } from './features/Teacher/teacher-actions/student-progress/student-progress.component';
 
 export const routes: Routes = [
   {
@@ -159,6 +164,11 @@ export const routes: Routes = [
             component: EditQuizComponent,
             title: 'Edit Exercise',
           },
+          {
+            path: 'subject/:sid/student/:stdID/progress',
+            component: StudentProgressComponent,
+            title: 'Student Progress',
+          },
         ],
       },
       // --- STUDENT ROUTES ---
@@ -226,6 +236,11 @@ export const routes: Routes = [
           },
         ],
       },
+
+      { path: 'quiz', component: SignQuizComponent },
+      { path: 'arabic-quiz', component: ArabicQuizComponent },
+      { path: 'word-quiz', component: EnglishWordQuizComponent },
+      { path: 'arabic-words', component: ArabicWordQuizComponent },
     ],
   },
   {

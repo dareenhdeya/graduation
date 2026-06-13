@@ -1,3 +1,4 @@
+import { TranslateModule } from '@ngx-translate/core';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { Footer } from './shared/components/footer/footer';
 import { RouterOutlet } from '@angular/router';
@@ -7,7 +8,7 @@ import { LanguageService } from './core/services/language.service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Footer, NgxSpinnerModule],
+  imports: [TranslateModule, RouterOutlet, Footer, NgxSpinnerModule],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })

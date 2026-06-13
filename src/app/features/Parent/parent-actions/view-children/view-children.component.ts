@@ -5,18 +5,20 @@ import { IChildren, IViewChildrenResponse } from '../../interfaces/IViewChildren
 import { HttpErrorResponse } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { NavigationStateService } from '../../../../core/auth/services/navigation-state.service';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-view-children',
   standalone: true,
-  imports: [CommonModule, RouterLink, TranslateModule],
+  imports: [CommonModule, RouterLink,TranslateModule],
   templateUrl: './view-children.component.html',
   styleUrl: './view-children.component.css',
 })
 export class ViewChildrenComponent implements OnInit {
   private readonly parentService = inject(ParentServiceService);
   private readonly toastr = inject(ToastrService);
+  // private readonly navState = inject(NavigationStateService);
 
   isLoading = true;
   children: IChildren[] = [];
@@ -33,6 +35,9 @@ export class ViewChildrenComponent implements OnInit {
     this.parentService.showChildren().subscribe({
       next: (res: IViewChildrenResponse) => {
         this.children = res.data;
+        // if (this.children.length > 0) {
+        //   this.navState.lastParentChildId = this.children[0].id;
+        // }
         this.isLoading = false;
         console.log(res);
       },

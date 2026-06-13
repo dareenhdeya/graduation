@@ -1,30 +1,35 @@
-<section class="relative min-h-screen pt-28 pb-10 px-4 overflow-hidden">
+<section
+  class="relative min-h-screen py-10 px-4 overflow-hidden text-text-main transition-colors duration-300"
+>
   <!-- Toast -->
   @if (toastVisible()) {
-  <div
-    class="fixed top-6 right-6 z-[100] flex items-center gap-3 px-5 py-4 rounded-2xl shadow-2xl border font-bold text-sm animate-in slide-in-from-top-2 duration-300"
-    [class]="
-      toastType() === 'success'
-        ? 'bg-green-500/10 border-green-500/20 text-green-500'
-        : 'bg-red-500/10 border-red-500/20 text-red-500'
-    "
-  >
-    <i
-      [class]="toastType() === 'success' ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-xmark'"
-    ></i>
-    {{ toastMessage() }}
-  </div>
+    <div
+      class="fixed top-6 right-6 z-[100] flex items-center gap-3 px-5 py-4 rounded-2xl shadow-2xl border font-bold text-sm animate-in slide-in-from-top-2 duration-300"
+      [class]="
+        toastType() === 'success'
+          ? 'bg-green-500/10 border-green-500/20 text-green-500'
+          : 'bg-red-500/10 border-red-500/20 text-red-500'
+      "
+    >
+      <i
+        [class]="
+          toastType() === 'success' ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-xmark'
+        "
+      ></i>
+      {{ toastMessage() }}
+    </div>
   }
 
   <div class="container mx-auto max-w-7xl relative z-10">
     <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
       <div>
-        <h1 class="text-3xl md:text-4xl font-black tracking-tight text-text-main">
+        <h1 class="text-3xl md:text-4xl font-black tracking-tight text-transparent bg-clip-text bg-linear-to-r from-primary to-text-main">
           Subject
-          <span class="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-purple-400"
-            >Quizzes</span
-          >
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-400">
+            Quizzes
+          </span>
         </h1>
+
         <p class="text-text-main/50 text-sm mt-1 font-bold">
           Manage and track quizzes for your students
         </p>
@@ -32,174 +37,182 @@
 
       <a
         [routerLink]="['/teacher/subject', subjectId(), 'quizzes', 'create']"
-        class="border border-violet-500/20 bg-violet-500/10 text-violet-500 hover:bg-violet-500/20 flex items-center gap-2 px-6 py-3 rounded-full font-bold transition-all shadow-sm hover:scale-105"
+        class="border border-primary/20 bg-surface/40 backdrop-blur-xl text-primary hover:bg-primary/20 flex items-center gap-2 px-6 py-3 rounded-full font-bold transition-all shadow-sm hover:scale-105"
       >
-        <i class="fa-solid fa-plus"></i> <span>Add New Quiz</span>
+        <i class="fa-solid fa-plus"></i>
+        <span>Add New Quiz</span>
       </a>
     </div>
 
     @if (isLoading()) {
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      @for (item of [1, 2, 3]; track item) {
-      <div
-        class="rounded-3xl border border-border-main bg-surface overflow-hidden shadow-sm animate-pulse"
-      >
-        <div class="h-16 bg-background border-b border-border-main"></div>
-        <div class="p-5 space-y-3">
-          <div class="h-5 bg-background rounded-xl w-3/4"></div>
-          <div class="h-4 bg-background rounded-xl w-full"></div>
-        </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @for (item of [1, 2, 3]; track item) {
+          <div
+            class="rounded-3xl border border-border-main bg-surface overflow-hidden shadow-sm animate-pulse"
+          >
+            <div class="h-16 bg-background border-b border-border-main"></div>
+
+            <div class="p-5 space-y-3">
+              <div class="h-5 bg-background rounded-xl w-3/4"></div>
+              <div class="h-4 bg-background rounded-xl w-full"></div>
+            </div>
+          </div>
+        }
       </div>
-      }
-    </div>
     } @else if (quizzes().length === 0) {
-    <div
-      class="flex flex-col items-center justify-center py-24 text-center border border-dashed border-border-main rounded-3xl bg-surface"
-    >
       <div
-        class="size-20 rounded-2xl bg-background border border-border-main shadow-sm flex items-center justify-center text-text-main/20 mb-4"
-      >
-        <i class="fa-solid fa-circle-question text-3xl"></i>
-      </div>
-      <h3 class="font-black tracking-tight text-text-main text-xl">No quizzes yet</h3>
-      <p class="text-text-main/50 mt-2 font-bold max-w-xs">
-        Create your first quiz or exercise for this subject.
-      </p>
-      <a
-        [routerLink]="['/teacher/subject', subjectId(), 'quizzes', 'create']"
-        class="mt-6 border border-violet-500/20 bg-violet-500/10 text-violet-500 hover:bg-violet-500/20 flex items-center gap-2 px-6 py-3 rounded-full font-bold transition-all shadow-sm"
-      >
-        <i class="fa-solid fa-plus"></i> <span class="text-sm">Create Quiz</span>
-      </a>
-    </div>
-    } @else {
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      @for (quiz of quizzes(); track quiz.id || quiz.ID) {
-      <div
-        class="group relative rounded-3xl border border-border-main bg-surface overflow-hidden shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-violet-500/40 hover:shadow-xl"
+        class="flex flex-col items-center justify-center py-24 text-center border border-dashed border-border-main rounded-3xl bg-surface"
       >
         <div
-          class="relative h-16 bg-violet-500/10 flex items-center px-5 border-b border-border-main"
+          class="size-20 rounded-2xl bg-background border border-border-main shadow-sm flex items-center justify-center text-text-main/20 mb-4"
         >
-          <div
-            class="size-8 rounded-full bg-violet-500/20 text-violet-500 flex items-center justify-center mr-3"
-          >
-            <i class="fa-solid fa-clipboard-list text-sm"></i>
-          </div>
-          <h3 class="font-bold text-text-main text-lg line-clamp-1">
-            {{ quiz.name || quiz.Name || quiz.title || quiz.Title || 'Untitled Quiz' }}
-          </h3>
-          <span
-            class="ml-auto text-xs font-bold px-2 py-1 rounded-full bg-background border border-border-main text-text-main/70"
-          >
-            {{ quiz.levelDifficulty || quiz.difficulty || quiz.Difficulty || 'Medium' }}
-          </span>
+          <i class="fa-solid fa-circle-question text-3xl"></i>
         </div>
 
-        <div class="p-5">
-          <div class="flex gap-4 mb-4 text-sm font-bold text-text-main/60">
-            <div class="flex items-center gap-1.5">
-              <i class="fa-solid fa-check-double text-violet-500/70"></i> Pass:
-              {{
-                quiz.passingPercentage ||
-                  quiz.PassingPercentage ||
-                  quiz.passingGrade ||
-                  quiz.PassingGrade ||
-                  50
-              }}%
-            </div>
-            <div class="flex items-center gap-1.5">
-              <i class="fa-solid fa-list-ol text-violet-500/70"></i> Level
-            </div>
-          </div>
+        <h3 class="font-black tracking-tight text-text-main text-xl">No quizzes yet</h3>
 
-          <div class="flex items-center justify-between pt-4 border-t border-border-main">
-            <a
-              [routerLink]="[
-                '/teacher/subject',
-                subjectId(),
-                'quizzes',
-                'view',
-                quiz.id || quiz.ID
-              ]"
-              class="flex items-center gap-2 text-sm font-bold text-violet-500 hover:text-violet-400 transition-colors cursor-pointer"
-            >
-              <i class="fa-solid fa-eye"></i> View Quiz
-            </a>
+        <p class="text-text-main/50 mt-2 font-bold max-w-xs">
+          Create your first quiz or exercise for this subject.
+        </p>
 
-            <div class="flex items-center gap-1">
-              <!-- Edit button -->
-              <a
-                [routerLink]="[
-                  '/teacher/subject',
-                  subjectId(),
-                  'quizzes',
-                  'edit',
-                  quiz.id || quiz.ID
-                ]"
-                class="size-8 rounded-2xl flex items-center justify-center text-text-main/50 border border-transparent hover:border-yellow-500/20 hover:bg-yellow-500/10 hover:text-yellow-500 transition-colors shadow-sm cursor-pointer"
-                title="Edit Quiz"
-              >
-                <i class="fa-solid fa-pen text-sm"></i>
-              </a>
-
-              <button
-                (click)="openDeleteModal(quiz)"
-                class="cursor-pointer size-8 rounded-2xl flex items-center justify-center text-text-main/50 border border-transparent hover:border-red-500/20 hover:bg-red-500/10 hover:text-red-500 transition-colors shadow-sm"
-                title="Delete"
-              >
-                <i class="fa-solid fa-trash text-sm"></i>
-              </button>
-            </div>
-          </div>
-        </div>
+        <a
+          [routerLink]="['/teacher/subject', subjectId(), 'quizzes', 'create']"
+          class="mt-6 border border-primary/20 bg-primary/10 text-primary hover:bg-primary/20 flex items-center gap-2 px-6 py-3 rounded-full font-bold transition-all shadow-sm"
+        >
+          <i class="fa-solid fa-plus"></i>
+          <span class="text-sm">Create Quiz</span>
+        </a>
       </div>
-      }
-    </div>
+    } @else {
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @for (quiz of quizzes(); track quiz.id || quiz.ID) {
+          <div
+            class="group relative rounded-3xl bg-surface/40 backdrop-blur-xl border border-border-main overflow-hidden shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl"
+          >
+            <div
+              class="relative h-16 bg-primary/10 flex items-center px-5 border-b border-border-main"
+            >
+              <div
+                class="size-8 rounded-full bg-primary/20 text-primary flex items-center justify-center mr-3"
+              >
+                <i class="fa-solid fa-clipboard-list text-sm"></i>
+              </div>
+
+              <h3 class="font-bold text-text-main text-lg line-clamp-1">
+                {{ quiz.name || quiz.Name || quiz.title || quiz.Title || 'Untitled Quiz' }}
+              </h3>
+
+              <span
+                class="ml-auto text-xs font-bold px-2 py-1 rounded-full bg-background border border-border-main text-text-main/70"
+              >
+                {{ quiz.levelDifficulty || quiz.difficulty || quiz.Difficulty || 'Medium' }}
+              </span>
+            </div>
+
+            <div class="p-5">
+              <div class="flex gap-4 mb-4 text-sm font-bold text-text-main/60">
+                <div class="flex items-center gap-1.5">
+                  <i class="fa-solid fa-check-double text-primary/70"></i>
+                  Pass:
+                  {{ quiz.passingPercentage || quiz.passingGrade }}%
+                </div>
+
+                <div class="flex items-center gap-1.5">
+                  <i class="fa-solid fa-list-ol text-primary/70"></i>
+                  Level
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between pt-4 border-t border-border-main">
+                <a
+                  [routerLink]="[
+                    '/teacher/subject',
+                    subjectId(),
+                    'quizzes',
+                    'view',
+                    quiz.id || quiz.ID,
+                  ]"
+                  class="flex items-center gap-2 text-sm font-bold text-primary hover:text-primary/80 transition-colors cursor-pointer"
+                >
+                  <i class="fa-solid fa-eye"></i>
+                  View Quiz
+                </a>
+
+                <div class="flex items-center gap-1">
+                  <a
+                    [routerLink]="[
+                      '/teacher/subject',
+                      subjectId(),
+                      'quizzes',
+                      'edit',
+                      quiz.id || quiz.ID,
+                    ]"
+                    class="size-8 rounded-2xl flex items-center justify-center text-text-main/50 border border-transparent hover:border-yellow-500/20 hover:bg-yellow-500/10 hover:text-yellow-500 transition-colors shadow-sm cursor-pointer"
+                    title="Edit Quiz"
+                  >
+                    <i class="fa-solid fa-pen text-sm"></i>
+                  </a>
+
+                  <button
+                    (click)="openDeleteModal(quiz)"
+                    class="cursor-pointer size-8 rounded-2xl flex items-center justify-center text-text-main/50 border border-transparent hover:border-red-500/20 hover:bg-red-500/10 hover:text-red-500 transition-colors shadow-sm"
+                    title="Delete"
+                  >
+                    <i class="fa-solid fa-trash text-sm"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
     }
   </div>
 
   @if (isDeleteModalOpen()) {
-  <div
-    class="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/40 backdrop-blur-sm"
-  >
-    <div (click)="closeDeleteModal()" class="absolute inset-0"></div>
     <div
-      class="relative w-full max-w-md rounded-3xl border border-border-main bg-surface p-8 shadow-2xl animate-in fade-in zoom-in duration-200"
+      class="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/40 backdrop-blur-sm"
     >
-      <div class="flex flex-col items-center text-center mb-6">
-        <div
-          class="size-16 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-500 flex items-center justify-center text-3xl mb-4"
-        >
-          <i class="fa-solid fa-triangle-exclamation"></i>
+      <div (click)="closeDeleteModal()" class="absolute inset-0"></div>
+      <div
+        class="relative w-full max-w-md rounded-3xl border border-border-main bg-surface p-8 shadow-2xl animate-in fade-in zoom-in duration-200"
+      >
+        <div class="flex flex-col items-center text-center mb-6">
+          <div
+            class="size-16 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-500 flex items-center justify-center text-3xl mb-4"
+          >
+            <i class="fa-solid fa-triangle-exclamation"></i>
+          </div>
+          <h2 class="text-xl font-black tracking-tight text-text-main">Delete Quiz?</h2>
+          <p class="text-text-main/50 font-bold text-sm mt-2">
+            "<span class="text-text-main">{{
+              quizToDelete()?.name || quizToDelete()?.Name || 'This quiz'
+            }}</span
+            >" will be permanently deleted.
+          </p>
         </div>
-        <h2 class="text-xl font-black tracking-tight text-text-main">Delete Quiz?</h2>
-        <p class="text-text-main/50 font-bold text-sm mt-2">
-          "<span class="text-text-main">{{
-            quizToDelete()?.name || quizToDelete()?.Name || 'This quiz'
-          }}</span
-          >" will be permanently deleted.
-        </p>
-      </div>
-      <div class="flex gap-4">
-        <button
-          type="button"
-          (click)="closeDeleteModal()"
-          class="cursor-pointer flex-1 py-3 rounded-2xl border border-border-main bg-surface text-text-main font-bold hover:bg-background transition shadow-sm"
-        >
-          Cancel
-        </button>
-        <button
-          type="button"
-          (click)="confirmDelete()"
-          [disabled]="isDeleting()"
-          class="cursor-pointer flex-1 py-3 rounded-2xl bg-red-500 text-white font-bold hover:bg-red-600 transition disabled:opacity-50 shadow-sm"
-        >
-          @if (isDeleting()) {
-          <i class="fa-solid fa-spinner fa-spin mr-2"></i> Deleting... } @else { Delete }
-        </button>
+        <div class="flex gap-4">
+          <button
+            type="button"
+            (click)="closeDeleteModal()"
+            class="cursor-pointer flex-1 py-3 rounded-2xl border border-border-main bg-surface text-text-main font-bold hover:bg-background transition shadow-sm"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            (click)="confirmDelete()"
+            [disabled]="isDeleting()"
+            class="cursor-pointer flex-1 py-3 rounded-2xl bg-red-500 text-white font-bold hover:bg-red-600 transition disabled:opacity-50 shadow-sm"
+          >
+            @if (isDeleting()) {
+              <i class="fa-solid fa-spinner fa-spin mr-2"></i> Deleting...
+            } @else {
+              Delete
+            }
+          </button>
+        </div>
       </div>
     </div>
-  </div>
   }
 </section>

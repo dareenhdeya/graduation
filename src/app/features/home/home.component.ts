@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { LettersComponent } from '../../shared/components/letters/letters.component';
 import { RoleActionsComponent } from '../role-actions/role-actions.component';
 import { AuthService } from '../../core/auth/services/auth.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 // type BgLetter = {
 //   id: number;
@@ -16,7 +17,7 @@ import { AuthService } from '../../core/auth/services/auth.service';
 
 @Component({
   selector: 'app-home',
-  imports: [LettersComponent, RoleActionsComponent],
+  imports: [LettersComponent, RoleActionsComponent, TranslateModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })

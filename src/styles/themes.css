@@ -4,4 +4,5 @@
   --color-primary: var(--brand-primary);
   --color-text-main: var(--text-color);
   --color-border-main: var(--border-color);
+  --color-placeholder: var(--placeholder-color);
 }

@@ -1,15 +1,7 @@
-<section class="min-h-screen text-white px-4 py-8">
+<section class="text-white px-4 py-8">
   <div class="mx-auto max-w-3xl">
-    <a
-      routerLink="/admin/subjects"
-      class="inline-flex items-center gap-2 rounded-2xl bg-white/[0.06] border border-white/10 px-4 py-2 text-sm hover:bg-white/[0.10] transition"
-    >
-      <i class="fa-solid fa-arrow-left"></i>
-      All Subjects
-    </a>
-
     @if (loading) {
-    <div class="mt-6 text-white/70">Loading...</div>
+    <div class="mt-6 text-white/70">{{ 'COMMON.LOADING' | translate }}</div>
     } @else if (error) {
     <div class="mt-6 rounded-3xl border border-red-500/25 bg-red-500/10 p-6 text-red-200">
       {{ error }}
@@ -17,11 +9,14 @@
     } @else if (subject) {
 
     <div class="mt-6 rounded-[28px] border border-white/10 bg-white/[0.06] backdrop-blur-xl p-6">
-      <div class="flex items-start justify-between gap-4">
-        <div>
-          <h1 class="text-2xl font-black tracking-tight">{{ subject.subjectName }}</h1>
-          <div class="text-white/55 text-sm mt-1">ID: {{ subject.subjectId }}</div>
-        </div>
+      <div class="flex items-center justify-between gap-4 mb-6">
+        <a
+          routerLink="/admin/subjects"
+          class="inline-flex items-center gap-2 rounded-xl border border-border-main bg-surface px-3 py-2 text-xs text-text-main hover:border-primary/50 hover:text-primary transition-all duration-300 hover:-translate-y-0.5 shadow-sm"
+        >
+          <i class="fa-solid fa-arrow-left"></i>
+          {{ 'ADMIN.ALL_SUBJECTS' | translate }}
+        </a>
 
         <span
           class="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold"
@@ -31,33 +26,95 @@
               : 'border-white/10 bg-white/[0.04] text-white/75'
           "
         >
-          deaf_mute
+          {{ 'ADMIN.DEAF_MUTE' | translate }}
         </span>
       </div>
 
-      <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+      <div class="mb-6">
+        <h1 class="text-2xl font-black tracking-tight text-transparent bg-clip-text bg-linear-to-r from-primary to-text-main">
+          {{ subject.subjectName }}
+        </h1>
+        <div class="text-white/55 text-sm mt-1">{{ 'ADMIN.ID' | translate }}: {{ subject.subjectId }}</div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
         <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-          <div class="text-white/60 text-xs">Students</div>
+          <div class="text-white/60 text-xs">{{ 'ADMIN.STUDENTS' | translate }}</div>
           <div class="text-xl font-bold mt-1">{{ subject.studentsCount }}</div>
         </div>
 
         <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-          <div class="text-white/60 text-xs">Teachers</div>
+          <div class="text-white/60 text-xs">{{ 'ADMIN.TEACHERS' | translate }}</div>
           <div class="text-xl font-bold mt-1">{{ subject.teachersCount }}</div>
         </div>
 
         <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-          <div class="text-white/60 text-xs">Lessons</div>
+          <div class="text-white/60 text-xs">{{ 'ADMIN.LESSONS' | translate }}</div>
           <div class="text-xl font-bold mt-1">{{ subject.lessonsCount }}</div>
         </div>
 
         <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-          <div class="text-white/60 text-xs">Levels</div>
+          <div class="text-white/60 text-xs">{{ 'ADMIN.LEVELS' | translate }}</div>
           <div class="text-xl font-bold mt-1">{{ subject.levelsCount }}</div>
         </div>
+      </div>
+
+      <div class="mt-6 border-t border-white/10 pt-6 flex items-center justify-end">
+        <button
+          type="button"
+          class="cursor-pointer inline-flex items-center gap-2 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2 text-xs font-bold text-red-500 hover:bg-red-500/20 hover:-translate-y-0.5 transition-all"
+          (click)="promptRemove(subject!)"
+        >
+          <i class="fa-solid fa-trash"></i>
+          {{ 'ADMIN.DELETE_SUBJECT' | translate }}
+        </button>
       </div>
     </div>
 
     }
   </div>
+  @if (showDeleteModal && subjectToDelete) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+    <div
+      class="rounded-3xl border border-border-main bg-surface p-8 shadow-2xl max-w-sm w-full mx-4"
+    >
+      <div class="mb-5 flex items-center gap-3">
+        <div
+          class="size-12 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center"
+        >
+          <i class="fa-solid fa-trash text-red-500 text-lg"></i>
+        </div>
+
+        <div>
+          <h3 class="font-black text-text-main text-lg">{{ 'ADMIN.REMOVE_SUBJECT' | translate }}</h3>
+          <p class="text-text-main/50 text-sm">{{ 'ADMIN.CANNOT_BE_UNDONE' | translate }}</p>
+        </div>
+      </div>
+
+      <p class="text-text-main/70 text-sm mb-6">
+        {{ 'ADMIN.SURE_DELETE' | translate }}
+        <span class="font-bold text-text-main">{{ subjectToDelete.subjectName }}</span
+        >?
+      </p>
+
+      <div class="flex flex-col gap-3">
+        <button
+          type="button"
+          class="cursor-pointer w-full py-3 rounded-2xl border border-red-500/30 bg-red-500/10 text-red-500 font-bold hover:bg-red-500/20 transition-all"
+          (click)="confirmRemove()"
+        >
+          <i class="fa-solid fa-trash mr-2"></i> {{ 'ADMIN.YES_DELETE' | translate }}
+        </button>
+
+        <button
+          type="button"
+          class="cursor-pointer w-full py-3 rounded-2xl border border-border-main text-text-main/60 font-bold hover:bg-primary/5 transition-all"
+          (click)="showDeleteModal = false; subjectToDelete = null"
+        >
+          {{ 'COMMON.CANCEL' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+  }
 </section>

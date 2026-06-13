@@ -11,7 +11,6 @@ import { TranslateModule } from '@ngx-translate/core';
   styleUrl: './view-enrolled-subjects.component.css',
 })
 export class ViewEnrolledSubjectsComponent implements OnInit {
-  // inject service
   private readonly studentService = inject(StudentServiceService);
 
   mySubjects: EnrolledSubject[] = [];
@@ -33,7 +32,7 @@ export class ViewEnrolledSubjectsComponent implements OnInit {
       },
     });
   }
-  //  give each subject a unique color based on its index
+
   getColor(index: number): string {
     const colors = [
       'text-sky-400',

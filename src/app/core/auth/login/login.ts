@@ -46,6 +46,11 @@ export class Login implements OnInit {
     });
   }
 
+  isInvalid(controlName: string): boolean {
+    const c = this.loginForm.get(controlName);
+    return !!(c && c.invalid && (c.touched || this.submitted));
+  }
+
   submitLogin(): void {
     this.submitted = true;
 

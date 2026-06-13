@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TeacherServiceService } from '../../../services/teacher-service.service';
 import { Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @Component({
   selector: 'app-view-quiz',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, TranslateModule],
   templateUrl: './view-quiz.component.html',
   styleUrl: './view-quiz.component.css',
 })
@@ -108,6 +109,11 @@ export class ViewQuizComponent implements OnInit {
     if (data.items && Array.isArray(data.items)) return data.items;
 
     return [];
+  }
+
+  getAiLettersArray(aiLetters: any): { letter: string; rounds: number }[] {
+    if (!aiLetters) return [];
+    return Object.entries(aiLetters).map(([letter, rounds]) => ({ letter, rounds: rounds as number }));
   }
 
 

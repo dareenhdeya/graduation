@@ -27,9 +27,12 @@ export class AddLessonComponent {
   private readonly route = inject(ActivatedRoute);
   private toastr = inject(ToastrService);
 
+  private subjectId: string | null = this.route.snapshot.paramMap.get('sid');
+
+  typeDropdownOpen = false;
+  prerequisiteDropdownOpen = false;
   isLoading = false;
   isLoadingPrerequisites = false;
-  private subjectId: string | null = this.route.snapshot.paramMap.get('sid');
 
   // Prerequisite options fetched from backend
   prerequisiteOptions: { id: string; title: string }[] = [];
@@ -49,7 +52,29 @@ export class AddLessonComponent {
   get selectedType(): number {
     return Number(this.lessonForm.get('perquisiteType')?.value) ?? PerquisiteType.None;
   }
+  getSelectedTypeLabel(): string {
+    const value = Number(this.lessonForm.get('perquisiteType')?.value);
 
+    return this.perquisiteTypes.find((x) => x.value === value)?.label || 'Select Type';
+  }
+  getSelectedPrerequisiteLabel(): string {
+    const selectedId = this.lessonForm.get('perquisiteId')?.value;
+
+    const selected = this.prerequisiteOptions.find((x) => x.id === selectedId);
+
+    return selected?.title || `Select ${this.selectedType === 1 ? 'Lesson' : 'Quiz'}`;
+  }
+
+  selectPrerequisite(option: { id: string; title: string }): void {
+    this.lessonForm.get('perquisiteId')?.setValue(option.id);
+    this.prerequisiteDropdownOpen = false;
+  }
+
+  selectType(value: number): void {
+    this.lessonForm.get('perquisiteType')?.setValue(value);
+    this.typeDropdownOpen = false;
+    this.onTypeChange();
+  }
   onTypeChange(): void {
     // Reset the selected item whenever type changes
     this.lessonForm.get('perquisiteId')?.setValue(null);

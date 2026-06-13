@@ -11,6 +11,7 @@
   /* Dark text */
   --border-color: #e2e8f0;
   /* Light gray borders */
+  --placeholder-color: rgba(0, 0, 0, 0.35);
 }
 
 :root.dark {
@@ -21,5 +22,5 @@
   --brand-primary: #38bdf8;
   --text-color: #ffffff;
   --border-color: rgba(255, 255, 255, 0.1);
-
+  --placeholder-color: rgba(255, 255, 255, 0.35);
 }

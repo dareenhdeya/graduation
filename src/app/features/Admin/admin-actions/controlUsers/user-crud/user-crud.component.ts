@@ -33,10 +33,10 @@ export class UserCrudComponent implements OnInit {
 
   statusLabels = ['Inactive', 'Active', 'Pending', 'Banned', 'Locked'];
   statusStyles: any = {
-    0: 'bg-slate-500/10 text-slate-500 border-slate-500/20', // Inactive
-    1: 'bg-green-500/10 text-green-500 border-green-500/20', // Active
-    2: 'bg-amber-500/10 text-amber-500 border-amber-500/20', // Pending
-    3: 'bg-red-500/10 text-red-500 border-red-500/20', // Banned
+    0: 'bg-slate-500/10 text-slate-500 border-slate-500/20', // inactive
+    1: 'bg-green-500/10 text-green-500 border-green-500/20', // active
+    2: 'bg-amber-500/10 text-amber-500 border-amber-500/20', // pending
+    3: 'bg-red-500/10 text-red-500 border-red-500/20', // banned
     4: 'bg-fuchsia-500/10 text-fuchsia-500 border-fuchsia-500/20', // locked
   };
 
@@ -48,6 +48,9 @@ export class UserCrudComponent implements OnInit {
 
   search = new FormControl<string>('', { nonNullable: true });
   roleFilter = new FormControl<Role | 'All'>('All', { nonNullable: true });
+  isRoleDropdownOpen = false;
+
+  roles: Array<Role | 'All'> = ['All', 'Parent', 'Teacher', 'Student'];
 
   userToDelete: IADMIN | null = null;
   showDeleteModal = false;
@@ -76,6 +79,15 @@ export class UserCrudComponent implements OnInit {
         this.error = err?.message || 'Failed to load users';
       },
     });
+  }
+
+  selectRole(role: Role | 'All') {
+    this.roleFilter.setValue(role);
+    this.isRoleDropdownOpen = false;
+  }
+
+  get selectedRoleLabel() {
+    return this.roleFilter.value || 'All';
   }
 
   get filteredUsers(): IADMIN[] {
@@ -149,7 +161,7 @@ export class UserCrudComponent implements OnInit {
   onDeleteUser(u: IADMIN, e: MouseEvent, all: boolean = false) {
     e.stopPropagation();
     this.error = '';
-  
+
     this.adminService.deleteUser(u, all).subscribe({
       next: () => {
         setTimeout(() => {
@@ -172,11 +184,11 @@ export class UserCrudComponent implements OnInit {
     this.showDeleteModal = true;
   }
 
-confirmDelete(all: boolean) {
-  if (!this.userToDelete) return;
-  const fakeEvent = new MouseEvent('click');
-  this.showDeleteModal = false;
-  this.onDeleteUser(this.userToDelete, fakeEvent, all);
-  this.userToDelete = null;
-}
+  confirmDelete(all: boolean) {
+    if (!this.userToDelete) return;
+    const fakeEvent = new MouseEvent('click');
+    this.showDeleteModal = false;
+    this.onDeleteUser(this.userToDelete, fakeEvent, all);
+    this.userToDelete = null;
+  }
 }

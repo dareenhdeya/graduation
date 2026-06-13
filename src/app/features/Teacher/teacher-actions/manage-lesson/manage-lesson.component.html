@@ -50,19 +50,19 @@
         >
           <i class="fa-solid fa-circle-exclamation"></i>
         </div>
-        <h3 class="font-black text-text-main text-xl">Lesson not found</h3>
+        <h3 class="font-black text-text-main text-xl">{{ 'TEACHER.LESSON_NOT_FOUND' | translate }}</h3>
       </div>
     } @else {
       <div class="flex flex-col md:flex-row justify-between items-start mb-10 gap-6">
         <div>
-          <h1 class="text-3xl md:text-4xl font-black tracking-tight text-text-main">
-            Manage
+          <h1 class="text-3xl md:text-4xl font-black tracking-tight text-transparent bg-clip-text bg-linear-to-r from-primary to-text-main">
+            {{ 'TEACHER.MANAGE' | translate }}
             <span
-              class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-400"
+              class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-400"
               >{{ lesson.title }}</span
             >
           </h1>
-          <p class="text-text-main/50 text-sm mt-1 font-bold">Upload and manage lesson videos.</p>
+          <p class="text-text-main/50 text-sm mt-1 font-bold">{{ 'TEACHER.MANAGE_LESSON_VIDEOS_DESC' | translate }}</p>
         </div>
         @if (hasExercise) {
           <div class="flex items-center gap-3 shrink-0 flex-wrap">
@@ -76,9 +76,9 @@
                 'view',
                 exerciseId,
               ]"
-              class="inline-flex items-center gap-2 h-11 px-5 rounded-2xl border border-primary/20 bg-primary/10 text-primary font-bold text-sm shadow-sm hover:bg-primary/20 hover:scale-[1.03] active:scale-[0.97] transition-all"
+              class="inline-flex items-center gap-2 h-11 px-5 rounded-2xl border border-primary/20 bg-surface/40 backdrop-blur-xl text-primary font-bold text-sm shadow-sm hover:bg-primary/20 hover:scale-[1.03] active:scale-[0.97] transition-all"
             >
-              <i class="fa-solid fa-eye"></i> {{ 'COMMON.VIEW' | translate }}
+              <i class="fa-solid fa-eye"></i> {{ 'TEACHER.VIEW_EXERCISE' | translate }}
             </a>
             <a
               [routerLink]="[
@@ -90,9 +90,9 @@
                 'edit',
                 exerciseId,
               ]"
-              class="inline-flex items-center gap-2 h-11 px-5 rounded-2xl border border-yellow-500/20 bg-yellow-500/10 text-yellow-500 font-bold text-sm shadow-sm hover:bg-yellow-500/20 hover:scale-[1.03] active:scale-[0.97] transition-all"
+              class="inline-flex items-center bg-surface/40 backdrop-blur-xl gap-2 h-11 px-5 rounded-2xl border border-primary/20 text-primary font-bold text-sm shadow-sm hover:bg-primary/20 hover:scale-[1.03] active:scale-[0.97] transition-all"
             >
-              <i class="fa-solid fa-pen"></i> {{ 'TEACHER.QUIZ.EDIT' | translate }}
+              <i class="fa-solid fa-pen"></i> {{ 'TEACHER.EDIT_EXERCISE' | translate }}
             </a>
           </div>
         } @else {
@@ -100,7 +100,7 @@
             [routerLink]="['/teacher/subject', subjectId, 'lesson', lessonId, 'exercise']"
             class="inline-flex items-center gap-2 h-11 px-5 rounded-2xl bg-gradient-to-r from-violet-500 to-primary text-white font-bold text-sm shadow-lg hover:shadow-primary/30 hover:scale-[1.03] active:scale-[0.97] transition-all shrink-0"
           >
-            <i class="fa-solid fa-circle-question"></i> {{ 'TEACHER.QUIZ.CREATE_EXERCISE' | translate }}
+            <i class="fa-solid fa-circle-question"></i> {{ 'TEACHER.ADD_EXERCISE' | translate }}
           </a>
         }
       </div>
@@ -109,7 +109,7 @@
         <!-- Videos list -->
         <div class="flex flex-col">
           <h2 class="text-xl font-black tracking-tight text-text-main mb-4 shrink-0">
-            Videos ({{ videos.length }})
+            {{ 'TEACHER.VIDEOS' | translate }} ({{ videos.length }})
           </h2>
 
           @if (videos.length === 0) {
@@ -122,14 +122,14 @@
                 <i class="fa-solid fa-film"></i>
               </div>
               <p class="font-bold text-text-main/60 text-sm">
-                No videos yet. Use the form to upload the first one.
+                {{ 'TEACHER.NO_VIDEOS_DESC' | translate }}
               </p>
             </div>
           } @else {
             <div id="videos" class="space-y-4 lg:max-h-[650px] lg:overflow-y-auto lg:pr-3">
               @for (video of videos; track video.vId ?? video.title) {
                 <div
-                  class="group rounded-3xl border border-border-main bg-surface overflow-hidden hover:border-primary/40 transition-all duration-300 hover:-translate-y-1 shadow-sm hover:shadow-xl"
+                  class="group bg-surface/40 backdrop-blur-xl rounded-3xl border border-border-main overflow-hidden hover:border-primary/40 transition-all duration-300 hover:-translate-y-1 shadow-sm hover:shadow-xl"
                 >
                   <div
                     class="relative h-40 bg-background overflow-hidden border-b border-border-main"
@@ -183,33 +183,37 @@
 
         <!-- Upload form -->
         <div
-          class="relative rounded-3xl border border-border-main bg-surface shadow-sm px-6 md:px-8 py-8 flex flex-col transition-all duration-300 hover:-translate-y-1 hover:border-primary/40"
+          class="relative bg-surface/40 backdrop-blur-xl rounded-3xl border border-border-main shadow-sm px-6 md:px-8 py-8 flex flex-col transition-all duration-300 hover:-translate-y-1 hover:border-primary/40"
         >
           <div class="text-left mb-6">
+            <!-- ✅ كان sky-500 → primary -->
             <div
-              class="inline-flex items-center justify-center size-12 rounded-2xl bg-sky-500/10 text-sky-500 mb-3 border border-sky-500/20 shadow-sm"
+              class="inline-flex items-center justify-center size-12 rounded-2xl bg-primary/10 text-primary mb-3 border border-primary/20 shadow-sm"
             >
               <i class="fa-solid fa-cloud-arrow-up text-xl"></i>
             </div>
-            <h2 class="text-2xl font-black tracking-tight text-text-main">{{ 'COMMON.UPLOAD' | translate }}</h2>
-            <p class="text-text-main/50 text-sm mt-1 font-bold">Add a new video to this lesson.</p>
+            <h2 class="text-2xl font-black tracking-tight text-text-main">{{ 'TEACHER.UPLOAD_VIDEO' | translate }}</h2>
+            <p class="text-text-main/50 text-sm mt-1 font-bold">{{ 'TEACHER.UPLOAD_VIDEO_DESC' | translate }}</p>
           </div>
 
           <form [formGroup]="uploadForm" (ngSubmit)="uploadVideo()" class="space-y-6">
             <div>
               <label
                 class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1"
-                >{{ 'COMMON.TITLE' | translate }}</label
+                >{{ 'TEACHER.VIDEO_TITLE' | translate }}</label
               >
               <input
                 formControlName="title"
                 type="text"
-                class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm placeholder:text-text-main/30"
-                placeholder="e.g., Introduction"
+                class="w-full rounded-2xl border border-border-main bg-background/60 px-4 py-3.5 text-sm font-medium text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm placeholder:text-placeholder placeholder:font-medium"
+                [placeholder]="'TEACHER.PLACEHOLDER_VIDEO_TITLE' | translate"
               />
               @if (uploadForm.get('title')?.touched && uploadForm.get('title')?.invalid) {
-                <p class="text-red-500 text-xs font-bold mt-1 pl-1">
-                  Title is required (min 3 characters).
+                <p
+                  class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+                >
+                  <i class="fas fa-circle-exclamation mt-0.5"></i>
+                  <span>{{ 'TEACHER.TITLE_REQUIRED' | translate }}</span>
                 </p>
               }
             </div>
@@ -217,19 +221,22 @@
             <div>
               <label
                 class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1"
-                >{{ 'COMMON.DESCRIPTION' | translate }}</label
+                >{{ 'TEACHER.DESCRIPTION' | translate }}</label
               >
               <textarea
                 formControlName="description"
                 rows="3"
-                class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm resize-none placeholder:text-text-main/30"
-                placeholder="Describe this video..."
+                class="w-full rounded-2xl border border-border-main bg-background/60 px-4 py-3.5 text-sm font-medium text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm resize-none placeholder:text-placeholder placeholder:font-medium"
+                [placeholder]="'TEACHER.PLACEHOLDER_DESCRIBE_VIDEO' | translate"
               ></textarea>
               @if (
                 uploadForm.get('description')?.touched && uploadForm.get('description')?.invalid
               ) {
-                <p class="text-red-500 text-xs font-bold mt-1 pl-1">
-                  Description is required (min 3 characters).
+                <p
+                  class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+                >
+                  <i class="fas fa-circle-exclamation mt-0.5"></i>
+                  <span>{{ 'TEACHER.DESCRIPTION_REQUIRED' | translate }}</span>
                 </p>
               }
             </div>
@@ -237,7 +244,7 @@
             <div>
               <label
                 class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1"
-                >Video File</label
+                >{{ 'TEACHER.VIDEO_FILE' | translate }}</label
               >
               <div class="relative group">
                 <input
@@ -247,9 +254,16 @@
                   accept="video/*,image/*"
                   class="hidden"
                 />
+                <!-- ✅ كان hover:border-sky-500/50 → hover:border-primary/50 -->
                 <div
                   (click)="mediaInput.click()"
-                  class="w-full cursor-pointer rounded-3xl border-2 border-dashed border-border-main bg-background hover:bg-surface hover:border-sky-500/50 transition-all duration-300 p-6 flex flex-col items-center justify-center text-center shadow-sm min-h-[160px]"
+                  class="w-full cursor-pointer rounded-3xl border-2 border-dashed bg-background/60 hover:bg-surface hover:border-primary/50 transition-all duration-300 p-6 flex flex-col items-center justify-center text-center shadow-sm min-h-[160px]"
+                  [class.border-border-main]="
+                    !(uploadForm.get('videoFile')?.touched && uploadForm.get('videoFile')?.invalid)
+                  "
+                  [class.border-red-500]="
+                    uploadForm.get('videoFile')?.touched && uploadForm.get('videoFile')?.invalid
+                  "
                 >
                   @if (selectedFile) {
                     @if (isImage) {
@@ -278,15 +292,16 @@
                       }}</span>
                     </div>
                     <p class="text-text-main/40 font-bold text-xs mt-2 uppercase">
-                      Click to replace
+                      {{ 'TEACHER.CLICK_TO_REPLACE' | translate }}
                     </p>
                   } @else {
+                    <!-- ✅ كان bg-sky-500/10 text-sky-500 border-sky-500/20 → primary -->
                     <div
-                      class="size-14 rounded-2xl bg-sky-500/10 text-sky-500 border border-sky-500/20 shadow-sm flex items-center justify-center mb-3 group-hover:scale-110 transition-transform"
+                      class="size-14 rounded-2xl bg-primary/10 text-primary border border-primary/20 shadow-sm flex items-center justify-center mb-3 group-hover:scale-110 transition-transform"
                     >
                       <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
                     </div>
-                    <p class="text-text-main font-bold">Upload Media</p>
+                    <p class="text-text-main font-bold">{{ 'TEACHER.UPLOAD_MEDIA' | translate }}</p>
                     <p class="text-text-main/40 font-bold text-xs mt-1 uppercase tracking-wider">
                       MP4, WebM, GIF, JPG, PNG
                     </p>
@@ -294,21 +309,27 @@
                 </div>
               </div>
               @if (uploadForm.get('videoFile')?.touched && uploadForm.get('videoFile')?.invalid) {
-                <p class="text-red-500 text-xs font-bold mt-1 pl-1">Media file is required.</p>
+                <p
+                  class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+                >
+                  <i class="fas fa-circle-exclamation mt-0.5"></i>
+                  <span>{{ 'TEACHER.MEDIA_REQUIRED' | translate }}</span>
+                </p>
               }
             </div>
 
             <div class="pt-4 border-t border-border-main">
+              <!-- ✅ كان bg-sky-500 hover:bg-sky-600 → bg-primary hover:bg-primary/80 -->
               <button
                 type="submit"
                 [disabled]="uploadForm.invalid || isUploading"
-                class="w-full h-12 cursor-pointer rounded-2xl bg-sky-500 font-bold text-white shadow-sm hover:bg-sky-600 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+                class="w-full h-12 cursor-pointer rounded-2xl bg-primary font-bold text-white shadow-sm hover:bg-primary/80 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
                 <span class="flex items-center justify-center gap-2">
                   @if (isUploading) {
-                    <i class="fas fa-spinner fa-spin"></i> Uploading...
+                    <i class="fas fa-spinner fa-spin"></i> {{ 'TEACHER.UPLOADING' | translate }}
                   } @else {
-                    <i class="fa-solid fa-paper-plane"></i> {{ 'COMMON.UPLOAD' | translate }}
+                    <i class="fa-solid fa-paper-plane"></i> {{ 'TEACHER.UPLOAD_VIDEO' | translate }}
                   }
                 </span>
               </button>
@@ -322,67 +343,85 @@
   <!-- Edit Video Modal -->
   @if (isEditVideoModalOpen) {
     <div
-      class="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/40 backdrop-blur-sm"
+      class="fixed inset-0 z-50 flex items-center justify-center px-4 bg-surface/40 backdrop-blur-xl"
     >
       <div (click)="closeEditVideoModal()" class="absolute inset-0"></div>
+
       <div
-        class="relative w-full max-w-lg rounded-3xl border border-border-main bg-surface p-8 shadow-2xl animate-in fade-in zoom-in duration-200"
+        class="relative w-full max-w-lg rounded-3xl border border-border-main bg-surface/90 backdrop-blur-xl p-8 shadow-2xl animate-in fade-in zoom-in duration-200"
       >
-        <h2 class="text-2xl font-black tracking-tight text-text-main mb-6">{{ 'COMMON.EDIT' | translate }}</h2>
+        <h2 class="text-2xl font-black tracking-tight text-text-main mb-6">{{ 'TEACHER.EDIT_VIDEO' | translate }}</h2>
+
         <form [formGroup]="editVideoForm" (ngSubmit)="saveVideoEdit()">
-          <div class="mb-4">
+          <div class="mb-5">
             <label
-              class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1 block"
-              >Title</label
+              class="block text-xs font-semibold uppercase tracking-[0.15em] text-text-main/80 mb-2 pl-1"
             >
+              {{ 'TEACHER.TITLE' | translate }}
+            </label>
+
             <input
               type="text"
               formControlName="title"
-              class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm"
-              placeholder="Video Title"
+              [placeholder]="'TEACHER.PLACEHOLDER_VIDEO_TITLE' | translate"
+              class="w-full rounded-2xl border border-border-main bg-background/60 backdrop-blur-sm px-4 py-3.5 text-sm font-medium text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm placeholder:text-placeholder placeholder:font-medium"
             />
+
             @if (editVideoForm.get('title')?.invalid && editVideoForm.get('title')?.touched) {
-              <p class="text-red-500 text-xs font-bold mt-1 pl-1">
-                Title is required (min 3 chars)
+              <p
+                class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+              >
+                <i class="fas fa-circle-exclamation mt-0.5"></i>
+                <span>{{ 'TEACHER.TITLE_REQUIRED' | translate }}</span>
               </p>
             }
           </div>
+
           <div class="mb-6">
             <label
-              class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1 block"
-              >Description</label
+              class="block text-xs font-semibold uppercase tracking-[0.15em] text-text-main/80 mb-2 pl-1"
             >
+              {{ 'TEACHER.DESCRIPTION' | translate }}
+            </label>
+
             <textarea
-              formControlName="description"
               rows="3"
-              class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm resize-none"
-              placeholder="Video Description"
+              formControlName="description"
+              [placeholder]="'TEACHER.PLACEHOLDER_VIDEO_DESCRIPTION' | translate"
+              class="w-full rounded-2xl border border-border-main bg-background/60 backdrop-blur-sm px-4 py-3.5 text-sm font-medium text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm resize-none placeholder:text-placeholder placeholder:font-medium"
             ></textarea>
+
             @if (
               editVideoForm.get('description')?.invalid && editVideoForm.get('description')?.touched
             ) {
-              <p class="text-red-500 text-xs font-bold mt-1 pl-1">
-                Description is required (min 3 chars)
+              <p
+                class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+              >
+                <i class="fas fa-circle-exclamation mt-0.5"></i>
+                <span>{{ 'TEACHER.DESCRIPTION_REQUIRED' | translate }}</span>
               </p>
             }
           </div>
+
           <div class="flex gap-4">
             <button
               type="button"
               (click)="closeEditVideoModal()"
-              class="flex-1 py-3 rounded-2xl border border-border-main bg-surface text-text-main font-bold hover:bg-background transition shadow-sm"
+              class="cursor-pointer flex-1 py-3 rounded-2xl border border-border-main bg-background/60 text-text-main font-bold hover:border-primary/30 hover:bg-background transition-all shadow-sm"
             >
               {{ 'COMMON.CANCEL' | translate }}
             </button>
+
             <button
               type="submit"
               [disabled]="editVideoForm.invalid || isEditingVideo"
-              class="flex-1 py-3 rounded-2xl bg-yellow-500 text-white font-bold hover:bg-yellow-600 transition disabled:opacity-50 shadow-sm"
+              class="cursor-pointer flex-1 py-3 rounded-2xl bg-primary text-white font-bold hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               @if (isEditingVideo) {
-                <i class="fa-solid fa-spinner fa-spin mr-2"></i> Saving...
+                <i class="fa-solid fa-spinner fa-spin mr-2"></i>
+                {{ 'COMMON.SAVING' | translate }}
               } @else {
-                Save Changes
+                {{ 'COMMON.SAVE_CHANGES' | translate }}
               }
             </button>
           </div>
@@ -394,40 +433,46 @@
   <!-- Delete Video Confirm Modal -->
   @if (isDeleteVideoModalOpen) {
     <div
-      class="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/40 backdrop-blur-sm"
+      class="fixed inset-0 z-50 flex items-center justify-center px-4 bg-surface/40 backdrop-blur-xl"
     >
       <div (click)="closeDeleteVideoModal()" class="absolute inset-0"></div>
+
       <div
-        class="relative w-full max-w-md rounded-3xl border border-border-main bg-surface p-8 shadow-2xl animate-in fade-in zoom-in duration-200"
+        class="relative w-full max-w-md rounded-3xl border border-border-main bg-surface/90 backdrop-blur-xl p-8 shadow-2xl animate-in fade-in zoom-in duration-200"
       >
         <div class="flex flex-col items-center text-center mb-6">
           <div
-            class="size-16 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-500 flex items-center justify-center text-3xl mb-4"
+            class="size-16 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-500 flex items-center justify-center text-3xl mb-4 shadow-sm"
           >
             <i class="fa-solid fa-triangle-exclamation"></i>
           </div>
-          <h2 class="text-xl font-black tracking-tight text-text-main">{{ 'COMMON.DELETE' | translate }}?</h2>
-          <p class="text-text-main/50 font-bold text-sm mt-2">
-            "<span class="text-text-main">{{ videoToDelete?.title }}</span
-            >" will be permanently deleted.
+
+          <h2 class="text-xl font-black tracking-tight text-text-main">{{ 'TEACHER.DELETE_VIDEO_QUESTION' | translate }}</h2>
+
+          <p class="text-text-main/50 font-medium text-sm mt-2 leading-relaxed">
+            "<span class="font-semibold text-text-main">{{ videoToDelete?.title }}</span
+            >" {{ 'TEACHER.WILL_BE_PERMANENTLY_DELETED' | translate }}
           </p>
         </div>
+
         <div class="flex gap-4">
           <button
             type="button"
             (click)="closeDeleteVideoModal()"
-            class="flex-1 py-3 rounded-2xl border border-border-main bg-surface text-text-main font-bold hover:bg-background transition shadow-sm"
+            class="cursor-pointer flex-1 py-3 rounded-2xl border border-border-main bg-background/60 text-text-main font-bold hover:border-text-main/30 hover:bg-background transition-all shadow-sm"
           >
             {{ 'COMMON.CANCEL' | translate }}
           </button>
+
           <button
             type="button"
             (click)="confirmDeleteVideo()"
             [disabled]="isDeletingVideo"
-            class="flex-1 py-3 rounded-2xl bg-red-500 text-white font-bold hover:bg-red-600 transition disabled:opacity-50 shadow-sm"
+            class="cursor-pointer flex-1 py-3 rounded-2xl bg-red-500 text-white font-bold hover:bg-red-600 transition-all shadow-lg shadow-red-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             @if (isDeletingVideo) {
-              <i class="fa-solid fa-spinner fa-spin mr-2"></i> Deleting...
+              <i class="fa-solid fa-spinner fa-spin mr-2"></i>
+              {{ 'COMMON.DELETING' | translate }}
             } @else {
               {{ 'COMMON.DELETE' | translate }}
             }

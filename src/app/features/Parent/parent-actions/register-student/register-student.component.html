@@ -1,25 +1,27 @@
-<section class="relative h-screen overflow-hidden">
-  <!-- <div
-    class="pointer-events-none absolute -top-64 -left-72 h-[520px] w-[820px] rounded-[999px] bg-sky-500/12 blur-[130px]"
+<section class="relative transition-colors duration-300">
+  <div
+    class="pointer-events-none absolute -top-64 -left-72 h-[520px] w-[820px] rounded-[999px] bg-primary/10 blur-[130px]"
   ></div>
   <div
-    class="pointer-events-none absolute -bottom-72 -right-60 h-[720px] w-[720px] rounded-full bg-fuchsia-500/12 blur-[140px]"
-  ></div> -->
+    class="pointer-events-none absolute -bottom-72 -right-60 h-[720px] w-[720px] rounded-full bg-primary/10 blur-[140px]"
+  ></div>
 
   <div class="relative z-10 h-full flex items-center justify-center px-4">
-    <div class="mx-auto w-full max-w-2xl">
+    <div class="mx-auto w-full max-w-2xl mt-14">
       <div
-        class="relative rounded-4xl border border-white/10 bg-white/[0.06] backdrop-blur-xl shadow-[0_50px_140px_-90px_rgba(0,0,0,.95)] px-6 md:px-8 pt-20 pb-6 max-h-[calc(100vh-9rem)] flex flex-col min-h-0"
+        class="bg-surface/90 backdrop-blur-xl rounded-4xl border border-border-main shadow-2xl relative z-10 pt-16 pb-4 px-6 md:px-8 max-h-[calc(100vh-12.5rem)] flex flex-col min-h-0"
       >
         <div class="absolute -top-14 left-1/2 -translate-x-1/2">
           <div
-            class="group relative size-28 md:size-32 rounded-full border-2 border-gray-900 bg-white/10 hover:border-sky-400/60 transition shadow-[0_22px_70px_-18px_rgba(0,0,0,.95)]"
+            class="group relative size-24 md:size-28 rounded-full border-2 border-surface bg-background hover:border-primary/60 transition shadow-lg"
           >
             <div class="absolute inset-0 rounded-full overflow-hidden">
               @if (avatarPreview) {
               <img [src]="avatarPreview" class="w-full h-full object-cover" />
               } @else {
-              <div class="w-full h-full flex items-center justify-center text-white/60 bg-white/5">
+              <div
+                class="w-full h-full flex items-center justify-center text-text-main/50 bg-black/5"
+              >
                 <i class="fa-regular fa-user text-3xl"></i>
               </div>
               }
@@ -31,7 +33,7 @@
             <button
               type="button"
               (click)="openAvatarPicker()"
-              class="cursor-pointer absolute -bottom-1 right-2 size-10 rounded-full bg-sky-600 text-white flex items-center justify-center text-md border-2 border-gray-900 shadow-lg z-10 hover:bg-sky-500 transition"
+              class="cursor-pointer absolute -bottom-1 right-2 rounded-full bg-primary text-white flex items-center justify-center text-md border-2 border-surface shadow-lg shadow-primary/20 z-10 hover:bg-primary/90 hover:-translate-y-0.5 transition-all size-10"
               title="Change picture"
             >
               <i class="fa-solid fa-pen"></i>
@@ -40,17 +42,17 @@
         </div>
 
         <div class="text-center">
-          <h1 class="text-3xl md:text-4xl font-black tracking-tight text-white">
+          <h1 class="text-2xl md:text-3xl font-black tracking-tight mb-2 text-transparent bg-clip-text bg-linear-to-r from-primary to-text-main">
             Register Student
           </h1>
-          <p class="text-white/50 text-sm mt-2">Add a child to your account</p>
+          <p class="text-text-main/50 text-sm">Add a child to your account</p>
         </div>
 
         @if (errMsg) {
         <div
-          class="mt-6 rounded-2xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-200"
+          class="mt-4 flex items-start gap-3 rounded-2xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm font-medium text-red-500 shadow-sm"
         >
-          {{ errMsg }}
+          <i class="fas fa-exclamation-circle mr-2"></i> {{ errMsg }}
         </div>
         }
 
@@ -61,35 +63,55 @@
         >
           <div class="overflow-y-auto pr-2 custom-scroll flex-1 min-h-0 space-y-5">
             <div>
-              <label class="block text-sm font-medium text-white/80 mb-2">Student Email</label>
+              <label
+                class="block text-xs font-semibold uppercase tracking-[0.15em] text-text-main/80 mb-2 pl-1"
+                >Email</label
+              >
               <input
                 formControlName="email"
+                [class.border-red-500]="
+                  signUpForm.get('email')?.touched && signUpForm.get('email')?.invalid
+                "
                 type="email"
-                class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
+                class="w-full rounded-2xl border border-border-main bg-background/60 text-sm font-medium px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-placeholder placeholder:font-medium"
                 placeholder="student@example.com"
               />
-              @if (signUpForm.get('email')?.touched && signUpForm.get('email')?.errors) { @if
-              (signUpForm.get('email')?.getError('required')) {
-              <p class="text-red-400 text-sm mt-1">Email is required.</p>
-              } @else if (signUpForm.get('email')?.getError('email')) {
-              <p class="text-red-400 text-sm mt-1">Enter valid email.</p>
+              @if (signUpForm.get('email')?.touched && signUpForm.get('email')?.invalid) { @if
+              (signUpForm.get('email')?.hasError('required')) {
+              <p
+                class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+              >
+                <i class="fas fa-circle-exclamation mt-0.5"></i>
+                <span>Email is required.</span>
+              </p>
+              } @if (signUpForm.get('email')?.hasError('email')) {
+              <p
+                class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+              >
+                <i class="fas fa-circle-exclamation mt-0.5"></i>
+                <span>Enter valid email.</span>
+              </p>
               } }
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-white/80 mb-2">Password</label>
-
+              <label
+                class="block text-xs font-semibold uppercase tracking-[0.15em] text-text-main/80 mb-2 pl-1"
+                >Password</label
+              >
               <div class="relative">
                 <input
                   formControlName="password"
+                  [class.border-red-500]="
+                    signUpForm.get('password')?.touched && signUpForm.get('password')?.invalid
+                  "
                   [type]="showPass ? 'text' : 'password'"
-                  class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 pr-12 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
+                  class="w-full rounded-2xl border border-border-main bg-background/60 text-sm font-medium px-4 py-3.5 pr-12 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-placeholder placeholder:font-medium"
                 />
-
                 <button
                   type="button"
                   (click)="showPass = !showPass"
-                  class="absolute top-1/2 right-3 -translate-y-1/2 size-9 rounded-xl cursor-pointer bg-white/[0.04] text-white/65 hover:text-white hover:bg-white/[0.08] transition flex items-center justify-center"
+                  class="absolute right-4 top-1/2 -translate-y-1/2 text-text-main/50 hover:text-primary transition-all duration-200 cursor-pointer"
                   aria-label="Toggle password visibility"
                 >
                   @if (showPass) {
@@ -99,103 +121,220 @@
                   }
                 </button>
               </div>
-
-              @if ( signUpForm.get('password')?.touched &&
-              signUpForm.get('password')?.getError('required') ) {
-              <p class="text-red-400 text-sm mt-1">Password is required.</p>
-              }@else if (signUpForm.get('password')?.touched &&
-              signUpForm.get('password')?.getError('pattern')) {
-              <p class="text-red-400 text-sm mt-1">
-                Password must be at least 8 characters and include an uppercase letter, a number,
-                and a special character.
+              @if (signUpForm.get('password')?.touched && signUpForm.get('password')?.invalid) { @if
+              (signUpForm.get('password')?.hasError('required')) {
+              <p
+                class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+              >
+                <i class="fas fa-circle-exclamation mt-0.5"></i>
+                <span>Password is required.</span>
               </p>
-              }
+              } @if (signUpForm.get('password')?.hasError('pattern')) {
+              <p
+                class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+              >
+                <i class="fas fa-circle-exclamation mt-0.5"></i>
+                <span
+                  >Password must be at least 8 characters and include an uppercase letter, a number,
+                  and a special character.</span
+                >
+              </p>
+              } }
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-medium text-white/80 mb-2">First Name</label>
+                <label
+                  class="block text-xs font-semibold uppercase tracking-[0.15em] text-text-main/80 mb-2 pl-1"
+                  >First Name</label
+                >
                 <input
                   formControlName="FName"
-                  class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
+                  [class.border-red-500]="
+                    signUpForm.get('FName')?.touched && signUpForm.get('FName')?.invalid
+                  "
+                  class="w-full rounded-2xl border border-border-main bg-background/60 text-sm font-medium px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-placeholder placeholder:font-medium"
                   placeholder="First name"
                 />
-                @if ( signUpForm.get('FName')?.touched &&
-                signUpForm.get('FName')?.getError('required') ) {
-                <p class="text-red-400 text-sm mt-1">First name is required.</p>
+                @if (signUpForm.get('FName')?.touched &&
+                signUpForm.get('FName')?.hasError('required')) {
+                <p
+                  class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+                >
+                  <i class="fas fa-circle-exclamation mt-0.5"></i>
+                  <span>First name is required.</span>
+                </p>
                 }
               </div>
 
               <div>
-                <label class="block text-sm font-medium text-white/80 mb-2">Last Name</label>
+                <label
+                  class="block text-xs font-semibold uppercase tracking-[0.15em] text-text-main/80 mb-2 pl-1"
+                  >Last Name</label
+                >
                 <input
                   formControlName="LName"
-                  class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
+                  [class.border-red-500]="
+                    signUpForm.get('LName')?.touched && signUpForm.get('LName')?.invalid
+                  "
+                  class="w-full rounded-2xl border border-border-main bg-background/60 text-sm font-medium px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-placeholder placeholder:font-medium"
                   placeholder="Last name"
                 />
-                @if ( signUpForm.get('LName')?.touched &&
-                signUpForm.get('LName')?.getError('required') ) {
-                <p class="text-red-400 text-sm mt-1">Last name is required.</p>
+                @if (signUpForm.get('LName')?.touched &&
+                signUpForm.get('LName')?.hasError('required')) {
+                <p
+                  class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+                >
+                  <i class="fas fa-circle-exclamation mt-0.5"></i>
+                  <span>Last name is required.</span>
+                </p>
                 }
               </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-medium text-white/80 mb-2">Gender</label>
-                <select
-                  formControlName="Gender"
-                  class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
+                <label
+                  class="block text-xs font-semibold uppercase tracking-[0.15em] text-text-main/80 mb-2 pl-1"
+                  >Gender</label
                 >
-                  <option class="bg-[#0b1020]" value="" disabled>Select gender</option>
-                  <option class="bg-[#0b1020]" [value]="1">Male</option>
-                  <option class="bg-[#0b1020]" [value]="2">Female</option>
-                </select>
-
-                @if ( signUpForm.get('Gender')?.touched &&
-                signUpForm.get('Gender')?.getError('required') ) {
-                <p class="text-red-400 text-sm mt-1">Gender is required.</p>
+                <div class="relative">
+                  @if (genderDropdownOpen) {
+                  <div class="fixed inset-0 z-40" (click)="genderDropdownOpen = false"></div>
+                  }
+                  <div
+                    (click)="genderDropdownOpen = !genderDropdownOpen"
+                    class="w-full rounded-2xl border border-border-main bg-background/60 text-text-main px-4 py-3.5 cursor-pointer flex justify-between items-center"
+                    [class.border-red-500]="
+                      signUpForm.get('Gender')?.touched && signUpForm.get('Gender')?.invalid
+                    "
+                  >
+                    <span>
+                      <button type="button">{{ getGenderLabel() }}</button>
+                    </span>
+                    <i
+                      class="fa-solid fa-chevron-down transition-transform"
+                      [class.rotate-180]="genderDropdownOpen"
+                    ></i>
+                  </div>
+                  @if (genderDropdownOpen) {
+                  <div
+                    class="absolute top-full left-0 z-50 mt-2 w-full rounded-2xl border border-border-main bg-background shadow-md overflow-hidden"
+                  >
+                    <div
+                      (click)="signUpForm.get('Gender')?.setValue(1); genderDropdownOpen = false"
+                      class="px-4 py-3 hover:bg-primary/10 font-medium text-text-main cursor-pointer"
+                    >
+                      Male
+                    </div>
+                    <div
+                      (click)="signUpForm.get('Gender')?.setValue(2); genderDropdownOpen = false"
+                      class="px-4 py-3 hover:bg-primary/10 font-medium text-text-main cursor-pointer"
+                    >
+                      Female
+                    </div>
+                  </div>
+                  }
+                </div>
+                @if (signUpForm.get('Gender')?.touched &&
+                signUpForm.get('Gender')?.hasError('required')) {
+                <p
+                  class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+                >
+                  <i class="fas fa-circle-exclamation mt-0.5"></i>
+                  <span>Gender is required.</span>
+                </p>
                 }
               </div>
 
               <div>
-                <label class="block text-sm font-medium text-white/80 mb-2">Address</label>
+                <label
+                  class="block text-xs font-semibold uppercase tracking-[0.15em] text-text-main/80 mb-2 pl-1"
+                  >Address</label
+                >
                 <input
                   formControlName="Address"
-                  class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
+                  [class.border-red-500]="
+                    signUpForm.get('Address')?.touched && signUpForm.get('Address')?.invalid
+                  "
+                  class="w-full rounded-2xl border border-border-main bg-background/60 text-sm font-medium px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-placeholder placeholder:font-medium"
                   placeholder="Address"
                 />
-                @if ( signUpForm.get('Address')?.touched &&
-                signUpForm.get('Address')?.getError('required') ) {
-                <p class="text-red-400 text-sm mt-1">Address is required.</p>
+                @if (signUpForm.get('Address')?.touched &&
+                signUpForm.get('Address')?.hasError('required')) {
+                <p
+                  class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+                >
+                  <i class="fas fa-circle-exclamation mt-0.5"></i>
+                  <span>Address is required.</span>
+                </p>
                 }
               </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-medium text-white/80 mb-2">Birth Date</label>
+                <label
+                  class="block text-xs font-semibold uppercase tracking-[0.15em] text-text-main/80 mb-2 pl-1"
+                  >Birth Date</label
+                >
                 <input
                   type="date"
                   formControlName="BirthDate"
-                  class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition placeholder:text-white/35 focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
+                  [class.border-red-500]="
+                    signUpForm.get('BirthDate')?.touched && signUpForm.get('BirthDate')?.invalid
+                  "
+                  class="w-full rounded-2xl border border-border-main bg-background/60 text-sm font-medium px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all"
                 />
-                @if ( signUpForm.get('BirthDate')?.touched &&
-                signUpForm.get('BirthDate')?.getError('required') ) {
-                <p class="text-red-400 text-sm mt-1">Birth date is required.</p>
+                @if (signUpForm.get('BirthDate')?.touched &&
+                signUpForm.get('BirthDate')?.hasError('required')) {
+                <p
+                  class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
+                >
+                  <i class="fas fa-circle-exclamation mt-0.5"></i>
+                  <span>Birthdate is required.</span>
+                </p>
                 }
               </div>
 
               <div>
-                <label class="block text-sm font-medium text-white/80 mb-2">Disability</label>
-                <select
-                  formControlName="Disability"
-                  class="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white/90 outline-none transition focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10"
+                <label
+                  class="block text-xs font-semibold uppercase tracking-[0.15em] text-text-main/80 mb-2 pl-1"
+                  >Disability</label
                 >
-                  @for (d of Disability; track d.id) {
-                  <option class="bg-[#0b1020]" [value]="d.id">{{ d.label }}</option>
+                <div class="relative">
+                  @if (disabilityDropdownOpen) {
+                  <div class="fixed inset-0 z-40" (click)="disabilityDropdownOpen = false"></div>
                   }
-                </select>
+                  <div
+                    (click)="disabilityDropdownOpen = !disabilityDropdownOpen"
+                    class="w-full rounded-2xl border border-border-main bg-background/60 text-text-main px-4 py-3.5 cursor-pointer flex justify-between items-center"
+                  >
+                    <span>
+                      <button type="button">{{ getDisabilityLabel() }}</button>
+                    </span>
+                    <i
+                      class="fa-solid fa-chevron-down transition-transform"
+                      [class.rotate-180]="disabilityDropdownOpen"
+                    ></i>
+                  </div>
+                  @if (disabilityDropdownOpen) {
+                  <div
+                    class="absolute bottom-full left-0 z-50 mb-2 w-full rounded-2xl border border-border-main bg-background shadow-md overflow-hidden"
+                  >
+                    @for (d of Disability; track d.id) {
+                    <div
+                      (click)="
+                        signUpForm.get('Disability')?.setValue(d.id); disabilityDropdownOpen = false
+                      "
+                      class="px-4 py-3 hover:bg-primary/10 cursor-pointer"
+                    >
+                      <span class="font-medium text-text-main">{{ d.label }}</span>
+                    </div>
+                    }
+                  </div>
+                  }
+                </div>
               </div>
             </div>
 
@@ -204,11 +343,11 @@
             }
           </div>
 
-          <div class="pt-4 mt-4 border-t border-white/10">
+          <div class="pt-4 mt-4 border-t border-border-main">
             <button
               type="submit"
               [disabled]="isLoading"
-              class="btn-solid cursor-pointer w-full h-12 rounded-2xl font-semibold text-white disabled:opacity-60 disabled:cursor-not-allowed"
+              class="w-full rounded-2xl bg-primary py-4 text-sm font-bold text-white hover:bg-primary/90 transition-all hover:-translate-y-0.5 shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <span class="flex items-center justify-center gap-2">
                 Register Student @if (isLoading) {
@@ -225,14 +364,14 @@
   @if (showAvatarPicker) {
   <div class="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
     <div
-      class="w-full max-w-3xl rounded-3xl bg-[#070A13]/60 border border-white/10 p-5 backdrop-blur-2xl"
+      class="w-full max-w-3xl rounded-3xl bg-surface/90 border border-border-main p-5 backdrop-blur-2xl"
     >
       <div class="flex items-center justify-between mb-4">
-        <h3 class="text-lg font-semibold text-white/90">Choose an avatar</h3>
+        <h3 class="text-lg font-semibold text-text-main">Choose an avatar</h3>
         <button
           type="button"
           (click)="closeAvatarPicker()"
-          class="cursor-pointer text-white/70 hover:text-white"
+          class="cursor-pointer text-text-main/70 hover:text-text-main"
         >
           <i class="fa-solid fa-xmark text-xl"></i>
         </button>
@@ -246,17 +385,15 @@
           class="hidden"
           accept="image/*"
         />
-
         <button
           type="button"
           (click)="fileInput.click()"
-          class="cursor-pointer size-14 rounded-full border border-white/12 bg-white/5 hover:border-sky-400/60 hover:bg-white/10 transition flex items-center justify-center text-white/90"
+          class="cursor-pointer size-14 rounded-full border border-border-main bg-background hover:border-primary/60 hover:bg-black/5 transition flex items-center justify-center text-text-main"
           title="Upload from device"
         >
           <i class="fa-solid fa-upload text-lg"></i>
         </button>
-
-        <p class="text-sm text-white/60">Upload from device</p>
+        <p class="text-sm text-text-main/60">Upload from device</p>
       </div>
 
       <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-3">
@@ -264,7 +401,7 @@
         <button
           type="button"
           (click)="selectAvatar(a.src)"
-          class="cursor-pointer rounded-full overflow-hidden border border-white/10 hover:border-sky-400/60 transition"
+          class="cursor-pointer rounded-full overflow-hidden border border-border-main hover:border-primary/60 transition"
           title="Select"
         >
           <img [src]="a.src" class="w-full aspect-square object-cover" />
@@ -276,7 +413,7 @@
         <button
           type="button"
           (click)="closeAvatarPicker()"
-          class="rounded-2xl cursor-pointer bg-white/5 border border-white/10 px-4 py-2 text-white/80 hover:bg-white/10 transition"
+          class="rounded-2xl cursor-pointer bg-background border border-border-main px-4 py-2 text-text-main hover:bg-black/5 transition"
         >
           Cancel
         </button>

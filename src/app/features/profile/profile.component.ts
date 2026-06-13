@@ -7,11 +7,11 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { SafeUrlPipe } from '../../core/pipes/safe-url.pipe';
 import { TeacherServiceService } from '../Teacher/services/teacher-service.service';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-profile',
-  imports: [ReactiveFormsModule, CommonModule, RouterLink, SafeUrlPipe, TranslateModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterLink, SafeUrlPipe, TranslatePipe],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
 })
@@ -43,7 +43,9 @@ export class ProfileComponent {
       [
         Validators.required,
         Validators.minLength(8),
-        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()_+\-])[A-Za-z\d@$!%*?&#^()_+\-]{8,}$/),
+        Validators.pattern(
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()_+\-])[A-Za-z\d@$!%*?&#^()_+\-]{8,}$/
+        ),
       ],
     ],
   });
@@ -278,26 +280,26 @@ export class ProfileComponent {
 
   onCvSelected(event: Event) {
     const input = event.target as HTMLInputElement;
-  
+
     if (!input.files?.length) return;
-  
+
     const file = input.files[0];
-  
-    if (file.type !== 'application/pdf') {
-      this.toastr.error('Please upload a PDF file');
+
+    const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+
+    if (!isPdf) {
+      this.toastr.error('Only PDF files are allowed');
+      input.value = '';
       return;
     }
-  
+
     this.teacherService.updateCv(file).subscribe({
       next: () => {
         this.toastr.success('CV updated successfully');
-  
         this.authService.refreshProfile();
       },
       error: (err) => {
-        this.toastr.error(
-          err?.error?.message || 'Failed to update CV'
-        );
+        this.toastr.error(err?.error?.message || 'Failed to update CV');
       },
     });
   }

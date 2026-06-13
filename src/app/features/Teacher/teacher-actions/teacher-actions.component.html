@@ -1,12 +1,16 @@
-<section class="relative min-h-screen pt-28 pb-10 px-4 overflow-hidden">
+<section class="relative py-10 px-4 overflow-hidden">
   <div class="container mx-auto max-w-7xl relative z-10">
     <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
       <div>
-        <h1 class="text-3xl md:text-5xl font-black tracking-tight text-text-main mb-2">
-          {{ 'NAVIGATION.MY_SUBJECTS' | translate }}
+        <h1 class="text-3xl md:text-5xl font-black tracking-tight mb-2 text-transparent bg-clip-text bg-linear-to-r from-primary to-text-main">
+          {{ 'TEACHER.YOUR' | translate }}
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-sky-600/70">
+            {{ 'TEACHER.SUBJECTS' | translate }}
+          </span>
         </h1>
+
         <p class="text-text-main/50 font-bold text-lg">
-          {{ 'TEACHER.SUBJECT.TITLE' | translate }}
+          {{ 'TEACHER.CHOOSE_SUBJECT_DESC' | translate }}
         </p>
       </div>
     </div>
@@ -14,32 +18,41 @@
     @if (isLoading) {
       <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
         @for (item of [1, 2, 3, 4]; track item) {
-          <div class="rounded-3xl border border-border-main bg-surface h-64 animate-pulse"></div>
+          <div
+            class="rounded-3xl border border-border-main bg-surface h-64 animate-pulse shadow-sm"
+          ></div>
         }
       </div>
     } @else if (subjects.length === 0) {
       <div
-        class="flex flex-col items-center justify-center py-24 text-center border border-dashed border-border-main rounded-3xl bg-surface"
+        class="flex flex-col items-center justify-center py-24 text-center border border-dashed border-border-main rounded-3xl bg-surface shadow-sm"
       >
         <div
-          class="size-20 rounded-2xl bg-background border border-border-main shadow-sm flex items-center justify-center text-text-main/20 mb-4"
+          class="size-20 rounded-2xl bg-background border border-border-main flex items-center justify-center text-text-main/20 mb-4"
         >
           <i class="fa-solid fa-book-open text-3xl"></i>
         </div>
-        <h3 class="font-black tracking-tight text-text-main text-xl">{{ 'TEACHER.SUBJECT.NO_SUBJECTS' | translate }}</h3>
+
+        <h3 class="font-black tracking-tight text-text-main text-xl">{{ 'TEACHER.NO_SUBJECTS_ASSIGNED' | translate }}</h3>
+
         <p class="text-text-main/50 mt-2 mb-2 max-w-md font-bold">
-          Once you are assigned to subjects, they will appear here and you can manage them.
+          {{ 'TEACHER.NO_SUBJECTS_DESC' | translate }}
         </p>
       </div>
     } @else {
       <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
         @for (sub of subjects; track sub.subjectId; let i = $index) {
           <div
-            class="group relative flex flex-col items-center justify-center text-center rounded-3xl border border-border-main bg-surface p-8 transition-all duration-300 hover:-translate-y-1 hover:border-border-main/40 shadow-sm"
+            class="group bg-surface/40 backdrop-blur-xl relative flex flex-col items-center justify-center text-center rounded-3xl border border-border-main p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-primary/20"
           >
+            <!-- subtle glow -->
+            <div
+              class="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-primary/5 via-transparent to-primary/10 pointer-events-none"
+            ></div>
+
             <div
               [class]="
-                'size-20 rounded-2xl flex items-center justify-center text-3xl shadow-sm border border-border-main mb-6 transition-transform duration-300 group-hover:scale-110 ' +
+                'relative size-20 rounded-2xl flex items-center justify-center text-3xl border border-border-main mb-6 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 shadow-sm ' +
                 getBgColor(i) +
                 ' ' +
                 getColor(i)
@@ -49,26 +62,45 @@
             </div>
 
             <h2
-              class="font-black tracking-tight text-text-main text-xl mb-2 group-hover:text-text-main/80 transition-colors line-clamp-1"
+              class="relative font-black tracking-tight text-text-main text-xl mb-2 transition-colors line-clamp-1 group-hover:text-primary"
             >
               {{ sub.subjectName }}
             </h2>
 
-            @if (sub.deaf_mute) {
-              <span
-                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-pink-500/10 text-pink-500 text-xs font-bold border border-pink-500/20 uppercase tracking-wider mb-6"
-              >
-                <i class="fa-solid fa-hands-asl-interpreting"></i> Accessible
-              </span>
-            } @else {
-              <span class="block h-6 mb-6"></span>
-            }
+            <div class="flex items-center justify-center gap-2 mb-6 flex-wrap">
+              @if (sub.deaf_mute) {
+                <span
+                  class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 text-blue-500 text-xs font-bold border border-blue-500/20 uppercase tracking-wider"
+                >
+                  <i class="fa-solid fa-hands-asl-interpreting"></i>
+                  {{ 'TEACHER.ACCESSIBLE' | translate }}
+                </span>
+              } @else {
+                <span
+                  class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gray-500/10 text-text-main/50 text-xs font-bold border border-gray-500/20 uppercase tracking-wider"
+                >
+                  <i class="fa-solid fa-hands-asl-interpreting"></i>
+                  {{ 'TEACHER.STANDARD' | translate }}
+                </span>
+              }
+              @if (sub.aI_supported) {
+                <span
+                  class="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 text-emerald-500 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider shadow-sm"
+                >
+                  <i class="fa-solid fa-robot text-[8px]"></i>
+                  {{ 'TEACHER.AI' | translate }}
+                </span>
+              }
+            </div>
 
             <button
               [routerLink]="['/teacher/subject', sub.subjectId]"
-              class="w-full rounded-2xl border border-sky-500/20 bg-sky-500/10 text-sky-500 px-6 py-3 text-sm font-bold transition-all hover:bg-sky-500/20 shadow-sm flex items-center justify-center gap-2"
+              class="relative cursor-pointer w-full rounded-2xl border border-primary/20 bg-primary/10 text-primary px-6 py-3 text-sm font-bold transition-all hover:bg-primary hover:text-white shadow-sm flex items-center justify-center gap-2"
             >
-              {{ 'TEACHER.LESSON.MANAGE' | translate }} <i class="fa-solid fa-arrow-right text-xs"></i>
+              {{ 'TEACHER.MANAGE_SUBJECT' | translate }}
+              <i
+                class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-1"
+              ></i>
             </button>
           </div>
         }
