@@ -4,19 +4,14 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-pulse">
       <div class="lg:col-span-2 h-[400px] bg-surface rounded-3xl border border-border-main"></div>
       <div class="space-y-4">
-        <div
-          class="h-24 bg-surface rounded-2xl border border-border-main"
-          *ngFor="let i of [1, 2, 3, 4]"
-        ></div>
+        <div class="h-24 bg-surface rounded-2xl border border-border-main" *ngFor="let i of [1, 2, 3, 4]"></div>
       </div>
     </div>
     } @else if (lesson && isLocked) {
     <div
-      class="flex flex-col items-center justify-center py-20 text-center min-h-[60vh] animate-in fade-in zoom-in duration-500"
-    >
+      class="flex flex-col items-center justify-center py-20 text-center min-h-[60vh] animate-in fade-in zoom-in duration-500">
       <div
-        class="size-32 rounded-3xl bg-surface border border-border-main flex items-center justify-center mb-8 shadow-2xl backdrop-blur-md relative overflow-hidden"
-      >
+        class="size-32 rounded-3xl bg-surface border border-border-main flex items-center justify-center mb-8 shadow-2xl backdrop-blur-md relative overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-br from-red-500/10 to-primary/10"></div>
 
         <i class="fa-solid fa-lock text-6xl text-text-main/50 drop-shadow-xl relative z-10"></i>
@@ -33,10 +28,8 @@
         contents.
       </p>
 
-      <a
-        [routerLink]="['/student/subject-lessons', lesson.subjectId]"
-        class="inline-flex items-center justify-center h-14 px-8 rounded-full bg-surface hover:bg-background border border-border-main text-text-main font-bold transition-all hover:-translate-y-1 active:scale-95"
-      >
+      <a [routerLink]="['/student/subject-lessons', lesson.subjectId]"
+        class="inline-flex items-center justify-center h-14 px-8 rounded-full bg-surface hover:bg-background border border-border-main text-text-main font-bold transition-all hover:-translate-y-1 active:scale-95">
         <i class="fa-solid fa-arrow-left-long mr-3"></i> Back to the Course Path
       </a>
     </div>
@@ -44,34 +37,20 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
       <div class="lg:col-span-2 space-y-6 sticky top-24">
         <div
-          class="relative w-full aspect-video bg-background rounded-3xl overflow-hidden border border-border-main shadow-[0_0_50px_rgba(0,0,0,0.2)] group"
-        >
+          class="relative w-full aspect-video bg-background rounded-3xl overflow-hidden border border-border-main shadow-[0_0_50px_rgba(0,0,0,0.2)] group">
           @if (activeVideo.videoUrl) { @if (isImage(activeVideo.videoUrl)) {
-          <img
-            [src]="activeVideo.videoUrl"
-            class="w-full h-full object-contain bg-background"
-            alt="Lesson Content"
-          />
+          <img [src]="activeVideo.videoUrl" class="w-full h-full object-contain bg-background" alt="Lesson Content" />
           <div
-            class="absolute bottom-4 right-4 bg-surface/80 px-3 py-1 rounded-full text-xs text-text-main backdrop-blur border border-border-main"
-          >
+            class="absolute bottom-4 right-4 bg-surface/80 px-3 py-1 rounded-full text-xs text-text-main backdrop-blur border border-border-main">
             <i class="fa-regular fa-image"></i> Visual Content
           </div>
           } @else {
-          <video
-            [src]="activeVideo.videoUrl"
-            controls
-            autoplay
-            class="w-full h-full object-contain"
-            controlsList="nodownload"
-          ></video>
+          <video [src]="activeVideo.videoUrl" controls autoplay class="w-full h-full object-contain"
+            controlsList="nodownload"></video>
           } } @else {
-          <div
-            class="w-full h-full flex flex-col items-center justify-center text-text-main/30 bg-surface"
-          >
+          <div class="w-full h-full flex flex-col items-center justify-center text-text-main/30 bg-surface">
             <div
-              class="size-20 rounded-full bg-background flex items-center justify-center mb-4 border border-border-main"
-            >
+              class="size-20 rounded-full bg-background flex items-center justify-center mb-4 border border-border-main">
               <i class="fa-solid fa-lock text-3xl"></i>
             </div>
             <p class="text-lg font-medium text-text-main/60">Content locked or unavailable</p>
@@ -87,8 +66,7 @@
             </h2>
 
             <span
-              class="whitespace-nowrap px-3 py-1 rounded-full bg-background text-text-main/60 text-xs border border-border-main"
-            >
+              class="whitespace-nowrap px-3 py-1 rounded-full bg-background text-text-main/60 text-xs border border-border-main">
               <i class="fa-regular fa-calendar mr-1"></i>
               {{ activeVideo.releaseDate | date : 'mediumDate' }}
             </span>
@@ -98,14 +76,11 @@
             {{ activeVideo.description }}
           </p>
           <!-- NOTE: Activities integration point. When activities APIs are implemented and Exercises are exposed on the lesson result, set hasActivities = true and update this button handler to: - Navigate to the first activity for this lesson, OR - After activities are done, call the Complete-lesson endpoint and show completion state. -->
-          <button
-            type="button"
-            (click)="goNextOrComplete()"
-            class="cursor-pointer group relative w-full cursor-pointer mt-8 overflow-hidden rounded-2xl border border-primary/30 bg-primary/10 py-4 transition-all duration-300 hover:bg-primary/20 hover:border-primary/60"
-          >
+          <button type="button" (click)="goNextOrComplete()"
+            class="cursor-pointer group relative w-full cursor-pointer mt-8 overflow-hidden rounded-2xl border border-primary/30 bg-primary/10 py-4 transition-all duration-300 hover:bg-primary/20 hover:border-primary/60">
             <div
-              class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-primary/10 to-transparent group-hover:animate-[shimmer_1.5s_infinite]"
-            ></div>
+              class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-primary/10 to-transparent group-hover:animate-[shimmer_1.5s_infinite]">
+            </div>
 
             <div class="relative flex items-center justify-center gap-3">
               <span class="text-sm font-bold tracking-widest uppercase text-primary">
@@ -113,8 +88,7 @@
               </span>
 
               <div
-                class="flex size-6 items-center justify-center rounded-full bg-primary/20 text-primary transition-all group-hover:translate-x-1 group-hover:bg-primary group-hover:text-white"
-              >
+                class="flex size-6 items-center justify-center rounded-full bg-primary/20 text-primary transition-all group-hover:translate-x-1 group-hover:bg-primary group-hover:text-white">
                 <i class="fa-solid fa-chevron-right text-[10px]"></i>
               </div>
             </div>
@@ -123,52 +97,42 @@
       </div>
 
       <div
-        class="bg-surface/40 backdrop-blur-xl border border-border-main rounded-3xl p-4 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto custom-scroll"
-      >
+        class="bg-surface/40 backdrop-blur-xl border border-border-main rounded-3xl p-4 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto custom-scroll">
         <h3 class="text-text-main font-bold text-lg mb-4 px-2">Videos in this Lesson</h3>
 
         <div class="space-y-3">
           @for (item of videos; track item.vId; let i = $index) {
-          <div
-            (click)="activeVideoIndex = i"
+          <div (click)="activeVideoIndex = i"
             class="group flex gap-4 p-3 rounded-2xl border transition-all cursor-pointer relative overflow-hidden"
             [ngClass]="
               activeVideo?.vId === item.vId
                 ? 'bg-primary/10 border-primary/40'
                 : 'bg-background border-border-main hover:bg-surface hover:border-primary/20'
-            "
-          >
+            ">
             @if (activeVideo?.vId === item.vId) {
             <div class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
             }
 
             <div
-              class="relative shrink-0 size-24 rounded-xl overflow-hidden flex items-center justify-center border border-border-main bg-background"
-            >
+              class="relative shrink-0 size-24 rounded-xl overflow-hidden flex items-center justify-center border border-border-main bg-background">
               <span class="text-text-main/30 font-black text-2xl group-hover:scale-110 transition">
                 {{ i + 1 }}
               </span>
 
               <div
-                class="absolute inset-0 flex items-center justify-center bg-background/40 opacity-0 group-hover:opacity-100 transition"
-              >
-                <div
-                  class="size-8 rounded-full bg-primary text-white flex items-center justify-center shadow-lg"
-                >
+                class="absolute inset-0 flex items-center justify-center bg-background/40 opacity-0 group-hover:opacity-100 transition">
+                <div class="size-8 rounded-full bg-primary text-white flex items-center justify-center shadow-lg">
                   <i class="fa-solid fa-play text-xs ml-0.5"></i>
                 </div>
               </div>
             </div>
 
             <div class="flex flex-col justify-center min-w-0">
-              <h4
-                class="font-bold text-sm line-clamp-2 mb-1 transition-colors"
-                [ngClass]="
+              <h4 class="font-bold text-sm line-clamp-2 mb-1 transition-colors" [ngClass]="
                   activeVideo?.vId === item.vId
                     ? 'text-primary'
                     : 'text-text-main group-hover:text-primary'
-                "
-              >
+                ">
                 {{ item.title }}
               </h4>
 

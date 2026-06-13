@@ -116,7 +116,7 @@ export class LessonDetailsComponent implements OnInit {
       } else {
         alert(
           'Exercise Found but ID is missing from object! Raw Data: ' +
-            JSON.stringify(this.levelDataAccessor)
+          JSON.stringify(this.levelDataAccessor)
         );
       }
       return;
@@ -128,12 +128,55 @@ export class LessonDetailsComponent implements OnInit {
     }
 
     this.studentService.completeLesson(this.subjectId, this.lessonId).subscribe({
-      next: () => {
-        console.log('compleeete');
+      next: (res: any) => {
+        console.log('Lesson completion response:', res);
+        const data = res?.result || res;
+
+        // Handle all possible casing for next/nextId and nextType
+        const nextId = data?.next || data?.Next || data?.nextId || data?.NextId;
+        const rawType = data?.nextType ?? data?.NextType;
+        const nextType = (rawType !== undefined && rawType !== null) ? Number(rawType) : null;
+
+        console.log('Parsed redirection data:', { nextId, nextType, message: res?.message });
+
+        // Redirection logic: nextType 1 = Lesson, 2 = Quiz
+        if (nextId && nextType) {
+          if (nextType === 1) {
+            console.log('Navigating to next lesson:', nextId);
+            this.router.navigate([
+              '/student/subject',
+              this.subjectId,
+              'lesson',
+              nextId,
+            ]);
+          } else if (nextType === 2) {
+            console.log('Navigating to next quiz:', nextId);
+            // Check if we have a lessonId to use for the route.
+            // If the quiz is standalone, we might need a different route.
+            // For now, assume it's under the current subject.
+            this.router.navigate([
+              '/student/subject',
+              this.subjectId,
+              'quizzes',
+              nextId,
+              'solve',
+            ]);
+          } else {
+            console.warn('Unknown nextType:', nextType);
+            this.router.navigate(['/student/subject', this.subjectId]);
+          }
+        } else {
+
+          console.log('No next activity found, going back to subject');
+          this.router.navigate(['/student/subject', this.subjectId]);
+        }
       },
       error: (err) => {
-        console.error(err);
+        console.error('Failed to complete lesson', err);
       },
     });
+
+
+
   }
 }

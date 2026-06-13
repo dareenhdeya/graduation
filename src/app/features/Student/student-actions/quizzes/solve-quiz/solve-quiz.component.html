@@ -166,7 +166,7 @@
                 Matching Exercise
                 }
                 @else {
-                  {{ exControl.value.exerciseType == 3 ? 'Sign Language Quiz' : 'Sign Language Words Quiz' }}
+                {{ exControl.value.exerciseType == 3 ? 'Sign Language Quiz' : 'Sign Language Words Quiz' }}
                 }
               </h3>
 
@@ -617,15 +617,21 @@ transition-all duration-300 flex items-center justify-center gap-2 hover:-transl
           <i class="fa-solid fa-rotate-right"></i> Try Again
         </button>
         }
-        <button (click)="navigateAfterResult()"
-          class="cursor-pointer flex-1 h-12 rounded-2xl font-bold text-sm text-white flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg"
-          [class.bg-gradient-to-r]="true" [class.from-green-500]="resultData()!.passed"
-          [class.to-emerald-600]="resultData()!.passed" [class.from-violet-500]="!resultData()!.passed"
-          [class.to-primary]="!resultData()!.passed">
+
+        @if (resultData()!.passed && resultData()!.nextId) {
+        <button (click)="goToNextActivity()"
+          class="cursor-pointer flex-1 h-12 rounded-2xl font-bold text-sm text-white flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg bg-gradient-to-r from-primary to-violet-600">
+          <i class="fa-solid fa-bolt"></i> Go to Next Activity
+        </button>
+        }
+
+        <button (click)="goBack()"
+          class="cursor-pointer flex-1 h-12 rounded-2xl font-bold text-sm text-text-main border border-border-main flex items-center justify-center gap-2 transition-all hover:bg-surface active:scale-[0.98]">
           <i class="fa-solid fa-arrow-left"></i>
           {{ lessonId() ? 'Back to Lesson' : 'Back to Subjects' }}
         </button>
       </div>
+
 
     </div>
   </div>

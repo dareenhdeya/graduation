@@ -11,7 +11,7 @@ type ExerciseType = 'MCQ' | 'Matching' | 'AI' | 'AIWords';
 // Mirrors backend enum: None = 0, Lesson = 1, Quiz = 2
 export enum PerquisiteType {
   None = 0,
-  Lesson = 1,
+  Lesson = 1
 }
 
 @Component({
@@ -50,7 +50,7 @@ export class CreateQuizComponent implements OnInit {
 
   readonly perquisiteTypes = [
     { value: PerquisiteType.None, label: 'None' },
-    { value: PerquisiteType.Lesson, label: 'Lesson' },
+    { value: PerquisiteType.Lesson, label: 'Lesson' }
   ];
 
   // ── Image maps ──
@@ -498,31 +498,27 @@ export class CreateQuizComponent implements OnInit {
       const type = this.getExerciseType(e);
       if (type === 'AI') {
         if (this.getAiLettersMap(e).size === 0) {
-          this.submitError = `Exercise ${
-            e + 1
-          }: Select at least one letter for the AI Sign Language test.`;
+          this.submitError = `Exercise ${e + 1
+            }: Select at least one letter for the AI Sign Language test.`;
           return;
         }
       } else if (type !== 'AIWords') {
         for (let q = 0; q < this.questions(e).length; q++) {
           if (type === 'MCQ') {
             if (!this.hasCorrectAnswer(e, q)) {
-              this.submitError = `Exercise ${e + 1}, Question ${
-                q + 1
-              }: mark at least one answer as correct.`;
+              this.submitError = `Exercise ${e + 1}, Question ${q + 1
+                }: mark at least one answer as correct.`;
               return;
             }
             if (!this.allMcqAnswersHaveContent(e, q)) {
-              this.submitError = `Exercise ${e + 1}, Question ${
-                q + 1
-              }: all answer choices need content.`;
+              this.submitError = `Exercise ${e + 1}, Question ${q + 1
+                }: all answer choices need content.`;
               return;
             }
           } else if (type === 'Matching') {
             if (!this.matchAnswerHasContent(e, q)) {
-              this.submitError = `Exercise ${e + 1}, Question ${
-                q + 1
-              }: provide a correct answer for matching.`;
+              this.submitError = `Exercise ${e + 1}, Question ${q + 1
+                }: provide a correct answer for matching.`;
               return;
             }
           }

@@ -39,15 +39,15 @@ export class SubjectDetailsComponent implements OnInit {
         console.log("Subject Details:", this.subject);
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error.error.message);
+        console.log(error.error?.message || error.message);
         this.isLoading = false;
       }
     });
   }
-  
+
   enrollSub(id: string) {
     this.studentService.enrollSubject(id).subscribe({
-      next: (res : IEnrollSubResponse) => {
+      next: (res: IEnrollSubResponse) => {
         console.log(res.message, "🥳🥳🥳🥳🥳");
         setTimeout(() => {
           this.toastr.success(res.message || 'Enrolled successfully.', 'Success');

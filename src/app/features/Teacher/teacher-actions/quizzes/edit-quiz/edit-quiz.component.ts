@@ -12,6 +12,7 @@ type ExerciseType = 'MCQ' | 'Matching' | 'AI';
 export enum PerquisiteType {
   None = 0,
   Lesson = 1,
+  Quiz = 2,
 }
 
 @Component({
@@ -51,6 +52,7 @@ export class EditQuizComponent implements OnInit {
   readonly perquisiteTypes = [
     { value: PerquisiteType.None, label: 'None' },
     { value: PerquisiteType.Lesson, label: 'Lesson' },
+    { value: PerquisiteType.Quiz, label: 'Quiz' },
   ];
 
   // ── Image maps: keys are 'eIdx-qIdx' for question images,
@@ -298,8 +300,8 @@ export class EditQuizComponent implements OnInit {
         exTypeInt === 3 || exTypeInt === '3' || exTypeInt === 'AI'
           ? 'AI'
           : exTypeInt === 2 || exTypeInt === '2' || exTypeInt === 'Matching'
-          ? 'Matching'
-          : 'MCQ';
+            ? 'Matching'
+            : 'MCQ';
       let exName = ex.name || ex.Name || ex.title || ex.Title || '';
       if (!exName || exName.trim() === '') exName = 'Untitled Exercise';
       const exId = ex.id || ex.Id || null;
@@ -508,8 +510,8 @@ export class EditQuizComponent implements OnInit {
       exTypeInt === 3 || exTypeInt === '3' || exTypeInt === 'AI'
         ? 'AI'
         : exTypeInt === 2 || exTypeInt === '2' || exTypeInt === 'Matching'
-        ? 'Matching'
-        : 'MCQ';
+          ? 'Matching'
+          : 'MCQ';
     this.exercises
       .at(eIndex)
       .get('name')
@@ -789,9 +791,8 @@ export class EditQuizComponent implements OnInit {
       const type = this.getExerciseType(e);
       if (type === 'AI') {
         if (this.getAiLettersMap(e).size === 0) {
-          this.submitError = `Exercise ${
-            e + 1
-          }: Select at least one letter for the AI Sign Language test.`;
+          this.submitError = `Exercise ${e + 1
+            }: Select at least one letter for the AI Sign Language test.`;
           return;
         }
         continue;
@@ -801,22 +802,19 @@ export class EditQuizComponent implements OnInit {
       for (let q = 0; q < qCount; q++) {
         if (type === 'MCQ') {
           if (!this.hasCorrectAnswer(e, q)) {
-            this.submitError = `Exercise ${e + 1}, Question ${
-              q + 1
-            }: mark at least one answer as correct.`;
+            this.submitError = `Exercise ${e + 1}, Question ${q + 1
+              }: mark at least one answer as correct.`;
             return;
           }
           if (!this.allMcqAnswersHaveContent(e, q)) {
-            this.submitError = `Exercise ${e + 1}, Question ${
-              q + 1
-            }: all answer choices need content.`;
+            this.submitError = `Exercise ${e + 1}, Question ${q + 1
+              }: all answer choices need content.`;
             return;
           }
         } else {
           if (!this.matchAnswerHasContent(e, q)) {
-            this.submitError = `Exercise ${e + 1}, Question ${
-              q + 1
-            }: provide a correct answer for matching.`;
+            this.submitError = `Exercise ${e + 1}, Question ${q + 1
+              }: provide a correct answer for matching.`;
             return;
           }
         }
@@ -843,9 +841,9 @@ export class EditQuizComponent implements OnInit {
     // Prerequisite
     const prereqType: number = this.selectedPrereqType;
     const prereqId: string | null = this.levelForm.get('perquisiteId')?.value;
-    formData.append('perquisiteType', prereqType.toString());
+    formData.append('PerquisiteType', prereqType.toString());
     if (prereqType !== PerquisiteType.None && prereqId) {
-      formData.append('perquisite', prereqId);
+      formData.append('PerquisiteID', prereqId);
     }
 
     this.exercises.value.forEach((ex: any, eIndex: number) => {

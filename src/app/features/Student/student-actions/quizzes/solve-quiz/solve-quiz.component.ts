@@ -46,7 +46,13 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
 
   // ── Result modal ───────────────────────────────────────────────
   showResultModal = signal(false);
-  resultData = signal<{ percentage: number; passed: boolean; message: string } | null>(null);
+  resultData = signal<{
+    percentage: number;
+    passed: boolean;
+    message: string;
+    nextId?: string;
+    nextType?: number;
+  } | null>(null);
 
   // ── Matching: shuffled display arrays ──────────────────────────
   matchingAnswers: Map<number, any[]> = new Map(); // eIdx → shuffled answers
@@ -318,10 +324,13 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
         // Store result and show modal
         const result = res?.result || res?.data || {};
         this.resultData.set({
-          percentage: result.percentage ?? 0,
-          passed: result.passed ?? false,
-          message: res?.message || (result.passed ? 'Well done! You passed!' : 'Keep practicing!'),
+          percentage: result.percentage ?? result.Percentage ?? 0,
+          passed: result.passed ?? result.Passed ?? false,
+          message: res?.message || (result.passed || result.Passed ? 'Well done! You passed!' : 'Keep practicing!'),
+          nextId: result.nextId || result.NextId || result.next || result.Next,
+          nextType: result.nextType || result.NextType,
         });
+
         this.showResultModal.set(true);
         if (result.passed) this.launchConfetti();
       },
@@ -332,12 +341,41 @@ export class SolveQuizComponent implements OnInit, OnDestroy {
     });
   }
 
-  navigateAfterResult() {
+  goBack() {
     this.showResultModal.set(false);
     if (this.lessonId()) {
-      this.router.navigate(['/student/subject', this.subjectId(), 'lesson', this.lessonId()]);
+      this.router.navigate([
+        '/student/subject',
+        this.subjectId(),
+        'lesson',
+        this.lessonId(),
+      ]);
     } else {
       this.router.navigate(['/student/subject', this.subjectId()]);
+    }
+  }
+
+  goToNextActivity() {
+    this.showResultModal.set(false);
+    const result = this.resultData();
+    if (result && result.nextId && result.nextType) {
+      // nextType: 1 for Lesson, 2 for Quiz
+      if (result.nextType === 1) {
+        this.router.navigate([
+          '/student/subject',
+          this.subjectId(),
+          'lesson',
+          result.nextId,
+        ]);
+      } else if (result.nextType === 2) {
+        this.router.navigate([
+          '/student/subject',
+          this.subjectId(),
+          'quizzes',
+          result.nextId,
+          'solve',
+        ]);
+      }
     }
   }
 
