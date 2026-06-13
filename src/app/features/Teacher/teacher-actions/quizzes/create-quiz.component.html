@@ -50,13 +50,13 @@
     <form [formGroup]="levelForm" (ngSubmit)="onSubmit()" class="space-y-8">
       <!-- Level Details Card -->
       <div
-        class="rounded-[32px] border border-white/10 bg-white/[0.04] backdrop-blur-2xl shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8)] p-6 md:p-8 space-y-6">
-        <div class="flex items-center gap-3 mb-2">
+        class="rounded-3xl border border-border-main backdrop-blur-xl shadow-sm p-6 md:p-8 space-y-6">
+        <div class="flex items-center gap-4">
           <div
-            class="size-10 rounded-2xl bg-violet-500/10 text-violet-400 flex items-center justify-center border border-violet-500/20">
+            class="size-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center text-xl">
             <i class="fa-solid fa-layer-group"></i>
           </div>
-          <h2 class="font-black text-xl text-text-main tracking-tight">Level Details</h2>
+          <h2 class="text-2xl font-black text-text-main">Level Details</h2>
         </div>
 
         <!-- Name -->
@@ -64,12 +64,15 @@
           <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Level
             Title</label>
           <input formControlName="name" type="text"
-            class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm placeholder:text-text-main/30"
+            class="w-full rounded-2xl border border-border-main bg-surface/40 backdrop-blur-xl px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm placeholder:text-placeholder"
             placeholder="e.g., Unit 1 – Comprehension Level" />
           @if (levelForm.get('name')?.touched && levelForm.get('name')?.invalid) {
-          <p class="text-red-500 text-xs font-bold mt-1 pl-1">
-            Title is required (min 3 characters).
-          </p>
+        
+          <p
+  class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1">
+  <i class="fas fa-circle-exclamation mt-0.5"></i>
+  <span>Title is required (min 3 characters).</span>
+</p>
           }
         </div>
 
@@ -79,12 +82,16 @@
             <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Passing Grade
               (%)</label>
             <input formControlName="passingGradePercentage" type="number" min="1" max="100"
-              class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm" />
+              class="w-full rounded-2xl border border-border-main bg-surface/40 backdrop-blur-xl px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm" />
             @if (
             levelForm.get('passingGradePercentage')?.touched &&
             levelForm.get('passingGradePercentage')?.invalid
             ) {
-            <p class="text-red-500 text-xs font-bold mt-1 pl-1">Must be between 1 and 100.</p>
+            <p
+  class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1">
+  <i class="fas fa-circle-exclamation mt-0.5"></i>
+  <span>Must be between 1 and 100.</span>
+</p>
             }
           </div>
           <div>
@@ -153,9 +160,12 @@
           @if (
           levelForm.get('perquisiteId')?.touched && !levelForm.get('perquisiteId')?.value
           ) {
-          <p class="text-red-500 text-xs font-bold mt-1 pl-1">
-            Please select a prerequisite item.
-          </p>
+       
+          <p
+  class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1">
+  <i class="fas fa-circle-exclamation mt-0.5"></i>
+  <span>Please select a prerequisite item.</span>
+</p>
           }
           }
         </div>
@@ -167,15 +177,13 @@
         @for (ex of exercises.controls; track ex; let eIndex = $index) {
         <div [formGroupName]="eIndex"
           class="rounded-[28px] border border-white/10 bg-white/[0.03] backdrop-blur-xl p-6 md:p-8 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)] space-y-6 hover:border-white/20 transition-all"
-          [class.border-emerald-500]="getExerciseType(eIndex) === 'AI'"
-          [class.border-teal-500]="getExerciseType(eIndex) === 'AIWords'">
+          [class.border-primary]="getExerciseType(eIndex) === 'AI' || getExerciseType(eIndex) === 'AIWords'"
+>
           <!-- Exercise Header -->
           <div class="flex items-center justify-between gap-4 flex-wrap">
             <div class="flex items-center gap-3">
-              <div class="size-10 rounded-2xl flex items-center justify-center border font-black text-base shrink-0"
-                [class]="getExerciseType(eIndex) === 'AI' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' 
-       : getExerciseType(eIndex) === 'AIWords' ? 'bg-teal-500/10 text-teal-500 border-teal-500/20' 
-       : 'bg-primary/10 text-primary border-primary/20'">
+              <div class="size-9 rounded-lg flex items-center justify-center bg-primary text-sm font-medium shrink-0 text-white"
+            >
                 {{ eIndex + 1 }}
               </div>
               <h2 class="font-black text-text-main text-xl tracking-tight">
@@ -186,18 +194,18 @@
             <!-- Action buttons -->
             <div class="flex items-center gap-2 flex-wrap">
               <button type="button" (click)="clearExercise(eIndex)"
-                class="h-9 px-4 rounded-2xl border border-amber-500/20 bg-amber-500/10 text-amber-400 font-bold text-xs hover:bg-amber-500/20 transition-all shadow-sm"
+                class="h-9 px-4  cursor-pointer  rounded-2xl border border-amber-500/20 bg-amber-500/10 text-amber-400 font-bold text-xs hover:bg-amber-500/20 transition-all shadow-sm"
                 title="Clear all content but keep structure">
                 <i class="fa-solid fa-eraser mr-1"></i> Clear
               </button>
               <button type="button" (click)="resetExercise(eIndex)"
-                class="h-9 px-4 rounded-2xl border border-sky-500/20 bg-sky-500/10 text-sky-400 font-bold text-xs hover:bg-sky-500/20 transition-all shadow-sm"
+                class="h-9 px-4 cursor-pointer  rounded-2xl border border-sky-500/20 bg-sky-500/10 text-sky-400 font-bold text-xs hover:bg-sky-500/20 transition-all shadow-sm"
                 title="Reset to default empty state">
                 <i class="fa-solid fa-rotate-left mr-1"></i> Reset
               </button>
               @if (exercises.length > 1) {
               <button type="button" (click)="removeExercise(eIndex)"
-                class="h-9 px-4 rounded-2xl border border-red-500/20 bg-red-500/10 text-red-400 font-bold text-xs hover:bg-red-500/20 transition-all shadow-sm">
+                class="h-9 px-4  cursor-pointer rounded-2xl border border-red-500/20 bg-red-500/10 text-red-400 font-bold text-xs hover:bg-red-500/20 transition-all shadow-sm">
                 <i class="fa-solid fa-trash-can mr-1"></i> Remove
               </button>
               }
@@ -209,12 +217,15 @@
             <label class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1">Exercise
               Name</label>
             <input formControlName="name" type="text"
-              class="w-full rounded-2xl border border-border-main bg-background px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm placeholder:text-text-main/30"
+              class="w-full rounded-2xl border border-border-main bg-surface/40 backdrop-blur-xl px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm placeholder:text-placeholder"
               placeholder="e.g., Vocabulary MCQ" />
             @if (ex.get('name')?.touched && ex.get('name')?.invalid) {
-            <p class="text-red-500 text-xs font-bold mt-1 pl-1">
-              Exercise name is required (min 3 characters).
-            </p>
+          
+            <p
+  class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1">
+  <i class="fas fa-circle-exclamation mt-0.5"></i>
+  <span>Exercise name is required (min 3 characters).</span>
+</p>
             }
           </div>
 
@@ -225,32 +236,34 @@
             <div
               class="inline-flex rounded-2xl border border-border-main bg-background overflow-hidden text-sm font-bold shadow-sm">
               <button type="button" (click)="setExerciseType(eIndex, 'MCQ')"
-                class="px-5 py-2.5 flex items-center gap-2 transition-all"
+                class="px-5 py-2.5 cursor-pointer flex items-center gap-2 transition-all"
                 [class.bg-primary]="getExerciseType(eIndex) === 'MCQ'"
                 [class.text-white]="getExerciseType(eIndex) === 'MCQ'"
-                [class.text-text-main]="getExerciseType(eIndex) !== 'MCQ'">
+                [class]="getExerciseType(eIndex) !== 'MCQ'? 'text-text-main hover:bg-primary/10' : ''">
                 <i class="fa-solid fa-list-check"></i> MCQ
               </button>
               <button type="button" (click)="setExerciseType(eIndex, 'Matching')"
-                class="px-5 py-2.5 flex items-center gap-2 border-l border-border-main transition-all"
+                class="px-5 py-2.5  cursor-pointer  flex items-center gap-2 border-l border-border-main transition-all"
                 [class.bg-primary]="getExerciseType(eIndex) === 'Matching'"
                 [class.text-white]="getExerciseType(eIndex) === 'Matching'"
-                [class.text-text-main]="getExerciseType(eIndex) !== 'Matching'">
+                [class]="getExerciseType(eIndex) !== 'Matching'? 'text-text-main hover:bg-primary/10' : ''">
                 <i class="fa-solid fa-shuffle"></i> Matching
               </button>
               @if (isAISupported) {
               <button type="button" (click)="setExerciseType(eIndex, 'AI')"
-                class="px-5 py-2.5 flex items-center gap-2 border-l border-border-main transition-all"
-                [class.bg-emerald-500]="getExerciseType(eIndex) === 'AI'"
+                class="px-5 py-2.5  cursor-pointer  flex items-center gap-2 border-l border-border-main transition-all"
                 [class.text-white]="getExerciseType(eIndex) === 'AI'"
-                [class]="getExerciseType(eIndex) !== 'AI' ? 'text-emerald-500 hover:bg-emerald-500/10' : ''">
+                [class.bg-primary]="getExerciseType(eIndex) === 'AI'"
+                [class.text-white]="getExerciseType(eIndex) === 'AI'"
+                [class]="getExerciseType(eIndex) !== 'AI' ? 'text-text-main hover:bg-primary/10' : ''">
                 <i class="fa-solid fa-robot"></i> AI Practice
               </button>
               <button type="button" (click)="setExerciseType(eIndex, 'AIWords')"
-              class="px-5 py-2.5 flex items-center gap-2 border-l border-border-main transition-all"
-              [class.bg-teal-500]="getExerciseType(eIndex) === 'AIWords'"
+              class="px-5 py-2.5  cursor-pointer  flex items-center gap-2 border-l border-border-main transition-all"
               [class.text-white]="getExerciseType(eIndex) === 'AIWords'"
-              [class]="getExerciseType(eIndex) !== 'AIWords' ? 'text-teal-500 hover:bg-teal-500/10' : ''">
+              [class.bg-primary]="getExerciseType(eIndex) === 'AIWords'"
+[class.text-white]="getExerciseType(eIndex) === 'AIWords'"
+[class]="getExerciseType(eIndex) !== 'AIWords' ? 'text-text-main hover:bg-primary/10' : ''" >
               <i class="fa-solid fa-spell-check"></i> AI Words
             </button>
               }
@@ -274,7 +287,7 @@
             <div class="flex items-center justify-between">
               <label class="text-xs font-bold uppercase tracking-wider text-text-main/50">Questions</label>
               <button type="button" (click)="addQuestion(eIndex)"
-                class="h-8 px-3 rounded-xl border border-primary/20 bg-primary/10 text-primary font-bold text-xs hover:bg-primary/20 transition-all shadow-sm">
+                class="h-8 px-3  cursor-pointer  rounded-xl border border-primary/20 bg-primary/10 text-primary font-bold text-xs hover:bg-primary/20 transition-all shadow-sm">
                 <i class="fa-solid fa-plus mr-1"></i> Add Question
               </button>
             </div>
@@ -293,7 +306,7 @@
                 </div>
                 @if (questions(eIndex).length > 1) {
                 <button type="button" (click)="removeQuestion(eIndex, qIndex)"
-                  class="h-8 px-3 rounded-xl border border-red-500/20 bg-red-500/10 text-red-400 font-bold text-xs hover:bg-red-500/20 transition-all">
+                  class="h-8 px-3  cursor-pointer  rounded-xl border border-red-500/20 bg-red-500/10 text-red-400 font-bold text-xs hover:bg-red-500/20 transition-all">
                   <i class="fa-solid fa-trash-can mr-1"></i> Remove
                 </button>
                 }
@@ -313,7 +326,7 @@
                   Text
                   <span class="normal-case font-normal text-text-main/30">(optional)</span></label>
                 <textarea formControlName="prompt_text" rows="2"
-                  class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm resize-none placeholder:text-text-main/30"
+                  class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm resize-none placeholder:text-placeholder"
                   placeholder="e.g., What is the main idea of the passage?"></textarea>
               </div>
 
@@ -352,7 +365,7 @@
                 <div class="flex items-center justify-between">
                   <label class="text-xs font-bold uppercase tracking-wider text-text-main/50">Answer Choices</label>
                   <button type="button" (click)="addAnswer(eIndex, qIndex)"
-                    class="h-7 px-3 rounded-xl border border-primary/20 bg-primary/10 text-primary font-bold text-xs hover:bg-primary/20 transition-all shadow-sm">
+                    class="h-7 px-3  cursor-pointer  rounded-xl border border-primary/20 bg-primary/10 text-primary font-bold text-xs hover:bg-primary/20 transition-all shadow-sm">
                     <i class="fa-solid fa-plus mr-1"></i> Add Choice
                   </button>
                 </div>
@@ -366,7 +379,7 @@
                   <div class="flex items-center gap-3 px-4 py-3">
                     <!-- ✓ Correct Toggle -->
                     <button type="button" (click)="toggleCorrect(eIndex, qIndex, aIndex)"
-                      class="shrink-0 size-8 rounded-xl flex items-center justify-center border transition-all font-bold text-sm"
+                      class="shrink-0 size-8  cursor-pointer  rounded-xl flex items-center justify-center border transition-all font-bold text-sm"
                       [class.border-green-500]="a.get('isCorrect')?.value"
                       [class.bg-green-500]="a.get('isCorrect')?.value" [class.text-white]="a.get('isCorrect')?.value"
                       [class.border-border-main]="!a.get('isCorrect')?.value"
@@ -379,7 +392,7 @@
                     <div
                       class="flex items-center rounded-xl border border-border-main bg-background overflow-hidden shrink-0 text-xs font-bold">
                       <button type="button" (click)="setMcqAnswerType(eIndex, qIndex, aIndex, 'text')"
-                        class="h-7 px-3 transition-all" [class.bg-primary]="
+                        class="h-7 px-3  cursor-pointer  transition-all" [class.bg-primary]="
                                     getMcqAnswerType(eIndex, qIndex, aIndex) === 'text'
                                   " [class.text-white]="
                                     getMcqAnswerType(eIndex, qIndex, aIndex) === 'text'
@@ -389,7 +402,7 @@
                         <i class="fa-solid fa-font mr-1"></i>Text
                       </button>
                       <button type="button" (click)="setMcqAnswerType(eIndex, qIndex, aIndex, 'image')"
-                        class="h-7 px-3 border-l border-border-main transition-all" [class.bg-primary]="
+                        class="h-7 px-3  cursor-pointer  border-l border-border-main transition-all" [class.bg-primary]="
                                     getMcqAnswerType(eIndex, qIndex, aIndex) === 'image'
                                   " [class.text-white]="
                                     getMcqAnswerType(eIndex, qIndex, aIndex) === 'image'
@@ -403,7 +416,7 @@
                     <!-- Text input -->
                     @if (getMcqAnswerType(eIndex, qIndex, aIndex) === 'text') {
                     <input formControlName="answer" type="text"
-                      class="flex-1 min-w-0 rounded-xl border border-transparent bg-transparent text-sm font-semibold text-text-main outline-none placeholder:text-text-main/30"
+                      class="flex-1 min-w-0 rounded-xl border border-transparent bg-transparent text-sm font-semibold text-text-main outline-none placeholder:text-placeholder"
                       [placeholder]="'Choice ' + (aIndex + 1)" />
                     }
 
@@ -435,7 +448,7 @@
                     <!-- Remove answer -->
                     @if (answers(eIndex, qIndex).length > 2) {
                     <button type="button" (click)="removeAnswer(eIndex, qIndex, aIndex)"
-                      class="shrink-0 size-8 rounded-xl border border-red-500/20 bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-all flex items-center justify-center text-xs">
+                      class="shrink-0 size-8  cursor-pointer  rounded-xl border border-red-500/20 bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-all flex items-center justify-center text-xs">
                       <i class="fa-solid fa-xmark"></i>
                     </button>
                     }
@@ -455,13 +468,13 @@
                   <div
                     class="flex items-center rounded-xl border border-border-main bg-background overflow-hidden shrink-0 text-xs font-bold">
                     <button type="button" (click)="setMatchAnswerType(eIndex, qIndex, 'text')"
-                      class="h-7 px-3 transition-all" [class.bg-primary]="getMatchAnswerType(eIndex, qIndex) === 'text'"
+                      class="h-7 px-3  cursor-pointer  transition-all" [class.bg-primary]="getMatchAnswerType(eIndex, qIndex) === 'text'"
                       [class.text-white]="getMatchAnswerType(eIndex, qIndex) === 'text'"
                       [class.text-text-main]="getMatchAnswerType(eIndex, qIndex) !== 'text'">
                       <i class="fa-solid fa-font mr-1"></i>Text
                     </button>
                     <button type="button" (click)="setMatchAnswerType(eIndex, qIndex, 'image')"
-                      class="h-7 px-3 border-l border-border-main transition-all"
+                      class="h-7 px-3  cursor-pointer  border-l border-border-main transition-all"
                       [class.bg-primary]="getMatchAnswerType(eIndex, qIndex) === 'image'"
                       [class.text-white]="getMatchAnswerType(eIndex, qIndex) === 'image'"
                       [class.text-text-main]="getMatchAnswerType(eIndex, qIndex) !== 'image'">
@@ -472,7 +485,7 @@
                   <!-- Text input -->
                   @if (getMatchAnswerType(eIndex, qIndex) === 'text') {
                   <input type="text" formControlName="matchAnswer"
-                    class="flex-1 min-w-0 rounded-xl border border-transparent bg-transparent text-sm font-semibold text-text-main outline-none placeholder:text-text-main/30"
+                    class="flex-1 min-w-0 rounded-xl border border-transparent bg-transparent text-sm font-semibold text-text-main outline-none placeholder:text-placeholder"
                     placeholder="Enter the correct answer…" />
                   }
 
@@ -513,84 +526,81 @@
 
           <!-- ── AI Letters Block ── -->
           @if (getExerciseType(eIndex) === 'AI') {
-          <div class="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-6 space-y-6">
-            <!-- Alphabet Tab Switcher -->
-            <div class="flex items-center gap-2 p-1.5 rounded-2xl border border-border-main bg-background w-fit">
-              <button type="button" (click)="setActiveAlphabetTab(eIndex, 'english')"
-                [class]="getActiveAlphabetTab(eIndex) === 'english' ? 'bg-emerald-500/10 text-emerald-500 font-bold' : 'text-text-main/60 font-medium hover:text-text-main'"
-                class="cursor-pointer rounded-xl px-4 py-2 text-sm transition-all">
-                English (A-Z)
-              </button>
-              <button type="button" (click)="setActiveAlphabetTab(eIndex, 'arabic')"
-                [class]="getActiveAlphabetTab(eIndex) === 'arabic' ? 'bg-emerald-500/10 text-emerald-500 font-bold' : 'text-text-main/60 font-medium hover:text-text-main'"
-                class="cursor-pointer rounded-xl px-4 py-2 text-sm transition-all">
-                Arabic (أ-ي)
-              </button>
-            </div>
-
-            <!-- Letters Grid -->
-            <div class="flex flex-wrap gap-2">
-              @for (letter of (getActiveAlphabetTab(eIndex) === 'english' ? englishAlphabet : arabicAlphabet); track
-              letter) {
-              <button type="button" (click)="toggleLetter(eIndex, letter)"
-                class="size-11 rounded-xl border text-sm font-black transition-all cursor-pointer flex items-center justify-center"
-                [class]="isLetterSelected(eIndex, letter)
-                        ? 'bg-emerald-500 text-white border-emerald-500 shadow-lg shadow-emerald-500/30 scale-110'
-                        : 'bg-background border-border-main text-text-main/70 hover:border-emerald-500/50 hover:text-emerald-500'">
-                {{ letter }}
-              </button>
-              }
-            </div>
-
-            <!-- Selected Letters with Rounds -->
-            @if (getAiLettersEntries(eIndex).length > 0) {
-            <div class="space-y-3 pt-2">
-              <div class="flex items-center justify-between">
-                <label class="text-xs font-bold uppercase tracking-wider text-text-main/50">Selected Letters &
-                  Rounds</label>
-                <span class="text-xs font-black text-emerald-500">
-                  Total: {{ getAiTotalRounds(eIndex) }} {{ getAiTotalRounds(eIndex) === 1 ? 'round' : 'rounds' }}
-                </span>
+            <div class="rounded-2xl border border-primary/20 bg-primary/5 p-6 space-y-6">
+              <!-- Alphabet Tab Switcher -->
+              <div class="flex items-center gap-2 p-1.5 rounded-2xl border border-border-main bg-background w-fit">
+                <button type="button" (click)="setActiveAlphabetTab(eIndex, 'english')"
+                  [class]="getActiveAlphabetTab(eIndex) === 'english' ? 'bg-primary/10 text-primary font-bold' : 'text-text-main/60 font-medium hover:text-text-main'"
+                  class="cursor-pointer rounded-xl px-4 py-2 text-sm transition-all">
+                  English (A-Z)
+                </button>
+                <button type="button" (click)="setActiveAlphabetTab(eIndex, 'arabic')"
+                  [class]="getActiveAlphabetTab(eIndex) === 'arabic' ? 'bg-primary/10 text-primary font-bold' : 'text-text-main/60 font-medium hover:text-text-main'"
+                  class="cursor-pointer rounded-xl px-4 py-2 text-sm transition-all">
+                  Arabic (أ-ي)
+                </button>
               </div>
-
-              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                @for (entry of getAiLettersEntries(eIndex); track entry.letter) {
-                <div
-                  class="flex items-center gap-3 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3">
-                  <span
-                    class="size-9 rounded-xl bg-emerald-500 text-white font-black text-sm flex items-center justify-center shrink-0">
-                    {{ entry.letter }}
-                  </span>
-                  <div class="flex items-center gap-2 flex-1 min-w-0">
-                    <button type="button" (click)="setLetterRounds(eIndex, entry.letter, entry.rounds - 1)"
-                      class="size-7 rounded-lg border border-border-main bg-background text-text-main/60 hover:text-text-main text-xs font-bold cursor-pointer flex items-center justify-center transition-all">
-                      −
-                    </button>
-                    <input type="number" [value]="entry.rounds" min="1" max="20"
-                      (change)="setLetterRounds(eIndex, entry.letter, +$any($event.target).value)"
-                      class="w-12 text-center rounded-lg border border-border-main bg-background px-1 py-1 text-sm font-bold text-text-main outline-none focus:border-emerald-500" />
-                    <button type="button" (click)="setLetterRounds(eIndex, entry.letter, entry.rounds + 1)"
-                      class="size-7 rounded-lg border border-border-main bg-background text-text-main/60 hover:text-text-main text-xs font-bold cursor-pointer flex items-center justify-center transition-all">
-                      +
-                    </button>
-                  </div>
-                  <button type="button" (click)="removeLetter(eIndex, entry.letter)"
-                    class="size-7 rounded-lg border border-red-500/20 bg-red-500/10 text-red-400 hover:bg-red-500/20 text-xs cursor-pointer flex items-center justify-center transition-all">
-                    <i class="fa-solid fa-xmark"></i>
-                  </button>
-                </div>
+            
+              <!-- Letters Grid -->
+              <div class="flex flex-wrap gap-2">
+                @for (letter of (getActiveAlphabetTab(eIndex) === 'english' ? englishAlphabet : arabicAlphabet); track letter) {
+                <button type="button" (click)="toggleLetter(eIndex, letter)"
+                  class="size-11 rounded-xl border text-sm font-black transition-all cursor-pointer flex items-center justify-center"
+                  [class]="isLetterSelected(eIndex, letter)
+                          ? 'bg-primary text-white border-primary shadow-lg shadow-primary/30 scale-110'
+                          : 'bg-background border-border-main text-text-main/70 hover:border-primary/50 hover:text-primary'">
+                  {{ letter }}
+                </button>
                 }
               </div>
+            
+              <!-- Selected Letters with Rounds -->
+              @if (getAiLettersEntries(eIndex).length > 0) {
+              <div class="space-y-3 pt-2">
+                <div class="flex items-center justify-between">
+                  <label class="text-xs font-bold uppercase tracking-wider text-text-main/50">Selected Letters & Rounds</label>
+                  <span class="text-xs font-black text-primary">
+                    Total: {{ getAiTotalRounds(eIndex) }} {{ getAiTotalRounds(eIndex) === 1 ? 'round' : 'rounds' }}
+                  </span>
+                </div>
+            
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  @for (entry of getAiLettersEntries(eIndex); track entry.letter) {
+                  <div class="flex items-center gap-3 rounded-2xl border border-primary/20 bg-primary/10 px-4 py-3">
+                    <span class="size-9 rounded-xl bg-primary text-white font-black text-sm flex items-center justify-center shrink-0">
+                      {{ entry.letter }}
+                    </span>
+                    <div class="flex items-center gap-2 flex-1 min-w-0">
+                      <button type="button" (click)="setLetterRounds(eIndex, entry.letter, entry.rounds - 1)"
+                        class="size-7 rounded-lg border border-border-main hover:border-primary bg-background text-text-main/60 hover:text-text-main text-xs font-bold cursor-pointer flex items-center justify-center transition-all">
+                        −
+                      </button>
+                      <input type="number" [value]="entry.rounds" min="1" max="20"
+                        (change)="setLetterRounds(eIndex, entry.letter, +$any($event.target).value)"
+                        class="w-12 text-center rounded-lg border border-border-main bg-background px-1 py-1 text-sm font-bold text-text-main outline-none focus:border-primary" />
+                      <button type="button" (click)="setLetterRounds(eIndex, entry.letter, entry.rounds + 1)"
+                        class="size-7 rounded-lg border border-border-main hover:border-primary bg-background text-text-main/60 hover:text-text-main text-xs font-bold cursor-pointer flex items-center justify-center transition-all">
+                        +
+                      </button>
+                    </div>
+                    <button type="button" (click)="removeLetter(eIndex, entry.letter)"
+                      class="size-7 rounded-lg border border-red-500/20 bg-red-500/10 text-red-400 hover:bg-red-500/20 text-xs cursor-pointer flex items-center justify-center transition-all">
+                      <i class="fa-solid fa-xmark"></i>
+                    </button>
+                  </div>
+                  }
+                </div>
+              </div>
+              }
             </div>
             }
-          </div>
-          }
 
          <!-- ai wordssssssssssssssssssssssssssss -->
          @if (getExerciseType(eIndex) === 'AIWords') {
-          <div class="rounded-2xl border border-teal-500/20 bg-teal-500/5 p-6 space-y-4">
+          <div class="rounded-2xl border border-primary/20 bg-primary/5 p-6 space-y-4"
+          >
             <div class="flex items-center gap-3 mb-2">
-              <div class="size-10 rounded-2xl bg-teal-500/10 text-teal-500 flex items-center justify-center border border-teal-500/20">
+              <div class="size-10 rounded-2xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20">
                 <i class="fa-solid fa-spell-check"></i>
               </div>
               <div>
@@ -606,19 +616,19 @@
               <div class="flex items-center gap-3">
                 <button type="button"
                   (click)="exercises.at(eIndex).get('aiWordsCount')?.setValue(Math.max(1, (exercises.at(eIndex).get('aiWordsCount')?.value ?? 1) - 1))"
-                  class="size-11 rounded-xl border border-border-main bg-background text-text-main/60 hover:text-text-main font-bold text-lg cursor-pointer flex items-center justify-center transition-all">−</button>
+                  class="size-11 rounded-xl border border-border-main hover:border-primary bg-background text-text-main/60 hover:text-text-main font-bold text-lg cursor-pointer flex items-center justify-center transition-all">−</button>
                 <input type="number" formControlName="aiWordsCount" min="1" max="50"
-                  class="w-20 text-center rounded-2xl border border-teal-500/30 bg-background px-3 py-3 text-lg font-black text-text-main outline-none transition-all focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 shadow-sm" />
+                  class="w-20 text-center rounded-2xl border border-border-main/30 bg-background px-3 py-3 text-lg font-black text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm" />
                 <button type="button"
                   (click)="exercises.at(eIndex).get('aiWordsCount')?.setValue(Math.min(50, (exercises.at(eIndex).get('aiWordsCount')?.value ?? 1) + 1))"
-                  class="size-11 rounded-xl border border-border-main bg-background text-text-main/60 hover:text-text-main font-bold text-lg cursor-pointer flex items-center justify-center transition-all">+</button>
+                  class="size-11 rounded-xl border border-border-main hover:border-primary bg-background text-text-main/60 hover:text-text-main font-bold text-lg cursor-pointer flex items-center justify-center transition-all">+</button>
                 <span class="text-sm text-text-main/40 font-bold">words</span>
               </div>
             </div>
           
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-teal-500/10 border border-teal-500/20">
-              <i class="fa-solid fa-circle-check text-teal-500 text-sm"></i>
-              <span class="text-sm font-bold text-teal-500">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-primary/10 border border-primary/20">
+              <i class="fa-solid fa-circle-check text-primary text-sm"></i>
+              <span class="text-sm font-bold text-primary">
                 {{ exercises.at(eIndex).get('aiWordsCount')?.value }} 
                 {{ exercises.at(eIndex).get('aiWordsCount')?.value === 1 ? 'word' : 'words' }} to practice
               </span>
@@ -631,15 +641,16 @@
 
       <!-- Add Exercise Button -->
       <button type="button" (click)="addExercise()"
-        class="w-full h-14 rounded-3xl border-2 border-dashed border-white/10 bg-white/[0.02] font-bold text-white/50 hover:text-sky-400 hover:border-sky-500/40 transition-all text-sm flex items-center justify-center gap-2 group">
-        <i class="fa-solid fa-plus group-hover:scale-125 transition-transform"></i>
-        Add Exercise
+        class="cursor-pointer w-full h-14 rounded-2xl border-2 border-dashed border-border-main bg-background font-bold text-text-main/50 hover:text-primary hover:border-primary/40 transition-all text-sm flex items-center justify-center gap-2 group">
+      <i class="fa-solid fa-plus group-hover:scale-125 transition-transform"></i>
+      Add Exercise
       </button>
+      
 
       <!-- Submit -->
       <div class="pt-2 pb-6">
         <button type="submit" [disabled]="isSubmitting"
-          class="w-full h-14 rounded-2xl bg-gradient-to-r from-sky-500 to-violet-500 font-bold text-white shadow-xl shadow-violet-500/20 hover:from-sky-400 hover:to-violet-400 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed text-base tracking-wide">
+        class="w-full cursor-pointer h-14 rounded-2xl bg-primary font-bold text-white shadow-sm hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed text-base tracking-wide">
           <span class="flex items-center justify-center gap-2">
             @if (isSubmitting) {
             <i class="fas fa-spinner fa-spin"></i> Creating Level…
@@ -648,6 +659,7 @@
             }
           </span>
         </button>
+
       </div>
     </form>
   </div>

@@ -6,7 +6,7 @@ import { TeacherServiceService } from '../../../services/teacher-service.service
 import { ToastrService } from 'ngx-toastr';
 
 type AnswerType = 'text' | 'image';
-type ExerciseType = 'MCQ' | 'Matching' | 'AI';
+type ExerciseType = 'MCQ' | 'Matching' | 'AI' | 'AIWords';
 
 // Mirrors backend enum: None = 0, Lesson = 1, Quiz = 2
 export enum PerquisiteType {
@@ -26,6 +26,7 @@ export class EditQuizComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly teacherService = inject(TeacherServiceService);
   private toastr = inject(ToastrService);
+  readonly Math = Math;
 
   subjectId: string | null = null;
   lessonId: string | null = null;
@@ -36,6 +37,9 @@ export class EditQuizComponent implements OnInit {
   submitError = '';
 
   difficulties = ['Easy', 'Medium', 'Hard'];
+
+  perquisiteTypeDropdownOpen = false;
+  prerequisiteItemDropdownOpen = false;
 
   /** ─── AI Configs ─── */
   isAISupported = false;
@@ -103,6 +107,17 @@ export class EditQuizComponent implements OnInit {
 
   getExerciseType(eIndex: number): ExerciseType {
     return this.exercises.at(eIndex).get('type')?.value as ExerciseType;
+  }
+
+  getPerquisiteTypeLabel(): string {
+    const val = Number(this.levelForm.get('perquisiteType')?.value ?? 0);
+    return this.perquisiteTypes.find((t) => t.value === val)?.label || 'Select Type';
+  }
+
+  getPrerequisiteItemLabel(): string {
+    const id = this.levelForm.get('perquisiteId')?.value;
+    if (!id) return '-- Select a lesson --';
+    return this.prerequisiteOptions.find((o) => o.id === id)?.title || '-- Select a lesson --';
   }
 
   // ── AI Methods ──
@@ -295,7 +310,9 @@ export class EditQuizComponent implements OnInit {
     exercises.forEach((ex: any, eIdx: number) => {
       const exTypeInt = ex.type ?? ex.Type ?? ex.exerciseType;
       const exTypeStr: ExerciseType =
-        exTypeInt === 3 || exTypeInt === '3' || exTypeInt === 'AI'
+        exTypeInt === 4 || exTypeInt === '4' || exTypeInt === 'AIWords'
+          ? 'AIWords'
+          : exTypeInt === 3 || exTypeInt === '3' || exTypeInt === 'AI'
           ? 'AI'
           : exTypeInt === 2 || exTypeInt === '2' || exTypeInt === 'Matching'
           ? 'Matching'
@@ -308,6 +325,7 @@ export class EditQuizComponent implements OnInit {
         id: [exId],
         name: [exName, [Validators.required, Validators.minLength(3)]],
         type: [exTypeStr],
+        aiWordsCount: [ex.round ?? ex.Round ?? 1, [Validators.min(1), Validators.max(50)]],
         questions: this.fb.array([]),
       });
       this.exercises.push(exGroup);
@@ -416,6 +434,7 @@ export class EditQuizComponent implements OnInit {
       id: [null],
       name: ['', [Validators.required, Validators.minLength(3)]],
       type: ['MCQ'],
+      aiWordsCount: [1, [Validators.min(1), Validators.max(50)]],
       questions: this.fb.array([]),
     });
     this.exercises.push(group);
@@ -505,7 +524,9 @@ export class EditQuizComponent implements OnInit {
     // Restore exercise-level fields
     const exTypeInt = exData.type ?? exData.Type ?? exData.exerciseType;
     const exTypeStr: ExerciseType =
-      exTypeInt === 3 || exTypeInt === '3' || exTypeInt === 'AI'
+      exTypeInt === 4 || exTypeInt === '4' || exTypeInt === 'AIWords'
+        ? 'AIWords'
+        : exTypeInt === 3 || exTypeInt === '3' || exTypeInt === 'AI'
         ? 'AI'
         : exTypeInt === 2 || exTypeInt === '2' || exTypeInt === 'Matching'
         ? 'Matching'
@@ -565,7 +586,7 @@ export class EditQuizComponent implements OnInit {
     while (qs.length) qs.removeAt(0);
     this.aiLettersMaps.delete(eIndex);
     this.activeAlphabetTabs.delete(eIndex);
-    if (type !== 'AI') {
+    if (type !== 'AI' && type !== 'AIWords') {
       this.addQuestion(eIndex);
     }
   }
@@ -787,11 +808,9 @@ export class EditQuizComponent implements OnInit {
     // Validate each exercise's questions
     for (let e = 0; e < this.exercises.length; e++) {
       const type = this.getExerciseType(e);
-      if (type === 'AI') {
-        if (this.getAiLettersMap(e).size === 0) {
-          this.submitError = `Exercise ${
-            e + 1
-          }: Select at least one letter for the AI Sign Language test.`;
+      if (type === 'AI' || type === 'AIWords') {
+        if (type === 'AI' && this.getAiLettersMap(e).size === 0) {
+          this.submitError = `Exercise ${e + 1}: Select at least one letter.`;
           return;
         }
         continue;
@@ -851,7 +870,8 @@ export class EditQuizComponent implements OnInit {
     this.exercises.value.forEach((ex: any, eIndex: number) => {
       if (ex.id) formData.append(`ExerciseDTOs[${eIndex}].Id`, ex.id);
       formData.append(`ExerciseDTOs[${eIndex}].Name`, ex.name);
-      const typeVal = ex.type === 'AI' ? '3' : ex.type === 'Matching' ? '2' : '1';
+      const typeVal =
+        ex.type === 'AI' ? '3' : ex.type === 'AIWords' ? '4' : ex.type === 'Matching' ? '2' : '1';
       formData.append(`ExerciseDTOs[${eIndex}].Type`, typeVal);
 
       if (ex.type === 'AI') {
@@ -861,6 +881,11 @@ export class EditQuizComponent implements OnInit {
           formData.append(`ExerciseDTOs[${eIndex}].AI_letters[${idx}].Value`, String(rounds));
           idx++;
         });
+        return;
+      }
+
+      if (ex.type === 'AIWords') {
+        formData.append(`ExerciseDTOs[${eIndex}].Round`, String(ex.aiWordsCount ?? 1));
         return;
       }
 
