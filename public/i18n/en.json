@@ -444,7 +444,9 @@
       "LESSONS_AVAILABLE": "Lessons Available",
       "NO_CONTENT": "No Content",
       "NO_LESSONS": "No Lessons",
-      "NEXT_ACTIVITY": "Next Activity"
+      "NEXT_ACTIVITY": "Next Activity",
+      "LOCKED_TOOLTIP_LESSON": "Finish the previous lesson",
+      "LOCKED_TOOLTIP_QUIZ": "Finish the quiz in the previous lesson"
     },
     "PROGRESS": {
       "ATTEMPTS_RETAKES": "Attempts Retakes",

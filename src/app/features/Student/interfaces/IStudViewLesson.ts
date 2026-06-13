@@ -12,7 +12,8 @@ export interface StudLesson {
   levels: any | null;
   videoFile?: any;
   videoUrl?: any;
-  releaseDate?: string;
+  previous: string | null;
+  previousType: number;
   completed: boolean;
 }
 

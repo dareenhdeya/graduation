@@ -58,4 +58,27 @@ export class ViewLessonsComponent implements OnInit {
 
     return colors[index % colors.length];
   }
+
+  getLockTooltip(lesson: StudLesson): string {
+    if (lesson.previousType === 1) {
+      return 'STUDENT.LESSONS.LOCKED_TOOLTIP_LESSON';
+    } else if (lesson.previousType === 2) {
+      return 'STUDENT.LESSONS.LOCKED_TOOLTIP_QUIZ';
+    }
+    return '';
+  }
+
+  getPrerequisiteName(lesson: StudLesson): string {
+    if (!lesson.previous) return '...';
+
+    // 1. Direct ID match (it's in the list)
+    const directMatch = this.lessons.find((l) => l.id === lesson.previous);
+    if (directMatch) return directMatch.title;
+
+    // 2. nlid match (the previous activity is linked from another lesson)
+    // If Lesson B depends on ID-X, and Lesson A leads to ID-X (nlid), 
+    // then ID-X is likely the quiz for Lesson A.
+    const parentLesson = this.lessons.find((l) => l.nlid === lesson.previous);
+    return parentLesson ? parentLesson.title : '...';
+  }
 }

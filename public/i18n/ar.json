@@ -444,7 +444,9 @@
       "LESSONS_AVAILABLE": "الدروس المتاحة",
       "NO_CONTENT": "لا يوجد محتوى متاح",
       "NO_LESSONS": "لا توجد دروس",
-      "NEXT_ACTIVITY": "النشاط التالي"
+      "NEXT_ACTIVITY": "النشاط التالي",
+      "LOCKED_TOOLTIP_LESSON": "يجب إنهاء الدرس السابق",
+      "LOCKED_TOOLTIP_QUIZ": "يجب إنهاء الاختبار في الدرس السابق"
     },
     "PROGRESS": {
       "ATTEMPTS_RETAKES": "المحاولات / الإعادات",
