@@ -115,7 +115,7 @@ export class ViewAllSubjectsComponent implements OnInit {
 
   private animationFrameId: any = null;
   private readonly EDGE_THRESHOLD = 200;
-  private readonly SCROLL_SPEED = 10; // 💡 لو عايزه أسرع كمان، خليها 20
+  private readonly SCROLL_SPEED = 8; // 💡 لو عايزه أسرع كمان، خليها 20
 
   onMouseMove(event: MouseEvent) {
     const container = this.scrollContainer.nativeElement;
