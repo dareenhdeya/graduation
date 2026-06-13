@@ -7,10 +7,11 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { SafeUrlPipe } from '../../core/pipes/safe-url.pipe';
 import { TeacherServiceService } from '../Teacher/services/teacher-service.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-profile',
-  imports: [ReactiveFormsModule, CommonModule, RouterLink, SafeUrlPipe],
+  imports: [ReactiveFormsModule, CommonModule, RouterLink, SafeUrlPipe, TranslatePipe],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
 })

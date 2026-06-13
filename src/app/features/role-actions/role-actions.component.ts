@@ -1,3 +1,4 @@
+import { TranslateModule } from '@ngx-translate/core';
 import { Component, computed, inject } from '@angular/core';
 import { AdminActionsComponent } from '../Admin/admin-actions/admin-actions.component';
 import { ParentActionsComponent } from '../Parent/parent-actions/parent-actions.component';
@@ -9,7 +10,7 @@ import { AdminDashboardComponent } from '../Admin/admin-dashboard/admin-dashboar
 
 @Component({
   selector: 'app-role-actions',
-  imports: [
+  imports: [TranslateModule, 
     AsyncPipe,
     AdminActionsComponent,
     ParentActionsComponent,

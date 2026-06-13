@@ -17,3 +17,12 @@
   -webkit-mask-image: linear-gradient(to right, black 40%, transparent 100%);
   transition: opacity 0.3s ease, mask-image 0.3s ease;
 } */
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}

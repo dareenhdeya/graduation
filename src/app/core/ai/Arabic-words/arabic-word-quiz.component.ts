@@ -1,3 +1,4 @@
+import { TranslateModule } from '@ngx-translate/core';
 import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
@@ -16,7 +17,7 @@ interface ArabicWord {
 @Component({
   selector: 'app-arabic-word-quiz',
   standalone: true,
-  imports: [CommonModule, HttpClientModule],
+  imports: [TranslateModule, CommonModule, HttpClientModule],
   templateUrl: './arabic-word-quiz.component.html',
   styleUrls: ['./arabic-word-quiz.component.css'],
 })

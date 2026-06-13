@@ -1,14 +1,14 @@
 <section class="relative overflow-hidden py-8 px-4">
   <div class="container mx-auto max-w-6xl relative z-10">
     <div class="mb-12 text-center md:text-left">
-      <h1 class="text-4xl md:text-5xl font-black text-text-main tracking-tight mb-2">
-        Subject
+      <h1 class="text-4xl md:text-5xl font-black tracking-tight mb-2 text-transparent bg-clip-text bg-linear-to-r from-primary to-text-main">
+        {{ 'TEACHER.SUBJECT' | translate }}
         <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-400">
-          Dashboard
+          {{ 'TEACHER.DASHBOARD' | translate }}
         </span>
       </h1>
       <p class="text-text-main/50 font-bold text-lg">
-        Manage lessons, students, and vocabulary for this subject.
+        {{ 'TEACHER.SUBJECT_DASHBOARD_DESC' | translate }}
       </p>
     </div>
 
@@ -28,15 +28,15 @@
             <i class="fa-solid fa-chalkboard-user"></i>
           </div>
 
-          <h3 class="font-bold text-text-main text-xl mb-2">My Lessons</h3>
+          <h3 class="font-bold text-text-main text-xl mb-2">{{ 'TEACHER.MY_LESSONS' | translate }}</h3>
           <p class="text-text-main/50 font-bold text-sm">
-            View, edit, and manage all your uploaded video lessons.
+            {{ 'TEACHER.MY_LESSONS_DESC' | translate }}
           </p>
 
           <div
             class="mt-6 flex items-center gap-2 text-sky-500 font-bold text-sm group-hover:gap-3 transition-all"
           >
-            <span>View All</span>
+            <span>{{ 'TEACHER.VIEW_ALL' | translate }}</span>
             <i class="fa-solid fa-arrow-right"></i>
           </div>
         </div>
@@ -57,15 +57,15 @@
             <i class="fa-solid fa-plus"></i>
           </div>
 
-          <h3 class="font-bold text-text-main text-xl mb-2">Create Lesson</h3>
+          <h3 class="font-bold text-text-main text-xl mb-2">{{ 'TEACHER.CREATE_LESSON' | translate }}</h3>
           <p class="text-text-main/50 font-bold text-sm">
-            Upload new content, videos, or activities for your students.
+            {{ 'TEACHER.CREATE_LESSON_DESC' | translate }}
           </p>
 
           <div
             class="mt-6 flex items-center gap-2 text-green-500 font-bold text-sm group-hover:gap-3 transition-all"
           >
-            <span>Start Creating</span>
+            <span>{{ 'TEACHER.START_CREATING' | translate }}</span>
             <i class="fa-solid fa-arrow-right"></i>
           </div>
         </div>
@@ -86,15 +86,15 @@
             <i class="fa-solid fa-book-bookmark"></i>
           </div>
 
-          <h3 class="font-bold text-text-main text-xl mb-2">Dictionary</h3>
+          <h3 class="font-bold text-text-main text-xl mb-2">{{ 'TEACHER.DICTIONARY' | translate }}</h3>
           <p class="text-text-main/50 font-bold text-sm">
-            Add new vocabulary words and attachments to the subject.
+            {{ 'TEACHER.DICTIONARY_DESC' | translate }}
           </p>
 
           <div
             class="mt-6 flex items-center gap-2 text-amber-500 font-bold text-sm group-hover:gap-3 transition-all"
           >
-            <span>Add Words</span>
+            <span>{{ 'TEACHER.ADD_WORDS' | translate }}</span>
             <i class="fa-solid fa-arrow-right"></i>
           </div>
         </div>
@@ -115,15 +115,15 @@
             <i class="fa-solid fa-users"></i>
           </div>
 
-          <h3 class="font-bold text-text-main text-xl mb-2">My Students</h3>
+          <h3 class="font-bold text-text-main text-xl mb-2">{{ 'TEACHER.MY_STUDENTS' | translate }}</h3>
           <p class="text-text-main/50 font-bold text-sm">
-            Track progress, view profiles, and manage the class roster.
+            {{ 'TEACHER.MY_STUDENTS_DESC' | translate }}
           </p>
 
           <div
             class="mt-6 flex items-center gap-2 text-purple-500 font-bold text-sm group-hover:gap-3 transition-all"
           >
-            <span>View List</span>
+            <span>{{ 'TEACHER.VIEW_LIST' | translate }}</span>
             <i class="fa-solid fa-arrow-right"></i>
           </div>
         </div>
@@ -145,15 +145,15 @@
             <i class="fa-solid fa-circle-question"></i>
           </div>
 
-          <h3 class="font-bold text-text-main text-xl mb-2">Quizzes</h3>
+          <h3 class="font-bold text-text-main text-xl mb-2">{{ 'TEACHER.QUIZZES' | translate }}</h3>
           <p class="text-text-main/50 font-bold text-sm">
-            Create quizzes and exercises for your students to complete.
+            {{ 'TEACHER.QUIZZES_DESC' | translate }}
           </p>
 
           <div
             class="mt-6 flex items-center gap-2 text-violet-500 font-bold text-sm group-hover:gap-3 transition-all"
           >
-            <span>Create Quiz</span>
+            <span>{{ 'TEACHER.CREATE_QUIZ' | translate }}</span>
             <i class="fa-solid fa-arrow-right"></i>
           </div>
         </div>

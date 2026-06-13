@@ -23,6 +23,7 @@
   background-position: 15px center !important;
 }
 
+
 #toast-container {
   top: 88% !important;
 }
@@ -33,6 +34,7 @@
   border-left: 10px solid #22c55e !important;
   color: #22c55e !important;
   font-weight: 600 !important;
+
 }
 
 /*  Error */
@@ -57,7 +59,7 @@ body {
 }
 
 body::-webkit-scrollbar {
-  width: var(--sb-size);
+  width: var(--sb-size)
 }
 
 body::-webkit-scrollbar-track {
@@ -68,6 +70,7 @@ body::-webkit-scrollbar-track {
 body::-webkit-scrollbar-thumb {
   background: var(--color-primary);
   border-radius: 3px;
+
 }
 
 @supports not selector(::-webkit-scrollbar) {
@@ -77,20 +80,20 @@ body::-webkit-scrollbar-thumb {
 }
 
 /* ── Date / Time input: native calendar icon adapts to theme ── */
-input[type='date'],
-input[type='datetime-local'],
-input[type='time'],
-input[type='month'],
-input[type='week'] {
+input[type="date"],
+input[type="datetime-local"],
+input[type="time"],
+input[type="month"],
+input[type="week"] {
   color-scheme: light;
   color: var(--text-color);
 }
 
-:root.dark input[type='date'],
-:root.dark input[type='datetime-local'],
-:root.dark input[type='time'],
-:root.dark input[type='month'],
-:root.dark input[type='week'] {
+:root.dark input[type="date"],
+:root.dark input[type="datetime-local"],
+:root.dark input[type="time"],
+:root.dark input[type="month"],
+:root.dark input[type="week"] {
   color-scheme: dark;
 }
 

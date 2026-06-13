@@ -11,13 +11,14 @@ import {
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
+import { TranslateModule } from '@ngx-translate/core';
 
 type Role = 'Parent' | 'Teacher' | 'Student';
 
 @Component({
   selector: 'app-pending-teachers',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, CommonModule],
+  imports: [ReactiveFormsModule, RouterLink, CommonModule, TranslateModule],
   templateUrl: './pending-teachers.component.html',
   styleUrl: './pending-teachers.component.css',
 })

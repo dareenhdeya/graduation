@@ -1,3 +1,4 @@
+import { TranslateModule } from '@ngx-translate/core';
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
@@ -8,7 +9,7 @@ import { inject } from '@angular/core';
 
 @Component({
   selector: 'app-quizzes-list',
-  imports: [CommonModule, RouterLink],
+  imports: [TranslateModule, CommonModule, RouterLink],
   templateUrl: './quizzes-list.component.html',
   styleUrl: './quizzes-list.component.css',
 })

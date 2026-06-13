@@ -5,6 +5,7 @@ import { IADMIN } from '../interfaces/iadmin.interface';
 import { AdminActionsComponent } from '../admin-actions/admin-actions.component';
 import { Chart, registerables } from 'chart.js';
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 
 Chart.register(...registerables);
 
@@ -20,7 +21,7 @@ type AdminStats = {
 
 @Component({
   selector: 'app-admin-dashboard',
-  imports: [RouterLink, AdminActionsComponent],
+  imports: [RouterLink, AdminActionsComponent, TranslateModule],
   templateUrl: './admin-dashboard.component.html',
   styleUrl: './admin-dashboard.component.css',
 })

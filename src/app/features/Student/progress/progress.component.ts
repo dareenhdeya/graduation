@@ -4,12 +4,13 @@ import { StudentServiceService } from '../services/student-service.service';
 import { Submission } from '../interfaces/IStudSubmissions.interface';
 import { Chart, registerables } from 'chart.js';
 import { ThemeService } from '../../../core/services/theme.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 Chart.register(...registerables);
 
 @Component({
   selector: 'app-progress',
-  imports: [CommonModule, DecimalPipe],
+  imports: [CommonModule, DecimalPipe,TranslateModule],
   templateUrl: './progress.component.html',
   styleUrl: './progress.component.css',
 })

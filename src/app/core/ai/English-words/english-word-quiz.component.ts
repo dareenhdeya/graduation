@@ -1,3 +1,4 @@
+import { TranslateModule } from '@ngx-translate/core';
 import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
@@ -11,7 +12,7 @@ type WordState = 'signing' | 'correct' | 'finished';
 @Component({
   selector: 'app-english-word-quiz',
   standalone: true,
-  imports: [CommonModule, HttpClientModule],
+  imports: [TranslateModule, CommonModule, HttpClientModule],
   templateUrl: './english-word-quiz.component.html',
   styleUrls: ['./english-word-quiz.component.css'],
 })

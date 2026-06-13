@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { TeacherServiceService } from '../../services/teacher-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { TranslateModule } from '@ngx-translate/core';
 
 // Mirrors backend enum: None = 0, Lesson = 1, Quiz = 2
 export enum PerquisiteType {
@@ -15,7 +16,7 @@ export enum PerquisiteType {
 @Component({
   selector: 'app-add-lesson',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, TranslateModule],
   templateUrl: './add-lesson.component.html',
   styleUrl: './add-lesson.component.css',
 })

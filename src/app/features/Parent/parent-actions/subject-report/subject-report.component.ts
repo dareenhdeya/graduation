@@ -5,12 +5,13 @@ import { ParentServiceService } from '../../services/parent-service.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ISubjectReportData } from '../../interfaces/IViewSubjectReport.interface';
 import { Chart, registerables } from 'chart.js';
+import { TranslateModule } from '@ngx-translate/core';
 
 Chart.register(...registerables);
 
 @Component({
   selector: 'app-subject-report',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink,TranslateModule],
   templateUrl: './subject-report.component.html',
   styleUrl: './subject-report.component.css',
 })

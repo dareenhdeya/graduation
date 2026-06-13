@@ -4,11 +4,12 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ParentServiceService } from '../../services/parent-service.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { IViewChildProfile, IChildProfile } from '../../interfaces/IViewChildProfile';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-child-profile',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink,TranslateModule],
   templateUrl: './child-profile.component.html',
   styleUrl: './child-profile.component.css',
 })

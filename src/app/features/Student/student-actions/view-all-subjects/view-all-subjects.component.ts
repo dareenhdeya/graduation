@@ -1,16 +1,17 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common'; // Import CommonModule
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'; // Import RouterLink
 import { IStudAllSubResponse, StudentAllSubject } from '../../interfaces/IStudAllSubResponse'; // Check path
 import { StudentServiceService } from '../../services/student-service.service';
 import { IEnrollSubResponse } from '../../interfaces/IEnrollSubResponse';
 import { ToastrService } from 'ngx-toastr';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-view-all-subjects',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, TranslateModule],
   templateUrl: './view-all-subjects.component.html',
   styleUrl: './view-all-subjects.component.css',
 })
@@ -21,6 +22,9 @@ export class ViewAllSubjectsComponent implements OnInit {
   private toastr = inject(ToastrService);
   allSub: StudentAllSubject[] = [];
   isLoading = true; // Add loading state
+
+  @ViewChild('scrollContainer') scrollContainer!: ElementRef<HTMLDivElement>;
+  scrollInterval: any;
 
   hoveredIndex: number | null = null;
 
@@ -106,6 +110,52 @@ export class ViewAllSubjectsComponent implements OnInit {
       return overlapClasses;
     } else {
       return 'z-10';
+    }
+  }
+
+  private animationFrameId: any = null;
+  private readonly EDGE_THRESHOLD = 200;
+  private readonly SCROLL_SPEED = 8; // 💡 لو عايزه أسرع كمان، خليها 20
+
+  onMouseMove(event: MouseEvent) {
+    const container = this.scrollContainer.nativeElement;
+    const rect = container.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+
+    if (rect.width - mouseX < this.EDGE_THRESHOLD) {
+      this.startAutoScroll(this.SCROLL_SPEED);
+    }
+    else if (mouseX < this.EDGE_THRESHOLD) {
+      this.startAutoScroll(-this.SCROLL_SPEED);
+    }
+    else {
+      this.stopAutoScroll();
+    }
+  }
+
+  // 2. استخدام requestAnimationFrame بدل setInterval
+  startAutoScroll(step: number) {
+    if (this.animationFrameId) return;
+
+    const container = this.scrollContainer.nativeElement;
+    container.classList.remove('scroll-smooth', 'snap-x', 'snap-mandatory');
+
+    // دالة بتنادي نفسها مع كل فريم للشاشة
+    const autoScroll = () => {
+      container.scrollLeft += step;
+      this.animationFrameId = requestAnimationFrame(autoScroll);
+    };
+
+    this.animationFrameId = requestAnimationFrame(autoScroll);
+  }
+
+  stopAutoScroll() {
+    if (this.animationFrameId) {
+      cancelAnimationFrame(this.animationFrameId);
+      this.animationFrameId = null;
+
+      const container = this.scrollContainer.nativeElement;
+      container.classList.add('scroll-smooth', 'snap-x', 'snap-mandatory');
     }
   }
 }

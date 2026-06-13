@@ -9,16 +9,16 @@
       </a>
 
       <div>
-        <h1 class="text-3xl md:text-4xl font-black tracking-tight text-text-main">
-          Course
+        <h1 class="text-3xl md:text-4xl font-black tracking-tight text-transparent bg-clip-text bg-linear-to-r from-primary to-text-main">
+          {{ 'STUDENT.LESSONS.COURSE' | translate }}
           <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/70">
-            Content
+            {{ 'STUDENT.LESSONS.CONTENT' | translate }}
           </span>
         </h1>
 
         <p class="text-text-main/60 text-sm font-medium mt-1">
           <span class="text-primary font-bold">{{ lessons.length }}</span>
-          Lessons available
+          {{ 'STUDENT.LESSONS.LESSONS_AVAILABLE' | translate }}
         </p>
       </div>
     </div>
@@ -46,7 +46,7 @@
         <div
           class="rounded-2xl border border-primary/20 bg-primary/10 px-6 py-3 text-primary font-semibold text-sm"
         >
-          Click any unlocked lesson to start learning
+          {{ 'STUDENT.LESSONS.CLICK_UNLOCKED' | translate }}
         </div>
       </div>
 
@@ -122,17 +122,17 @@
         <i class="fa-solid fa-box-open text-4xl text-text-main/20"></i>
       </div>
 
-      <h2 class="text-2xl font-black text-text-main mb-2">No lessons yet</h2>
+      <h2 class="text-2xl font-black text-text-main mb-2">{{ 'STUDENT.LESSONS.NO_LESSONS' | translate }}</h2>
 
       <p class="text-text-main/60 max-w-md">
-        The teacher hasn't uploaded any content for this subject yet.
+        {{ 'STUDENT.LESSONS.NO_CONTENT' | translate }}
       </p>
 
       <a
         routerLink="/student/all-subjects"
         class="mt-6 rounded-2xl bg-primary/10 border border-primary/20 text-primary px-6 py-3 font-bold hover:bg-primary/15 transition"
       >
-        Browse Subjects
+        {{ 'STUDENT.LESSONS.BROWSE_SUBJECTS' | translate }}
       </a>
     </div>
 

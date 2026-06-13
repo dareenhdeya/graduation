@@ -1,3 +1,4 @@
+import { TranslateModule } from '@ngx-translate/core';
 // //
 // import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 
@@ -401,7 +402,7 @@ type QuizState = 'waiting' | 'correct' | 'wrong' | 'finished';
 @Component({
   selector: 'app-sign-quiz',
   standalone: true,
-  imports: [CommonModule],
+  imports: [TranslateModule, CommonModule],
   templateUrl: './sign-quiz.component.html',
   styleUrls: ['./app-sign.component.css'],
 })

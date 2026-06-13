@@ -1,3 +1,4 @@
+import { TranslateModule } from '@ngx-translate/core';
 import { Component } from '@angular/core';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
 import { RouterOutlet } from '@angular/router';
@@ -16,7 +17,7 @@ type BgLetter = {
 
 @Component({
   selector: 'app-main-layout',
-  imports: [NavbarComponent, RouterOutlet, ColorPickerComponent],
+  imports: [TranslateModule, NavbarComponent, RouterOutlet, ColorPickerComponent],
   templateUrl: './main-layout.html',
   styleUrl: './main-layout.css',
 })

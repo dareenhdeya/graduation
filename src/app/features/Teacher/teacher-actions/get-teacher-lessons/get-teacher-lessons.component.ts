@@ -7,6 +7,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ILesson } from '../../interfaces/IGetTeacherLessons';
 import { IEditedLesson } from '../../interfaces/IEditLessonResponse';
 import { ToastrService } from 'ngx-toastr';
+import { TranslateModule } from '@ngx-translate/core';
 
 // Mirrors backend enum: None = 0, Lesson = 1, Quiz = 2
 export enum PerquisiteType {
@@ -18,7 +19,7 @@ export enum PerquisiteType {
 @Component({
   selector: 'app-get-teacher-lessons',
   standalone: true,
-  imports: [CommonModule, RouterLink, ReactiveFormsModule],
+  imports: [CommonModule, RouterLink, ReactiveFormsModule, TranslateModule],
   templateUrl: './get-teacher-lessons.component.html',
   styleUrl: './get-teacher-lessons.component.css',
 })

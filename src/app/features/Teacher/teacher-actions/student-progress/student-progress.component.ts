@@ -7,12 +7,13 @@ import {
   IStudentProgressItem,
   StudentProgressResponse,
 } from '../../interfaces/IStudentProgress.interface';
+import { TranslateModule } from '@ngx-translate/core';
 
 Chart.register(...registerables);
 
 @Component({
   selector: 'app-student-progress',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, TranslateModule],
   templateUrl: './student-progress.component.html',
   styleUrl: './student-progress.component.css',
 })

@@ -4,11 +4,12 @@ import { Router, RouterLink } from '@angular/router';
 import { AdminServiceService } from '../../../services/admin-service.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { TranslateModule } from '@ngx-translate/core';
 type Role = 'Parent' | 'Teacher' | 'Student';
 
 @Component({
   selector: 'app-user-crud',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, TranslateModule],
   templateUrl: './user-crud.component.html',
   styleUrl: './user-crud.component.css',
 })

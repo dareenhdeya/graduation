@@ -4,10 +4,11 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ParentServiceService } from '../../services/parent-service.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ISubjectData } from '../../interfaces/IViewStudentSubjects.interface';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-student-subjects',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink,TranslateModule],
   templateUrl: './student-subjects.component.html',
   styleUrl: './student-subjects.component.css',
 })

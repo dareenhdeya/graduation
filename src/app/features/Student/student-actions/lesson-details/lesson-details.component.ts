@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { StudentServiceService } from '../../services/student-service.service';
 import { IStudLessonContentResult, IStudVideo } from '../../interfaces/IStudLessonContent';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-lesson-details',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, TranslateModule],
   templateUrl: './lesson-details.component.html',
   styleUrl: './lesson-details.component.css',
 })

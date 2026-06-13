@@ -3,10 +3,11 @@ import { IAdminSubject } from '../../../interfaces/IAdminSubject.interface';
 import { AdminServiceService } from '../../../services/admin-service.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-admin-subject-details',
-  imports: [RouterLink],
+  imports: [RouterLink,TranslateModule],
   templateUrl: './admin-subject-details.component.html',
   styleUrl: './admin-subject-details.component.css',
 })

@@ -6,11 +6,12 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { IStudSubDetailsResponse, StudentSubject } from '../../interfaces/IStudSubDetailsResponse';
 import { IEnrollSubResponse } from '../../interfaces/IEnrollSubResponse';
 import { ToastrService } from 'ngx-toastr';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-subject-details',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, TranslateModule],
   templateUrl: './subject-details.component.html',
   styleUrl: './subject-details.component.css',
 })

@@ -1,3 +1,4 @@
+import { TranslateModule } from '@ngx-translate/core';
 import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -16,7 +17,7 @@ interface ArabicLetter {
 @Component({
   selector: 'app-arabic-quiz',
   standalone: true,
-  imports: [CommonModule],
+  imports: [TranslateModule, CommonModule],
   templateUrl: './arabic-quiz.component.html',
   styleUrls: ['./arabic-quiz.component.css'],
 })

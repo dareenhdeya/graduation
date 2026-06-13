@@ -1,3 +1,4 @@
+import { TranslateModule } from '@ngx-translate/core';
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
@@ -7,7 +8,7 @@ import { IStudViewLesson, StudLesson } from '../../interfaces/IStudViewLesson';
 @Component({
   selector: 'app-view-lessons',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [TranslateModule, CommonModule, RouterLink],
   templateUrl: './view-lessons.component.html',
   styleUrl: './view-lessons.component.css',
 })

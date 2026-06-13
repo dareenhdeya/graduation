@@ -58,10 +58,10 @@
           @if (currentStep === 1) {
           <div class="text-center">
             <h2 class="text-3xl md:text-4xl font-black tracking-tight text-text-main mb-2">
-              Forgot Password
+              {{ 'AUTH.FORGOT_PASSWORD_TITLE' | translate }}
             </h2>
             <p class="text-sm font-medium text-text-main/50 text-center mb-8">
-              Enter your email to receive an OTP.
+              {{ 'AUTH.FORGOT_PASSWORD_SUBTITLE' | translate }}
             </p>
           </div>
 
@@ -69,12 +69,12 @@
             <div>
               <label
                 class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1"
-                >Email</label
+                >{{ 'AUTH.EMAIL_OR_USERNAME' | translate }}</label
               >
               <input
                 formControlName="emailOrUserName"
                 type="text"
-                placeholder="name@email.com"
+                [placeholder]="'AUTH.PLACEHOLDER_EMAIL_USERNAME' | translate"
                 class="w-full rounded-2xl border border-border-main bg-background/60 text-sm font-medium px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-placeholder placeholder:font-medium"
               />
               @if ( emailForm.get('emailOrUserName')?.touched &&
@@ -83,25 +83,25 @@
                 class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
               >
                 <i class="fas fa-circle-exclamation mt-0.5"></i>
-                <span>Email/Username is required</span>
+                <span>{{ 'VALIDATION.REQUIRED' | translate }}</span>
               </p>
               } @if (emailForm.get('emailOrUserName')?.hasError('emailOrUserName')) {
               <p
                 class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
               >
                 <i class="fas fa-circle-exclamation mt-0.5"></i>
-                <span>Enter valid email.</span>
+                <span>{{ 'VALIDATION.EMAIL_INVALID' | translate }}</span>
               </p>
               }
             </div>
 
             <div class="flex items-center justify-between py-1">
               <p class="text-sm font-medium text-text-main/50 text-center">
-                Back to
+                {{ 'AUTH.BACK_TO_LOGIN' | translate }}
                 <a
                   routerLink="/login"
                   class="text-primary font-bold hover:text-primary/80 transition-colors cursor-pointer"
-                  >login</a
+                  >{{ 'AUTH.LOGIN_LINK' | translate }}</a
                 >
               </p>
             </div>
@@ -112,7 +112,7 @@
               class="w-full cursor-pointer rounded-2xl bg-primary py-4 text-sm font-bold text-white hover:bg-primary/90 transition-all hover:-translate-y-0.5 shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <span class="flex items-center justify-center gap-2">
-                Send OTP @if (loading) {
+                {{ 'AUTH.SEND_OTP_BTN' | translate }} @if (loading) {
                 <span
                   class="h-5 w-5 rounded-full border-2 border-white/40 border-t-white animate-spin"
                 ></span>
@@ -123,10 +123,10 @@
           } @if (currentStep === 2) {
           <div class="text-center">
             <h2 class="text-3xl md:text-4xl font-black tracking-tight text-text-main mb-2">
-              Verify OTP
+              {{ 'AUTH.VERIFY_OTP_TITLE' | translate }}
             </h2>
             <p class="text-sm font-medium text-text-main/50 text-center mb-8">
-              We sent an OTP to <span class="text-text-main font-medium">{{ savedUser }}</span
+              {{ 'AUTH.VERIFY_OTP_SUBTITLE' | translate }} <span class="text-text-main font-medium">{{ savedUser }}</span
               >.
             </p>
           </div>
@@ -135,13 +135,13 @@
             <div>
               <label
                 class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1"
-                >OTP</label
+                >{{ 'AUTH.OTP' | translate }}</label
               >
               <input
                 formControlName="otp"
                 type="text"
                 inputmode="numeric"
-                placeholder="Enter OTP"
+                [placeholder]="'AUTH.PLACEHOLDER_OTP' | translate"
                 class="w-full rounded-2xl border border-border-main bg-background/60 text-sm font-medium px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-placeholder placeholder:font-medium"
               />
               @if (otpForm.get('otp')?.touched && otpForm.get('otp')?.getError('required')) {
@@ -149,7 +149,7 @@
                 class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
               >
                 <i class="fas fa-circle-exclamation mt-0.5"></i>
-                <span> OTP is required</span>
+                <span>{{ 'VALIDATION.REQUIRED' | translate }}</span>
               </p>
               }
             </div>
@@ -161,7 +161,7 @@
                 [disabled]="loading"
                 class="flex-1 rounded-2xl border border-border-main bg-background/60 py-4 text-sm font-bold text-text-main hover:border-primary/40 hover:text-primary transition-all shadow-sm"
               >
-                Back
+                {{ 'AUTH.BACK_BTN' | translate }}
               </button>
 
               <button
@@ -170,7 +170,7 @@
                 class="flex-1 w-full rounded-2xl bg-primary py-4 text-sm font-bold text-white hover:bg-primary/90 transition-all hover:-translate-y-0.5 shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <span class="flex items-center justify-center gap-2">
-                  Verify @if (loading) {
+                  {{ 'AUTH.VERIFY_BTN' | translate }} @if (loading) {
                   <span
                     class="h-5 w-5 rounded-full border-2 border-white/40 border-t-white animate-spin"
                   ></span>
@@ -182,10 +182,10 @@
           } @if (currentStep === 3) {
           <div class="text-center">
             <h2 class="text-3xl md:text-4xl font-black tracking-tight text-text-main mb-2">
-              Reset Password
+              {{ 'AUTH.RESET_PASSWORD_TITLE' | translate }}
             </h2>
             <p class="text-sm font-medium text-text-main/50 text-center mb-8">
-              Create a new password for your account.
+              {{ 'AUTH.RESET_PASSWORD_SUBTITLE' | translate }}
             </p>
           </div>
 
@@ -193,7 +193,7 @@
             <div>
               <label
                 class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1"
-                >New Password</label
+                >{{ 'AUTH.NEW_PASSWORD' | translate }}</label
               >
               <div class="relative">
                 <input
@@ -202,7 +202,7 @@
                   [class.border-red-400]="
                     resetForm.get('newPassword')?.touched && resetForm.get('newPassword')?.invalid
                   "
-                  placeholder="Enter new password"
+                  [placeholder]="'AUTH.PLACEHOLDER_NEW_PASSWORD' | translate"
                   class="w-full rounded-2xl border border-border-main bg-background/60 text-sm font-medium px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-placeholder placeholder:font-medium"
                 />
                 <button
@@ -225,14 +225,14 @@
                   class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
                 >
                   <i class="fas fa-circle-exclamation mt-0.5"></i>
-                  <span>Password is required</span>
+                  <span>{{ 'VALIDATION.REQUIRED' | translate }}</span>
                 </p>
                 } @if (nPass?.errors?.['pattern']) {
                 <p
                   class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
                 >
                   <i class="fas fa-circle-exclamation mt-0.5"></i>
-                  <span> Must include: Upper, lower, number, and special character (@$!%*?&).</span>
+                  <span>{{ 'VALIDATION.PASSWORD_MIN' | translate }}</span>
                 </p>
                 }
               </div>
@@ -242,7 +242,7 @@
             <div class="mt-4">
               <label
                 class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2 pl-1"
-                >Confirm Password</label
+                >{{ 'AUTH.CONFIRM_PASSWORD' | translate }}</label
               >
               <div class="relative">
                 <input
@@ -251,7 +251,7 @@
                   [class.border-red-400]="
                     resetForm.hasError('mismatch') && resetForm.get('confirmPassword')?.touched
                   "
-                  placeholder="Confirm new password"
+                  [placeholder]="'AUTH.PLACEHOLDER_CONFIRM_PASSWORD' | translate"
                   class="w-full rounded-2xl border border-border-main bg-background/60 text-sm font-medium px-4 py-3.5 text-text-main outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all placeholder:text-placeholder placeholder:font-medium"
                 />
                 <button
@@ -274,7 +274,7 @@
                   class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
                 >
                   <i class="fas fa-circle-exclamation mt-0.5"></i>
-                  <span> Confirming password is required</span>
+                  <span>{{ 'VALIDATION.REQUIRED' | translate }}</span>
                 </p>
                 } @if ( resetForm.hasError('mismatch') &&
                 !resetForm.get('confirmPassword')?.hasError('required') ) {
@@ -282,7 +282,7 @@
                   class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
                 >
                   <i class="fas fa-circle-exclamation mt-0.5"></i>
-                  <span> Passwords do not match</span>
+                  <span>{{ 'VALIDATION.PASSWORD_MATCH' | translate }}</span>
                 </p>
                 }
               </div>
@@ -296,7 +296,7 @@
                 [disabled]="loading"
                 class="flex-1 rounded-2xl border border-border-main bg-background/60 py-4 text-sm font-bold text-text-main hover:border-primary/40 hover:text-primary transition-all shadow-sm"
               >
-                Back
+                {{ 'AUTH.BACK_BTN' | translate }}
               </button>
 
               <button
@@ -305,7 +305,7 @@
                 class="flex-1 w-full rounded-2xl bg-primary py-4 text-sm font-bold text-white hover:bg-primary/90 transition-all hover:-translate-y-0.5 shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <span class="flex items-center justify-center gap-2">
-                  Reset Password @if (loading) {
+                  {{ 'AUTH.RESET_BTN' | translate }} @if (loading) {
                   <span
                     class="h-5 w-5 rounded-full border-2 border-white/40 border-t-white animate-spin"
                   ></span>

@@ -5,10 +5,11 @@ import { IADMIN } from '../../../interfaces/iadmin.interface';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { SafeUrlPipe } from '../../../../../core/pipes/safe-url.pipe';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-user-details',
-  imports: [RouterLink, SafeUrlPipe],
+  imports: [RouterLink, SafeUrlPipe, TranslateModule],
   templateUrl: './user-details.component.html',
   styleUrl: './user-details.component.css',
 })

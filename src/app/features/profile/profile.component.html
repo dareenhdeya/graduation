@@ -1,781 +1,828 @@
 <section class="text-text-main px-4 py-6 transition-colors duration-300">
   <div class="mx-auto max-w-6xl">
-    <h1 class="mb-5 text-3xl md:text-4xl font-black tracking-tight">
-      My <span class="text-primary">Profile</span>
+    <h1 class="mb-5 w-fit text-3xl md:text-4xl font-black tracking-tight text-transparent bg-clip-text bg-linear-to-r from-primary to-text-main"
+    >
+      <span>{{ 'PROFILE.PROFILE_TITLE' | translate }}</span>
     </h1>
 
     @if (loadingProfile) {
-    <div
-      class="rounded-3xl border border-border-main bg-surface p-12 text-center text-text-main/70 text-lg font-medium animate-pulse shadow-sm"
-    >
-      <i class="fa-solid fa-circle-notch fa-spin mr-3 text-primary text-xl"></i> Loading profile...
-    </div>
-    } @else if (error) {
-    <div
-      class="rounded-3xl border border-red-500/30 bg-red-500/10 p-12 text-center text-red-500 font-semibold text-lg shadow-sm"
-    >
-      <i class="fa-solid fa-triangle-exclamation mr-2 text-xl"></i> {{ error }}
-    </div>
-    } @else if (profile; as p) {
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      <aside
-        class="lg:col-span-4 rounded-3xl border border-border-main bg-surface overflow-hidden shadow-sm relative flex flex-col"
+      <div
+        class="rounded-3xl border border-border-main bg-surface p-12 text-center text-text-main/70 text-lg font-medium animate-pulse shadow-sm"
       >
-        <div class="relative h-28 bg-surface border-b border-border-main overflow-hidden">
-          <div
-            class="pointer-events-none absolute -top-10 -left-10 size-40 rounded-full bg-primary/10 blur-2xl"
-          ></div>
-          <div
-            class="pointer-events-none absolute -bottom-12 -right-12 size-44 rounded-full bg-fuchsia-500/10 blur-2xl"
-          ></div>
-        </div>
-
-        <div class="px-5 pb-5 relative z-10 flex flex-col flex-1">
-          <div class="-mt-12 flex items-end justify-between">
-            @if (p.pfpURL) {
-            <img
-              [src]="p.pfpURL"
-              class="size-20 rounded-full object-cover border-4 border-surface shadow-sm"
-              alt="avatar"
-            />
-            } @else {
+        <i class="fa-solid fa-circle-notch fa-spin mr-3 text-primary text-xl"></i>
+        {{ 'PROFILE.LOADING_PROFILE' | translate }}
+      </div>
+    } @else if (error) {
+      <div
+        class="rounded-3xl border border-red-500/30 bg-red-500/10 p-12 text-center text-red-500 font-semibold text-lg shadow-sm"
+      >
+        <i class="fa-solid fa-triangle-exclamation mr-2 text-xl"></i> {{ error }}
+      </div>
+    } @else if (profile; as p) {
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <aside
+          class="lg:col-span-4 rounded-3xl border border-border-main bg-surface overflow-hidden shadow-sm relative flex flex-col"
+        >
+          <div class="relative h-28 bg-surface border-b border-border-main overflow-hidden">
             <div
-              class="size-20 text-3xl rounded-full border-4 border-surface bg-primary/10 flex items-center justify-center text-primary font-black shadow-sm uppercase"
-            >
-              {{ p.fName[0] }}
-            </div>
-            }
-
-            <span
-              class="inline-flex items-center gap-1.5 rounded-full border border-border-main bg-surface px-3 py-1.5 text-xs font-bold text-text-main/80 shadow-sm mb-2"
-            >
-              <span class="size-2 rounded-full bg-primary opacity-80"></span>
-              {{ p.role || '-' }}
-            </span>
-          </div>
-
-          <div class="mt-5">
-            <div class="text-2xl font-black truncate text-text-main">
-              {{ p.fName }} {{ p.lName }}
-            </div>
+              class="pointer-events-none absolute -top-10 -left-10 size-40 rounded-full bg-primary/10 blur-2xl"
+            ></div>
             <div
-              class="text-text-main/60 font-medium text-sm truncate mt-1 flex items-center gap-2"
-            >
-              <i class="fa-regular fa-envelope text-text-main/40"></i>
-              {{ p.email || '-' }}
-            </div>
+              class="pointer-events-none absolute -bottom-12 -right-12 size-44 rounded-full bg-fuchsia-500/10 blur-2xl"
+            ></div>
           </div>
 
-          <div class="mt-6 flex flex-wrap gap-2">
-            <span
-              class="inline-flex items-center rounded-xl border border-border-main bg-surface px-3 py-1.5 text-xs font-bold text-text-main/70"
-            >
-              <i class="fa-solid fa-phone mr-2 text-primary/60"></i>{{ p.phone || '-' }}
-            </span>
+          <div class="px-5 pb-5 relative z-10 flex flex-col flex-1">
+            <div class="-mt-12 flex items-end justify-between">
+              @if (p.pfpURL) {
+                <img
+                  [src]="p.pfpURL"
+                  class="size-20 rounded-full object-cover border-4 border-surface shadow-sm"
+                  alt="avatar"
+                />
+              } @else {
+                <div
+                  class="size-20 text-3xl rounded-full border-4 border-surface bg-primary/10 flex items-center justify-center text-primary font-black shadow-sm uppercase"
+                >
+                  {{ p.fName[0] }}
+                </div>
+              }
 
-            <span
-              class="inline-flex items-center rounded-xl border border-border-main bg-surface px-3 py-1.5 text-xs font-bold text-text-main/70"
-            >
-              <i class="fa-regular fa-calendar mr-2 text-primary/60"></i>{{ p.birthDate || '-' }}
-            </span>
-          </div>
-
-          <div class="mt-auto">
-            <div class="my-6 h-px bg-border-main"></div>
-
-            <div class="flex items-center gap-3">
-              <button
-                type="button"
-                (click)="changepass()"
-                class="flex-1 rounded-xl border border-border-main bg-surface px-4 py-3 text-sm font-bold text-text-main/80 hover:text-primary hover:border-primary/40 transition-all shadow-sm cursor-pointer"
+              <span
+                class="inline-flex items-center gap-1.5 rounded-full border border-border-main bg-surface px-3 py-1.5 text-xs font-bold text-text-main/80 shadow-sm mb-2"
               >
-                <i class="fa-solid fa-lock mr-2 text-text-main/40"></i>Password
-              </button>
-
-              <button
-                (click)="openEdit()"
-                class="w-20 rounded-xl bg-primary px-3 py-3 text-sm font-bold text-white hover:bg-primary/90 transition-all shadow-sm cursor-pointer hover:-translate-y-0.5"
-              >
-                <i class="fa-solid fa-pen mr-1.5"></i>Edit
-              </button>
+                <span class="size-2 rounded-full bg-primary opacity-80"></span>
+                {{ p.role || '-' }}
+              </span>
             </div>
 
-            <!-- @if (p.role === 'Teacher' && p.cvPath) {
+            <div class="mt-5">
+              <div class="text-2xl font-black truncate text-text-main">
+                {{ p.fName }} {{ p.lName }}
+              </div>
+              <div
+                class="text-text-main/60 font-medium text-sm truncate mt-1 flex items-center gap-2"
+              >
+                <i class="fa-regular fa-envelope text-text-main/40"></i>
+                {{ p.email || '-' }}
+              </div>
+            </div>
+
+            <div class="mt-6 flex flex-wrap gap-2">
+              <span
+                class="inline-flex items-center rounded-xl border border-border-main bg-surface px-3 py-1.5 text-xs font-bold text-text-main/70"
+              >
+                <i class="fa-solid fa-phone mr-2 text-primary/60"></i>{{ p.phone || '-' }}
+              </span>
+
+              <span
+                class="inline-flex items-center rounded-xl border border-border-main bg-surface px-3 py-1.5 text-xs font-bold text-text-main/70"
+              >
+                <i class="fa-regular fa-calendar mr-2 text-primary/60"></i>{{ p.birthDate || '-' }}
+              </span>
+            </div>
+
+            <div class="mt-auto">
+              <div class="my-6 h-px bg-border-main"></div>
+
+              <div class="flex items-center gap-3">
+                <button
+                  type="button"
+                  (click)="changepass()"
+                  class="flex-1 rounded-xl border border-border-main bg-surface px-4 py-3 text-sm font-bold text-text-main/80 hover:text-primary hover:border-primary/40 transition-all shadow-sm cursor-pointer"
+                >
+                  <i class="fa-solid fa-lock mr-2 text-text-main/40"></i
+                  >{{ 'PROFILE.PASSWORD' | translate }}
+                </button>
+
+                <button
+                  (click)="openEdit()"
+                  class="w-20 rounded-xl bg-primary px-3 py-3 text-sm font-bold text-white hover:bg-primary/90 transition-all shadow-sm cursor-pointer hover:-translate-y-0.5"
+                >
+                  <i class="fa-solid fa-pen mr-1.5"></i>{{ 'PROFILE.EDIT' | translate }}
+                </button>
+              </div>
+
+              <!-- @if (p.role === 'Teacher' && p.cvPath) {
           <button type="button" (click)="showCvModal = true"
             class="mt-3 flex items-center justify-center gap-2 w-full rounded-xl border border-border-main bg-surface px-4 py-3 text-sm font-bold text-text-main/80 hover:text-primary hover:border-primary/40 transition-all shadow-sm cursor-pointer hover:-translate-y-0.5">
-            <i class="fa-solid fa-file-pdf text-primary/70"></i> View CV
+            <i class="fa-solid fa-file-pdf text-primary/70"></i>
+                {{ 'PROFILE.VIEW_CV' | translate }}
           </button>
           } -->
 
-            @if (p.role === 'Teacher') {
-            <div class="grid grid-cols-2 gap-3 mt-3">
-              @if (p.cvPath) {
-              <button
-                type="button"
-                (click)="showCvModal = true"
-                class="flex items-center justify-center gap-2 rounded-xl border border-border-main bg-surface px-4 py-3 text-sm font-bold text-text-main/80 hover:text-primary hover:border-primary/40 transition-all shadow-sm cursor-pointer"
-              >
-                <i class="fa-solid fa-file-pdf text-primary/70"></i>
-                View CV
-              </button>
-              }
+              @if (p.role === 'Teacher') {
+                <div class="grid grid-cols-2 gap-3 mt-3">
+                  @if (p.cvPath) {
+                    <button
+                      type="button"
+                      (click)="showCvModal = true"
+                      class="flex items-center justify-center gap-2 rounded-xl border border-border-main bg-surface px-4 py-3 text-sm font-bold text-text-main/80 hover:text-primary hover:border-primary/40 transition-all shadow-sm cursor-pointer"
+                    >
+                      <i class="fa-solid fa-file-pdf text-primary/70"></i>
+                      {{ 'PROFILE.VIEW_CV' | translate }}
+                    </button>
+                  }
 
-              <button
-                type="button"
-                (click)="cvInput.click()"
-                class="flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-bold text-white hover:bg-primary/90 transition-all shadow-sm cursor-pointer"
-              >
-                <i class="fa-solid fa-upload"></i>
-                Update CV
-              </button>
-            </div>
-
-            <input
-              #cvInput
-              type="file"
-              accept="application/pdf,.pdf"
-              class="hidden"
-              (change)="onCvSelected($event)"
-            />
-            }
-          </div>
-        </div>
-      </aside>
-
-      <main class="lg:col-span-8 space-y-4">
-        <div class="rounded-3xl border border-border-main bg-surface p-5 sm:p-6 shadow-sm">
-          <div class="flex items-center justify-between mb-6">
-            <div class="font-black text-xl text-text-main tracking-tight">Details</div>
-            <span class="text-xs font-bold uppercase tracking-wider text-text-main/40"
-              >Account info</span
-            >
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div
-              class="rounded-2xl border border-border-main bg-surface p-5 hover:border-primary/20 transition-colors"
-            >
-              <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">
-                Phone
-              </div>
-              <div class="font-bold text-text-main text-lg">{{ p.phone || '-' }}</div>
-            </div>
-
-            <div
-              class="rounded-2xl border border-border-main bg-surface p-5 hover:border-primary/20 transition-colors"
-            >
-              <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">
-                Birth Date
-              </div>
-              <div class="font-bold text-text-main text-lg">{{ p.birthDate || '-' }}</div>
-            </div>
-
-            <div
-              class="rounded-2xl border border-border-main bg-surface p-5 sm:col-span-2 hover:border-primary/20 transition-colors"
-            >
-              <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">
-                Address
-              </div>
-              <div class="font-bold text-text-main text-lg break-words">{{ p.address || '-' }}</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="rounded-3xl border border-border-main bg-surface p-5 sm:p-6 shadow-sm">
-          <div class="flex items-center justify-between mb-6">
-            <div class="font-black text-xl text-text-main tracking-tight">Work / Study</div>
-            <span class="text-xs font-bold uppercase tracking-wider text-text-main/40"
-              >Role-related</span
-            >
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            @if (p.role !== 'Parent') {
-            <div
-              class="group relative rounded-2xl border border-border-main bg-surface p-5 transition-colors hover:border-primary/20"
-            >
-              <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2">
-                Subject
-              </div>
-
-              @if(p.role === 'Student') {
-              <div class="flex items-center justify-between mt-1">
-                <div class="flex items-center gap-2">
-                  <span class="text-3xl font-black text-text-main leading-none">{{
-                    p.subjectsCount
-                  }}</span>
-                  <span
-                    class="text-[10px] font-bold uppercase tracking-wider text-text-main/40 leading-none"
-                    >Registered<br />Courses</span
+                  <button
+                    type="button"
+                    (click)="cvInput.click()"
+                    class="flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-bold text-white hover:bg-primary/90 transition-all shadow-sm cursor-pointer"
                   >
+                    <i class="fa-solid fa-upload"></i>
+                    {{ 'PROFILE.UPDATE_CV' | translate }}
+                  </button>
                 </div>
 
-                <a
-                  routerLink="/student/my-subjects"
-                  class="group/btn flex items-center gap-2 rounded-xl bg-primary/10 border border-primary/20 px-4 py-2 text-xs font-bold text-primary transition-all hover:bg-primary/20 hover:-translate-y-0.5 active:scale-95"
-                >
-                  View All
-                  <i
-                    class="fa-solid fa-arrow-right transition-transform group-hover/btn:translate-x-1"
-                  ></i>
-                </a>
-              </div>
-              } @else {
-              <div class="font-bold text-text-main text-lg">{{ p.teaches || '-' }}</div>
+                <input
+                  #cvInput
+                  type="file"
+                  accept="application/pdf,.pdf"
+                  class="hidden"
+                  (change)="onCvSelected($event)"
+                />
               }
             </div>
-            }
+          </div>
+        </aside>
 
-            <div
-              class="rounded-2xl border border-border-main bg-surface p-5 hover:border-primary/20 transition-colors"
-            >
-              <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">
-                Job
+        <main class="lg:col-span-8 space-y-4">
+          <div class="rounded-3xl border border-border-main bg-surface p-5 sm:p-6 shadow-sm">
+            <div class="flex items-center justify-between mb-6">
+              <div class="font-black text-xl text-text-main tracking-tight">
+                {{ 'PROFILE.DETAILS' | translate }}
               </div>
-              <div class="font-bold text-text-main text-lg">{{ p.job || '-' }}</div>
+              <span class="text-xs font-bold uppercase tracking-wider text-text-main/40">{{
+                'PROFILE.ACCOUNT_INFO' | translate
+              }}</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div
+                class="rounded-2xl border border-border-main bg-surface p-5 hover:border-primary/20 transition-colors"
+              >
+                <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">
+                  {{ 'PROFILE.PHONE' | translate }}
+                </div>
+                <div class="font-bold text-text-main text-lg">{{ p.phone || '-' }}</div>
+              </div>
+
+              <div
+                class="rounded-2xl border border-border-main bg-surface p-5 hover:border-primary/20 transition-colors"
+              >
+                <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">
+                  {{ 'PROFILE.BIRTH_DATE' | translate }}
+                </div>
+                <div class="font-bold text-text-main text-lg">{{ p.birthDate || '-' }}</div>
+              </div>
+
+              <div
+                class="rounded-2xl border border-border-main bg-surface p-5 sm:col-span-2 hover:border-primary/20 transition-colors"
+              >
+                <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">
+                  {{ 'PROFILE.ADDRESS' | translate }}
+                </div>
+                <div class="font-bold text-text-main text-lg break-words">
+                  {{ p.address || '-' }}
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </main>
-    </div>
+
+          <div class="rounded-3xl border border-border-main bg-surface p-5 sm:p-6 shadow-sm">
+            <div class="flex items-center justify-between mb-6">
+              <div class="font-black text-xl text-text-main tracking-tight">
+                {{ 'PROFILE.WORK_STUDY' | translate }}
+              </div>
+              <span class="text-xs font-bold uppercase tracking-wider text-text-main/40">{{
+                'PROFILE.ROLE_RELATED' | translate
+              }}</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              @if (p.role !== 'Parent') {
+                <div
+                  class="group relative rounded-2xl border border-border-main bg-surface p-5 transition-colors hover:border-primary/20"
+                >
+                  <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-2">
+                    {{ 'PROFILE.SUBJECT' | translate }}
+                  </div>
+
+                  @if (p.role === 'Student') {
+                    <div class="flex items-center justify-between mt-1">
+                      <div class="flex items-center gap-2">
+                        <span class="text-3xl font-black text-text-main leading-none">{{
+                          p.subjectsCount
+                        }}</span>
+                        <span
+                          class="text-[10px] font-bold uppercase tracking-wider text-text-main/40 leading-none"
+                          [innerHTML]="'PROFILE.REGISTERED_COURSES' | translate"
+                        ></span>
+                      </div>
+
+                      <a
+                        routerLink="/student/my-subjects"
+                        class="group/btn flex items-center gap-2 rounded-xl bg-primary/10 border border-primary/20 px-4 py-2 text-xs font-bold text-primary transition-all hover:bg-primary/20 hover:-translate-y-0.5 active:scale-95"
+                      >
+                        {{ 'PROFILE.VIEW_ALL' | translate }}
+                        <i
+                          class="fa-solid fa-arrow-right transition-transform group-hover/btn:translate-x-1"
+                        ></i>
+                      </a>
+                    </div>
+                  } @else {
+                    <div class="font-bold text-text-main text-lg">{{ p.teaches || '-' }}</div>
+                  }
+                </div>
+              }
+
+              <div
+                class="rounded-2xl border border-border-main bg-surface p-5 hover:border-primary/20 transition-colors"
+              >
+                <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-1">
+                  {{ 'PROFILE.JOB' | translate }}
+                </div>
+                <div class="font-bold text-text-main text-lg">{{ p.job || '-' }}</div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
     }
   </div>
 
   @if (showEditModal) {
-  <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
-    <div
-      class="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
-      (click)="showEditModal = false"
-    ></div>
+    <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div
+        class="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
+        (click)="showEditModal = false"
+      ></div>
 
-    <form
-      [formGroup]="editForm"
-      (ngSubmit)="submitEdit()"
-      class="relative w-full max-w-xl max-h-[90vh] flex flex-col rounded-3xl border border-border-main bg-surface shadow-2xl overflow-hidden z-10 animate-in fade-in zoom-in duration-200"
-      (click)="$event.stopPropagation()"
-    >
-      <div class="relative p-6 sm:p-8 border-b border-border-main bg-surface">
-        <div
-          class="pointer-events-none absolute -top-24 -left-24 h-56 w-56 rounded-full bg-primary/10 blur-[70px]"
-        ></div>
-        <div
-          class="pointer-events-none absolute -bottom-24 -right-24 h-56 w-56 rounded-full bg-fuchsia-500/10 blur-[70px]"
-        ></div>
+      <form
+        [formGroup]="editForm"
+        (ngSubmit)="submitEdit()"
+        class="relative w-full max-w-xl max-h-[90vh] flex flex-col rounded-3xl border border-border-main bg-surface shadow-2xl overflow-hidden z-10 animate-in fade-in zoom-in duration-200"
+        (click)="$event.stopPropagation()"
+      >
+        <div class="relative p-6 sm:p-8 border-b border-border-main bg-surface">
+          <div
+            class="pointer-events-none absolute -top-24 -left-24 h-56 w-56 rounded-full bg-primary/10 blur-[70px]"
+          ></div>
+          <div
+            class="pointer-events-none absolute -bottom-24 -right-24 h-56 w-56 rounded-full bg-fuchsia-500/10 blur-[70px]"
+          ></div>
 
-        <div class="relative flex items-start justify-between gap-4">
-          <div class="flex items-start gap-4">
-            <div
-              class="size-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0 shadow-sm"
-            >
-              <i class="fa-solid fa-user-pen text-primary text-lg"></i>
+          <div class="relative flex items-start justify-between gap-4">
+            <div class="flex items-start gap-4">
+              <div
+                class="size-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0 shadow-sm"
+              >
+                <i class="fa-solid fa-user-pen text-primary text-lg"></i>
+              </div>
+              <div>
+                <div class="text-xl font-black tracking-tight text-text-main">
+                  {{ 'PROFILE.EDIT_PROFILE' | translate }}
+                </div>
+                <div class="text-sm font-medium text-text-main/60 mt-1">
+                  {{ 'PROFILE.EDIT_PROFILE_DESC' | translate }}
+                </div>
+              </div>
             </div>
-            <div>
-              <div class="text-xl font-black tracking-tight text-text-main">Edit Profile</div>
-              <div class="text-sm font-medium text-text-main/60 mt-1">
-                Update your personal information.
+
+            <button
+              type="button"
+              class="size-9 grid place-items-center rounded-xl border border-border-main bg-surface text-text-main/50 hover:text-text-main hover:bg-border-main/50 transition-all cursor-pointer"
+              (click)="showEditModal = false"
+            >
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto modal-scroll p-6 sm:p-8 space-y-5">
+          <div class="w-full flex justify-center mb-8">
+            <div
+              class="relative w-32 h-32 rounded-full border-4 border-surface shadow-sm ring-2 ring-primary/20"
+            >
+              <div class="w-full h-full rounded-full overflow-hidden bg-surface relative">
+                <img
+                  *ngIf="imagePreview; else defaultAvatar"
+                  [src]="imagePreview"
+                  alt="Profile"
+                  class="w-full h-full object-cover"
+                />
+
+                <ng-template #defaultAvatar>
+                  <div
+                    class="w-full h-full flex items-center justify-center text-primary/30 text-5xl bg-primary/5"
+                  >
+                    <i class="fa-solid fa-user"></i>
+                  </div>
+                </ng-template>
+
+                <button
+                  type="button"
+                  (click)="openAvatarPicker()"
+                  class="cursor-pointer absolute inset-0 bg-black/50 opacity-0 hover:opacity-100 flex items-center justify-center transition-all duration-300 rounded-full text-white"
+                >
+                  <i class="fa-solid fa-camera text-2xl mb-1"></i>
+                </button>
               </div>
             </div>
           </div>
 
-          <button
-            type="button"
-            class="size-9 grid place-items-center rounded-xl border border-border-main bg-surface text-text-main/50 hover:text-text-main hover:bg-border-main/50 transition-all cursor-pointer"
-            (click)="showEditModal = false"
-          >
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-        </div>
-      </div>
+          <div class="rounded-2xl border border-border-main bg-surface p-5 shadow-inner">
+            <label
+              class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-3 pl-1"
+              >{{ 'PROFILE.NAME' | translate }}</label
+            >
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <input
+                  formControlName="fName"
+                  [class.border-red-500]="f.fName.touched && f.fName.errors"
+                  class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm"
+                  [placeholder]="'PROFILE.FIRST_NAME' | translate"
+                />
+                @if (f.fName.touched && f.fName.errors) {
+                  <p class="text-[10px] font-bold text-red-500 mt-2 pl-1">
+                    <i class="fa-solid fa-circle-exclamation mr-1"></i>
+                    {{ 'PROFILE.INVALID_FIRST_NAME' | translate }}
+                  </p>
+                }
+              </div>
+              <div>
+                <input
+                  formControlName="lName"
+                  [class.border-red-500]="f.lName.touched && f.lName.errors"
+                  class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm"
+                  [placeholder]="'PROFILE.LAST_NAME' | translate"
+                />
+                @if (f.lName.touched && f.lName.errors) {
+                  <p class="text-[10px] font-bold text-red-500 mt-2 pl-1">
+                    <i class="fa-solid fa-circle-exclamation mr-1"></i>
+                    {{ 'PROFILE.INVALID_LAST_NAME' | translate }}
+                  </p>
+                }
+              </div>
+            </div>
+          </div>
 
-      <div class="flex-1 overflow-y-auto modal-scroll p-6 sm:p-8 space-y-5">
-        <div class="w-full flex justify-center mb-8">
-          <div
-            class="relative w-32 h-32 rounded-full border-4 border-surface shadow-sm ring-2 ring-primary/20"
-          >
-            <div class="w-full h-full rounded-full overflow-hidden bg-surface relative">
-              <img
-                *ngIf="imagePreview; else defaultAvatar"
-                [src]="imagePreview"
-                alt="Profile"
-                class="w-full h-full object-cover"
+          <div class="rounded-2xl border border-border-main bg-surface p-5 shadow-inner">
+            <label
+              class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-3 pl-1"
+              >{{ 'PROFILE.EMAIL' | translate }}</label
+            >
+            <input
+              formControlName="email"
+              [class.border-red-500]="f.email.touched && f.email.errors"
+              class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm"
+              [placeholder]="'PROFILE.EMAIL_PLACEHOLDER' | translate"
+            />
+            @if (f.email.touched && f.email.errors) {
+              <div class="text-[10px] font-bold text-red-500 mt-2 pl-1">
+                @if (f.email.errors['email']) {
+                  <span
+                    ><i class="fa-solid fa-circle-exclamation mr-1"></i>
+                    {{ 'PROFILE.INVALID_EMAIL' | translate }}</span
+                  >
+                }
+              </div>
+            }
+          </div>
+
+          <div class="rounded-2xl border border-border-main bg-surface p-5 shadow-inner">
+            <label
+              class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-3 pl-1"
+              >{{ 'PROFILE.PHONE' | translate }}</label
+            >
+            <input
+              formControlName="phone"
+              [class.border-red-500]="f.phone.touched && f.phone.errors"
+              class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm placeholder:text-text-main/30 placeholder:font-medium"
+              [placeholder]="'PROFILE.PHONE_PLACEHOLDER' | translate"
+            />
+            @if (f.phone.touched && f.phone.errors) {
+              <div class="text-[10px] font-bold text-red-500 mt-2 pl-1">
+                @if (f.phone.errors['pattern']) {
+                  <span
+                    ><i class="fa-solid fa-circle-exclamation mr-1"></i>
+                    {{ 'PROFILE.INVALID_PHONE' | translate }}</span
+                  >
+                }
+              </div>
+            }
+          </div>
+
+          <div class="rounded-2xl border border-border-main bg-surface p-5 shadow-inner">
+            <label
+              class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-3 pl-1"
+              >{{ 'PROFILE.ADDRESS' | translate }}</label
+            >
+            <input
+              formControlName="address"
+              [class.border-red-500]="f['address'].touched && f['address'].errors"
+              class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm placeholder:text-text-main/30 placeholder:font-medium"
+              [placeholder]="'PROFILE.ADDRESS_PLACEHOLDER' | translate"
+            />
+            @if (f['address'].touched && f['address'].errors) {
+              <div
+                class="text-[10px] font-bold text-red-500 mt-2 pl-1 animate-in fade-in slide-in-from-top-1"
+              >
+                @if (f['address'].errors?.['minlength']) {
+                  <span
+                    ><i class="fa-solid fa-circle-exclamation mr-1"></i>
+                    {{ 'PROFILE.ADDRESS_TOO_SHORT' | translate }}</span
+                  >
+                }
+              </div>
+            }
+          </div>
+
+          @if (profile?.role === 'Parent') {
+            <div class="rounded-2xl border border-border-main bg-surface p-5 shadow-inner">
+              <label
+                class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-3 pl-1"
+                >{{ 'PROFILE.JOB' | translate }}</label
+              >
+              <input
+                formControlName="job"
+                [class.border-red-500]="f['job'].touched && f['job'].errors"
+                class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm placeholder:text-text-main/30 placeholder:font-medium"
+                [placeholder]="'PROFILE.JOB_PLACEHOLDER' | translate"
               />
-
-              <ng-template #defaultAvatar>
-                <div
-                  class="w-full h-full flex items-center justify-center text-primary/30 text-5xl bg-primary/5"
-                >
-                  <i class="fa-solid fa-user"></i>
+              @if (f['job'].touched && f['job'].errors) {
+                <div class="text-[10px] font-bold text-red-500 mt-2 pl-1">
+                  @if (f['job'].errors?.['minlength']) {
+                    <span
+                      ><i class="fa-solid fa-circle-exclamation mr-1"></i>
+                      {{ 'PROFILE.JOB_TOO_SHORT' | translate }}</span
+                    >
+                  }
                 </div>
-              </ng-template>
+              }
+            </div>
+          }
+          @if (editError) {
+            <div
+              class="rounded-2xl border border-red-500/30 bg-red-500/10 p-4 text-sm font-semibold text-red-500 shadow-sm"
+            >
+              <i class="fa-solid fa-triangle-exclamation mr-2"></i> {{ editError }}
+            </div>
+          }
+        </div>
 
+        <div
+          class="p-6 sm:px-8 sm:py-5 border-t border-border-main bg-surface flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between z-10"
+        >
+          <div class="text-sm font-bold text-text-main/50">
+            @if (loadingEdit) {
+              <i class="fa-solid fa-spinner fa-spin mr-2"></i>{{ 'PROFILE.SAVING' | translate }}
+            }
+          </div>
+
+          <div class="flex items-center gap-3">
+            <button
+              type="button"
+              class="rounded-xl cursor-pointer border border-border-main bg-surface px-5 py-2.5 text-sm font-bold text-text-main/70 hover:text-text-main hover:border-text-main/30 transition-all shadow-sm w-full sm:w-auto text-center"
+              (click)="showEditModal = false"
+            >
+              {{ 'PROFILE.CANCEL' | translate }}
+            </button>
+
+            <button
+              type="submit"
+              [disabled]="loadingEdit || editForm.invalid"
+              class="rounded-xl cursor-pointer px-6 py-2.5 text-sm font-bold transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed bg-primary hover:bg-primary/90 text-white shadow-primary/20 enabled:hover:-translate-y-0.5 w-full sm:w-auto text-center"
+            >
+              {{ 'PROFILE.SAVE_CHANGES' | translate }}
+            </button>
+          </div>
+        </div>
+      </form>
+
+      @if (showAvatarPicker) {
+        <div
+          class="fixed inset-0 z-[60] flex items-center justify-center p-4 backdrop-blur-md bg-black/50"
+        >
+          <div
+            class="w-full max-w-3xl rounded-3xl border border-border-main bg-surface p-6 sm:p-8 shadow-2xl animate-in zoom-in-95 duration-200"
+            (click)="$event.stopPropagation()"
+          >
+            <div class="flex items-center justify-between mb-8">
+              <div>
+                <h3 class="text-2xl font-black text-text-main tracking-tight">
+                  {{ 'PROFILE.CHOOSE_AVATAR' | translate }}
+                </h3>
+                <p class="text-sm font-medium text-text-main/50 mt-1">
+                  {{ 'PROFILE.CHOOSE_AVATAR_DESC' | translate }}
+                </p>
+              </div>
               <button
                 type="button"
-                (click)="openAvatarPicker()"
-                class="cursor-pointer absolute inset-0 bg-black/50 opacity-0 hover:opacity-100 flex items-center justify-center transition-all duration-300 rounded-full text-white"
+                (click)="closeAvatarPicker()"
+                class="size-10 grid place-items-center rounded-xl border border-border-main bg-surface text-text-main/50 hover:text-text-main hover:bg-border-main/50 transition-all cursor-pointer"
               >
-                <i class="fa-solid fa-camera text-2xl mb-1"></i>
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+
+            <div
+              class="flex items-center gap-5 p-5 rounded-2xl bg-surface border border-border-main mb-6 shadow-inner"
+            >
+              <input
+                #fileInputPicker
+                type="file"
+                (change)="onFileChange($event); closeAvatarPicker()"
+                class="hidden"
+                accept="image/*"
+              />
+              <button
+                type="button"
+                (click)="fileInputPicker.click()"
+                class="cursor-pointer size-16 rounded-2xl border-2 border-dashed border-primary/30 bg-primary/5 hover:border-primary hover:bg-primary/10 flex items-center justify-center text-primary transition-all group shrink-0"
+              >
+                <i
+                  class="fa-solid fa-cloud-arrow-up text-2xl group-hover:scale-110 transition-transform"
+                ></i>
+              </button>
+              <div>
+                <div class="text-base font-bold text-text-main">
+                  {{ 'PROFILE.UPLOAD_CUSTOM_IMAGE' | translate }}
+                </div>
+                <div class="text-xs font-bold uppercase tracking-wider text-text-main/40 mt-1">
+                  {{ 'PROFILE.UPLOAD_HINT' | translate }}
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-4 max-h-[350px] overflow-y-auto modal-scroll pr-2"
+            >
+              @for (a of avatars; track a.id) {
+                <button
+                  type="button"
+                  (click)="selectAvatar(a.src)"
+                  class="cursor-pointer group relative aspect-square rounded-2xl border border-border-main bg-surface overflow-hidden hover:border-primary/50 transition-all hover:-translate-y-1 shadow-sm"
+                >
+                  <img [src]="a.src" class="w-full h-full object-cover" [alt]="a.id" />
+                  <div
+                    class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity"
+                  ></div>
+                </button>
+              }
+            </div>
+
+            <div class="flex justify-end mt-8 border-t border-border-main pt-6">
+              <button
+                type="button"
+                (click)="closeAvatarPicker()"
+                class="cursor-pointer rounded-xl border border-border-main bg-surface px-6 py-2.5 text-sm font-bold text-text-main/70 hover:text-text-main transition-all shadow-sm"
+              >
+                {{ 'PROFILE.CLOSE' | translate }}
               </button>
             </div>
           </div>
         </div>
-
-        <div class="rounded-2xl border border-border-main bg-surface p-5 shadow-inner">
-          <label
-            class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-3 pl-1"
-            >Name</label
-          >
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <input
-                formControlName="fName"
-                [class.border-red-500]="f.fName.touched && f.fName.errors"
-                class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm"
-                placeholder="First Name"
-              />
-              @if (f.fName.touched && f.fName.errors) {
-              <p class="text-[10px] font-bold text-red-500 mt-2 pl-1">
-                <i class="fa-solid fa-circle-exclamation mr-1"></i> Invalid first name.
-              </p>
-              }
-            </div>
-            <div>
-              <input
-                formControlName="lName"
-                [class.border-red-500]="f.lName.touched && f.lName.errors"
-                class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm"
-                placeholder="Last Name"
-              />
-              @if (f.lName.touched && f.lName.errors) {
-              <p class="text-[10px] font-bold text-red-500 mt-2 pl-1">
-                <i class="fa-solid fa-circle-exclamation mr-1"></i> Invalid last name.
-              </p>
-              }
-            </div>
-          </div>
-        </div>
-
-        <div class="rounded-2xl border border-border-main bg-surface p-5 shadow-inner">
-          <label
-            class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-3 pl-1"
-            >Email</label
-          >
-          <input
-            formControlName="email"
-            [class.border-red-500]="f.email.touched && f.email.errors"
-            class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm"
-            placeholder="email@example.com"
-          />
-          @if (f.email.touched && f.email.errors) {
-          <div class="text-[10px] font-bold text-red-500 mt-2 pl-1">
-            @if (f.email.errors['email']) {
-            <span
-              ><i class="fa-solid fa-circle-exclamation mr-1"></i> Please enter a valid email.</span
-            >
-            }
-          </div>
-          }
-        </div>
-
-        <div class="rounded-2xl border border-border-main bg-surface p-5 shadow-inner">
-          <label
-            class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-3 pl-1"
-            >Phone</label
-          >
-          <input
-            formControlName="phone"
-            [class.border-red-500]="f.phone.touched && f.phone.errors"
-            class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm placeholder:text-text-main/30 placeholder:font-medium"
-            placeholder="01#########"
-          />
-          @if (f.phone.touched && f.phone.errors) {
-          <div class="text-[10px] font-bold text-red-500 mt-2 pl-1">
-            @if (f.phone.errors['pattern']) {
-            <span
-              ><i class="fa-solid fa-circle-exclamation mr-1"></i> Phone must be 11 digits starting
-              with 0.</span
-            >
-            }
-          </div>
-          }
-        </div>
-
-        <div class="rounded-2xl border border-border-main bg-surface p-5 shadow-inner">
-          <label
-            class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-3 pl-1"
-            >Address</label
-          >
-          <input
-            formControlName="address"
-            [class.border-red-500]="f['address'].touched && f['address'].errors"
-            class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm placeholder:text-text-main/30 placeholder:font-medium"
-            placeholder="Enter your full home address..."
-          />
-          @if (f['address'].touched && f['address'].errors) {
-          <div
-            class="text-[10px] font-bold text-red-500 mt-2 pl-1 animate-in fade-in slide-in-from-top-1"
-          >
-            @if (f['address'].errors?.['minlength']) {
-            <span
-              ><i class="fa-solid fa-circle-exclamation mr-1"></i> Address is too short (min 10
-              chars).</span
-            >
-            }
-          </div>
-          }
-        </div>
-
-        @if (profile?.role === 'Parent') {
-        <div class="rounded-2xl border border-border-main bg-surface p-5 shadow-inner">
-          <label
-            class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-3 pl-1"
-            >Job</label
-          >
-          <input
-            formControlName="job"
-            [class.border-red-500]="f['job'].touched && f['job'].errors"
-            class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 text-sm font-semibold text-text-main outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm placeholder:text-text-main/30 placeholder:font-medium"
-            placeholder="e.g. Engineer"
-          />
-          @if (f['job'].touched && f['job'].errors) {
-          <div class="text-[10px] font-bold text-red-500 mt-2 pl-1">
-            @if (f['job'].errors?.['minlength']) {
-            <span
-              ><i class="fa-solid fa-circle-exclamation mr-1"></i> Job title must be at least 2
-              characters long.</span
-            >
-            }
-          </div>
-          }
-        </div>
-        } @if (editError) {
-        <div
-          class="rounded-2xl border border-red-500/30 bg-red-500/10 p-4 text-sm font-semibold text-red-500 shadow-sm"
-        >
-          <i class="fa-solid fa-triangle-exclamation mr-2"></i> {{ editError }}
-        </div>
-        }
-      </div>
-
-      <div
-        class="p-6 sm:px-8 sm:py-5 border-t border-border-main bg-surface flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between z-10"
-      >
-        <div class="text-sm font-bold text-text-main/50">
-          @if (loadingEdit) { <i class="fa-solid fa-spinner fa-spin mr-2"></i>Saving... }
-        </div>
-
-        <div class="flex items-center gap-3">
-          <button
-            type="button"
-            class="rounded-xl cursor-pointer border border-border-main bg-surface px-5 py-2.5 text-sm font-bold text-text-main/70 hover:text-text-main hover:border-text-main/30 transition-all shadow-sm w-full sm:w-auto text-center"
-            (click)="showEditModal = false"
-          >
-            Cancel
-          </button>
-
-          <button
-            type="submit"
-            [disabled]="loadingEdit || editForm.invalid"
-            class="rounded-xl cursor-pointer px-6 py-2.5 text-sm font-bold transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed bg-primary hover:bg-primary/90 text-white shadow-primary/20 enabled:hover:-translate-y-0.5 w-full sm:w-auto text-center"
-          >
-            Save Changes
-          </button>
-        </div>
-      </div>
-    </form>
-
-    @if (showAvatarPicker) {
-    <div
-      class="fixed inset-0 z-[60] flex items-center justify-center p-4 backdrop-blur-md bg-black/50"
-    >
-      <div
-        class="w-full max-w-3xl rounded-3xl border border-border-main bg-surface p-6 sm:p-8 shadow-2xl animate-in zoom-in-95 duration-200"
-        (click)="$event.stopPropagation()"
-      >
-        <div class="flex items-center justify-between mb-8">
-          <div>
-            <h3 class="text-2xl font-black text-text-main tracking-tight">Choose an Avatar</h3>
-            <p class="text-sm font-medium text-text-main/50 mt-1">
-              Select a character or upload your own.
-            </p>
-          </div>
-          <button
-            type="button"
-            (click)="closeAvatarPicker()"
-            class="size-10 grid place-items-center rounded-xl border border-border-main bg-surface text-text-main/50 hover:text-text-main hover:bg-border-main/50 transition-all cursor-pointer"
-          >
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-        </div>
-
-        <div
-          class="flex items-center gap-5 p-5 rounded-2xl bg-surface border border-border-main mb-6 shadow-inner"
-        >
-          <input
-            #fileInputPicker
-            type="file"
-            (change)="onFileChange($event); closeAvatarPicker()"
-            class="hidden"
-            accept="image/*"
-          />
-          <button
-            type="button"
-            (click)="fileInputPicker.click()"
-            class="cursor-pointer size-16 rounded-2xl border-2 border-dashed border-primary/30 bg-primary/5 hover:border-primary hover:bg-primary/10 flex items-center justify-center text-primary transition-all group shrink-0"
-          >
-            <i
-              class="fa-solid fa-cloud-arrow-up text-2xl group-hover:scale-110 transition-transform"
-            ></i>
-          </button>
-          <div>
-            <div class="text-base font-bold text-text-main">Upload Custom Image</div>
-            <div class="text-xs font-bold uppercase tracking-wider text-text-main/40 mt-1">
-              PNG, JPG up to 2MB
-            </div>
-          </div>
-        </div>
-
-        <div
-          class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-4 max-h-[350px] overflow-y-auto modal-scroll pr-2"
-        >
-          @for (a of avatars; track a.id) {
-          <button
-            type="button"
-            (click)="selectAvatar(a.src)"
-            class="cursor-pointer group relative aspect-square rounded-2xl border border-border-main bg-surface overflow-hidden hover:border-primary/50 transition-all hover:-translate-y-1 shadow-sm"
-          >
-            <img [src]="a.src" class="w-full h-full object-cover" [alt]="a.id" />
-            <div
-              class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity"
-            ></div>
-          </button>
-          }
-        </div>
-
-        <div class="flex justify-end mt-8 border-t border-border-main pt-6">
-          <button
-            type="button"
-            (click)="closeAvatarPicker()"
-            class="cursor-pointer rounded-xl border border-border-main bg-surface px-6 py-2.5 text-sm font-bold text-text-main/70 hover:text-text-main transition-all shadow-sm"
-          >
-            Close
-          </button>
-        </div>
-      </div>
+      }
     </div>
-    }
-  </div>
-  } @if (showChangePassModal) {
-  <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
-    <div
-      class="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
-      (click)="showChangePassModal = false"
-    ></div>
-
-    <form
-      [formGroup]="changePassForm"
-      (ngSubmit)="submitChangePassword()"
-      class="relative w-full max-w-md flex flex-col rounded-3xl border border-border-main bg-surface shadow-2xl overflow-hidden z-10 animate-in fade-in zoom-in duration-200"
-      (click)="$event.stopPropagation()"
-    >
+  }
+  @if (showChangePassModal) {
+    <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div
-        class="pointer-events-none absolute -top-24 -left-24 h-56 w-56 rounded-full bg-primary/10 blur-[70px]"
+        class="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
+        (click)="showChangePassModal = false"
       ></div>
 
-      <div
-        class="relative p-6 sm:p-8 border-b border-border-main bg-surface flex items-start justify-between gap-4"
+      <form
+        [formGroup]="changePassForm"
+        (ngSubmit)="submitChangePassword()"
+        class="relative w-full max-w-md flex flex-col rounded-3xl border border-border-main bg-surface shadow-2xl overflow-hidden z-10 animate-in fade-in zoom-in duration-200"
+        (click)="$event.stopPropagation()"
       >
-        <div class="flex items-start gap-4">
-          <div
-            class="size-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0 shadow-sm"
-          >
-            <i class="fa-solid fa-lock text-amber-500 text-lg"></i>
-          </div>
-          <div>
-            <div class="text-xl font-black tracking-tight text-text-main">Security</div>
-            <div class="text-sm font-medium text-text-main/60 mt-1">
-              Update your password securely.
-            </div>
-          </div>
-        </div>
-        <button
-          type="button"
-          class="size-9 grid place-items-center rounded-xl border border-border-main bg-surface text-text-main/50 hover:text-text-main hover:bg-border-main/50 transition-all cursor-pointer"
-          (click)="showChangePassModal = false"
-        >
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-
-      <div class="p-6 sm:p-8 space-y-5">
-        <div class="rounded-2xl border border-border-main bg-surface p-5 shadow-inner">
-          <label
-            class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-3 pl-1"
-            >Current Password</label
-          >
-          <div class="relative">
-            <input
-              [type]="showOldPass ? 'text' : 'password'"
-              formControlName="oldPassword"
-              [class.border-red-500]="
-                changePassForm.get('oldPassword')?.touched &&
-                changePassForm.get('oldPassword')?.invalid
-              "
-              class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 pr-12 text-sm font-semibold text-text-main outline-none transition-all focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 shadow-sm placeholder:text-text-main/30"
-              placeholder="••••••••"
-            />
-            <button
-              type="button"
-              (click)="showOldPass = !showOldPass"
-              class="absolute right-4 top-1/2 -translate-y-1/2 text-text-main/40 hover:text-amber-500 transition-colors cursor-pointer"
-            >
-              <i class="fa-solid" [ngClass]="showOldPass ? 'fa-eye-slash' : 'fa-eye'"></i>
-            </button>
-          </div>
-          @if (changePassForm.get('oldPassword')?.touched &&
-          changePassForm.get('oldPassword')?.errors?.['required']) {
-          <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1">
-            <i class="fa-solid fa-circle-exclamation"></i> Current password is required
-          </p>
-          }
-        </div>
-
-        <div class="rounded-2xl border border-border-main bg-surface p-5 shadow-inner">
-          <label
-            class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-3 pl-1"
-            >New Password</label
-          >
-          <div class="relative">
-            <input
-              [type]="showNewPass ? 'text' : 'password'"
-              formControlName="newPassword"
-              [class.border-red-500]="
-                changePassForm.get('newPassword')?.touched &&
-                changePassForm.get('newPassword')?.invalid
-              "
-              class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 pr-12 text-sm font-semibold text-text-main outline-none transition-all focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 shadow-sm placeholder:text-text-main/30"
-              placeholder="Create a strong password"
-            />
-            <button
-              type="button"
-              (click)="showNewPass = !showNewPass"
-              class="absolute right-4 top-1/2 -translate-y-1/2 text-text-main/40 hover:text-amber-500 transition-colors cursor-pointer"
-            >
-              <i class="fa-solid" [ngClass]="showNewPass ? 'fa-eye-slash' : 'fa-eye'"></i>
-            </button>
-          </div>
-
-          @let newPass = changePassForm.get('newPassword'); @if (newPass?.touched &&
-          newPass?.invalid) {
-          <div class="mt-3 space-y-2 px-1 animate-in fade-in slide-in-from-top-1">
-            @if (newPass?.errors?.['required']) {
-            <p class="text-[10px] font-bold text-red-500 flex items-center gap-1">
-              <i class="fa-solid fa-circle-exclamation"></i> New password is required
-            </p>
-            } @if (newPass?.errors?.['minlength']) {
-            <p class="text-[10px] font-bold text-amber-500 flex items-center gap-1">
-              <i class="fa-solid fa-circle-info"></i> Minimum 8 characters required
-            </p>
-            } @if (newPass?.errors?.['pattern']) {
-            <div
-              class="rounded-xl bg-surface border border-border-main p-3 space-y-2 mt-2 shadow-sm"
-            >
-              <p class="text-[10px] text-text-main font-bold uppercase tracking-wider mb-1">
-                Password must contain:
-              </p>
-              <ul class="grid grid-cols-2 gap-x-2 gap-y-1.5">
-                <li class="text-[10px] font-medium text-text-main/60 flex items-center gap-1.5">
-                  <i class="fa-solid fa-check text-[8px] text-amber-500"></i> Upper & Lowercase
-                </li>
-                <li class="text-[10px] font-medium text-text-main/60 flex items-center gap-1.5">
-                  <i class="fa-solid fa-check text-[8px] text-amber-500"></i> At least one Number
-                </li>
-                <li
-                  class="text-[10px] font-medium text-text-main/60 flex items-center gap-1.5 col-span-2"
-                >
-                  <i class="fa-solid fa-check text-[8px] text-amber-500"></i> Special character
-                  (@$!%*?)
-                </li>
-              </ul>
-            </div>
-            }
-          </div>
-          }
-        </div>
-
-        @if (changePassError) {
         <div
-          class="rounded-2xl border border-red-500/30 bg-red-500/10 p-4 text-xs font-bold text-red-500 shadow-sm flex items-center gap-2"
-        >
-          <i class="fa-solid fa-triangle-exclamation"></i>
-          {{ changePassError }}
-        </div>
-        }
-      </div>
+          class="pointer-events-none absolute -top-24 -left-24 h-56 w-56 rounded-full bg-primary/10 blur-[70px]"
+        ></div>
 
-      <div
-        class="p-6 sm:px-8 sm:py-5 border-t border-border-main bg-surface flex items-center justify-end gap-3 z-10"
-      >
-        <button
-          type="button"
-          class="rounded-xl cursor-pointer border border-border-main bg-surface px-5 py-2.5 text-sm font-bold text-text-main/70 hover:text-text-main hover:border-text-main/30 transition-all shadow-sm"
-          (click)="showChangePassModal = false"
+        <div
+          class="relative p-6 sm:p-8 border-b border-border-main bg-surface flex items-start justify-between gap-4"
         >
-          Cancel
-        </button>
-        <button
-          type="submit"
-          [disabled]="loadingChangePass || changePassForm.invalid"
-          class="rounded-xl cursor-pointer px-6 py-2.5 text-sm font-bold transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed bg-amber-500 hover:bg-amber-600 text-white shadow-amber-500/20 enabled:hover:-translate-y-0.5"
-        >
-          @if(loadingChangePass){ <i class="fa-solid fa-spinner fa-spin mr-2"></i>Updating... }
-          @else { Update Password }
-        </button>
-      </div>
-    </form>
-  </div>
-  } @if (showCvModal && profile?.cvPath) {
-  <div
-    class="fixed inset-0 z-[70] flex items-center justify-center p-4"
-    (click)="showCvModal = false"
-  >
-    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
-    <div
-      class="relative z-10 w-full max-w-4xl h-[85vh] flex flex-col rounded-3xl border border-border-main bg-surface shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200"
-      (click)="$event.stopPropagation()"
-    >
-      <div class="flex items-center justify-between px-6 py-4 border-b border-border-main shrink-0">
-        <div class="flex items-center gap-3">
-          <div
-            class="size-9 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center"
-          >
-            <i class="fa-solid fa-file-pdf text-primary"></i>
+          <div class="flex items-start gap-4">
+            <div
+              class="size-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0 shadow-sm"
+            >
+              <i class="fa-solid fa-lock text-amber-500 text-lg"></i>
+            </div>
+            <div>
+              <div class="text-xl font-black tracking-tight text-text-main">
+                {{ 'PROFILE.SECURITY' | translate }}
+              </div>
+              <div class="text-sm font-medium text-text-main/60 mt-1">
+                {{ 'PROFILE.SECURITY_DESC' | translate }}
+              </div>
+            </div>
           </div>
-          <span class="font-black text-text-main text-base tracking-tight">CV Preview</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <a
-            [href]="profile?.cvPath"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-1.5 rounded-xl border border-border-main bg-surface px-3 py-2 text-xs font-bold text-text-main/70 hover:text-primary hover:border-primary/40 transition-all shadow-sm"
-          >
-            <i class="fa-solid fa-arrow-up-right-from-square"></i> Open in new tab
-          </a>
           <button
             type="button"
-            (click)="showCvModal = false"
             class="size-9 grid place-items-center rounded-xl border border-border-main bg-surface text-text-main/50 hover:text-text-main hover:bg-border-main/50 transition-all cursor-pointer"
+            (click)="showChangePassModal = false"
           >
             <i class="fa-solid fa-xmark"></i>
           </button>
         </div>
-      </div>
-      <iframe
-        [src]="profile?.cvPath | safeUrl"
-        class="flex-1 w-full border-none"
-        title="CV Preview"
-      ></iframe>
+
+        <div class="p-6 sm:p-8 space-y-5">
+          <div class="rounded-2xl border border-border-main bg-surface p-5 shadow-inner">
+            <label
+              class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-3 pl-1"
+              >{{ 'PROFILE.CURRENT_PASSWORD' | translate }}</label
+            >
+            <div class="relative">
+              <input
+                [type]="showOldPass ? 'text' : 'password'"
+                formControlName="oldPassword"
+                [class.border-red-500]="
+                  changePassForm.get('oldPassword')?.touched &&
+                  changePassForm.get('oldPassword')?.invalid
+                "
+                class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 pr-12 text-sm font-semibold text-text-main outline-none transition-all focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 shadow-sm placeholder:text-text-main/30"
+                placeholder="••••••••"
+              />
+              <button
+                type="button"
+                (click)="showOldPass = !showOldPass"
+                class="absolute right-4 top-1/2 -translate-y-1/2 text-text-main/40 hover:text-amber-500 transition-colors cursor-pointer"
+              >
+                <i class="fa-solid" [ngClass]="showOldPass ? 'fa-eye-slash' : 'fa-eye'"></i>
+              </button>
+            </div>
+            @if (
+              changePassForm.get('oldPassword')?.touched &&
+              changePassForm.get('oldPassword')?.errors?.['required']
+            ) {
+              <p class="text-[10px] font-bold text-red-500 mt-2 pl-1 flex items-center gap-1">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                {{ 'PROFILE.CURRENT_PASSWORD_REQUIRED' | translate }}
+              </p>
+            }
+          </div>
+
+          <div class="rounded-2xl border border-border-main bg-surface p-5 shadow-inner">
+            <label
+              class="block text-xs font-bold uppercase tracking-wider text-text-main/50 mb-3 pl-1"
+              >{{ 'PROFILE.NEW_PASSWORD' | translate }}</label
+            >
+            <div class="relative">
+              <input
+                [type]="showNewPass ? 'text' : 'password'"
+                formControlName="newPassword"
+                [class.border-red-500]="
+                  changePassForm.get('newPassword')?.touched &&
+                  changePassForm.get('newPassword')?.invalid
+                "
+                class="w-full rounded-2xl border border-border-main bg-surface px-4 py-3.5 pr-12 text-sm font-semibold text-text-main outline-none transition-all focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 shadow-sm placeholder:text-text-main/30"
+                [placeholder]="'PROFILE.CREATE_STRONG_PASSWORD' | translate"
+              />
+              <button
+                type="button"
+                (click)="showNewPass = !showNewPass"
+                class="absolute right-4 top-1/2 -translate-y-1/2 text-text-main/40 hover:text-amber-500 transition-colors cursor-pointer"
+              >
+                <i class="fa-solid" [ngClass]="showNewPass ? 'fa-eye-slash' : 'fa-eye'"></i>
+              </button>
+            </div>
+
+            @let newPass = changePassForm.get('newPassword');
+            @if (newPass?.touched && newPass?.invalid) {
+              <div class="mt-3 space-y-2 px-1 animate-in fade-in slide-in-from-top-1">
+                @if (newPass?.errors?.['required']) {
+                  <p class="text-[10px] font-bold text-red-500 flex items-center gap-1">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    {{ 'PROFILE.NEW_PASSWORD_REQUIRED' | translate }}
+                  </p>
+                }
+                @if (newPass?.errors?.['minlength']) {
+                  <p class="text-[10px] font-bold text-amber-500 flex items-center gap-1">
+                    <i class="fa-solid fa-circle-info"></i>
+                    {{ 'PROFILE.MIN_CHARACTERS' | translate }}
+                  </p>
+                }
+                @if (newPass?.errors?.['pattern']) {
+                  <div
+                    class="rounded-xl bg-surface border border-border-main p-3 space-y-2 mt-2 shadow-sm"
+                  >
+                    <p class="text-[10px] text-text-main font-bold uppercase tracking-wider mb-1">
+                      {{ 'PROFILE.PASSWORD_CONTAIN' | translate }}
+                    </p>
+                    <ul class="grid grid-cols-2 gap-x-2 gap-y-1.5">
+                      <li
+                        class="text-[10px] font-medium text-text-main/60 flex items-center gap-1.5"
+                      >
+                        <i class="fa-solid fa-check text-[8px] text-amber-500"></i>
+                        {{ 'PROFILE.UPPER_LOWER' | translate }}
+                      </li>
+                      <li
+                        class="text-[10px] font-medium text-text-main/60 flex items-center gap-1.5"
+                      >
+                        <i class="fa-solid fa-check text-[8px] text-amber-500"></i>
+                        {{ 'PROFILE.AT_LEAST_ONE_NUMBER' | translate }}
+                      </li>
+                      <li
+                        class="text-[10px] font-medium text-text-main/60 flex items-center gap-1.5 col-span-2"
+                      >
+                        <i class="fa-solid fa-check text-[8px] text-amber-500"></i>
+                        {{ 'PROFILE.SPECIAL_CHARACTER' | translate }}
+                      </li>
+                    </ul>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+
+          @if (changePassError) {
+            <div
+              class="rounded-2xl border border-red-500/30 bg-red-500/10 p-4 text-xs font-bold text-red-500 shadow-sm flex items-center gap-2"
+            >
+              <i class="fa-solid fa-triangle-exclamation"></i>
+              {{ changePassError }}
+            </div>
+          }
+        </div>
+
+        <div
+          class="p-6 sm:px-8 sm:py-5 border-t border-border-main bg-surface flex items-center justify-end gap-3 z-10"
+        >
+          <button
+            type="button"
+            class="rounded-xl cursor-pointer border border-border-main bg-surface px-5 py-2.5 text-sm font-bold text-text-main/70 hover:text-text-main hover:border-text-main/30 transition-all shadow-sm"
+            (click)="showChangePassModal = false"
+          >
+            {{ 'PROFILE.CANCEL' | translate }}
+          </button>
+          <button
+            type="submit"
+            [disabled]="loadingChangePass || changePassForm.invalid"
+            class="rounded-xl cursor-pointer px-6 py-2.5 text-sm font-bold transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed bg-amber-500 hover:bg-amber-600 text-white shadow-amber-500/20 enabled:hover:-translate-y-0.5"
+          >
+            @if (loadingChangePass) {
+              <i class="fa-solid fa-spinner fa-spin mr-2"></i>{{ 'PROFILE.UPDATING' | translate }}
+            } @else {
+              {{ 'PROFILE.UPDATE_PASSWORD' | translate }}
+            }
+          </button>
+        </div>
+      </form>
     </div>
-  </div>
+  }
+  @if (showCvModal && profile?.cvPath) {
+    <div
+      class="fixed inset-0 z-[70] flex items-center justify-center p-4"
+      (click)="showCvModal = false"
+    >
+      <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+      <div
+        class="relative z-10 w-full max-w-4xl h-[85vh] flex flex-col rounded-3xl border border-border-main bg-surface shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200"
+        (click)="$event.stopPropagation()"
+      >
+        <div
+          class="flex items-center justify-between px-6 py-4 border-b border-border-main shrink-0"
+        >
+          <div class="flex items-center gap-3">
+            <div
+              class="size-9 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center"
+            >
+              <i class="fa-solid fa-file-pdf text-primary"></i>
+            </div>
+            <span class="font-black text-text-main text-base tracking-tight">{{
+              'PROFILE.CV_PREVIEW' | translate
+            }}</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <a
+              [href]="profile?.cvPath"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-1.5 rounded-xl border border-border-main bg-surface px-3 py-2 text-xs font-bold text-text-main/70 hover:text-primary hover:border-primary/40 transition-all shadow-sm"
+            >
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+              {{ 'PROFILE.OPEN_IN_NEW_TAB' | translate }}
+            </a>
+            <button
+              type="button"
+              (click)="showCvModal = false"
+              class="size-9 grid place-items-center rounded-xl border border-border-main bg-surface text-text-main/50 hover:text-text-main hover:bg-border-main/50 transition-all cursor-pointer"
+            >
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+        </div>
+        <iframe
+          [src]="profile?.cvPath | safeUrl"
+          class="flex-1 w-full border-none"
+          title="CV Preview"
+        ></iframe>
+      </div>
+    </div>
   }
 </section>

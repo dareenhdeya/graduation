@@ -7,13 +7,14 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { catchError, of } from 'rxjs';
 import { IStudentProgressItem } from '../../interfaces/IStudentProgress.interface';
 import { Chart, registerables } from 'chart.js';
+import { TranslateModule } from '@ngx-translate/core';
 
 Chart.register(...registerables);
 
 @Component({
   selector: 'app-get-teacher-students',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [CommonModule, RouterLink, FormsModule, TranslateModule],
   templateUrl: './get-teacher-students.component.html',
   styleUrl: './get-teacher-students.component.css',
 })

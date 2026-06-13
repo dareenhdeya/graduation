@@ -20,17 +20,18 @@
       </div>
 
       <h2 class="text-4xl md:text-5xl font-black text-text-main tracking-tight mb-4 drop-shadow-sm">
-        Restricted Area
+        {{ 'STUDENT.LESSON.RESTRICTED_AREA' | translate }}
       </h2>
 
       <p class="text-text-main/60 text-lg md:text-xl max-w-lg mb-10 leading-relaxed font-medium">
-        You must complete prior requirements or prerequisites to unlock this lesson and view its
-        contents.
+        {{ 'STUDENT.LESSON.RESTRICTED_DESC' | translate }}
       </p>
 
-      <a [routerLink]="['/student/subject-lessons', lesson.subjectId]"
-        class="inline-flex items-center justify-center h-14 px-8 rounded-full bg-surface hover:bg-background border border-border-main text-text-main font-bold transition-all hover:-translate-y-1 active:scale-95">
-        <i class="fa-solid fa-arrow-left-long mr-3"></i> Back to the Course Path
+      <a
+        [routerLink]="['/student/subject-lessons', lesson.subjectId]"
+        class="inline-flex items-center justify-center h-14 px-8 rounded-full bg-surface hover:bg-background border border-border-main text-text-main font-bold transition-all hover:-translate-y-1 active:scale-95"
+      >
+        <i class="fa-solid fa-arrow-left-long mr-3"></i> {{ 'STUDENT.LESSON.BACK_TO_COURSE' | translate }}
       </a>
     </div>
     } @else if (lesson && activeVideo) {
@@ -41,8 +42,9 @@
           @if (activeVideo.videoUrl) { @if (isImage(activeVideo.videoUrl)) {
           <img [src]="activeVideo.videoUrl" class="w-full h-full object-contain bg-background" alt="Lesson Content" />
           <div
-            class="absolute bottom-4 right-4 bg-surface/80 px-3 py-1 rounded-full text-xs text-text-main backdrop-blur border border-border-main">
-            <i class="fa-regular fa-image"></i> Visual Content
+            class="absolute bottom-4 right-4 bg-surface/80 px-3 py-1 rounded-full text-xs text-text-main backdrop-blur border border-border-main"
+          >
+            <i class="fa-regular fa-image"></i> {{ 'STUDENT.LESSON.VISUAL_CONTENT' | translate }}
           </div>
           } @else {
           <video [src]="activeVideo.videoUrl" controls autoplay class="w-full h-full object-contain"
@@ -53,8 +55,8 @@
               class="size-20 rounded-full bg-background flex items-center justify-center mb-4 border border-border-main">
               <i class="fa-solid fa-lock text-3xl"></i>
             </div>
-            <p class="text-lg font-medium text-text-main/60">Content locked or unavailable</p>
-            <p class="text-sm text-text-main/40">Please contact your teacher</p>
+            <p class="text-lg font-medium text-text-main/60">{{ 'STUDENT.LESSON.CONTENT_LOCKED' | translate }}</p>
+            <p class="text-sm text-text-main/40">{{ 'STUDENT.LESSON.CONTACT_TEACHER' | translate }}</p>
           </div>
           }
         </div>
@@ -97,8 +99,9 @@
       </div>
 
       <div
-        class="bg-surface/40 backdrop-blur-xl border border-border-main rounded-3xl p-4 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto custom-scroll">
-        <h3 class="text-text-main font-bold text-lg mb-4 px-2">Videos in this Lesson</h3>
+        class="bg-surface/40 backdrop-blur-xl border border-border-main rounded-3xl p-4 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto custom-scroll"
+      >
+        <h3 class="text-text-main font-bold text-lg mb-4 px-2">{{ 'STUDENT.LESSON.VIDEOS_IN_LESSON' | translate }}</h3>
 
         <div class="space-y-3">
           @for (item of videos; track item.vId; let i = $index) {
@@ -146,7 +149,7 @@
       </div>
     </div>
     } @else {
-    <div class="text-text-main">Lesson not found.</div>
+    <div class="text-text-main">{{ 'STUDENT.LESSON.NOT_FOUND' | translate }}</div>
     }
   </div>
 </section>

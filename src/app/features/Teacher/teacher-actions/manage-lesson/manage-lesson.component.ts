@@ -5,11 +5,12 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { TeacherServiceService } from '../../services/teacher-service.service';
 import { ITeacherLessonContentResult, ITeacherVideo } from '../../interfaces/ILessonContent';
 import { ToastrService } from 'ngx-toastr';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-manage-lesson',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, TranslateModule],
   templateUrl: './manage-lesson.component.html',
   styleUrl: './manage-lesson.component.css',
 })

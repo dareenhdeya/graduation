@@ -4,8 +4,7 @@
     <div
       class="rounded-3xl border border-border-main bg-surface p-12 text-center text-text-main/70 text-lg font-medium animate-pulse shadow-sm"
     >
-      <i class="fa-solid fa-circle-notch fa-spin mr-3 text-primary text-xl"></i> Loading user
-      details...
+      <i class="fa-solid fa-circle-notch fa-spin mr-3 text-primary text-xl"></i> {{ 'ADMIN.LOADING_USER_DETAILS' | translate }}
     </div>
 
     } @else if (error) {
@@ -44,7 +43,7 @@
 
           <div class="min-w-0 flex-1">
             <div class="flex flex-wrap items-center gap-3">
-              <h1 class="text-3xl font-black text-text-main tracking-tight truncate">
+              <h1 class="text-3xl font-black tracking-tight truncate text-transparent bg-clip-text bg-linear-to-r from-primary to-text-main">
                 {{ user.fName }}
               </h1>
 
@@ -68,7 +67,7 @@
                 class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-bold shadow-sm border-blue-500/20 bg-blue-500/10 text-blue-400"
               >
                 <i class="fa-solid fa-wheelchair text-blue-400/80"></i>
-                {{ user.disability || 'No disability' }}
+                {{ user.disability || ('ADMIN.NO_DISABILITY' | translate) }}
               </span>
               }
             </div>
@@ -84,7 +83,7 @@
               class="mt-1 text-xs font-bold text-text-main/40 uppercase tracking-wider truncate flex items-center gap-2"
             >
               <i class="fa-solid fa-fingerprint text-text-main/30"></i>
-              ID: {{ user.id }}
+              {{ 'ADMIN.ID' | translate }}: {{ user.id }}
             </div>
           </div>
         </div>
@@ -92,7 +91,7 @@
 
       <div class="p-6 sm:p-8 relative z-10">
         <h3 class="text-sm font-bold uppercase tracking-wider text-text-main/40 mb-4">
-          Personal Information
+          {{ 'ADMIN.PERSONAL_INFORMATION' | translate }}
         </h3>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -100,7 +99,7 @@
             class="rounded-xl border border-border-main bg-surface p-3 hover:border-primary/20 transition-colors"
           >
             <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-0.5">
-              Phone
+              {{ 'ADMIN.PHONE' | translate }}
             </div>
             <div class="font-bold text-text-main">{{ user.phone || '-' }}</div>
           </div>
@@ -109,7 +108,7 @@
             class="rounded-xl border border-border-main bg-surface p-3 hover:border-primary/20 transition-colors"
           >
             <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-0.5">
-              Birth Date
+              {{ 'ADMIN.BIRTH_DATE' | translate }}
             </div>
             <div class="font-bold text-text-main">{{ user.birthDate || '-' }}</div>
           </div>
@@ -118,7 +117,7 @@
             class="rounded-xl border border-border-main bg-surface p-3 sm:col-span-2 hover:border-primary/20 transition-colors"
           >
             <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-0.5">
-              Address
+              {{ 'ADMIN.ADDRESS' | translate }}
             </div>
             <div class="font-bold text-text-main">{{ user.address || '-' }}</div>
           </div>
@@ -127,7 +126,7 @@
             class="rounded-xl border border-border-main bg-surface p-3 hover:border-primary/20 transition-colors"
           >
             <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-0.5">
-              Subject
+              {{ 'ADMIN.SUBJECT' | translate }}
             </div>
             <div class="font-bold text-text-main">{{ user.teaches || '-' }}</div>
           </div>
@@ -136,7 +135,7 @@
             class="rounded-xl border border-border-main bg-surface p-3 hover:border-primary/20 transition-colors"
           >
             <div class="text-xs font-bold uppercase tracking-wider text-text-main/50 mb-0.5">
-              Job
+              {{ 'ADMIN.JOB' | translate }}
             </div>
             <div class="font-bold text-text-main">{{ user.job || '-' }}</div>
           </div>
@@ -150,7 +149,7 @@
             class="inline-flex items-center gap-2 rounded-2xl border border-border-main bg-surface px-4 py-2 text-sm font-bold text-text-main hover:border-primary/50 hover:text-primary transition-all duration-300 hover:-translate-y-0.5 shadow-sm"
           >
             <i class="fa-solid fa-arrow-left"></i>
-            All Users
+            {{ 'ADMIN.ALL_USERS' | translate }}
           </a>
           <div class="flex flex-wrap gap-3">
             <button
@@ -160,7 +159,7 @@
               (click)="onEndSession()"
             >
               <i class="fa-solid fa-power-off"></i>
-              End Session
+              {{ 'ADMIN.END_SESSION' | translate }}
             </button>
 
             @if (user.status !== 3) {
@@ -171,7 +170,7 @@
               (click)="onBlockUser()"
             >
               <i class="fa-solid fa-ban"></i>
-              Block User
+              {{ 'ADMIN.BLOCK_USER' | translate }}
             </button>
             } @else {
             <button
@@ -180,7 +179,7 @@
               (click)="onBlockUser()"
             >
               <i class="fa-solid fa-unlock"></i>
-              Unblock User
+              {{ 'ADMIN.UNBLOCK_USER' | translate }}
             </button>
             } @if (user.role === 'Teacher' && user.cvPath) {
             <button
@@ -189,7 +188,7 @@
               class="cursor-pointer py-2.5 px-5 inline-flex items-center gap-2 rounded-xl border border-primary/30 bg-primary/10 text-primary font-bold text-sm transition-all hover:bg-primary/20 hover:-translate-y-0.5"
             >
               <i class="fa-solid fa-file-pdf"></i>
-              View CV
+              {{ 'ADMIN.VIEW_CV' | translate }}
             </button>
             }
 
@@ -199,7 +198,7 @@
               (click)="promptDelete()"
             >
               <i class="fa-solid fa-trash"></i>
-              Remove User
+              {{ 'ADMIN.REMOVE_USER' | translate }}
             </button>
           </div>
         </div>
@@ -219,44 +218,41 @@
           <i class="fa-solid fa-trash text-red-500 text-lg"></i>
         </div>
         <div>
-          <h3 class="font-black text-text-main text-lg">Remove User</h3>
-          <p class="text-text-main/50 text-sm">This action cannot be undone</p>
+          <h3 class="font-black text-text-main text-lg">{{ 'ADMIN.REMOVE_USER' | translate }}</h3>
+          <p class="text-text-main/50 text-sm">{{ 'ADMIN.ACTION_UNDONE' | translate }}</p>
         </div>
       </div>
 
       @if (userToDelete.role === 'Parent') {
-      <p class="text-text-main/70 text-sm mb-6">
-        This user is a <span class="font-bold text-text-main">Parent</span>. Do you want to delete
-        only the parent account or also remove all linked children?
-      </p>
+        {{ 'ADMIN.DELETE_PARENT_DESC1' | translate }} <span class="font-bold text-text-main">{{ 'ADMIN.PARENT' | translate }}</span>. {{ 'ADMIN.DELETE_PARENT_DESC2' | translate }}
       <div class="flex flex-col gap-3">
         <button
           type="button"
           class="cursor-pointer w-full py-3 rounded-2xl border border-purple-500/30 bg-purple-500/10 text-purple-500 font-bold hover:bg-purple-500/20 transition-all"
           (click)="confirmDelete(false)"
         >
-          <i class="fa-solid fa-user mr-2"></i> Delete Parent Only
+          <i class="fa-solid fa-user mr-2"></i> {{ 'ADMIN.DELETE_PARENT_ONLY' | translate }}
         </button>
         <button
           type="button"
           class="cursor-pointer w-full py-3 rounded-2xl border border-red-500/30 bg-red-500/10 text-red-500 font-bold hover:bg-red-500/20 transition-all"
           (click)="confirmDelete(true)"
         >
-          <i class="fa-solid fa-users mr-2"></i> Delete Parent & All Children
+          <i class="fa-solid fa-users mr-2"></i> {{ 'ADMIN.DELETE_PARENT_CHILDREN' | translate }}
         </button>
         <button
           type="button"
           class="cursor-pointer w-full py-3 rounded-2xl border border-border-main text-text-main/60 font-bold hover:bg-primary/5 transition-all"
           (click)="showDeleteModal = false; userToDelete = null"
         >
-          Cancel
+          {{ 'COMMON.CANCEL' | translate }}
         </button>
       </div>
       } @else {
       <p class="text-text-main/70 text-sm mb-6">
-        Are you sure you want to remove
+        {{ 'ADMIN.CONFIRM_REMOVE' | translate }}
         <span class="font-bold text-text-main">{{ userToDelete.fName }}</span
-        >? This action cannot be undone.
+        >? {{ 'ADMIN.ACTION_UNDONE' | translate }}
       </p>
       <div class="flex flex-col gap-3">
         <button
@@ -264,14 +260,14 @@
           class="cursor-pointer w-full py-3 rounded-2xl border border-red-500/30 bg-red-500/10 text-red-500 font-bold hover:bg-red-500/20 transition-all"
           (click)="confirmDelete(false)"
         >
-          <i class="fa-solid fa-trash mr-2"></i> Yes, Remove User
+          <i class="fa-solid fa-trash mr-2"></i> {{ 'ADMIN.YES_REMOVE_USER' | translate }}
         </button>
         <button
           type="button"
           class="cursor-pointer w-full py-3 rounded-2xl border border-border-main text-text-main/60 font-bold hover:bg-primary/5 transition-all"
           (click)="showDeleteModal = false; userToDelete = null"
         >
-          Cancel
+          {{ 'COMMON.CANCEL' | translate }}
         </button>
       </div>
       }
@@ -295,7 +291,7 @@
             <i class="fa-solid fa-file-pdf text-primary"></i>
           </div>
           <span class="font-black text-text-main text-base tracking-tight"
-            >CV Preview — {{ user!.fName }}</span
+            >{{ 'ADMIN.CV_PREVIEW' | translate }} — {{ user!.fName }}</span
           >
         </div>
         <div class="flex items-center gap-2">
@@ -305,7 +301,7 @@
             rel="noopener noreferrer"
             class="inline-flex items-center gap-1.5 rounded-xl border border-border-main bg-surface px-3 py-2 text-xs font-bold text-text-main/70 hover:text-primary hover:border-primary/40 transition-all shadow-sm"
           >
-            <i class="fa-solid fa-arrow-up-right-from-square"></i> Open in new tab
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> {{ 'ADMIN.OPEN_NEW_TAB' | translate }}
           </a>
           <button
             type="button"
@@ -319,7 +315,7 @@
       <iframe
         [src]="user!.cvPath! | safeUrl"
         class="flex-1 w-full border-none"
-        title="CV Preview"
+        [title]="'ADMIN.CV_PREVIEW' | translate"
       ></iframe>
     </div>
   </div>

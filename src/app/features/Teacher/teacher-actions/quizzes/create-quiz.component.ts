@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators } fr
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TeacherServiceService } from '../../services/teacher-service.service';
 import { ToastrService } from 'ngx-toastr';
+import { TranslateModule } from '@ngx-translate/core';
 
 type AnswerType = 'text' | 'image';
 type ExerciseType = 'MCQ' | 'Matching' | 'AI' | 'AIWords';
@@ -17,7 +18,7 @@ export enum PerquisiteType {
 @Component({
   selector: 'app-create-quiz',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, TranslateModule],
   templateUrl: './create-quiz.component.html',
   styleUrl: './create-quiz.component.css',
 })

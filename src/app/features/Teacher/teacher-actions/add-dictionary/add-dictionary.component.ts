@@ -6,12 +6,13 @@ import { forkJoin } from 'rxjs'; // Import for parallel requests
 import { IAddToDictionaryResponse } from '../../interfaces/IAddToDictionaryResponse';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @Component({
   selector: 'app-add-dictionary',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, TranslateModule],
   templateUrl: './add-dictionary.component.html',
   styleUrl: './add-dictionary.component.css',
 })

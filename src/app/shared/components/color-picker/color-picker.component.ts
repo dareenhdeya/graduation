@@ -1,10 +1,11 @@
+import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { ThemeService } from './../../../core/services/theme.service';
 import { Component, inject } from '@angular/core';
 
 @Component({
   selector: 'app-color-picker',
-  imports: [CommonModule],
+  imports: [TranslateModule, CommonModule],
   templateUrl: './color-picker.component.html',
   styleUrl: './color-picker.component.css',
 })

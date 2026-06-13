@@ -14,12 +14,12 @@
         class="rounded-3xl border border-border-main bg-surface/90 backdrop-blur-xl p-6 sm:p-8 shadow-xl relative overflow-hidden z-10"
       >
         <div class="text-center">
-          <h1 class="text-3xl md:text-4xl font-black tracking-tight text-text-main mb-3">
-            Login Now
+          <h1 class="text-3xl md:text-4xl font-black tracking-tight mb-3 text-transparent bg-clip-text bg-linear-to-r from-primary to-text-main">
+            {{ 'AUTH.LOGIN_TITLE' | translate }}
           </h1>
 
           <p class="text-sm md:text-base text-text-main/60 max-w-md mx-auto">
-            Welcome back. Enter your credentials to access your account.
+            {{ 'AUTH.LOGIN_SUBTITLE' | translate }}
           </p>
         </div>
 
@@ -34,12 +34,12 @@
           @if (errMsg.includes('pending')) {
           <p>
             <i class="fas fa-clock mr-2 text-yellow-500"></i>
-            <span class="text-yellow-500">Waiting for admin approval</span>
+            <span class="text-yellow-500">{{ 'AUTH.ERR_PENDING' | translate }}</span>
           </p>
           } @else if (errMsg.includes('credentials')) {
-          <p><i class="fas fa-exclamation-circle mr-2"></i> Invalid email or password</p>
+          <p><i class="fas fa-exclamation-circle mr-2"></i> {{ 'AUTH.ERR_CREDENTIALS' | translate }}</p>
           } @else if (errMsg.includes('deactivated')) {
-          <p><i class="fas fa-ban mr-2"></i> Account is deactivated</p>
+          <p><i class="fas fa-ban mr-2"></i> {{ 'AUTH.ERR_DEACTIVATED' | translate }}</p>
           } @else {
           <p><i class="fas fa-exclamation-circle mr-2"></i> {{ errMsg }}</p>
           }
@@ -53,14 +53,14 @@
           <div>
             <label
               class="block text-xs font-semibold uppercase tracking-[0.15em] text-text-main/80 mb-2 pl-1"
-              >Email</label
+              >{{ 'AUTH.EMAIL' | translate }}</label
             >
             <input
               formControlName="usernameorEmail"
               [class.border-red-500]="isInvalid('usernameorEmail')"
               type="email"
               class="w-full rounded-2xl border border-border-main bg-background/60 px-4 py-3.5 text-sm font-medium text-text-main outline-none transition-all duration-200 placeholder:text-placeholder placeholder:font-medium focus:border-primary focus:ring-4 focus:ring-primary/10 focus:bg-surface shadow-sm"
-              placeholder="name@email.com"
+              [placeholder]="'AUTH.PLACEHOLDER_EMAIL' | translate"
             />
 
             @if (emailCont?.touched && emailCont?.errors) { @if (emailCont?.getError('required')) {
@@ -68,14 +68,14 @@
               class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
             >
               <i class="fas fa-circle-exclamation mt-0.5"></i>
-              <span>Email is required.</span>
+              <span>{{ 'VALIDATION.REQUIRED' | translate }}</span>
             </p>
             } @if (emailCont?.hasError('email')) {
             <p
               class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
             >
               <i class="fas fa-circle-exclamation mt-0.5"></i>
-              <span>Enter valid email.</span>
+              <span>{{ 'VALIDATION.EMAIL_INVALID' | translate }}</span>
             </p>
             } }
           </div>
@@ -83,7 +83,7 @@
           <div>
             <label
               class="block text-xs font-semibold uppercase tracking-[0.15em] text-text-main/80 mb-2 pl-1"
-              >Password</label
+              >{{ 'AUTH.PASSWORD' | translate }}</label
             >
 
             <div class="relative">
@@ -98,10 +98,9 @@
                 type="button"
                 (click)="showPass = !showPass"
                 class="absolute right-4 top-1/2 -translate-y-1/2 text-text-main/50 hover:text-primary transition-all duration-200 cursor-pointer"
-                aria-label="Toggle password visibility"
+                [attr.aria-label]="'AUTH.TOGGLE_PASSWORD' | translate"
               >
-                @if (showPass) { <i class="fas fa-eye-slash"></i> } @else {
-                <i class="fas fa-eye"></i> }
+                @if (showPass) { <i class="fas fa-eye-slash"></i> } @else { <i class="fas fa-eye"></i> }
               </button>
             </div>
 
@@ -110,17 +109,14 @@
               class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
             >
               <i class="fas fa-circle-exclamation mt-0.5"></i>
-              <span>Password is required.</span>
+              <span>{{ 'VALIDATION.REQUIRED' | translate }}</span>
             </p>
             } @else if (passCont?.getError('pattern')) {
             <p
               class="mt-2 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1"
             >
               <i class="fas fa-circle-exclamation mt-0.5"></i>
-              <span
-                >Password must be at least 8 characters long, contain upper and lower case letters,
-                a number, and a special character</span
-              >
+              <span>{{ 'VALIDATION.PASSWORD_MIN' | translate }}</span>
             </p>
             } }
           </div>
@@ -130,7 +126,7 @@
               class="text-primary font-semibold hover:text-primary/80 transition-colors cursor-pointer text-sm"
               routerLink="/forgotpass"
             >
-              Forgot password?
+              {{ 'AUTH.FORGOT_PASSWORD' | translate }}
             </a>
           </div>
 
@@ -140,16 +136,16 @@
             class="w-full rounded-2xl bg-primary px-6 py-3.5 text-sm font-bold text-white transition-all shadow-sm hover:bg-primary/90 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed shadow-primary/20 cursor-pointer mt-2"
           >
             <span class="flex items-center justify-center gap-2">
-              Login @if (isLoading) { <i class="fas fa-spinner fa-spin"></i> }
+              {{ 'AUTH.LOGIN_BTN' | translate }} @if (isLoading) { <i class="fas fa-spinner fa-spin"></i> }
             </span>
           </button>
 
           <p class="text-sm text-text-main/60 text-center mt-5">
-            Don't have an account?
+            {{ 'AUTH.NO_ACCOUNT' | translate }}
             <a
               routerLink="/register"
               class="font-semibold text-primary hover:text-primary/80 transition-colors cursor-pointer"
-              >Register</a
+              >{{ 'AUTH.REGISTER_LINK' | translate }}</a
             >
           </p>
         </form>

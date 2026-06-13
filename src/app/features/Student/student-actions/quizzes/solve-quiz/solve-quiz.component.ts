@@ -6,6 +6,7 @@ import { filter, Subscription } from 'rxjs';
 import { StudentServiceService } from '../../../services/student-service.service';
 import { ToastrService } from 'ngx-toastr';
 import confetti from 'canvas-confetti';
+import { TranslateModule } from '@ngx-translate/core';
 
 interface QuizState {
   status: 'pre-start' | 'in-progress' | 'submitting' | 'completed';
@@ -21,7 +22,7 @@ interface SvgLine {
 @Component({
   selector: 'app-solve-quiz',
   standalone: true,
-  imports: [CommonModule, RouterLink, ReactiveFormsModule],
+  imports: [CommonModule, RouterLink, ReactiveFormsModule, TranslateModule],
   templateUrl: './solve-quiz.component.html',
   styleUrl: './solve-quiz.component.css',
 })
