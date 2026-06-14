@@ -10,7 +10,7 @@ Chart.register(...registerables);
 
 @Component({
   selector: 'app-progress',
-  imports: [CommonModule, DecimalPipe,TranslateModule],
+  imports: [CommonModule, DecimalPipe, TranslateModule],
   templateUrl: './progress.component.html',
   styleUrl: './progress.component.css',
 })
@@ -27,7 +27,7 @@ export class ProgressComponent implements OnInit, OnDestroy {
   private barScoreChart?: Chart;
   private pieChart?: Chart;
 
-  constructor(private studentService: StudentServiceService, private themeService: ThemeService) {}
+  constructor(private studentService: StudentServiceService, private themeService: ThemeService) { }
 
   ngOnInit() {
     this.studentService.viewSubmissions().subscribe({
@@ -352,5 +352,15 @@ export class ProgressComponent implements OnInit, OnDestroy {
 
   get failedCount(): number {
     return this.submissions.length - this.passedCount;
+  }
+  get avgHighestPercentage(): number {
+    if (this.submissions.length === 0) return 0;
+
+    const total = this.submissions.reduce(
+      (sum, s) => sum + (s.highestPercentage || 0),
+      0
+    );
+
+    return total / this.submissions.length;
   }
 }
